@@ -1,17 +1,26 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    home
+    <RoomListView
+      v-for="room in rooms"
+      :key="room.id"
+      :room="room"
+    />
   </div>
 </template>
 
 <script>
-
-
+import RoomListView from '@/components/home/RoomListView.vue'
 export default {
   name: 'HomeView',
   components: {
+    RoomListView,
+  },
+  props: {
+    rooms: {
+      type: Array,
+    }
+  },
   
-  }
 }
 </script>
