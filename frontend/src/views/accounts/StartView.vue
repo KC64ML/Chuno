@@ -4,7 +4,7 @@
     <br>
     <div class="container" @click="onStart">
       <p>시작하기</p>
-      <img alt="Vue logo" src="@/assets/button_back1.png">
+      <img alt="Vue logo" src="@/assets/button_back1.svg">
     </div>
     <hr>
   </div>

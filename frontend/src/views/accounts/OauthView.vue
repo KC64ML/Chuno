@@ -19,10 +19,10 @@ export default {
     async start() {
       const code = new URL(window.location.href).searchParams.get('code');
       // const code = this.$route.params.code
-      console.log(code)
+      // console.log(code)
       var { data } = await axios.post("http://3.34.138.191:9997/kakao/login", code, {headers: {'Content-Type': 'text/plain'}});
-
-      console.log(data.result);
+      console.log(data)
+      // console.log(data.result);
       if (data.result == "not_member") {
           console.log(data)
           // 아직 우리 서비스에 가입하지 않았어요 회원 가입 페이지로 넘어가요 뷰에서는 패러미터를 안고 라우터뷰를 이동하면 될거에요

@@ -28,7 +28,7 @@
       </div>
       <div class="container" @click="onSave">
         <p>저장</p>
-        <img alt="Vue logo" src="@/assets/button_back1.png">
+        <img alt="Vue logo" src="@/assets/button_back1.svg">
       </div>
     </div>
   </div>

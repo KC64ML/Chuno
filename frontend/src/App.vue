@@ -3,7 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <nav id="header">
       <router-link to="/">
-        <img class="logo" alt="Chuno Logo" src="@/assets/round_logo.png">
+        <img class="logo" alt="Chuno Logo" src="@/assets/round_logo.svg">
       </router-link>
       <br>
       <router-link to="/start">Start</router-link> |
