@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>Play Time</div>
 </template>
 
 <script>

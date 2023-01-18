@@ -2,11 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import StartView from '@/views/accounts/StartView.vue'
 import LoginView from '@/views/accounts/LoginView.vue'
+import OauthView from '@/views/accounts/OauthView.vue'
 import SearchView from '@/views/SearchView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import ShopView from '@/views/ShopView.vue'
 import RankView from '@/views/RankView.vue'
-import InputInfoView from '@/views/accounts/InputInfoView.vue'
+import RegisterView from '@/views/accounts/RegisterView.vue'
 
 const routes = [
   {
@@ -45,9 +46,14 @@ const routes = [
     component: RankView
   },
   {
-    path: '/info/',
-    name: 'Info',
-    component: InputInfoView
+    path: '/register/:email/',
+    name: 'Register',
+    component: RegisterView
+  },
+  {
+    path: '/oauth/',
+    name: 'Oauth',
+    component: OauthView
   },
   
 ]

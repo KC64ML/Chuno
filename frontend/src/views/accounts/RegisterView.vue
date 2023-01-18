@@ -1,16 +1,18 @@
 <template>
   <div>
-    <div class="profile">
-      <img :src="img ? img : img_default" alt="profile pic">
-      <label for="file" class="input-plus">
-        <img src="@/assets/camera.svg" alt="upload pic">
+    <div class="profile">   
+      <label for="file">
+        <!-- <img src="@/assets/profile_frame.png" alt="profileFrame"> -->
+        <!-- <img src="@/assets/camera.svg" alt="upload pic"> -->
+        <img :src="img ? img : img_default" alt="profilePic" class="uploadedImg">
         <input type="file" id="file" class="inputfile" @change="upload">
       </label>
+
     </div>
 
     <div>
       <label for="nickname_input">닉네임</label>
-      <input type="text" id="nickname_input" v-model="nickname">
+      <input type="text" id="nickname_input" v-model="nickname" maxlength="6">
 
       <div class="check" v-if="nickname.length>0">
         <div v-if="!lengthValid || !useValid">
@@ -33,10 +35,11 @@
 </template>
 
 <script>
+import axios from 'axios'
 import img_default from '@/assets/account_default.svg'
 
 export default {
-  name: 'InputInfoView',
+  name: 'RegisterView',
   data() {
     return {
       img_default,
@@ -49,6 +52,7 @@ export default {
     }
   },
   methods: {
+    // 프로필 사진
     upload(event) {
       let file = event.target.files
       let reader = new FileReader()
@@ -59,26 +63,33 @@ export default {
         this.img = event.target.result
         console.log(this.img)
       }
+      // DB업로드 코드 추가하기
     },
+    // 닉네임 유효성 검사
     check() {
-      if(this.nickname.length < 6) {
+      if(this.nickname.length > 6) {
         this.lengthValid = false
       } else {
         this.lengthValid = true
       }
       // 중복체크 코드로 바꾸기
-      if(this.nickname.length < 4){
+      if(this.nickname.length < 3){
         this.useValid = false
       } else {
         this.useValid = true
       }
-
-      // if(this.lengthValid === false || this.useValid === false) {
-      //   this.validv= false
-      // }
     },
-    onSave() {
+    async onSave() {
       if(this.lengthValid && this.useValid) {
+        alert("가입하기");
+        const nick = this.nickname
+        // const email = new URL(window.location.href).searchParams.get('email');
+        const email = this.$route.params.email
+        var token = await axios.post("http://3.34.138.191:9997/kakao/register", {"nick": nick, "email": email});
+        console.log("회원가입 완료", token.data);
+        // token에 토큰이 담겨있어요 쎄션스토리지에 넣어서 사용해하세요
+        sessionStorage.setItem("token", token.data);
+        //이곳에 회원가입이 완료하고 돌아갈 곳을 달아주세요
         this.$router.push({ name: 'Home' })
       } else {
         alert('닉네임을 바르게 설정하세요.')
@@ -94,19 +105,31 @@ export default {
 
 <style>
 .profile {
-  border-radius: 70%;
+  /* padding:50px 0px; */
+  /* position: relative; */
+}
+.profile .uploadedImg {
+  /* position: absolute; */
+  top: 0;
+  left: 40%;
+  height: 100px;
+  width: 100px;
+  border-radius: 100%;
+  object-fit: cover;
+  /* border: 2px solid #1D182C */
 }
 .inputfile {
   width: 0;
   height: 0%;
   overflow: hidden;
 }
-.profile label {
+/* .uploadBtn {
   width: 30px;
   height: 30px;
   background-color: #1D182C;
-  border-radius: 70%;
-}
+  border-radius: 100%;
+  vertical-align: middle;
+} */
 .check {
   font-size: 11px;
   color: red;
