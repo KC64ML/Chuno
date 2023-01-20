@@ -11,7 +11,7 @@
     </nav>
     <router-view/>
     
-    <nav id="footer">
+    <nav id="default">
       <!-- <img alt="Shop" src="@/assets/home.svg"> -->
       <router-link :to="{ name: 'Search' }">
         <img alt="search" src="@/assets/search.svg">
@@ -60,13 +60,18 @@ nav a {
 nav a.router-link-exact-active {
   color: #42b983;
 }
-#footer {
+#default {
+  /* position: fixed; */
   background-color: #1D182C;
+  /* background-image: url(@/assets/footer.png); */
+  /* width: 100%; */
+  /* height: 10vh; */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 5%;
 }
-#footer img{
+#default img{
   width: 50px;
   height: auto;
   /* padding-left: 10px;
