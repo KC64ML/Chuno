@@ -4,17 +4,25 @@ plugins {
 }
 
 android {
+    // local.properties 사용을 위함
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    def native_app_key = properties.getProperty('native_app_key')
+
     namespace 'com.leesfamily.chuno'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.leesfamily.chuno"
         minSdk 24
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [native_app_key:native_app_key]
+        buildConfigField "String", "KAKAO_API_KEY", properties['kakao_api_key']
     }
 
     buildTypes {
@@ -30,9 +38,30 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    viewBinding{
+        enabled = true
+    }
 }
 
 dependencies {
+    implementation "com.kakao.sdk:v2-user:2.12.0" // 카카오 로그인
+    implementation "com.kakao.sdk:v2-talk:2.12.0" // 친구, 메시지(카카오톡)
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
+
+    // circleImageView
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    // Ted Permission
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
+
+    // Jetpack-navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'

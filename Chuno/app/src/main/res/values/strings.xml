@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">Chuno</string>
+    <string name="app_name">추노</string>
+    <string name="permission_title">권한안내</string>
+    <string name="ok">확인</string>
+    <string name="permission_optional">선택적 접근 권한</string>
+    <string name="permission_essential">필수적 접근 권한</string>
+    <string name="permission_text">추노는 다음 권한을 필요로 합니다.\n아래의 권한을 허용해 주세요.</string>
+
+    <string name="logout">로그아웃</string>
+    <string name="nickname">닉네임</string>
+    <string name="profile_text">프로필 입력</string>
+    <string name="save">저장</string>
+    <string name="login_text">계정과 비밀번호 입력없이\n 카카오톡으로 로그인 해 보세요.</string>
 </resources>
