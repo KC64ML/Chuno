@@ -11,4 +11,8 @@
     <string name="profile_text">프로필 입력</string>
     <string name="save">저장</string>
     <string name="login_text">계정과 비밀번호 입력없이\n 카카오톡으로 로그인 해 보세요.</string>
+    <string name="my_create_room">내가 만든 방</string>
+    <string name="all_room">전체 방</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

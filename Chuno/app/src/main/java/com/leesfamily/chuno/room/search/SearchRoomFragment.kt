@@ -1,20 +1,20 @@
-package com.leesfamily.chuno.room
+package com.leesfamily.chuno.room.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.leesfamily.chuno.databinding.FragmentRoomListBinding
+import com.leesfamily.chuno.R
 
 /**
- * 게임을 위한 방의 목록을 보여주는 Fragment이다.
+ * 게임을 위한 방 목록 중 방제목으로(포함) 검색하는 Fragment이다.
  **/
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class RoomListFragment : Fragment() {
-    lateinit var binding: FragmentRoomListBinding
+class SearchRoomFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
@@ -30,15 +30,14 @@ class RoomListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentRoomListBinding.inflate(inflater, container, false)
-        return binding.root
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_search_room, container, false)
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            RoomListFragment().apply {
+            SearchRoomFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
