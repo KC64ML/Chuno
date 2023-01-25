@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div id="modal">Edit Profile</div>
 </template>
 
 <script>

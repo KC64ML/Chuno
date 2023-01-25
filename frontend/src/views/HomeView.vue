@@ -1,11 +1,7 @@
 <template>
   <div class="home">
     <input id="islogin">
-    <RoomListView
-      v-for="room in rooms"
-      :key="room.id"
-      :room="room"
-    />
+    <RoomListView/>
   </div>
 </template>
 

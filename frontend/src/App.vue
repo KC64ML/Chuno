@@ -77,4 +77,10 @@ nav a.router-link-exact-active {
   /* padding-left: 10px;
   padding-right: 10px; */
 }
+
+/* 모달 */
+#modal{
+  background-color: #F5F5F5;
+  border-radius: 10%;
+}
 </style>
