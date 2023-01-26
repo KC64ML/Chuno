@@ -1,4 +1,4 @@
-package com.leesfamily.chuno.common.vo;
+package com.leesfamily.chuno.common.model;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

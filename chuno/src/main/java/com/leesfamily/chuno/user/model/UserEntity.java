@@ -1,6 +1,7 @@
-package com.leesfamily.chuno.user.vo;
+package com.leesfamily.chuno.user.model;
 
-import com.leesfamily.chuno.common.vo.BaseTimeEntity;
+import com.leesfamily.chuno.common.model.BaseTimeEntity;
+import com.leesfamily.chuno.item.model.ItemEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,10 +9,10 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,14 +21,16 @@ import java.time.LocalDateTime;
 @Entity(name="users")
 @DynamicInsert
 @DynamicUpdate
+//@Inheritance(strategy = InheritanceType.JOINED)
 public class UserEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userKey;
-    @Column(nullable = false)
+    @Column(name = "user_key")
+    private Long id;
+    @Column(nullable = false, length = 40)
     private String email;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 7)
     private String nickname;
     @Column(nullable = false)
     @ColumnDefault("1")
@@ -57,5 +60,20 @@ public class UserEntity extends BaseTimeEntity {
     @ColumnDefault("0")
     private int money;
 
+    @Embedded
+    private UserProfile profile;
+
+    @OneToMany(mappedBy = "fromUser")
+    private List<FriendEntity> friendsOut = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toUser")
+    private List<FriendEntity> friendsIn = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "inventory",
+            joinColumns = @JoinColumn(name = "user_key"),
+            inverseJoinColumns = @JoinColumn(name = "item_key")
+    )
+    private List<ItemEntity> inventory = new ArrayList<>();
 
 }
