@@ -1,14 +1,8 @@
 <template>
   <div id="app">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <nav id="header">
-      <router-link to="/">
-        <img class="logo" alt="Chuno Logo" src="@/assets/round_logo.svg">
-      </router-link>
-      <br>
       <router-link to="/start">Start</router-link> |
       <router-link to="/login">Login</router-link> 
-    </nav>
     <router-view/>
     
     <nav id="default">
@@ -61,10 +55,11 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 #default {
-  /* position: fixed; */
+  position: fixed;
+  bottom: 0%;
   background-color: #1D182C;
   /* background-image: url(@/assets/footer.png); */
-  /* width: 100%; */
+  width: 100vw;
   /* height: 10vh; */
   display: flex;
   flex-direction: row;
@@ -79,8 +74,33 @@ nav a.router-link-exact-active {
 }
 
 /* 모달 */
-#modal{
+.modal-bg{
+  width: 100%; height:100%;
+  background: rgba(0,0,0,0.5);
+  position: fixed; padding: 20px;
+}
+
+.modal{
+  position: fixed;
   background-color: #F5F5F5;
   border-radius: 10%;
+  width: 70vw;
+}
+/* 헤더 */
+#header{
+  display: flex;
+  flex-direction: row;
+  padding: 5%;
+  font-size: 20pt;
+}
+#header img{
+  height: 50px;
+  width: 50px;
+  padding-right: 10px;
+}
+#header p{
+  margin: 0;
+  vertical-align: middle;
+
 }
 </style>

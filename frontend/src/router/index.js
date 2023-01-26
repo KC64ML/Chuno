@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView from '@/views/HomeView.vue'
 import StartView from '@/views/accounts/StartView.vue'
 import LoginView from '@/views/accounts/LoginView.vue'
 import OauthView from '@/views/accounts/OauthView.vue'
@@ -8,7 +8,7 @@ import ProfileView from '@/views/ProfileView.vue'
 import ShopView from '@/views/ShopView.vue'
 import RankView from '@/views/RankView.vue'
 import RegisterView from '@/views/accounts/RegisterView.vue'
-
+import WaitingRoomView from '@/views/WaitingRoomView.vue'
 const routes = [
   {
     path: '/',
@@ -54,6 +54,11 @@ const routes = [
     path: '/oauth/',
     name: 'Oauth',
     component: OauthView
+  },
+  {
+    path: '/waitingroom/:room_num/',
+    name: 'Waitingroom',
+    component: WaitingRoomView
   },
   
 ]

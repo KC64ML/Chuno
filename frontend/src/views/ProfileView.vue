@@ -1,4 +1,12 @@
 <template>
+  <nav id="header">
+    <router-link to="/">
+      <img class="logo" alt="Chuno Logo" src="@/assets/round_logo.svg">
+    </router-link>
+    <p>프로필</p>
+  </nav>
+  <!-- <router-view/> -->
+
   <div>
     <MyProfileView @on-edit="onEdit"/>
     <div class="container">

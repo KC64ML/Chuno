@@ -1,0 +1,58 @@
+@font-face {
+  font-family: 'WandohopeR';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/WandohopeR.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+.app {
+
+}
+
+
+body {
+font-family: 'WandohopeR';
+text-align: center;
+background-image: url( "@/assets/background.png" );
+position:relative;
+/* /* width: 100vw; */
+height: 100%;
+/* background-size: cover; */
+}
+nav img {
+height: 100px;
+}
+nav {
+padding: 30px;
+}
+
+nav a {
+font-weight: bold;
+color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+color: #42b983;
+}
+#default {
+/* position: fixed; */
+background-color: #1D182C;
+/* background-image: url(@/assets/footer.png); */
+/* width: 100%; */
+/* height: 10vh; */
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+padding: 5%;
+}
+#default img{
+width: 50px;
+height: auto;
+/* padding-left: 10px;
+padding-right: 10px; */
+}
+
+/* 모달 */
+#modal{
+background-color: #F5F5F5;
+border-radius: 10%;
+}

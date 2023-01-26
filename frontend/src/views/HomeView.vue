@@ -1,22 +1,38 @@
 <template>
+  <CreateRoomModal v-if="modal"/>
   <div class="home">
+    <nav id="header">
+      <router-link to="/">
+        <img class="logo" alt="Chuno Logo" src="@/assets/round_logo.svg">
+      </router-link>
+      <p>저잣거리</p>
+    </nav>
     <input id="islogin">
     <RoomListView/>
+    
+    <img src="@/assets/createRoomBtn.svg" alt="createRoom" class="create" @click="createRoom">
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import RoomListView from '@/components/home/RoomListView.vue'
+import CreateRoomModal from '@/components/home/CreateRoomModal.vue'
 
 export default {
   name: 'HomeView',
   components: {
     RoomListView,
+    CreateRoomModal,
   },
   props: {
     rooms: {
       type: Array,
+    },
+  },
+  data(){
+    return {
+      modal: false,
     }
   },
   methods: {
@@ -31,6 +47,9 @@ export default {
           }
       }
     },
+    createRoom() {
+      this.modal = true
+    },
   },
   created() {
     this.start()
@@ -38,3 +57,11 @@ export default {
   
 }
 </script>
+<style>
+.create{
+  position: fixed;
+  bottom: 15%;
+  /* left: 10%; */
+  right: 5%;
+}
+</style>
