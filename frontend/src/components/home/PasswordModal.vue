@@ -3,14 +3,18 @@
     <div id="modal">
       <div>
         <p>비밀번호</p>
-        <p>X</p>
+        <p @click="onClose">X</p>
       </div>
-      <input type="text" v-model="password">
-      <div v-show="wrong">비밀번호가 틀렸습니다.</div>
-      <div class="container" @click="onConfirm">
-        <p>확인</p>
-        <img alt="btn" src="@/assets/button_back1.svg">
+      <!--  -->
+      <div>
+        <input type="text" v-model="password">
+        <div v-show="wrong">비밀번호가 틀렸습니다.</div>
+        <div class="container" @click="onConfirm">
+          <p>확인</p>
+          <img alt="btn" src="@/assets/button_back1.svg">
+        </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -25,7 +29,8 @@ export default {
     }
   },
   methods: {
-    // 비밀번호 일치 확인 코드 바꾸기
+    // 확인 버튼 눌렀을 때
+      // 비밀번호 일치 확인 코드 바꾸기
     onConfirm() {
       if (this.password.length == this.password ) {
         // this.wrong = false
@@ -33,6 +38,11 @@ export default {
       } else {
         this.wrong = true
       }
+    },
+
+    // 창 닫기
+    onClose() {
+      this.$store.state.passwordModal = !this.$store.state.passwordModal 
     }
   }
 }

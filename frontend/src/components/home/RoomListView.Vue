@@ -1,6 +1,5 @@
 <template>
   <div>
-    RoomListView
     <RoomItemView/>
   </div>
 </template>
