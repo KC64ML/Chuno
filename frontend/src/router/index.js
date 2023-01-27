@@ -9,6 +9,8 @@ import ShopView from '@/views/ShopView.vue'
 import RankView from '@/views/RankView.vue'
 import RegisterView from '@/views/accounts/RegisterView.vue'
 import WaitingRoomView from '@/views/WaitingRoomView.vue'
+// import WaitingRoomView from '@/views/WaitingRoomView.vue'
+
 const routes = [
   {
     path: '/',
@@ -57,7 +59,7 @@ const routes = [
   },
   {
     path: '/waitingroom/:room_num/',
-    name: 'Waitingroom',
+    name: 'WaitingRoom',
     component: WaitingRoomView
   },
   

@@ -1,5 +1,5 @@
 <template>
-  <CreateRoomModal v-if="modal"/>
+  <CreateRoomModal v-if="modal" @createRoom="createRoom"/>
   <div class="home">
     <nav id="header">
       <router-link to="/">
@@ -48,7 +48,7 @@ export default {
       }
     },
     createRoom() {
-      this.modal = true
+      this.modal = !this.modal
     },
   },
   created() {
