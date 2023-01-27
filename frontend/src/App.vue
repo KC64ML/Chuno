@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-      <router-link to="/start">Start</router-link> |
-      <router-link to="/login">Login</router-link> 
-    <router-view/>
-    
+    <router-link to="/start">Start</router-link> |
+    <router-link to="/login">Login</router-link>
+    <router-view />
+
     <nav id="default">
       <!-- <img alt="Shop" src="@/assets/home.svg"> -->
       <router-link :to="{ name: 'Search' }">
@@ -19,29 +19,32 @@
       <router-link :to="{ name: 'Rank' }">
         <img alt="rank" src="@/assets/rank.svg">
       </router-link>
-      </nav>
+    </nav>
   </div>
 </template>
 
 <style>
 @font-face {
-    font-family: 'WandohopeR';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/WandohopeR.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
+  font-family: 'WandohopeR';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/WandohopeR.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
 }
+
 body {
   font-family: 'WandohopeR';
   text-align: center;
-  background-image: url( "@/assets/background.png" );
-  position:relative;
+  background-image: url("@/assets/background.png");
+  position: relative;
   /* /* width: 100vw; */
   height: 100%;
   /* background-size: cover; */
 }
+
 nav img {
   height: 100px;
 }
+
 nav {
   padding: 30px;
 }
@@ -54,19 +57,21 @@ nav a {
 nav a.router-link-exact-active {
   color: #42b983;
 }
+
 #default {
   position: fixed;
   bottom: 0%;
   background-color: #1D182C;
   /* background-image: url(@/assets/footer.png); */
-  width: 100vw;
+  width: 50vw;
   /* height: 10vh; */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 5%;
 }
-#default img{
+
+#default img {
   width: 50px;
   height: auto;
   /* padding-left: 10px;
@@ -74,31 +79,36 @@ nav a.router-link-exact-active {
 }
 
 /* 모달 */
-.modal-bg{
-  width: 100%; height:100%;
-  background: rgba(0,0,0,0.5);
-  position: fixed; padding: 20px;
+.modal-bg {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  padding: 20px;
 }
 
-.modal{
+.modal {
   position: fixed;
   background-color: #F5F5F5;
   border-radius: 10%;
   width: 70vw;
 }
+
 /* 헤더 */
-#header{
+#header {
   display: flex;
   flex-direction: row;
   padding: 5%;
   font-size: 20pt;
 }
-#header img{
+
+#header img {
   height: 50px;
   width: 50px;
   padding-right: 10px;
 }
-#header p{
+
+#header p {
   margin: 0;
   vertical-align: middle;
 
