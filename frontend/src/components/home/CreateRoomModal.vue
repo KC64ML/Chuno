@@ -27,6 +27,7 @@
         <img alt="btn" src="@/assets/button_back1.svg">
       </div>
     </div>
+    
     <!-- page 2 -->
     <div class="modal" v-if="!page">
       <div class="container-row">

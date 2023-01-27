@@ -1,16 +1,20 @@
 <template>
-  <CreateRoomModal v-if="modal" @createRoom="createRoom"/>
-  <div class="home">
-    <nav id="header">
-      <router-link to="/">
-        <img class="logo" alt="Chuno Logo" src="@/assets/round_logo.svg">
-      </router-link>
-      <p>저잣거리</p>
-    </nav>
-    <input id="islogin">
-    <RoomListView/>
-    
-    <img src="@/assets/createRoomBtn.svg" alt="createRoom" class="create" @click="createRoom">
+  <div>
+    <CreateRoomModal v-if="createRoomModal" @createRoom="createRoom"/>
+    <PasswordModal v-if="passwordModal"/>
+    <PushModal v-if="pushModal"/>
+    <div class="home">
+      <nav id="header">
+        <router-link to="/">
+          <img class="logo" alt="Chuno Logo" src="@/assets/round_logo.svg">
+        </router-link>
+        <p>저잣거리</p>
+      </nav>
+      <input id="islogin">
+      <RoomListView/>
+      
+      <img src="@/assets/createRoomBtn.svg" alt="createRoom" class="create" @click="createRoom">
+    </div>
   </div>
 </template>
 
@@ -18,12 +22,16 @@
 import axios from 'axios'
 import RoomListView from '@/components/home/RoomListView.vue'
 import CreateRoomModal from '@/components/home/CreateRoomModal.vue'
+import PasswordModal from '@/components/home/PasswordModal.vue'
+import PushModal from '@/components/home/PushModal.vue'
 
 export default {
   name: 'HomeView',
   components: {
     RoomListView,
     CreateRoomModal,
+    PasswordModal,
+    PushModal,
   },
   props: {
     rooms: {
@@ -32,7 +40,9 @@ export default {
   },
   data(){
     return {
-      modal: false,
+      createRoomModal: false,
+      passwordModal: true,
+      pushModal: false,
     }
   },
   methods: {

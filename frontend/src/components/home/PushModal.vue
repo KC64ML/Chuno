@@ -1,5 +1,9 @@
 <template>
-  <div></div>
+  <div class="modal-bg">
+    <div id="modal">
+      PushModal
+    </div>
+  </div>
 </template>
 
 <script>

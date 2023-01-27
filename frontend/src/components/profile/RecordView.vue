@@ -13,6 +13,9 @@
 <script>
 export default {
   name: 'RecordView',
+  data() {
+    // record: null,
+  },
   methods: {
 
   },
