@@ -41,7 +41,7 @@ export default {
   data(){
     return {
       createRoomModal: false,
-      passwordModal: true,
+      passwordModal: false,
       pushModal: false,
     }
   },

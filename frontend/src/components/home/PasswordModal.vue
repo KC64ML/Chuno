@@ -26,9 +26,10 @@ export default {
   },
   methods: {
     // 비밀번호 일치 확인 코드 바꾸기
+    // parmas 바꾸기
     onConfirm() {
       if (this.password.length == this.password ) {
-        this.wrong = false
+        // this.wrong = false
         this.$router.push({ name: 'WaitingRoom', params: { room_num: 1 }})
       } else {
         this.wrong = true
