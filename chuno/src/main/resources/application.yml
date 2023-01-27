@@ -8,6 +8,9 @@ server:
       force: true
   address: localhost
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/chuno?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
@@ -30,3 +33,6 @@ logging:
   level:
     root: info
     org.hibernate.type: trace
+
+secret:
+  key: ssafy
