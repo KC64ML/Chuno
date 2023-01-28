@@ -68,15 +68,15 @@
 
     <EditText
         android:id="@+id/edit_nick"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:background="@drawable/nickname_back"
+        android:background="@drawable/gray_square"
         android:gravity="center"
+        android:maxLength="8"
         android:singleLine="true"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:maxLength="8"
         app:layout_constraintBottom_toBottomOf="@+id/textView13"
         app:layout_constraintStart_toEndOf="@+id/textView13"
         app:layout_constraintTop_toTopOf="@+id/textView13" />

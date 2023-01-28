@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/room_list">
+    app:startDestination="@id/room_list"
+    >
     <fragment
         android:id="@+id/game_view"
         android:name="com.leesfamily.chuno.game.GameViewFragment"

@@ -19,4 +19,12 @@
     <string name="nick_overlap_message">이미 사용된 닉네임입니다.</string>
     <string name="nick_allow_message">사용 가능한 닉네임입니다.</string>
     <string name="nick_no_input_message">닉네임을 입력해주세요.</string>
+    <string name="delete_account">탈퇴하기</string>
+    <string name="room_title">방 제목</string>
+    <string name="password_text">비밀번호</string>
+    <string name="reservation_text">예약</string>
+    <string name="create_room">방 만들기</string>
+    <string name="min_text">분</string>
+    <string name="hour_text">시</string>
+    <string name="before">이전</string>
 </resources>

@@ -3,5 +3,7 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="room_icon">30dp</dimen>
     <dimen name="logo_icon">120dp</dimen>
+    <dimen name="btn_height">45dp</dimen>
+    <dimen name="btn_width">145dp</dimen>
 
 </resources>

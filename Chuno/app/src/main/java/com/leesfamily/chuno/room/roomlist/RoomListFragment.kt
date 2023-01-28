@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.leesfamily.chuno.databinding.FragmentRoomListBinding
 import com.leesfamily.chuno.room.placeholder.PlaceholderContent
 
@@ -18,7 +19,7 @@ import com.leesfamily.chuno.room.placeholder.PlaceholderContent
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class RoomListFragment : Fragment() {
+class RoomListFragment : Fragment(){
     lateinit var binding: FragmentRoomListBinding
     private var param1: String? = null
     private var param2: String? = null
@@ -53,18 +54,20 @@ class RoomListFragment : Fragment() {
             adapter = RoomItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
 
         }
+
+        val fab: View = binding.createRoom
+        fab.setOnClickListener { view ->
+            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+                .setAction("Action", null)
+                .show()
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val fab: View = binding.createRoom
-        fab.setOnClickListener { view ->
-            AlertDialog.Builder(view.context).apply {
-                setMessage("")
-                setTitle("방 만들기")
-            }
-        }
+
     }
 
     companion object {
