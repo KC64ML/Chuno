@@ -15,4 +15,8 @@
     <string name="all_room">전체 방</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nick_limit_message">닉네임은 최대 6글자까지 가능합니다.</string>
+    <string name="nick_overlap_message">이미 사용된 닉네임입니다.</string>
+    <string name="nick_allow_message">사용 가능한 닉네임입니다.</string>
+    <string name="nick_no_input_message">닉네임을 입력해주세요.</string>
 </resources>

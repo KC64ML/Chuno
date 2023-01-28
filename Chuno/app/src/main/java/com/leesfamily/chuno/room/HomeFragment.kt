@@ -1,10 +1,12 @@
 package com.leesfamily.chuno.room
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.leesfamily.chuno.R
@@ -27,7 +29,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val navHostFragment = parentFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        binding.bottomNavView.setupWithNavController(navHostFragment!!.findNavController())
+       val navHostFragment = childFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+       binding.bottomNavView.setupWithNavController(navHostFragment.navController)
     }
 }

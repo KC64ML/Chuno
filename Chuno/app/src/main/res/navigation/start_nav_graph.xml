@@ -4,18 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/start_nav_graph"
     app:startDestination="@id/permissionFragment">
-    <action
-        android:id="@+id/action_room_list_to_rankFragment"
-        app:destination="@id/navigation" />
-    <action
-        android:id="@+id/action_roomListFragment_to_searchRoomFragment"
-        app:destination="@id/navigation" />
-    <action
-        android:id="@+id/action_room_list_to_myPageFragment"
-        app:destination="@id/navigation" />
-    <action
-        android:id="@+id/action_room_list_to_shopFragment"
-        app:destination="@id/navigation" />
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.leesfamily.chuno.start.LoginFragment"
@@ -47,58 +35,12 @@
         android:id="@+id/homeFragment"
         android:name="com.leesfamily.chuno.room.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/home_fragment"/>
+        tools:layout="@layout/home_fragment" />
 
     <fragment
         android:id="@+id/game_view"
         android:name="com.leesfamily.chuno.game.GameViewFragment"
         android:label="GameViewFragment"
         tools:layout="@layout/fragment_game_view" />
-
-
-
-    <navigation android:id="@+id/navigation"
-        app:startDestination="@id/shop">
-        <fragment
-            android:id="@+id/search_room"
-            android:name="com.leesfamily.chuno.room.search.SearchRoomFragment"
-            android:label="SearchRoomFragment"
-            tools:layout="@layout/fragment_search_room" />
-        <fragment
-            android:id="@+id/rankFragment"
-            android:name="com.leesfamily.chuno.room.rank.RankFragment"
-            android:label="RankFragment"
-            tools:layout="@layout/fragment_rank" />
-        <fragment
-            android:id="@+id/shop"
-            android:name="com.leesfamily.chuno.room.shop.ShopFragment"
-            android:label="fragment_shop"
-            tools:layout="@layout/fragment_shop" />
-        <fragment
-            android:id="@+id/room_list"
-            android:name="com.leesfamily.chuno.room.roomlist.RoomListFragment"
-            android:label="RoomListFragment"
-            tools:layout="@layout/fragment_room_list">
-            <action
-                android:id="@+id/action_roomListFragment_to_searchRoomFragment"
-                app:destination="@id/search_room" />
-            <action
-                android:id="@+id/action_room_list_to_shopFragment"
-                app:destination="@id/shop" />
-            <action
-                android:id="@+id/action_room_list_to_myPageFragment"
-                app:destination="@id/my_page" />
-            <action
-                android:id="@+id/action_room_list_to_rankFragment"
-                app:destination="@id/rankFragment" />
-        </fragment>
-        <fragment
-            android:id="@+id/my_page"
-            android:name="com.leesfamily.chuno.room.page.MyPageFragment"
-            android:label="fragment_my_page"
-            tools:layout="@layout/fragment_my_page" />
-    </navigation>
-
-    <include app:graph="@navigation/nav_graph" />
 
 </navigation>

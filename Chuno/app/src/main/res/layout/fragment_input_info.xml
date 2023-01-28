@@ -76,20 +76,18 @@
         android:singleLine="true"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:maxLength="8"
         app:layout_constraintBottom_toBottomOf="@+id/textView13"
         app:layout_constraintStart_toEndOf="@+id/textView13"
         app:layout_constraintTop_toTopOf="@+id/textView13" />
 
     <TextView
-        android:id="@+id/limit_count"
+        android:id="@+id/limit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginTop="5dp"
-        android:text="최대 6자리까지 입력 가능합니다."
         android:textSize="12sp"
-        android:textColor="@color/red"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/edit_nick"
         app:layout_constraintStart_toStartOf="@+id/edit_nick"
         app:layout_constraintTop_toBottomOf="@+id/edit_nick" />
@@ -99,7 +97,6 @@
         android:layout_width="185dp"
         android:layout_height="80dp"
         android:background="@drawable/button_back1"
-        android:clickable="false"
         android:text="@string/save"
         android:textColor="@color/secondary"
         android:textSize="20sp"

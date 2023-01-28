@@ -26,12 +26,15 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentInputInfoBinding
+import com.leesfamily.chuno.util.custom.MyCustomDialog
+import com.leesfamily.chuno.util.custom.MyCustomDialogInterface
 
 
-class InputInfoFragment : Fragment() {
+class InputInfoFragment : Fragment(), MyCustomDialogInterface {
     private lateinit var binding: FragmentInputInfoBinding
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var photoResultLauncher: ActivityResultLauncher<Intent>
+    private var flag = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
@@ -52,58 +55,76 @@ class InputInfoFragment : Fragment() {
             startDialog()
         }
         binding.saveButton.setOnClickListener {
-            findNavController().navigate(R.id.homeFragment)
-        }
-        binding.editNick.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                // 입력란에 변화가 있을 시 조치
-                Log.d(TAG, "onTextChanged: s:$s,start:$start,before:$before,count:$count")
-            }
-
-            override fun afterTextChanged(arg0: Editable) {
-                // 입력이 끝났을 때 조치
-                // 닉네임 중복 확인
-                val count = arg0.length
-                if (count in 1..6) {
-                    ableButton(true)
-                    binding.limitCount.visibility = View.GONE
-                    Log.d(TAG, "onTextChanged: 1~6")
-                } else if (count > 6) {
-                    ableButton(false)
-                    binding.limitCount.visibility = View.VISIBLE
-                    Log.d(TAG, "onTextChanged: 6초과")
-                } else {
-                    ableButton(false)
-                    Log.d(TAG, "onTextChanged: 0")
+            when (flag) {
+                2 -> {  // 가능
+                    findNavController().navigate(R.id.homeFragment)
                 }
-                Log.d(TAG, "afterTextChanged: $arg0")
-
+                else -> {
+                    showCustomDialog()
+                }
             }
+        }
 
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // 입력하기 전에 조치
-                // 최대 6자리인 것을 표시
-                Log.d(TAG, "beforeTextChanged: s:$s,start:$start,count:$count,after:$after")
+        binding.editNick.addTextChangedListener(
+            object : TextWatcher {
+                override fun onTextChanged(
+                    s: CharSequence,
+                    start: Int,
+                    before: Int,
+                    count: Int
+                ) {
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun afterTextChanged(arg0: Editable) {
+                    // 입력이 끝났을 때 조치
+                    val count = arg0.length
+                    if (count in 1..6) {
+                        // 중복
+                        flag = 1
+                        // 가능
+                        flag = 2
+                    } else if (count > 6) {
+                        // 초과
+                        flag = 3
+                    } else {
+                        // 0
+                        flag = 0
+                    }
+
+                    if (flag == 0) {
+                        binding.limitText.visibility = View.GONE
+                    } else {
+                        binding.limitText.visibility = View.VISIBLE
+                        setLimitText(flag)
+                    }
+                }
             }
-        })
+        )
     }
 
-    private fun ableButton(flag: Boolean) {
-        binding.saveButton.apply {
+    private fun showCustomDialog() {
+        MyCustomDialog(requireContext(), this).apply {
             when (flag) {
-                true -> {
-                    isClickable = true
-                    backgroundTintList =
-                        ColorStateList.valueOf(requireActivity().getColor(R.color.primary))
-                    Log.d(TAG, "ableButton: true")
+                0 -> {  // 입력안함
+                    message = getString(R.string.nick_no_input_message)
                 }
-                false -> {
-                    isClickable = false
-                    backgroundTintList = ColorStateList.valueOf(Color.parseColor("#B9B7BD"))
-                    Log.d(TAG, "ableButton: false")
+                1 -> {  // 중복
+                    message = getString(R.string.nick_overlap_message)
+                }
+                3 -> {  //초과
+                    message = getString(R.string.nick_limit_message)
                 }
             }
-
+            yesMsg = getString(R.string.ok)
+            show()
         }
     }
 
@@ -123,7 +144,48 @@ class InputInfoFragment : Fragment() {
                     binding.profile.setImageBitmap(bitmap)
                 }
             }
+    }
 
+    private fun setLimitText(flag: Int) {
+        binding.limitText.apply {
+            when (flag) {
+                1 -> {
+                    // 중복
+                    setText(R.string.nick_overlap_message)
+                    setTextColor(Color.RED)
+                }
+                2 -> {
+                    // 가능
+                    setText(R.string.nick_allow_message)
+                    setTextColor(Color.GREEN)
+                }
+                3 -> {
+                    // 글자 수 초과
+                    setText(R.string.nick_limit_message)
+                    setTextColor(Color.RED)
+                }
+            }
+
+        }
+    }
+
+    private fun ableButton(flag: Boolean) {
+        binding.saveButton.apply {
+            when (flag) {
+                true -> {
+                    isClickable = true
+                    backgroundTintList =
+                        ColorStateList.valueOf(requireActivity().getColor(R.color.primary))
+                    Log.d(TAG, "ableButton: true")
+                }
+                false -> {
+                    isClickable = false
+                    backgroundTintList = ColorStateList.valueOf(Color.parseColor("#B9B7BD"))
+                    Log.d(TAG, "ableButton: false")
+                }
+            }
+
+        }
     }
 
     private fun setImgUri(imgUri: Uri) {
@@ -172,7 +234,12 @@ class InputInfoFragment : Fragment() {
                     } else if (options[which] == "앨범") {
                         Intent(Intent.ACTION_GET_CONTENT).apply {
                             type = "image/*"
-                            activityResultLauncher.launch(Intent.createChooser(this, "Get Album"))
+                            activityResultLauncher.launch(
+                                Intent.createChooser(
+                                    this,
+                                    "Get Album"
+                                )
+                            )
                         }
                     }
                 })
@@ -183,6 +250,9 @@ class InputInfoFragment : Fragment() {
 
     companion object {
         private const val TAG = "추노_InputInfo"
-
     }
+
+    override fun onYesButtonClicked() {}
+
+    override fun onNoButtonClicked() {}
 }

@@ -26,7 +26,7 @@
             app:destination="@id/my_page" />
         <action
             android:id="@+id/action_room_list_to_rankFragment"
-            app:destination="@id/rankFragment" />
+            app:destination="@id/rank" />
     </fragment>
     <fragment
         android:id="@+id/search_room"
@@ -44,7 +44,7 @@
         android:label="fragment_my_page"
         tools:layout="@layout/fragment_my_page" />
     <fragment
-        android:id="@+id/rankFragment"
+        android:id="@+id/rank"
         android:name="com.leesfamily.chuno.room.rank.RankFragment"
         android:label="RankFragment"
         tools:layout="@layout/fragment_rank"/>
