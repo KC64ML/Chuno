@@ -58,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/logo_black"
-        android:background="@drawable/round_square"
+        android:background="@drawable/btn_square"
         android:adjustViewBounds="true"
         android:maxHeight="40dp"
         android:scaleType="fitCenter"

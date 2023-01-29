@@ -21,7 +21,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = HomeFragmentBinding.inflate(inflater, container, false)
-        binding.toolbarInclude.toolbarTitle.text = getString(R.string.room_list_title)
         return binding.root
     }
 

@@ -44,7 +44,7 @@ class RoomListFragment : Fragment(), CreateRoomDialogInterface {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentRoomListBinding.inflate(inflater, container, false)
-
+        binding.toolbarInclude.toolbarTitle.text = getString(R.string.room_list_title)
         binding.myRoomList.apply {
             layoutManager = when {
                 columnCount <= 1 -> LinearLayoutManager(requireContext())

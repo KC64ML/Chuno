@@ -50,7 +50,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_square"
+                android:background="@drawable/btn_square"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingStart="5dp"
@@ -87,14 +87,14 @@
                 android:id="@+id/notify_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/btn_square"
                 android:adjustViewBounds="true"
-                android:background="@drawable/round_square"
                 android:maxWidth="30dp"
                 android:maxHeight="30dp"
+                android:scaleType="fitCenter"
                 android:padding="5dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:scaleType="fitCenter"
                 android:src="@drawable/ic_baseline_notifications_24" />
 
             <androidx.appcompat.widget.AppCompatImageButton
@@ -102,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:background="@drawable/round_square"
+                android:background="@drawable/btn_square"
                 android:maxWidth="30dp"
                 android:maxHeight="30dp"
                 android:padding="5dp"

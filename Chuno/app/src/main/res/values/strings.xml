@@ -16,6 +16,7 @@
     <string name="all_room">전체 방</string>
 
     <string name="room_list_title">저잣거리</string>
+    <string name="my_page_title">프로필</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -33,7 +34,7 @@
 
     <string name="password_wrong">비밀번호가 틀렸습니다.</string>
 
-    <string name="delete_account">탈퇴하기</string>
+    <string name="delete_account">회원탈퇴</string>
     <string name="room_title">방 제목</string>
     <string name="password_text">비밀번호</string>
     <string name="reservation_text">예약</string>
@@ -46,4 +47,6 @@
     <string name="notify_off_text">알림 끄기</string>
     <string name="notify_on_text">알림 켜기</string>
     <string name="around_text">반경</string>
+    <string name="room_title_search_hint">방 제목을 검색해보세요.</string>
+    <string name="badge_text">뱃지</string>
 </resources>
