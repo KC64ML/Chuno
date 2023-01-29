@@ -12,6 +12,7 @@
 
     <color name="primary">#1D182C</color>
     <color name="gray">#4D434039</color>
+    <color name="wine">#FFA03A2C</color>
     <color name="secondary">#F5F5F5</color>
     <color name="highlight">#F66A03</color>
 </resources>

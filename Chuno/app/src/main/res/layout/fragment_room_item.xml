@@ -10,6 +10,7 @@
     app:cardPreventCornerOverlap="true">
 
     <LinearLayout
+        android:id="@+id/room_in_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -33,7 +34,6 @@
                 android:id="@+id/room_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="방 이름"
                 android:textStyle="bold"
                 android:layout_marginStart="10dp"
                 android:textAppearance="?attr/textAppearanceListItem"
@@ -69,10 +69,10 @@
                     android:src="@drawable/ic_baseline_timer_24" />
 
                 <TextView
-                    android:id="@+id/content"
+                    android:id="@+id/reservation_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="예약 일자"
+                    android:gravity="center"
                     android:textStyle="bold"
                     android:textColor="@color/secondary"
                     android:textSize="16sp"
@@ -84,6 +84,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
             <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/notify_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -97,6 +98,7 @@
                 android:src="@drawable/ic_baseline_notifications_24" />
 
             <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/room_info_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -105,7 +107,8 @@
                 android:maxHeight="30dp"
                 android:padding="5dp"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/door" />
+                app:srcCompat="@drawable/ic_baseline_info_24"
+                android:tint="@color/secondary"/>
 
         </LinearLayout>
     </LinearLayout>

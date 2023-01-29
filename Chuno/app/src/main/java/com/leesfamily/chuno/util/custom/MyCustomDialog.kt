@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.leesfamily.chuno.R
@@ -25,6 +27,14 @@ class MyCustomDialog(
     }
 
     var message: String? = null
+
+    var title: String? = null
+
+    var subMessage: String? = null
+
+    var isUseEditText:Boolean = false
+
+    var editText: String? = null
 
     var yesMsg: String? = null
 
@@ -68,6 +78,32 @@ class MyCustomDialog(
             }
         }
 
+        title?.let {
+            findViewById<TextView>(R.id.title_view).apply {
+                text = it
+                visibility = View.VISIBLE
+            }
+            findViewById<ImageButton>(R.id.close_button).apply {
+                visibility = View.VISIBLE
+            }
+        }
+
+        subMessage?.let {
+            findViewById<TextView>(R.id.sub_message_view).apply {
+                text = it
+                visibility = View.VISIBLE
+            }
+            findViewById<Button>(R.id.yes_button).apply {
+
+            }
+        }
+
+        if(isUseEditText){
+            findViewById<TextView>(R.id.edit_view).apply {
+                visibility = View.VISIBLE
+            }
+        }
+
         findViewById<Button>(R.id.no_button).setOnClickListener(this)
         findViewById<Button>(R.id.yes_button).setOnClickListener(this)
     }
@@ -77,6 +113,9 @@ class MyCustomDialog(
             findViewById<Button>(R.id.yes_button) -> {
                 Log.d(TAG, "onCreate: Yes 버튼 클릭")
                 this.myCustomDialogInterface?.onYesButtonClicked()
+                if(findViewById<EditText>(R.id.edit_view).text.toString().isNotEmpty()){
+                    editText = findViewById<EditText>(R.id.edit_view).text.toString()
+                }
                 dismiss()
             }
             findViewById<Button>(R.id.no_button) -> {

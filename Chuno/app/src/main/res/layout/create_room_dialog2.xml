@@ -54,21 +54,21 @@
             app:layout_constraintTop_toBottomOf="@+id/title_view">
 
             <TextView
-                android:id="@+id/room_title_text"
+                android:id="@+id/room_round_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoSizeMaxTextSize="30sp"
                 android:autoSizeMinTextSize="20sp"
-                android:text="반경"
+                android:text="@string/around_text"
                 android:textColor="@color/primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/room_title_edit"
+                app:layout_constraintBottom_toBottomOf="@+id/room_round_edit"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/room_title_edit"
+                android:id="@+id/room_round_edit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -79,7 +79,7 @@
                 android:singleLine="true"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/textView14"
-                app:layout_constraintStart_toEndOf="@+id/room_title_text"
+                app:layout_constraintStart_toEndOf="@+id/room_round_text"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -92,7 +92,7 @@
                 android:textColor="@color/primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/room_title_edit"
+                app:layout_constraintBottom_toBottomOf="@+id/room_round_edit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -104,7 +104,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/room_title_edit" />
+                app:layout_constraintTop_toBottomOf="@+id/room_round_edit" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/room_info"
+        android:title="@string/room_info_text"
+        android:enabled="true"
+        android:icon="@drawable/info_icon"/>
+
+    <item android:id="@+id/notify_off"
+        android:title="@string/notify_off_text"
+        android:enabled="true"
+        android:visible="true"
+        android:icon="@drawable/notify_off_icon"/>
+
+    <item android:id="@+id/notify_on"
+        android:title="@string/notify_on_text"
+        android:enabled="true"
+        android:visible="true"
+        android:icon="@drawable/notify_on_icon"/>
+
+    <item android:id="@+id/out"
+        android:title="@string/out"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_output_24"/>
+
+</menu>

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">추노</string>
+
     <string name="permission_title">권한안내</string>
     <string name="ok">확인</string>
     <string name="permission_optional">선택적 접근 권한</string>
@@ -13,12 +14,25 @@
     <string name="login_text">계정과 비밀번호 입력없이\n 카카오톡으로 로그인 해 보세요.</string>
     <string name="my_create_room">내가 만든 방</string>
     <string name="all_room">전체 방</string>
+
+    <string name="room_list_title">저잣거리</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nick_limit_message">닉네임은 최대 6글자까지 가능합니다.</string>
     <string name="nick_overlap_message">이미 사용된 닉네임입니다.</string>
     <string name="nick_allow_message">사용 가능한 닉네임입니다.</string>
     <string name="nick_no_input_message">닉네임을 입력해주세요.</string>
+
+    <string name="room_no_title_message">방 제목을 설정해주세요.</string>
+    <string name="room_no_password_message">비밀번호를 설정해주세요.</string>
+    <string name="room_no_reservation_message">예약 일정을 설정해주세요.</string>
+
+    <string name="notify_on">알림 신청이 완료되었습니다.</string>
+    <string name="notify_off">알림 신청이 해제되었습니다.</string>
+
+    <string name="password_wrong">비밀번호가 틀렸습니다.</string>
+
     <string name="delete_account">탈퇴하기</string>
     <string name="room_title">방 제목</string>
     <string name="password_text">비밀번호</string>
@@ -27,4 +41,9 @@
     <string name="min_text">분</string>
     <string name="hour_text">시</string>
     <string name="before">이전</string>
+    <string name="room_info_text">방 정보</string>
+    <string name="out">나가기</string>
+    <string name="notify_off_text">알림 끄기</string>
+    <string name="notify_on_text">알림 켜기</string>
+    <string name="around_text">반경</string>
 </resources>

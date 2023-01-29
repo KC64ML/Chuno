@@ -8,6 +8,13 @@
     android:layout_height="match_parent"
     android:background="@drawable/background">
 
+    <include
+        android:id="@+id/toolbar_include"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
         android:tag="hello"

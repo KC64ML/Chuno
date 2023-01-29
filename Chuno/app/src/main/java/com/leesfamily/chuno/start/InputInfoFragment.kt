@@ -35,6 +35,7 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var photoResultLauncher: ActivityResultLauncher<Intent>
     private var flag = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
@@ -50,6 +51,7 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.toolbarInclude.toolbarTitle.text = getString(R.string.profile_text)
 
         binding.profile.setOnClickListener {
             startDialog()
