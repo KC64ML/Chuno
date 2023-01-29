@@ -33,7 +33,7 @@ class FriendItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_friend_list, container, false)
-
+//        binding.toolbarInclude.toolbarTitle.text = getString(R.string.friend_list_title)
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
