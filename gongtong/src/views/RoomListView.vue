@@ -1,6 +1,16 @@
 <template>
-    <div container>
+    <div id="modal_container" v-if="make_room_modal1 || make_room_modal2">
+        <div class="modal" v-if="make_room_modal1" style="width: 300px">
+            <div style="position: absolute; top: 10px; right: 10px;">X</div>
+            <div style="text-align: center">방만들기</div>
+            <div style="margin-top: 20px"></div>
+            <div class="flex_center">
+                <div>방 제목 :&nbsp;</div><input v-model="room_title">
+            </div>
+        </div>
+        <div class="modal" v-else>
 
+        </div>
     </div>
     <div id="header">
         <img src="@/assets/main_logo2.png" style="height: 50px; position: absolute; left: 20px;">
@@ -22,7 +32,9 @@ export default {
     },
     data() {
         return {
-            make_room_modal: false,
+            make_room_modal1: true,
+            make_room_modal2: false,
+            room_title: "",
             roomSearch: "",
             roomList: [
                 {
@@ -52,11 +64,10 @@ export default {
         }
     },
     created() {
-        console.log(this.$store.state.nickname);
     },
     methods: {
         makeRoom() {
-            alert('ffff');
+            this.make_room_modal1 = true;
         }
     }
 }
@@ -90,5 +101,21 @@ $plus_button_size: 50px;
         text-align: center;
         font-weight: bold;
         font-size: 30px;
+    }
+    #modal_container {
+        z-index: 99;
+        position: absolute;
+        background-color: $modal_background;
+        width: 100vw;
+        height: 100vh;
+    }
+    .modal {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #F2F2F2;
+        padding: 20px;
+        border-radius: 10px;
     }
 </style>

@@ -56,6 +56,9 @@ export default {
         position: absolute;
         bottom: 0;
     }
+    textarea:focus, input:focus{
+        outline: none;
+    }
 </style>
 
 <style lang="scss" scoped>
