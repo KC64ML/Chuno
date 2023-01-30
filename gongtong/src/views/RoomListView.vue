@@ -1,7 +1,7 @@
 <template>
     <div id="modal_container" v-if="make_room_modal1 || make_room_modal2">
         <div class="modal" v-if="make_room_modal1" style="width: 300px">
-            <div style="position: absolute; top: 10px; right: 10px;">X</div>
+            <div style="position: absolute; top: 10px; right: 10px;" @click="close_modal">X</div>
             <div style="text-align: center">방만들기</div>
             <div style="margin-top: 20px"></div>
             <div class="flex_center">
@@ -15,6 +15,7 @@
     <div id="header">
         <img src="@/assets/main_logo2.png" style="height: 50px; position: absolute; left: 20px;">
         <div style="font-size: 30px;">저잣거리</div>
+        {{ test }}
     </div>
     <div style="height: 75%">
         <!-- <div style="text-align: center">저잣거리</div> -->
@@ -32,7 +33,8 @@ export default {
     },
     data() {
         return {
-            make_room_modal1: true,
+            test: 0,
+            make_room_modal1: false,
             make_room_modal2: false,
             room_title: "",
             roomSearch: "",
@@ -64,10 +66,17 @@ export default {
         }
     },
     created() {
+        window.addEventListener("resize", () => {
+            this.test = document.body.clientHeight;
+        });
     },
     methods: {
         makeRoom() {
             this.make_room_modal1 = true;
+        },
+        close_modal() {
+            this.make_room_modal1 = false;
+            this.make_room_modal2 = false;
         }
     }
 }
@@ -107,7 +116,7 @@ $plus_button_size: 50px;
         position: absolute;
         background-color: $modal_background;
         width: 100vw;
-        height: 100vh;
+        height: 100%;
     }
     .modal {
         position: absolute;

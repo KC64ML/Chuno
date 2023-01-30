@@ -7,7 +7,9 @@
             {{ room.title }}
         </div>
         <div style="margin-top: 10px"></div>
+        <!-- stretch는 위아래로 모든 div의 높이를 같게 해줘요 -->
         <div style="display: flex; align-items: stretch;">
+            <!-- flex: 1 은 남은공간을 이 div가 모두 가져가게 해 줘요 -->
             <div class="card_menu flex_center" style="color: white; flex: 1">
                 <img src="@/assets/Clock.svg">
                 <div class="start_time" v-if="this.room.room_start_time < this.now">진행중</div>
@@ -25,7 +27,7 @@
             <div class="card_margin"></div>
 
             <div class="card_menu">
-                <img src="@/assets/Door.svg" />
+                <img src="@/assets/Info.svg" />
             </div>
         </div>
     </div>
