@@ -23,6 +23,7 @@ export default {
       await axios.post("http://3.34.138.191:9997/kakao/delUser", del_user_email, {headers: {'Content-Type': 'text/plain'}});
       console.log("탈퇴완료");
       this.logout();
+      this.$router.push({ name: 'Start'})
     },
   }
 }

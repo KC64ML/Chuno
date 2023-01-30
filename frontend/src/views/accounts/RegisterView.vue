@@ -14,7 +14,7 @@
       <label for="nickname_input">닉네임</label>
       <input type="text" id="nickname_input" v-model="nickname" maxlength="6">
 
-      <div class="check" v-if="nickname.length>0">
+      <div class="check" v-if="nickname.length">
         <div v-if="!lengthValid || !useValid">
           <p v-if="!lengthValid">닉네임은 최대 6글자까지 가능합니다.</p>
           <p v-if="!useValid">이미 사용 중인 닉네임입니다.</p>

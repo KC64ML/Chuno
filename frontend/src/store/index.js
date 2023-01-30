@@ -5,6 +5,11 @@ export default createStore({
     nav: true,
     nickname: null,
     loggedIn: false,
+
+    // Modal on/off
+    createRoomModal: false,
+    passwordModal: false,
+    pushModal: false,
     
   },
   getters: {

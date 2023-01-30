@@ -6,16 +6,17 @@
       <div>방제목</div>
     </div>
     <div class="buttons">
+      <!-- 예약 시간 -->
       <div class="room_button">
         <img src="@/assets/reservation.svg" alt="reservation">
         <span>2023년 01월 17일 20:00</span>
       </div>
-
-      <div class="room_button">
+      <!-- 알림 신청 -->
+      <div class="room_button" @click="onPushModal">
         <img src="@/assets/notification.svg" alt="notification">
       </div>
-
-      <div class="room_button">
+      <!-- 입장 -->
+      <div class="room_button" @click="enter">
         <img src="@/assets/door.svg" alt="door" style="width:22px; height:22px">
       </div>
     </div>
@@ -25,6 +26,22 @@
 <script>
 export default {
   name: 'RoomItemView',
+  methods: {
+    // 알림 신청
+    onPushModal() {
+      this.$store.state.pushModal = !this.$store.state.pushModal
+      // 알림 신청하는 코드 추가
+    },
+
+    // 입장
+    enter() {
+      // if (true) {
+      this.$store.state.passwordModal = !this.$store.state.passwordModal
+      // } else {
+        // this.$router.push({name: WaitingRoom, params: { room_num :1 }})
+      // }
+    }
+  }
 }
 </script>
 
