@@ -43,7 +43,6 @@
             android:fontFamily="@font/main_font"
             android:hint="@string/friend_search_hint"
             android:paddingHorizontal="20dp"
-            android:gravity="center"
             android:paddingVertical="5dp"
             android:maxLines="1"
             android:textColor="@color/primary"

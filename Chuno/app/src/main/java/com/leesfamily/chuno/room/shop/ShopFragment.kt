@@ -35,6 +35,7 @@ class ShopFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+//        binding.toolbarInclude.toolbarTitle.text = getString(R.string.shop_title)
         return inflater.inflate(R.layout.fragment_shop, container, false)
     }
 
