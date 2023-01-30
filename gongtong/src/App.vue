@@ -11,9 +11,6 @@ export default {
     components: {
         FooterVue
     },
-    created() {
-        
-    }
 }
 </script>
 
@@ -28,6 +25,15 @@ export default {
         font-family: 'WandohopeR';
         margin: 0;
         box-sizing: border-box;
+    }
+    html {
+        height: 100%;
+    }
+    body {
+        height: 100%;
+    }
+    #app {
+        height: 100%
     }
     .button_style_1 {
         background-image: url("@/assets/main_button1.png");
