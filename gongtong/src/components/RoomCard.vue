@@ -55,8 +55,7 @@
 </script>
 
 <style lang="scss" scoped>
-    $card_vertical_margin: 20px;
-    $card_margin: 15px;
+    @import "@/assets/scss/_variable.scss";
 
     #container {
         margin: $card_vertical_margin 0;
