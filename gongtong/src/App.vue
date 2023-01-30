@@ -12,6 +12,7 @@ export default {
         FooterVue
     },
     created() {
+        
     }
 }
 </script>
@@ -67,6 +68,7 @@ export default {
         //cover는 다 덮도록 확대축소(1번 만나옴) contain 이미지가 전부 나오도록 확대축소 (2번나올수 있음)
         background-size: cover;
         width: 100vw;
-        height: 100vh;
+        height: 100%;
+        overflow: hidden;
     }
 </style>
