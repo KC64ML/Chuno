@@ -13,4 +13,4 @@ ARG JAR_FILE=./build/libs/chuno-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
 
 # 시스템 진입점 정의
-ENTRYPOINT ["java", "-jar", "/app.jar", "http://3.36.87.75:8000"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]
