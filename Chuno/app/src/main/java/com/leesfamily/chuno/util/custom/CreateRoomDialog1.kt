@@ -1,7 +1,5 @@
 package com.leesfamily.chuno.util.custom
 
-import android.app.DatePickerDialog
-import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,12 +8,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
+import android.view.animation.AnimationUtils
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.CreateRoomDialog1Binding
+import com.leesfamily.chuno.util.custom.DialogSizeHelper.dialogFragmentResizeWidth
+import java.util.*
+
 
 class CreateRoomDialog1(
     context: Context,
@@ -44,6 +44,7 @@ class CreateRoomDialog1(
     var defValue = 6
     var minValue = 4
     var maxValue = 10
+    var curValue = defValue
 
     // 인터페이스 연결
     init {
@@ -52,6 +53,11 @@ class CreateRoomDialog1(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        context?.dialogFragmentResizeWidth(this, 0.8f)
     }
 
     override fun onCreateView(
@@ -64,9 +70,73 @@ class CreateRoomDialog1(
         binding.nextButton.setOnClickListener(this)
         binding.closeButton.setOnClickListener(this)
         binding.calendarView.setOnClickListener(this)
+
+        val numberView = binding.number.apply {
+            text = defValue.toString()
+        }
+        binding.numberPlusBtn.apply {
+            setOnClickListener {
+                curValue += step
+                checkRange(numberView, curValue, minValue, maxValue)
+            }
+        }
+
+        binding.numberMinusBtn.apply {
+            setOnClickListener {
+                curValue -= step
+                checkRange(numberView, curValue, minValue, maxValue)
+            }
+        }
+
         setReadOnly()
         isCancelable = false
         return binding.root
+    }
+
+    private fun checkRange(numberView: TextView, curValue: Int, minValue: Int, maxValue: Int) {
+
+        when {
+            curValue in minValue..maxValue -> {
+                Log.d(TAG, "checkRange: minValue <= curValue <= maxValue")
+                numberView.text = curValue.toString()
+                binding.numberText.visibility = View.GONE
+            }
+            curValue < minValue -> {
+                Log.d(TAG, "checkRange: minValue > curValue")
+                numberView.text = minValue.toString()
+                this.curValue = minValue
+                binding.numberText.apply {
+                    text = getString(R.string.min_person_count_message)
+                    visibility = View.VISIBLE
+                    setVisibilityGone(this)
+                }
+                binding.roomMaxCountEdit.animation = AnimationUtils.loadAnimation(context,R.anim.shake)
+            }
+            else -> {
+                Log.d(TAG, "checkRange: curValue > maxValue")
+                numberView.text = maxValue.toString()
+                this.curValue = maxValue
+                binding.numberText.apply {
+                    text = getString(R.string.max_person_count_message)
+                    visibility = View.VISIBLE
+                    setVisibilityGone(this)
+                }
+                binding.roomMaxCountEdit.animation = AnimationUtils.loadAnimation(context,R.anim.shake)
+            }
+        }
+
+    }
+
+    private fun setVisibilityGone(textView: TextView) {
+        val timer = Timer()
+        timer.schedule(object :TimerTask(){
+            override fun run() {
+                binding.root.post {
+                    textView.visibility = View.GONE
+                }
+                timer.cancel()
+            }
+        },1000)
     }
 
     override fun onClick(view: View?) {

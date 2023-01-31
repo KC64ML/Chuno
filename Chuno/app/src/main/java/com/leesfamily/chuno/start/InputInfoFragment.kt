@@ -1,6 +1,7 @@
 package com.leesfamily.chuno.start
 
 import android.content.ActivityNotFoundException
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -17,6 +18,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -67,49 +69,56 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
             }
         }
 
-        binding.editNick.addTextChangedListener(
-            object : TextWatcher {
-                override fun onTextChanged(
-                    s: CharSequence,
-                    start: Int,
-                    before: Int,
-                    count: Int
-                ) {
-                }
+        val imm = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
 
-                override fun beforeTextChanged(
-                    s: CharSequence,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
+        binding.editNick.apply {
+            requestFocus()
+            imm!!.showSoftInput(this, 0)
 
-                override fun afterTextChanged(arg0: Editable) {
-                    // 입력이 끝났을 때 조치
-                    val count = arg0.length
-                    if (count in 1..6) {
-                        // 중복
-                        flag = 1
-                        // 가능
-                        flag = 2
-                    } else if (count > 6) {
-                        // 초과
-                        flag = 3
-                    } else {
-                        // 0
-                        flag = 0
+            addTextChangedListener(
+                object : TextWatcher {
+                    override fun onTextChanged(
+                        s: CharSequence,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
                     }
 
-                    if (flag == 0) {
-                        binding.limitText.visibility = View.GONE
-                    } else {
-                        binding.limitText.visibility = View.VISIBLE
-                        setLimitText(flag)
+                    override fun beforeTextChanged(
+                        s: CharSequence,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
+
+                    override fun afterTextChanged(arg0: Editable) {
+                        // 입력이 끝났을 때 조치
+                        val count = arg0.length
+                        if (count in 1..6) {
+                            // 중복
+                            flag = 1
+                            // 가능
+                            flag = 2
+                        } else if (count > 6) {
+                            // 초과
+                            flag = 3
+                        } else {
+                            // 0
+                            flag = 0
+                        }
+
+                        if (flag == 0) {
+                            binding.limitText.visibility = View.GONE
+                        } else {
+                            binding.limitText.visibility = View.VISIBLE
+                            setLimitText(flag)
+                        }
                     }
                 }
-            }
-        )
+            )
+        }
     }
 
     private fun showCustomDialog() {

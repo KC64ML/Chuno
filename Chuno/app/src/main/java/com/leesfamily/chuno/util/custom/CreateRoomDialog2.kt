@@ -14,6 +14,8 @@ import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.fragment.app.DialogFragment
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.CreateRoomDialog2Binding
+import com.leesfamily.chuno.util.custom.DialogSizeHelper.dialogFragmentResize
+import com.leesfamily.chuno.util.custom.DialogSizeHelper.dialogFragmentResizeWidth
 
 class CreateRoomDialog2(
     context: Context,
@@ -45,6 +47,11 @@ class CreateRoomDialog2(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        context?.dialogFragmentResizeWidth(this, 0.8f)
     }
 
     override fun onCreateView(
