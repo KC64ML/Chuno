@@ -5,6 +5,8 @@ import RankView from '@/views/RankView.vue'
 import OauthView from '@/views/OauthView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 
+import module from '@/router/module.js'
+
 const routes = [
   {
     path: "/",
@@ -51,6 +53,7 @@ const routes = [
     name: 'Register',
     component: RegisterView
   },
+  ...module
 ]
 
 const router = createRouter({
