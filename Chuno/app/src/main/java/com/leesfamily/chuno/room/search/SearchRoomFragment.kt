@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.room.placeholder.PlaceholderContent
-import com.leesfamily.chuno.room.roomlist.RoomItemFragment
+
 
 /**
  * 게임을 위한 방 목록 중 방제목으로(포함) 검색하는 Fragment이다.
@@ -25,7 +25,7 @@ class SearchRoomFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            columnCount = it.getInt(RoomItemFragment.ARG_COLUMN_COUNT)
+            columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
     }
 
@@ -56,7 +56,7 @@ class SearchRoomFragment : Fragment() {
         fun newInstance(columnCount: Int) =
             SearchRoomFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(RoomItemFragment.ARG_COLUMN_COUNT, columnCount)
+                    putInt(ARG_COLUMN_COUNT, columnCount)
                 }
             }
     }

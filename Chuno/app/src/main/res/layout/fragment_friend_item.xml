@@ -54,18 +54,18 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1" />
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/logo_black"
-        android:background="@drawable/btn_square"
-        android:adjustViewBounds="true"
-        android:maxHeight="40dp"
-        android:scaleType="fitCenter"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        app:tint="@color/secondary"
-        />
+<!--    <ImageButton-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/logo_black"-->
+<!--        android:background="@drawable/btn_square"-->
+<!--        android:adjustViewBounds="true"-->
+<!--        android:maxHeight="40dp"-->
+<!--        android:scaleType="fitCenter"-->
+<!--        android:paddingStart="15dp"-->
+<!--        android:paddingEnd="15dp"-->
+<!--        android:paddingTop="5dp"-->
+<!--        android:paddingBottom="5dp"-->
+<!--        app:tint="@color/secondary"-->
+<!--        />-->
 </LinearLayout>

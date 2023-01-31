@@ -27,13 +27,23 @@ class CreateRoomDialog1(
 
     var isReadOnly: Boolean = false
 
+    // 방제목
     var title: String? = null
 
+    // 비밀번호
     var password: String? = null
 
+    // 예약일자
     var reservationDate: Long? = null
 
+    // 예약시간
     var reservationTime: Long? = null
+
+    // 최대 인원
+    var step = 2
+    var defValue = 6
+    var minValue = 4
+    var maxValue = 10
 
     // 인터페이스 연결
     init {
@@ -53,6 +63,7 @@ class CreateRoomDialog1(
         dialog?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         binding.nextButton.setOnClickListener(this)
         binding.closeButton.setOnClickListener(this)
+        binding.calendarView.setOnClickListener(this)
         setReadOnly()
         isCancelable = false
         return binding.root
@@ -61,13 +72,15 @@ class CreateRoomDialog1(
     override fun onClick(view: View?) {
         when (view) {
             binding.nextButton -> {
-                if (checkEmptyInput(view))
+                if (checkEmptyInput(view)) {
                     createRoomDialogInterface?.onNextButtonClicked(binding.root)
+                    dismiss()
+                }
             }
             binding.closeButton -> {
                 dismiss()
             }
-            binding.calendarImageView, binding.reservationDate, binding.reservationHour, binding.reservationMin -> {
+            binding.calendarView -> {
                 if (!isReadOnly)
                     createRoomDialogInterface?.onReservationClicked(binding.root)
             }
@@ -84,31 +97,34 @@ class CreateRoomDialog1(
     }
 
     private fun checkEmptyInput(view: View?): Boolean {
-        view?.let {
-            if (binding.roomTitleEdit.text.toString().isEmpty()) {
-                showCustomDialog(0)
-                return false
-            } else {
-                this.title = binding.roomTitleEdit.text.toString()
+        if (!isReadOnly) {
+            view?.let {
+                if (binding.roomTitleEdit.text.toString().isEmpty()) {
+                    showCustomDialog(0)
+                    return false
+                } else {
+                    this.title = binding.roomTitleEdit.text.toString()
+                }
+                if (binding.passwordEdit.text.toString().isEmpty()) {
+                    showCustomDialog(1)
+                    return false
+                } else {
+                    this.password = binding.passwordEdit.text.toString()
+                }
+//            if (binding.reservationDate.text.toString().isEmpty() ||
+//                binding.reservationHour.text.toString().isEmpty() ||
+//                binding.reservationMin.text.toString().isEmpty()
+//            ) {
+//                showCustomDialog(2)
+//                return false
+//            } else {
+////                this.reservationDate = binding.reservationDate.text
+//            }
+                return true
             }
-            if (binding.passwordEdit.text.toString().isEmpty()) {
-                showCustomDialog(1)
-                return false
-            } else {
-                this.password = binding.passwordEdit.text.toString()
-            }
-            if (binding.reservationDate.text.toString().isEmpty() ||
-                binding.reservationHour.text.toString().isEmpty() ||
-                binding.reservationMin.text.toString().isEmpty()
-            ) {
-                showCustomDialog(2)
-                return false
-            } else {
-//                this.reservationDate = binding.reservationDate.text
-            }
-            return true
+            return false
         }
-        return false
+        return true
     }
 
     private fun showCustomDialog(flag: Int) {

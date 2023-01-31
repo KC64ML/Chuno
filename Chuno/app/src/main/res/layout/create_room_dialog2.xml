@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
-    android:layout_height="400dp"
+    android:layout_height="wrap_content"
     android:gravity="center"
-    android:minHeight="200dp"
+    android:minHeight="400dp"
     android:orientation="vertical"
     app:cardBackgroundColor="@color/secondary"
     app:cardCornerRadius="20dp"
@@ -48,63 +48,91 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toTopOf="@+id/button_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_view">
 
-            <TextView
-                android:id="@+id/room_round_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeMinTextSize="20sp"
-                android:text="@string/around_text"
-                android:textColor="@color/primary"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/room_round_edit"
+            <LinearLayout
+                android:id="@+id/room_round_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
+                <TextView
+                    android:id="@+id/room_round_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="20sp"
+                    android:text="@string/around_text"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/room_round_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="20sp"
+                    android:text="0"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/room_round_text"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="20sp"
+                    android:text="m"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/room_round_value"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/room_round_value"
+                    app:layout_constraintTop_toTopOf="@+id/room_round_value" />
+            </LinearLayout>
+
+
+            <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/room_round_edit"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/gray_square"
-                android:gravity="center"
-                android:inputType="number"
-                android:singleLine="true"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toStartOf="@+id/textView14"
-                app:layout_constraintStart_toEndOf="@+id/room_round_text"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeMinTextSize="20sp"
-                android:text="km"
-                android:textColor="@color/primary"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/room_round_edit"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="10dp"
+                android:progressDrawable="@drawable/seekbar_bar"
+                android:thumb="@drawable/seekbar_thumb"
+                android:tickMarkTint="@color/blue"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/view"
+                app:layout_constraintStart_toStartOf="@+id/view"
+                app:layout_constraintTop_toBottomOf="@+id/view" />
 
             <View
+                android:id="@+id/view"
                 android:layout_width="180dp"
                 android:layout_height="180dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/gray"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/room_round_edit" />
+                app:layout_constraintTop_toBottomOf="@+id/room_round_view" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
@@ -141,4 +169,4 @@
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>

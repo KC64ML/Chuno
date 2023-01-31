@@ -92,6 +92,10 @@ class SearchItemRecyclerViewAdapter(
         Log.d(TAG, "onNextButtonClicked: ")
     }
 
+    override fun onPrevButtonClicked(view: View) {
+        Log.d(TAG, "onPrevButtonClicked: ")
+    }
+
     override fun onReservationClicked(view: View) {
         Log.d(TAG, "onReservationClicked: ")
     }

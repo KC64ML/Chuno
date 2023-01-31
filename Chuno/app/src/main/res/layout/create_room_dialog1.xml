@@ -3,8 +3,8 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="300dp"
-    android:layout_height="400dp"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
     android:gravity="center"
     android:minHeight="200dp"
     android:orientation="vertical"
@@ -48,7 +48,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
             app:layout_constraintBottom_toTopOf="@+id/button_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,9 +65,7 @@
                 android:textColor="@color/primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/room_title_edit"
-                app:layout_constraintEnd_toEndOf="@+id/password_text"
-                app:layout_constraintStart_toStartOf="@+id/password_text"
+                app:layout_constraintStart_toStartOf="@+id/room_max_count_text"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
@@ -75,13 +74,73 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:background="@drawable/gray_square"
-                android:gravity="center"
                 android:fontFamily="@font/main_font"
+                android:gravity="center"
+                android:labelFor="@+id/room_title_text"
                 android:singleLine="true"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/room_title_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/room_title_text"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/room_max_count_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeMinTextSize="20sp"
+                android:text="최대인원"
+                android:textColor="@color/primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/room_max_count_edit"
+                app:layout_constraintStart_toStartOf="@+id/password_text"
+                app:layout_constraintTop_toTopOf="@+id/room_max_count_edit" />
+
+            <LinearLayout
+                android:id="@+id/room_max_count_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="@+id/room_title_edit"
+                app:layout_constraintTop_toBottomOf="@+id/room_title_edit">
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/number_plus_btn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/btn_square"
+                    android:text="+"
+                    android:textColor="@color/secondary"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="20sp"
+                    android:text="6"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/number_picker_minus_btn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/btn_square"
+                    android:text="-"
+                    android:textColor="@color/secondary"
+                    android:textSize="24sp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/password_text"
@@ -97,64 +156,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/password_edit" />
 
+
             <EditText
                 android:id="@+id/password_edit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/gray_square"
-                android:inputType="numberPassword"
+                android:fontFamily="@font/main_font"
                 android:gravity="center"
+                android:inputType="numberPassword"
+                android:labelFor="@+id/password_text"
                 android:singleLine="true"
                 android:textSize="18sp"
-                android:fontFamily="@font/main_font"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/room_title_edit"
-                app:layout_constraintTop_toBottomOf="@+id/room_title_edit" />
-
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/calendar_image_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:adjustViewBounds="true"
-                android:minWidth="@dimen/room_icon"
-                android:minHeight="@dimen/room_icon"
-                app:layout_constraintBottom_toBottomOf="@+id/reservation_date"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/reservation_date"
-                app:srcCompat="@drawable/calendar" />
-
-            <TextView
-                android:id="@+id/reservation_hour_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeMinTextSize="20sp"
-                android:text="@string/hour_text"
-                android:textColor="@color/primary"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/reservation_hour"
-                app:layout_constraintStart_toEndOf="@+id/reservation_hour"
-                app:layout_constraintTop_toTopOf="@+id/reservation_hour" />
-
-            <TextView
-                android:id="@+id/reservation_min_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeMinTextSize="20sp"
-                android:text="@string/min_text"
-                android:textColor="@color/primary"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/reservation_min"
-                app:layout_constraintStart_toEndOf="@+id/reservation_min"
-                app:layout_constraintTop_toTopOf="@+id/reservation_min" />
-
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/room_max_count_edit"
+                app:layout_constraintTop_toBottomOf="@+id/room_max_count_edit" />
 
             <TextView
                 android:id="@+id/reservation_text"
@@ -166,52 +184,102 @@
                 android:textColor="@color/primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/reservation_date"
                 app:layout_constraintEnd_toEndOf="@+id/password_text"
                 app:layout_constraintStart_toStartOf="@+id/password_text"
-                app:layout_constraintTop_toTopOf="@+id/reservation_date" />
+                app:layout_constraintTop_toTopOf="@+id/calendar_view" />
 
-            <TextView
-                android:id="@+id/reservation_date"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/calendar_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/gray_square"
-                android:textSize="18sp"
-                android:textColor="@color/primary"
-                android:gravity="center"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/calendar_image_view"
-                app:layout_constraintStart_toStartOf="@+id/password_edit"
-                app:layout_constraintTop_toBottomOf="@+id/password_edit" />
-
-            <TextView
-                android:id="@+id/reservation_hour"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/gray_square"
-                android:textSize="18sp"
-                android:gravity="center"
-                android:textColor="@color/primary"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/reservation_date"
-                app:layout_constraintTop_toBottomOf="@+id/reservation_date" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/password_edit"
+                app:layout_constraintTop_toBottomOf="@+id/password_edit">
 
-            <TextView
-                android:id="@+id/reservation_min"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/gray_square"
-                android:textSize="18sp"
-                android:gravity="center"
-                android:textColor="@color/primary"
-                app:layout_constraintBottom_toBottomOf="@+id/reservation_hour"
-                app:layout_constraintStart_toEndOf="@+id/reservation_hour_text"
-                app:layout_constraintTop_toTopOf="@+id/reservation_hour" />
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/calendar_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:adjustViewBounds="true"
+                    android:minWidth="@dimen/room_icon"
+                    android:minHeight="@dimen/room_icon"
+                    app:layout_constraintBottom_toBottomOf="@+id/reservation_date"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/reservation_date"
+                    app:srcCompat="@drawable/calendar" />
 
+                <TextView
+                    android:id="@+id/reservation_hour_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="20sp"
+                    android:text="@string/hour_text"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/reservation_hour"
+                    app:layout_constraintStart_toEndOf="@+id/reservation_hour"
+                    app:layout_constraintTop_toTopOf="@+id/reservation_hour" />
+
+                <TextView
+                    android:id="@+id/reservation_min_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeMinTextSize="20sp"
+                    android:text="@string/min_text"
+                    android:textColor="@color/primary"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/reservation_min"
+                    app:layout_constraintStart_toEndOf="@+id/reservation_min"
+                    app:layout_constraintTop_toTopOf="@+id/reservation_min" />
+
+                <TextView
+                    android:id="@+id/reservation_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/gray_square"
+                    android:gravity="center"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/calendar_image_view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/reservation_hour"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/gray_square"
+                    android:gravity="center"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/reservation_date"
+                    app:layout_constraintTop_toBottomOf="@+id/reservation_date" />
+
+                <TextView
+                    android:id="@+id/reservation_min"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/gray_square"
+                    android:gravity="center"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/reservation_hour"
+                    app:layout_constraintStart_toEndOf="@+id/reservation_hour_text"
+                    app:layout_constraintTop_toTopOf="@+id/reservation_hour" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
@@ -228,10 +296,11 @@
                 android:id="@+id/next_button"
                 android:layout_width="145dp"
                 android:layout_height="50dp"
+                android:layout_marginTop="30dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_back1"
-                android:textColor="@color/secondary"
                 android:text="다음"
+                android:textColor="@color/secondary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

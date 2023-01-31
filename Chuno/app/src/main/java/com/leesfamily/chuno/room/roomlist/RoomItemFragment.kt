@@ -1,3 +1,4 @@
+/*
 package com.leesfamily.chuno.room.roomlist
 
 import android.os.Bundle
@@ -14,9 +15,11 @@ import com.leesfamily.chuno.room.placeholder.PlaceholderContent
 import com.leesfamily.chuno.util.custom.MyCustomDialog
 import com.leesfamily.chuno.util.custom.MyCustomDialogInterface
 
+*/
 /**
  * A fragment representing a list of Items.
- */
+ *//*
+
 class RoomItemFragment : Fragment() {
 
     private var columnCount = 1
@@ -60,4 +63,4 @@ class RoomItemFragment : Fragment() {
                 }
             }
     }
-}
+}*/

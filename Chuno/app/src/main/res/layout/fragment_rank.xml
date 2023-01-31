@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/secondary">
 
     <include
         android:id="@+id/toolbar_include"
@@ -11,5 +12,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.appcompat.widget.AppCompatSeekBar
+        android:id="@+id/room_round_edit"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:progressDrawable="@drawable/seekbar_bar"
+        android:thumb="@drawable/seekbar_thumb"
+        android:tickMarkTint="@color/blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_include"
+        app:layout_constraintVertical_bias="0.45" />
+
+    <TextView
+        android:id="@+id/room_round_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="245dp"
+        android:text="500"
+        app:layout_constraintStart_toStartOf="@+id/room_round_edit"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_include" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

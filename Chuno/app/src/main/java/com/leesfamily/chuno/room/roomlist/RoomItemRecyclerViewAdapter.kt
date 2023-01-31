@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -17,39 +18,40 @@ import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentRoomItemBinding
 import com.leesfamily.chuno.room.placeholder.PlaceholderContent.PlaceholderItem
-import com.leesfamily.chuno.util.custom.CreateRoomDialog1
-import com.leesfamily.chuno.util.custom.CreateRoomDialogInterface
-import com.leesfamily.chuno.util.custom.MyCustomDialog
-import com.leesfamily.chuno.util.custom.MyCustomDialogInterface
+import com.leesfamily.chuno.util.custom.*
 
-
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
 class RoomItemRecyclerViewAdapter(
     private val values: List<PlaceholderItem>
-) : RecyclerView.Adapter<RoomItemRecyclerViewAdapter.ViewHolder>(), CreateRoomDialogInterface,MyCustomDialogInterface {
+) : RecyclerView.Adapter<RoomItemRecyclerViewAdapter.ViewHolder>(), CreateRoomDialogInterface,
+    MyCustomDialogInterface {
 
     private lateinit var binding: FragmentRoomItemBinding
+    private lateinit var manager: FragmentManager
+    private lateinit var mContext: Context
+
+
+    private lateinit var dialog1: CreateRoomDialog1
+    private lateinit var dialog2: CreateRoomDialog2
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        mContext = parent.context
         binding = FragmentRoomItemBinding.inflate(
-            LayoutInflater.from(parent.context),
+            LayoutInflater.from(mContext),
             parent,
             false
         )
         binding.notifyButton.setOnClickListener {
-            showCustomDialog(parent.context)
+            showCustomDialog(mContext)
         }
         binding.roomInView.setOnClickListener {
             Log.d(TAG, "onCreateViewHolder: 입장")
 
         }
         binding.roomInfoButton.setOnClickListener {
-            val manager: FragmentManager = (parent.context as AppCompatActivity).supportFragmentManager
+            manager = (mContext as AppCompatActivity).supportFragmentManager
             Log.d(TAG, "onCreateViewHolder: $manager")
             // 방 정보
-            CreateRoomDialog1(parent.context, this).apply {
+            dialog1 = CreateRoomDialog1(mContext, this).apply {
                 isReadOnly = true
                 show(manager, "infoRoomDialog1")
             }
@@ -94,14 +96,21 @@ class RoomItemRecyclerViewAdapter(
     }
 
     override fun onNextButtonClicked(view: View) {
-        Log.d(TAG, "onNextButtonClicked: ")
+        dialog2 = CreateRoomDialog2(mContext, this).apply {
+            isReadOnly = true
+            show(manager, "createRoomDialog2")
+        }
+    }
+
+    override fun onPrevButtonClicked(view: View) {
+        dialog1.show(manager, "createRoomDialog1")
     }
 
     override fun onReservationClicked(view: View) {
-        Log.d(TAG, "onReservationClicked: ")
+        Toast.makeText(context, "나 예약 버튼임", Toast.LENGTH_SHORT).show()
     }
 
-    companion object{
+    companion object {
         private const val TAG = "추노_RoomItemRecyclerViewAda"
     }
 }
