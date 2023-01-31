@@ -22,7 +22,7 @@
         },
         methods: {
             goHome() {
-                alert('ffff');
+                this.$router.push("/home");
             }
         }
     }
