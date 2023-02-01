@@ -88,7 +88,8 @@ public class RoomController {
         log.info(String.valueOf(point));
         room.setLocation(point);
         RoomEntity res = roomService.insRoom(room, room.getHostId());
-        Map<String, Object> response = statusCodeGeneratorUtils.checkResultByObject(res);
+        RoomDto dto = new RoomDto(res);
+        Map<String, Object> response = statusCodeGeneratorUtils.checkResultByObject(dto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

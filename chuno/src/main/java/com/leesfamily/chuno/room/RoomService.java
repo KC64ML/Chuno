@@ -83,7 +83,8 @@ public class RoomService {
             }else {
                 room.setCurrentPlayers(currentPlayers + 1);
                 roomRepository.saveAndFlush(room);
-                resMap.put("result", room);
+                RoomDto dto = new RoomDto(room);
+                resMap.put("result", dto);
                 resMap.put("code", "1");
             }
         }else {
