@@ -3,18 +3,22 @@
     <div id="dot_menu" @click="dot_menu">
         <img src="@/assets/dot_menu.svg">
     </div>
-    <div>
-        여기는 웨이팅 룸이에요
+    <div class="subscribers-container">
+        <div v-for="(sub, idx) in subscribers" :key="idx">
+            <NicknameCardVue :sub="sub"></NicknameCardVue>
+        </div>
     </div>
 </template>
 
 <script>
 import HeaderVue from '@/components/HeaderVue.vue';
+import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
 // import { OpenVidu } from "openvidu-browser";
 
     export default {
         components: {
-            HeaderVue
+            HeaderVue,
+            NicknameCardVue
         },
         data() {
             return {
@@ -42,7 +46,18 @@ import HeaderVue from '@/components/HeaderVue.vue';
             this.hostNickName = "asdf";
 
             // 오픈비두에서 subscribers들을 받아오는 소스로 부터 subscribers를 추출해요
-            this.subscribers = ["conn1", "conn2", "conn3", "coon4"]
+            if (this.$store.state.nickname == undefined) {
+                this.$store.state.nickname = "werwer";
+            }
+            var myNickname = this.$store.state.nickname
+            var hostNickName = this.hostNickName
+            this.subscribers = [
+                {"level": 15, "nickname": myNickname, "isReady": false},
+                {"level": 1, "nickname": hostNickName, "isReady": false},
+                {"level": 5, "nickname": "conn3", "isReady": false},
+                {"level": 77, "nickname": "conn4", "isReady": true},
+                {"level": 43, "nickname": "conn5", "isReady": false}
+            ]
 
             
 
@@ -73,6 +88,13 @@ import HeaderVue from '@/components/HeaderVue.vue';
     #dot_menu > img {
         display: block;
         height: 60%
+    }
+    .subscribers-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: calc(100vw * 0.02);
+        position: absolute;
+        top: $header_height + 20px;
     }
 
 </style>
