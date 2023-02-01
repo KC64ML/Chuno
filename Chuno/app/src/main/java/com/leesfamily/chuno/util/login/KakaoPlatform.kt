@@ -48,8 +48,8 @@ class KakaoPlatform {
                 } else if (token != null) {
                     Log.i(TAG, "카카오톡으로 로그인 성공 ,토큰 : ${token.accessToken}")
 //                    listener.loginSuccess()
-                    App.prefs.setString("login_access_token", token.accessToken)
-                    getUserData()
+//                    App.prefs.setString("login_access_token", token.accessToken)
+//                    getUserData()
                 }
             }
         } else {

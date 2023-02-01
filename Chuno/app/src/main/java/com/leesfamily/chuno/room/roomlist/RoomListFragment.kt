@@ -16,9 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentRoomListBinding
 import com.leesfamily.chuno.room.placeholder.PlaceholderContent
-import com.leesfamily.chuno.util.custom.CreateRoomDialog1
-import com.leesfamily.chuno.util.custom.CreateRoomDialog2
-import com.leesfamily.chuno.util.custom.CreateRoomDialogInterface
+import com.leesfamily.chuno.util.custom.*
 
 /**
  * 게임을 위한 방의 목록을 보여주는 Fragment이다.
@@ -129,7 +127,4 @@ class RoomListFragment : Fragment(), CreateRoomDialogInterface {
         dialog1.show(childFragmentManager, "createRoomDialog1")
     }
 
-    override fun onReservationClicked(view: View) {
-        Toast.makeText(context, "나 예약 버튼임", Toast.LENGTH_SHORT).show()
-    }
 }

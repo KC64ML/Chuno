@@ -106,9 +106,6 @@ class RoomItemRecyclerViewAdapter(
         dialog1.show(manager, "createRoomDialog1")
     }
 
-    override fun onReservationClicked(view: View) {
-        Toast.makeText(context, "나 예약 버튼임", Toast.LENGTH_SHORT).show()
-    }
 
     companion object {
         private const val TAG = "추노_RoomItemRecyclerViewAda"

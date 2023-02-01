@@ -96,9 +96,6 @@ class SearchItemRecyclerViewAdapter(
         Log.d(TAG, "onPrevButtonClicked: ")
     }
 
-    override fun onReservationClicked(view: View) {
-        Log.d(TAG, "onReservationClicked: ")
-    }
 
     companion object{
         private const val TAG = "추노_SearchItemRecyclerViewAdapter"

@@ -57,4 +57,7 @@
 
     <string name="max_person_count_message">최대 인원은 10명입니다.</string>
     <string name="min_person_count_message">최소 인원은 4명입니다.</string>
+    <string name="today_text">오늘</string>
+    <string name="tomorrow_text">내일</string>
+    <string name="date_warning_message">현재보다 이후의 시간으로 설정해주세요.</string>
 </resources>

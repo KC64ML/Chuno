@@ -75,6 +75,7 @@
                 android:background="@drawable/gray_square"
                 android:fontFamily="@font/main_font"
                 android:gravity="center"
+                android:textColor="@color/primary"
                 android:labelFor="@+id/room_title_text"
                 android:singleLine="true"
                 android:textSize="18sp"
@@ -181,6 +182,7 @@
                 android:fontFamily="@font/main_font"
                 android:layout_marginTop="30dp"
                 android:gravity="center"
+                android:textColor="@color/primary"
                 android:inputType="numberPassword"
                 android:labelFor="@+id/password_text"
                 android:singleLine="true"
@@ -279,6 +281,7 @@
                     android:gravity="center"
                     android:textColor="@color/primary"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/reservation_date"
                     app:layout_constraintTop_toBottomOf="@+id/reservation_date" />
@@ -292,6 +295,7 @@
                     android:gravity="center"
                     android:textColor="@color/primary"
                     android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/reservation_hour"
                     app:layout_constraintStart_toEndOf="@+id/reservation_hour_text"
                     app:layout_constraintTop_toTopOf="@+id/reservation_hour" />
@@ -302,7 +306,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.75" />
+                app:layout_constraintGuide_percent="0.7" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

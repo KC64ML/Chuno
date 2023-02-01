@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--  눌린 상태  -->
+    <item android:drawable="@drawable/btn_default_right" android:state_focused="true" />
+    <!--  클릭 상태 -->
+    <item android:drawable="@drawable/btn_default_right" android:state_pressed="true" />
+    <!--  기본 상태 -->
+    <item android:drawable="@drawable/btn_pressed_right" />
+</selector>

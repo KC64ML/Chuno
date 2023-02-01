@@ -6,5 +6,5 @@ import android.view.View
 interface CreateRoomDialogInterface {
     fun onNextButtonClicked(view: View)
     fun onPrevButtonClicked(view: View)
-    fun onReservationClicked(view: View)
+//    fun onReservationClicked(view: View)
 }

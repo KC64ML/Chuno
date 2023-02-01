@@ -10,10 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.CreateRoomDialog1Binding
-import com.leesfamily.chuno.util.custom.DialogSizeHelper.dialogFragmentResizeWidth
+import com.leesfamily.chuno.util.custom.DialogSizeHelper.dialogFragmentResize
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -34,10 +37,16 @@ class CreateRoomDialog1(
     var password: String? = null
 
     // 예약일자
-    var reservationDate: Long? = null
+    var reservationDate: String? = null
+    var yearValue: Int? = null
+    var monthValue: Int? = null
+    var dayValue: Int? = null
 
     // 예약시간
-    var reservationTime: Long? = null
+    var reservationHour: String? = null
+    var reservationMin: String? = null
+
+    var mContext: Context? = null
 
     // 최대 인원
     var step = 2
@@ -49,6 +58,7 @@ class CreateRoomDialog1(
     // 인터페이스 연결
     init {
         this.createRoomDialogInterface = createRoomDialogInterface
+        mContext = context
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +67,7 @@ class CreateRoomDialog1(
 
     override fun onResume() {
         super.onResume()
-        context?.dialogFragmentResizeWidth(this, 0.8f)
+        mContext?.dialogFragmentResize(this, 0.8f)
     }
 
     override fun onCreateView(
@@ -110,7 +120,8 @@ class CreateRoomDialog1(
                     visibility = View.VISIBLE
                     setVisibilityGone(this)
                 }
-                binding.roomMaxCountEdit.animation = AnimationUtils.loadAnimation(context,R.anim.shake)
+                binding.roomMaxCountEdit.animation =
+                    AnimationUtils.loadAnimation(mContext, R.anim.shake)
             }
             else -> {
                 Log.d(TAG, "checkRange: curValue > maxValue")
@@ -121,7 +132,8 @@ class CreateRoomDialog1(
                     visibility = View.VISIBLE
                     setVisibilityGone(this)
                 }
-                binding.roomMaxCountEdit.animation = AnimationUtils.loadAnimation(context,R.anim.shake)
+                binding.roomMaxCountEdit.animation =
+                    AnimationUtils.loadAnimation(mContext, R.anim.shake)
             }
         }
 
@@ -129,14 +141,14 @@ class CreateRoomDialog1(
 
     private fun setVisibilityGone(textView: TextView) {
         val timer = Timer()
-        timer.schedule(object :TimerTask(){
+        timer.schedule(object : TimerTask() {
             override fun run() {
                 binding.root.post {
                     textView.visibility = View.GONE
                 }
                 timer.cancel()
             }
-        },1000)
+        }, 1000)
     }
 
     override fun onClick(view: View?) {
@@ -151,8 +163,32 @@ class CreateRoomDialog1(
                 dismiss()
             }
             binding.calendarView -> {
-                if (!isReadOnly)
-                    createRoomDialogInterface?.onReservationClicked(binding.root)
+                if (!isReadOnly) {
+                    DateTimePicker(mContext!!, object : DateTimePickerInterface {
+
+                        override fun onOkButtonClicked(
+                            date: Calendar?,
+                            hourValue: Int?,
+                            minuteValue: Int?
+                        ) {
+                            val df: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+                            reservationDate = date?.time?.let { df.format(it) }
+
+                            yearValue = date?.get(Calendar.YEAR)
+                            monthValue = date?.get(Calendar.DAY_OF_MONTH)
+                            dayValue = date?.get(Calendar.DATE)
+
+                            reservationHour = "$hourValue"
+                            reservationMin = "$minuteValue"
+
+                            binding.reservationDate.text = reservationDate
+                            binding.reservationHour.text = reservationHour
+                            binding.reservationMin.text = reservationMin
+                        }
+
+                    }).show(childFragmentManager, "datePicker")
+                }
             }
         }
     }
@@ -181,15 +217,15 @@ class CreateRoomDialog1(
                 } else {
                     this.password = binding.passwordEdit.text.toString()
                 }
-//            if (binding.reservationDate.text.toString().isEmpty() ||
-//                binding.reservationHour.text.toString().isEmpty() ||
-//                binding.reservationMin.text.toString().isEmpty()
-//            ) {
-//                showCustomDialog(2)
-//                return false
-//            } else {
-////                this.reservationDate = binding.reservationDate.text
-//            }
+            if (binding.reservationDate.text.toString().isEmpty() ||
+                binding.reservationHour.text.toString().isEmpty() ||
+                binding.reservationMin.text.toString().isEmpty()
+            ) {
+                showCustomDialog(2)
+                return false
+            } else {
+//                this.reservationDate = binding.reservationDate.text
+            }
                 return true
             }
             return false
@@ -198,7 +234,7 @@ class CreateRoomDialog1(
     }
 
     private fun showCustomDialog(flag: Int) {
-        MyCustomDialog(requireContext(), this).apply {
+        MyCustomDialog(mContext!!, this).apply {
             when (flag) {
                 0 -> {
                     message = getString(R.string.room_no_title_message)
