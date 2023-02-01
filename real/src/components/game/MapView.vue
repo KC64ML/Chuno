@@ -1,26 +1,34 @@
 <template>
-  
   <GMapMap
     :center="player"
-    :zoom="zoom"
+    :zoom="18"
     :options="{
       zoomControl: false,
       mapTypeControl: false,
-      streetViewControl: true,
-      fullscreenControl: true,
-      minZoom: 10,
+      streetViewControl: false,
+      fullscreenControl: false,
+      minZoom: 16,
       maxZoom: 18,
     }"
-    style="width: 15rem; height: 15rem"
+    style="width: 100vw; height: 25rem"
   >
 
     <GMapMarker
       :animation=4
       :position=this.player
     />
+    <GMapMarker
+      :key="index"
+      :animation=1
+      v-for="(m, index) in markers"
+      :position="m.position"
+      :clickable="true"
+
+      @click="center = m.position"
+    />
 
     <GMapCircle
-      :radius="radius"
+      :radius="50"
       :center="player"
       :options="circleOptions"
     />
@@ -28,16 +36,28 @@
 </template>
 
 <script>
-
 export default {
-  props:{
-    radius: Number,
-  },
+  name: {},
   data() {
     return {
+      center: { lat: 36.0, lng: 128.1163344 },
+      markers: [
+        {
+          position: {
+            lat: 36.108135,
+            lng: 128.42335,
+          },
+        },
+        {
+          position: {
+            lat: 36.10565,
+            lng: 128.42335,
+          },
+        },
+      ],
       player: {
-          lat: null,
-          lng: null,
+          lat: 36.107,
+          lng: 128.420,
       },
       circleOptions: {
         strokeColor: "#0000FF",
@@ -46,7 +66,6 @@ export default {
         fillColor: "#0000FF",
         fillOpacity: 0.15,
       },
-      zoom: 15
 
     };
   },
@@ -55,23 +74,16 @@ export default {
       (position) => {
           this.player.lat= position.coords.latitude;
           this.player.lng= position.coords.longitude;
+          // this.center.lat = position.coords.latitude;
+          // this.center.lng = position.coords.longitude;
       })
   },
-  watch: {
-    radius(r) {
-      if(r <=550){
-        this.zoom = 15
-      } else {
-        this.zoom = 14
-      }
-    }
-  }
 
 };
 </script>
 
 <style>
-/* body {
+body {
   margin: 0;
-} */
+}
 </style>

@@ -1,22 +1,17 @@
 <template>
   <HeaderVue></HeaderVue>
-  <nav id="header">
-    <router-link to="/home">
-      <img class="logo" alt="Chuno Logo" src="@/assets/main_logo2.png">
-    </router-link>
-    <p>랭크</p>
-  </nav>
-  
-  <div>rank</div>
+  <RankListView/>
 </template>
 
 <script>
 import HeaderVue from '@/components/HeaderVue.vue';
+import RankListView from '@/components/rank/RankListView.vue';
 
 export default {
   name: 'RankView',
   components: {
-    HeaderVue
+    HeaderVue,
+    RankListView,
   }
 }
 </script>

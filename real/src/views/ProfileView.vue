@@ -1,8 +1,12 @@
 <template>
+  <!-- 모달 -->
+  <LogoutModal v-if="logoutModal" @on-logout="onLogout"/>
+  <DeleteAccountModal v-if="deleteAccountModal" @on-delete="onDelete"/>
+  <EditProfileModal v-if="editProfileModal"/>
+  
   <HeaderVue></HeaderVue>
-  <!-- <router-view/> -->
 
-  <div style="width: 80%;">
+  <div style="height: 75%;">
     <MyProfileView @on-edit="onEdit"/>
     <div class="container">
       <PlayTimeView/>
@@ -12,10 +16,6 @@
     <span @click="onLogout">로그아웃</span>
     <br>
     <br>
-    <!-- 모달 -->
-    <LogoutModal v-if="logoutModal" @on-logout="onLogout"/>
-    <DeleteAccountModal v-if="deleteAccountModal" @on-delete="onDelete"/>
-    <EditProfileModal v-if="editProfileModal"/>
   </div>
 
 </template>

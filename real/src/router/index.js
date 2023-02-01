@@ -4,6 +4,7 @@ import ShopView from '@/views/ShopView.vue'
 import RankView from '@/views/RankView.vue'
 import OauthView from '@/views/OauthView.vue'
 import RegisterView from '@/views/RegisterView.vue'
+import GameView from '@/views/GameView.vue'
 
 const routes = [
   {
@@ -27,7 +28,7 @@ const routes = [
     component: () => import("@/views/HomeView.vue")
   },
   {
-    path: '/profile',
+    path: '/profile/:uid',
     name: 'Profile',
     component: ProfileView
   },
@@ -50,6 +51,11 @@ const routes = [
     path: '/register/:email',
     name: 'Register',
     component: RegisterView
+  },
+  {
+    path: '/game',
+    name: 'game',
+    component: GameView
   },
 ]
 

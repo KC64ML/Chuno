@@ -17,8 +17,10 @@
         created() {
             var here = this.$route.path;
             if (here == '/home') this.here = '저잣거리';
+            //프로필 링크 수정 필요
+            else if (here == '/profile/1') this.here = '내 프로필';
+            else if (here == '/shop') this.here = '상점';
             else if (here == '/rank') this.here = '랭킹';
-            else if (here == '/profile') this.here = '프로필';
         },
         methods: {
             goHome() {
