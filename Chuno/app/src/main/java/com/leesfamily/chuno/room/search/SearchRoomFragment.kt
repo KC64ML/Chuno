@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.leesfamily.chuno.R
+import com.leesfamily.chuno.databinding.FragmentSearchRoomBinding
 import com.leesfamily.chuno.room.placeholder.PlaceholderContent
 
 
@@ -21,6 +22,7 @@ private const val ARG_PARAM2 = "param2"
 
 class SearchRoomFragment : Fragment() {
     private var columnCount = 1
+    lateinit var binding:FragmentSearchRoomBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,20 +35,15 @@ class SearchRoomFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_search_room, container, false)
-
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = SearchItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
+        binding = FragmentSearchRoomBinding.inflate(inflater,container,false)
+        binding.searchRoomList.apply {
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
             }
+            adapter = SearchItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
         }
-        return view
+        return binding.root
     }
 
     companion object {

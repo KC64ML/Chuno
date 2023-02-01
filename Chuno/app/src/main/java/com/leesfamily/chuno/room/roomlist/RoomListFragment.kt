@@ -1,14 +1,10 @@
 package com.leesfamily.chuno.room.roomlist
 
-import android.app.DatePickerDialog
-import android.content.res.Resources.Theme
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,7 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentRoomListBinding
 import com.leesfamily.chuno.room.placeholder.PlaceholderContent
-import com.leesfamily.chuno.util.custom.*
+import com.leesfamily.chuno.util.custom.CreateRoomDialog1
+import com.leesfamily.chuno.util.custom.CreateRoomDialog2
+import com.leesfamily.chuno.util.custom.CreateRoomDialogInterface
 
 /**
  * 게임을 위한 방의 목록을 보여주는 Fragment이다.

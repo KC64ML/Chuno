@@ -9,17 +9,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.leesfamily.chuno.R
+import com.leesfamily.chuno.databinding.FragmentWaitingRoomListBinding
 import com.leesfamily.chuno.room.wait.placeholder.PlaceholderContent
 
 /**
  * A fragment representing a list of Items.
  */
 class WaitingRoomFragment : Fragment() {
-
+    private lateinit var binding: FragmentWaitingRoomListBinding
     private var columnCount = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
@@ -30,27 +32,24 @@ class WaitingRoomFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_waiting_room_list, container, false)
+        binding.toolbarInclude.toolbarTitle.text = "나는 방 이름"
+        binding = FragmentWaitingRoomListBinding.inflate(inflater, container, false)
+        binding.userList.apply {
 
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = UserItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
+            layoutManager = when {
+                columnCount <= 3 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
             }
+            adapter = UserItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
+
         }
-        return view
+
+        return binding.root
     }
 
     companion object {
-
-        // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
 
-        // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
             WaitingRoomFragment().apply {

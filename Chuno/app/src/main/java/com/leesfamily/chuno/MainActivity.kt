@@ -1,5 +1,6 @@
 package com.leesfamily.chuno
 
+import android.app.Fragment
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.leesfamily.chuno.databinding.ActivityMainBinding
@@ -12,9 +13,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
     }
 
+    override fun onAttachFragment(fragment: Fragment?) {
+        super.onAttachFragment(fragment)
+    }
 
     override fun onStart() {
         super.onStart()

@@ -1,22 +1,24 @@
 package com.leesfamily.chuno.room.friend
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.leesfamily.chuno.R
+import com.leesfamily.chuno.databinding.FragmentFriendListBinding
 import com.leesfamily.chuno.room.placeholder.PlaceholderContent
 
 /**
  * A fragment representing a list of Items.
  */
 class FriendItemFragment : Fragment() {
+
+    private lateinit var binding: FragmentFriendListBinding
 
     private var columnCount = 1
 
@@ -32,22 +34,22 @@ class FriendItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_friend_list, container, false)
-//        binding.toolbarInclude.toolbarTitle.text = getString(R.string.friend_list_title)
+        binding = FragmentFriendListBinding.inflate(inflater, container, false)
+        binding.toolbarInclude.toolbarTitle.text = getString(R.string.friend_list_title)
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-                itemDecoration.setDrawable(getDrawable(context, R.drawable.line)!!)
-                addItemDecoration(itemDecoration)
-                adapter = FriendItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
+        binding.friendList.apply {
+
+            layoutManager = when {
+                columnCount <= 1 -> LinearLayoutManager(context)
+                else -> GridLayoutManager(context, columnCount)
             }
+            val itemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+            itemDecoration.setDrawable(getDrawable(context, R.drawable.line)!!)
+            addItemDecoration(itemDecoration)
+            adapter = FriendItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
         }
-        return view
+
+        return binding.root
     }
 
     companion object {

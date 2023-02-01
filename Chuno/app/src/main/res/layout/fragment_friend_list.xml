@@ -59,7 +59,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:padding="20dp"
-            android:id="@+id/list"
+            android:id="@+id/friend_list"
             android:name="com.leesfamily.chuno.room.ItemfriendFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -22,7 +22,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [native_app_key:native_app_key]
+        manifestPlaceholders = [native_app_key: native_app_key]
         buildConfigField "String", "KAKAO_API_KEY", properties['kakao_api_key']
     }
 
@@ -40,7 +40,7 @@ android {
         jvmTarget = '1.8'
     }
 
-    viewBinding{
+    viewBinding {
         enabled = true
     }
     buildFeatures {
@@ -81,7 +81,14 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 
     // google map
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+    // Maps SDK for Android KTX Library
+//    implementation 'com.google.maps.android:maps-ktx:3.0.0'
+
+    // Maps SDK for Android Utility Library KTX Library
+//    implementation 'com.google.maps.android:maps-utils-ktx:3.0.0'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
