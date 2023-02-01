@@ -1,4 +1,5 @@
 <template>
+  <CreateRoomModal v-if="this.$store.state.CreateRoomModal"/>
     <!-- <div id="modal_container" v-if="make_room_modal1 || make_room_modal2">
         <div class="modal" ref="modal" v-if="make_room_modal1" style="width: 300px;">
             <div style="position: absolute; top: 10px; right: 10px;" @click="close_modal">X</div>
@@ -17,18 +18,20 @@
         <!-- <div style="text-align: center">저잣거리</div> -->
         <room-card v-for="(room, idx) in roomList" :key="idx" v-bind:room="room"></room-card>
     </div>
-    <div id="plus_button" @click="makeRoom">+</div>
+    <div id="plus_button" @click="createRoom">+</div>
 </template>
 
 <script>
 import HeaderVue from "@/components/HeaderVue.vue"
 import RoomCard from "@/components/RoomCard.vue"
+import CreateRoomModal from '@/components/home/CreateRoomModal.vue'
 // import variables from "@/assets/scss/_variable.scss"
 
 export default {
     components: {
         HeaderVue,
-        RoomCard
+        RoomCard,
+        CreateRoomModal,
     },
     data() {
         return {
@@ -67,8 +70,9 @@ export default {
     mounted() {
     },
     methods: {
-        async makeRoom() {
-            alert("눌렸어요")
+        createRoom() {
+            // alert("눌렸어요")
+            this.$store.state.CreateRoomModal = true
         },
         fff() {
             alert('fffff');

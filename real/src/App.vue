@@ -66,6 +66,20 @@ export default {
     textarea:focus, input:focus{
         outline: none;
     }
+    /* 모달 */
+    .modal-bg{
+      width: 100%; height:100%;
+      background: rgba(0,0,0,0.5);
+      position: fixed; padding: 20px;
+    }
+
+    .modal{
+      // position: fixed;
+      background-color: #F5F5F5;
+      border-radius: 10%;
+      width: 70vw;
+      // height: 80%;
+    }
 </style>
 
 <style lang="scss" scoped>
