@@ -1,5 +1,5 @@
 <template>
-  <HeaderVue></HeaderVue>
+  <HeaderVue :title="'프로필'"></HeaderVue>
   <!-- <router-view/> -->
 
   <div style="width: 80%;">

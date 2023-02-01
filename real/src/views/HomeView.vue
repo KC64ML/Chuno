@@ -12,7 +12,7 @@
 
         </div>
     </div> -->
-    <HeaderVue></HeaderVue>
+    <HeaderVue :title="'홈'"></HeaderVue>
     <div style="height: 75%">
         <!-- <div style="text-align: center">저잣거리</div> -->
         <room-card v-for="(room, idx) in roomList" :key="idx" v-bind:room="room"></room-card>

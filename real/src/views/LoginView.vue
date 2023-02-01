@@ -14,7 +14,6 @@
     export default {
         methods: {
             loginGo() {
-                console.log(process.env.VUE_APP_HERE)
                 var REST_API_KEY = "9733352823239497d6928853e1e59954";
                 var REDIRECT_URI = process.env.VUE_APP_HERE + "oauth";
                 window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;

@@ -1,5 +1,5 @@
 <template>
-  <HeaderVue></HeaderVue>
+  <HeaderVue :title="'랭킹'"></HeaderVue>
   <nav id="header">
     <router-link to="/home">
       <img class="logo" alt="Chuno Logo" src="@/assets/main_logo2.png">
