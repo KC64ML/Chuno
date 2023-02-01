@@ -13,7 +13,7 @@
 
         </div>
     </div> -->
-    <HeaderVue></HeaderVue>
+    <HeaderVue :title="'홈'"></HeaderVue>
     <div style="height: 75%">
         <!-- <div style="text-align: center">저잣거리</div> -->
         <room-card v-for="(room, idx) in roomList" :key="idx" v-bind:room="room"></room-card>
@@ -50,7 +50,7 @@ export default {
                     room_start_time: new Date(2023, 1, 1, 13, 20, 0)
                 },
                 {
-                    room_id: 2,
+                    roomId: 2,
                     title: "방이름2",
                     is_public: false,
                     password: "abc111",
