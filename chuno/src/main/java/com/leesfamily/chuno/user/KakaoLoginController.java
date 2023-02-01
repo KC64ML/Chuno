@@ -5,16 +5,21 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.JsonObject;
+import com.leesfamily.chuno.user.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,11 +45,13 @@ public class KakaoLoginController {
     final private UserService userService;
 
     @PostMapping("/login")
-    String getAccessToken(@RequestBody String code) {
-        System.out.println(code);
+    public ResponseEntity<Map<String, Object>> getAccessToken(@RequestBody String code) {
+        System.out.println("컨트롤러에서 받은 코드 : " + code);
         String access_Token = "";
         String refresh_Token = "";//
         String reqURL = "https://kauth.kakao.com/oauth/token";
+        Map<String, Object> res = new HashMap<>();
+        HttpStatus httpStatus = null;
         try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -58,14 +65,16 @@ public class KakaoLoginController {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=9733352823239497d6928853e1e59954"); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=http://localhost:8080"); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&redirect_uri=http://localhost:5500/oauth.html"); // TODO 인가코드 받은 redirect_uri 입력
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();
 
             //결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
+            String ctnt = conn.getResponseMessage();
             System.out.println("성공여부 : " + responseCode);
+            System.out.println("내용 : " + ctnt);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = "";
@@ -94,26 +103,32 @@ public class KakaoLoginController {
             System.out.println(email);
 
             if (email.equals("no_email")) {
-                return "no_email";
+                res.put("code", "no_email");
+                httpStatus = HttpStatus.OK;
             }
             System.out.println("여기까지");
 
             //이메일을 데이터베이스에서 뒤져요
-            String user = userService.findUserByEmail(email);
+            UserEntity user = userService.findUserByEmail(email);
             //이메일이 있으면 이미 가입한 유저에요 JWT토큰을 만들어 홈으로 userDto와 함께 가요
             //이메일이 없으면 가입한 적이 없는 유저에요
-            System.out.println(user);
             if (user == null) {
-                return "not_member_"+email;
+                res.put("code", "no_email");
+                res.put("result", email);
+                httpStatus = HttpStatus.OK;
             } else {
-                return makeToken(user);
+                res.put("code", "member");
+                res.put("result", makeToken(user.getId()));
+                httpStatus = HttpStatus.OK;
             }
         } catch (Exception e) {
-            return "error";
+            res.put("code", e.getMessage());
+            httpStatus = HttpStatus.EXPECTATION_FAILED;
         }
+        return new ResponseEntity<>(res, httpStatus);
     }
 
-    String makeToken(String nickname) {
+    String makeToken(Long user_id) {
         System.out.println("여기도 잘되는데요");
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + 86400000);
@@ -124,7 +139,7 @@ public class KakaoLoginController {
                 .setIssuedAt(new Date()) // 발행일
                 .setExpiration(expiryDate) // 만료일
                 //만약 claim을 넣고 싶다면
-//				.claim("nickname", nickname) // 넣을 payload 키
+				.claim("user_id", user_id) // 넣을 payload 키
                 .signWith(SignatureAlgorithm.HS512, secretKey) // 암호화 방식
                 .compact(); // 묶어
     }
@@ -167,16 +182,16 @@ public class KakaoLoginController {
     }
 
     @PostMapping("/register")
-    String register(@RequestBody HashMap<String, String> map) {
-        mapper.register(map);
-        return makeToken(map.get("nickname"));
+    String register(@RequestBody UserEntity user) {
+        Long user_id = userService.register(user);
+        return makeToken(user_id);
     }
 
     @PostMapping("/tokenConfirm")
     public int tokenConfirm(@RequestBody String token) {
         try {
             Claims claim = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-            System.out.println(claim.get("nickname"));
+            System.out.println(claim.get("user_id"));
             return 1;
         } catch(Exception e) {
             return 0;

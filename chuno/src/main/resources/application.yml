@@ -19,6 +19,7 @@ spring:
       password: ssafy
   jpa:
     database: mysql
+    database-platform: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
     hibernate:
       ddl-auto: create
 #    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -26,13 +27,24 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
   servlet:
     multipart:
-      location: C:\res_file\chuno
+      location: /chuno/resources
 logging:
   level:
     root: info
     org.hibernate.type: trace
 
 secret:
-  key: ssafy
+  key: believ8ebeli7ev6ethat5lifeisno4tadrea1mitsfal3lWhatthoughourBestOerhopeaheavyswayHopeagain2eriemfojc
+jwt:
+  token:
+    secret-key: [secret-key]
+  access-token:
+    expire-length: 1800000
+  refresh-token:
+    expire-length: 1209600000
