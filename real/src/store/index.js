@@ -2,7 +2,12 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    nickname: undefined
+    nickname: undefined,
+    // Modal
+    createRoomModal: false,
+    passwordModal: false,
+    pushModal: false,
+
   },
   getters: {
   },

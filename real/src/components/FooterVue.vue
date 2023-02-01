@@ -8,7 +8,7 @@
             <img class="menu" src="@/assets/Search.svg">
             <div style="color: white">방검색</div>
         </div>
-        <div class="menu_box" @click="this.$router.push('/profile')">
+        <div class="menu_box" @click="this.$router.push('/profile/1')">
             <img class="menu" src="@/assets/Profile_footer.svg">
             <div style="color: white">내프로필</div>
         </div>

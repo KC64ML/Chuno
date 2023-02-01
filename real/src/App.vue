@@ -23,6 +23,52 @@ export default {
 </script>
 
 <style lang="scss">
+    .button_style_1 {
+        background-image: url("@/assets/main_button1.png");
+        background-size: cover;
+        width: 120px;
+        height: 50px;
+    }
+    .block_center {
+        display: block;
+        margin: 0 auto;
+    }
+    .flex_center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .relative {
+        position: relative;
+    }
+    .image_text {
+        color: white; position: absolute
+    }
+    .hover_pointer:hover {
+        cursor: pointer;
+    }
+    .footer_fix {
+        position: absolute;
+        bottom: 0;
+    }
+    textarea:focus, input:focus{
+        outline: none;
+    }
+    /* 모달 */
+    .modal-bg{
+      width: 100%; height:100%;
+      background: rgba(0,0,0,0.5);
+      position: fixed; padding: 20px;
+    }
+
+    .modal{
+      // position: fixed;
+      background-color: #F5F5F5;
+      border-radius: 10%;
+      width: 70vw;
+      // height: 80%;
+    }
+
 @font-face {
     font-family: 'WandohopeR';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/WandohopeR.woff') format('woff');
@@ -82,6 +128,7 @@ textarea:focus,
 input:focus {
     outline: none;
 }
+
 </style>
 
 <style lang="scss" scoped>
