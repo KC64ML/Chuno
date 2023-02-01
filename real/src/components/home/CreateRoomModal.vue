@@ -28,10 +28,10 @@
         <div class="container-row">
           <label for="reservation">예약</label>
           <div class="container-col">
-            <input type="date" id="reservation" v-model="date">
+            <input type="date" id="reservation" v-model="date" >
             <div class="container-row">
-              <div :id="dateBtn ? date-btn1 : date-btn2" @click="onDate"><p>오늘</p></div>
-              <div :id="dateBtn ? date-btn2 : date-btn1" @click="onDate"><p>내일</p></div>
+              <div :id="dateBtn ? 'date-btn1' : 'date-btn2'" @click="onDate"><p>오늘</p></div>
+              <div :id="dateBtn ? 'date-btn2' : 'date-btn1'" @click="onDate"><p>내일</p></div>
             </div>
             <input type="time" id="reservation" v-model="time">
           </div>
@@ -50,8 +50,8 @@
         <p @click="onClose">X</p>
       </div>
       <div>
-        <label for="radious">반경</label>
-        <p>{{ this.radius }} m</p>
+        <span>반경</span>
+        <span>{{ this.radius }} m</span>
       </div>
       <MapView
       :radius="radius"
@@ -92,8 +92,15 @@ export default {
       maxPlayer: 4,
       password: null,
       dateBtn: true,
-      date: null,
-      time: null,
+      date: {
+        year: null,
+        month: null,
+        day: null,
+      },
+      time: {
+        hour: null,
+        min: null,
+      },
       // page2
       radius: 500,
     }
@@ -107,7 +114,7 @@ export default {
     // 방 생성
     // params 수정 필요
     onCreate() {
-      this.$router.push({ name: 'WaitingRoom', params: { room_num: 1} })
+      this.$router.push({ name: 'WaitingRoom', params: { room_num: 1 } })
     },
 
     // 최대인원
@@ -132,6 +139,19 @@ export default {
     // 오늘 내일
     onDate() {
       this.dateBtn = !this.dateBtn
+      const today = new Date()
+      if(this.dateBtn){
+        this.date.year = today.getFullYear()
+        this.date.month = today.getMonth()
+        this.date.day = today.getDay()
+      } else{
+        this.date.year = today.getFullYear()
+        this.date.month = today.getMonth()
+        this.date.day = today.getDay() + 1
+      }
+      console.log(this.date.year)
+      console.log(this.date.month)
+      console.log(this.date.day)
     }
   },
   computed(){
@@ -142,13 +162,12 @@ export default {
     }
   },
   watch: {
-    date(res){
-      console.log(res)
-      console.log(typeof(res))
-    },
     time(res){
-      console.log(res)
-      console.log(typeof(res))
+      const time = res.split(':')
+      this.hour = Number(time[0])
+      this.min = Number(time[1])
+      console.log(this.hour)
+      console.log(this.min)
     }
   }
 }
@@ -193,9 +212,13 @@ export default {
   #date-btn1{
     color: #F5F5F5;
     background-color: black;
+    padding: 5%;
+    border-radius: 20% 0 0 20%;
   }
   #date-btn2{
     color: #F5F5F5;
     background-color: #434039;
+    padding: 5%;
+    border-radius: 0 20% 20% 0;
   }
 </style>
