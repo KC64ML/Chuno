@@ -1,4 +1,23 @@
 <template>
+    <div id="modal_container" @click="modal_close" v-if="menu_modal">
+        <div id="waiting_room_modal">
+            <div style="display: flex" class="menu_box" @click="info_on">
+                <img class="modal_menu_image" src="@/assets/info_yanggak.svg" /> 방 정보
+            </div>
+            <div style="display: flex" class="menu_box" @click="notting_off">
+                <img class="modal_menu_image" src="@/assets/note_on.svg" />
+                <div>알림끄기</div>
+            </div>
+            <div style="display: flex" class="menu_box" @click="notting_on">
+                <img class="modal_menu_image" src="@/assets/note_off.svg" />
+                <div>알림켜기</div>
+            </div>
+            <div style="display: flex" class="menu_box" @click="exiting_room">
+                <img class="modal_menu_image" src="@/assets/exit_room.svg" />
+                <div>나가기</div>
+            </div>
+        </div>
+    </div>
     <HeaderVue :title="roomInfo.title"></HeaderVue>
     <div id="dot_menu" @click="dot_menu">
         <img src="@/assets/dot_menu.svg">
@@ -22,8 +41,10 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
         },
         data() {
             return {
+                menu_modal: false,
                 roomInfo: undefined,
                 hostNickName: undefined,
+                is_noted: undefined,
                 subscribers: [],
             }
         },
@@ -59,7 +80,7 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
                 {"level": 43, "nickname": "conn5", "isReady": false}
             ]
 
-            
+            // 아이디 키와, 방 키를 보내서 방 알람 설정을 했는지 아닌지 알아봐요            
 
             /*
             //여기 부터 오픈비두 소스로 사용할 거같아요
@@ -69,7 +90,22 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
         },
         methods: {
             dot_menu() {
-                alert('ffff')
+                this.menu_modal = true;
+            },
+            modal_close() {
+                this.menu_modal = false;
+            },
+            info_on() {
+                alert("정보");
+            },
+            notting_on() {
+                alert("알림켜기");
+            },
+            notting_off() {
+                alert("알림끄기");
+            },
+            exiting_room() {
+                alert("나가기")
             }
         }
     }
@@ -77,10 +113,11 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
 
 <style lang="scss" scoped>
 @import "@/assets/scss/variable";
+$dot_right_position: 20px;
     #dot_menu {
         position: absolute;
         top: $header_margin;
-        right: 20px;
+        right: $dot_right_position;
         height: $header_height;
         display: flex;
         align-items: center;
@@ -96,5 +133,30 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
         position: absolute;
         top: $header_height + 20px;
     }
-
+    #modal_container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: rgb(0,0,0,0.2);
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+    #waiting_room_modal {
+        background-color: #F5F5F5;
+        box-shadow: 0 5px 5px rgb(0,0,0,0.4);
+        padding: 10px;
+        position: absolute;
+        top: $header_height - 10px;
+        right: $dot_right_position;
+    }
+    .modal_menu_image {
+        margin-right: 10px;
+    }
+    .menu_box {
+        margin: 5px;
+    }
+    .menu_box:hover {
+        background-color: #888888;
+    }
 </style>
