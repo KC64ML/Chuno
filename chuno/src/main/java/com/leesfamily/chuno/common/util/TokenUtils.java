@@ -23,7 +23,9 @@ public class TokenUtils {
         try {
             String token = requestHeader.getFirst("Authorization");
             log.info("token in TokenUtils : " + token);
-            token = token.substring("Bearer ".length()); // swagger 테스트 용
+            if(token.substring(0, 6).equals("Bearer")) { // swagger 테스트 용
+                token = token.substring("Bearer ".length());
+            }
             Claims claim = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
             Long userId = claim.get("user_id", Long.class);
             return userId;

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        열심히 로그인 중이에요!
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script>
+            async function start() {
+                var code = new URL(window.location.href).searchParams.get(
+                    "code"
+                );
+                // 카카오 로그인에 성공하면 code를 얻을 수 있어요 이 코드는 유저가 내 서비스에서 카카오로그인에 성공했다는 증명이에요 이 증명을 가지고
+                // 핸들러로 가서 카카오 유저 정보를 가져올 수 있는 토큰을 받을 거에요. 그 토큰으로 유저의 정보를 얻고 유저의 정보를 가진 우리 서비스의 토큰을 만들어서
+                // 우리 웹페이지의 세션스토리지에 보관할 거에요
+                var { data } = await axios.post(
+                    "http://3.36.87.75:8000/kakao/login",
+                    code,
+                    { headers: { "Content-Type": "text/plain" } }
+                );
+                console.log(data);
+                if (data.code == "no_email") {
+                    // 아직 우리 서비스에 가입하지 않았어요 회원 가입 페이지로 넘어가요 뷰에서는 패러미터를 안고 라우터뷰를 이동하면 될거에요
+                    window.location.href = "register.html?email=" + data.result;
+                } else if (data.code == "member") {
+                    // 우리 서비스의 멤버에요 세션스토리지에 토큰을 저장하고 홈페이지로 이동해요
+                    sessionStorage.setItem("token", data.result);
+                    window.location.href = "/index.html";
+                }
+            }
+            start();
+        </script>
+    </body>
+</html>
