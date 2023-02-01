@@ -41,15 +41,6 @@ public class UserController {
     private final StatusCodeGeneratorUtils statusCodeGeneratorUtils;
 
     @Operation(summary = "내 프로필 불러오기", description = "")
-    @Parameters({
-            @Parameter(name = "lat", description = "위도", example = "36.10734231483315"),
-            @Parameter(name = "lng", description = "경도", example = "128.4168157734013"),
-            @Parameter(name = "title", description = "방 제목", example = "너만 오면 고"),
-            @Parameter(name = "isPublic", description = "공개방 여부", example = "true"),
-            @Parameter(name = "radius", description = "반경", example = "3"),
-            @Parameter(name = "password", description = "비밀번호", example = ""),
-            @Parameter(name = "hostId", description = "방장 PK(추후 토큰으로 대체 예정)", example = "1"),
-    })
     @GetMapping
     public ResponseEntity<Map<String, Object>> getMyProfile(
             @RequestHeader HttpHeaders requestHeader) {
