@@ -65,7 +65,7 @@ public class KakaoLoginController {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=9733352823239497d6928853e1e59954"); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=http://http://3.36.87.75:8000/oauth.html"); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&redirect_uri=http://3.36.87.75:8000/oauth.html"); // TODO 인가코드 받은 redirect_uri 입력
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();
