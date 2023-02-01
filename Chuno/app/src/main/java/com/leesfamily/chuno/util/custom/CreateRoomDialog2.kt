@@ -12,9 +12,11 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.fragment.app.DialogFragment
+import com.google.android.gms.maps.SupportMapFragment
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.CreateRoomDialog2Binding
 import com.leesfamily.chuno.util.custom.DialogSizeHelper.dialogFragmentResize
+import com.leesfamily.chuno.util.map.MapsUtil
 
 class CreateRoomDialog2(
     context: Context,
@@ -61,11 +63,18 @@ class CreateRoomDialog2(
         binding = CreateRoomDialog2Binding.inflate(inflater, container, false)
 
         dialog?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+
         binding.yesButton.setOnClickListener(this)
         binding.closeButton.setOnClickListener(this)
         binding.noButton.setOnClickListener(this)
         val roundValue = binding.roomRoundValue.apply {
             text = defValue.toString()
+        }
+        binding.map.apply {
+            val mapFragment = childFragmentManager
+                .findFragmentById(R.id.map) as SupportMapFragment
+            mapFragment.getMapAsync(MapsUtil)
         }
 
         binding.roomRoundEdit.apply {
