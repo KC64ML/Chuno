@@ -59,7 +59,7 @@ public class RoomEntity {
     @Embedded
     private DateTime dateTime;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "host_id", referencedColumnName = "user_id", nullable = false)
     private UserEntity host;
 
