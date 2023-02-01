@@ -20,8 +20,8 @@ import javax.persistence.*;
 public class ItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "item_key")
-    private int id;
+    @Column(name = "item_id")
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -29,4 +29,13 @@ public class ItemEntity {
     @Column(nullable = false)
     @ColumnDefault("0")
     private int price;
+
+    @Column(nullable = false)
+    private String description;
+
+    @Column(nullable = false)
+    private String imgPath;
+
+    @Column(nullable = false)
+    private int forRunner;
 }

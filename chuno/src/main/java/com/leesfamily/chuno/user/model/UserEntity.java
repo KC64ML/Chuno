@@ -12,6 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -26,7 +27,7 @@ public class UserEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_key")
+    @Column(name = "user_id")
     private Long id;
     @Column(nullable = false, length = 40)
     private String email;
@@ -63,17 +64,16 @@ public class UserEntity extends BaseTimeEntity {
     @Embedded
     private UserProfile profile;
 
-    @OneToMany(mappedBy = "fromUser")
-    private List<FriendEntity> friendsOut = new ArrayList<>();
-
-    @OneToMany(mappedBy = "toUser")
-    private List<FriendEntity> friendsIn = new ArrayList<>();
+//    @OneToMany(mappedBy = "fromUser")
+//    private List<FriendEntity> friendsOut = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "toUser")
+//    private List<FriendEntity> friendsIn = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "inventory",
-            joinColumns = @JoinColumn(name = "user_key"),
-            inverseJoinColumns = @JoinColumn(name = "item_key")
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
     )
     private List<ItemEntity> inventory = new ArrayList<>();
-
 }

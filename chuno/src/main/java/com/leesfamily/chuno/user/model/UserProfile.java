@@ -12,7 +12,7 @@ import javax.persistence.*;
 //@Entity(name="profile_img")
 //@DynamicInsert
 //@DynamicUpdate
-//@PrimaryKeyJoinColumn(name = "user_key")
+//@PrimaryKeyJoinColumn(name = "user_id")
 @Embeddable
 public class UserProfile {
 
