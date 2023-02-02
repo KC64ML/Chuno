@@ -21,7 +21,7 @@ export default {
       // const code = this.$route.params.code
       // console.log(code)
       // 아이피 주소 고쳐주세요
-      var { data } = await this.axios.post("http://43.201.137.209:9997/kakao/login", code, {headers: {'Content-Type': 'text/plain'}});
+      var { data } = await this.axios.post("http://3.36.87.75:8000/api/kakao/login", code, {headers: {'Content-Type': 'text/plain'}});
       console.log(data)
       // console.log(data.result);
       if (data.result == "not_member") {

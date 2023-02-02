@@ -1,18 +1,20 @@
 <template>
-    <div class="main_back flex_center">
-        <router-view></router-view>
-    </div>
-    <FooterVue class="footer_fix"
-        v-if="this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth'">
-    </FooterVue>
-    <button @click="testBtn">테스트버튼</button>333333333333333333333
+  <div class="main_back flex_center">
+    <router-view></router-view>
+  </div>
+  <FooterVue class="footer_fix" v-if="this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth' && this.$route.path != '/game'"></FooterVue>
+  <GameFooterView class="footer_fix" v-else/>
+  <button @click="testBtn">테스트버튼</button>333333333333333333333
 </template>
 
 <script>
 import FooterVue from "@/components/FooterVue.vue"
+import GameFooterView from "./components/GameFooterView.vue"
+
 export default {
     components: {
-        FooterVue
+      FooterVue,
+      GameFooterView,
     },
     methods: {
         async testBtn() {
