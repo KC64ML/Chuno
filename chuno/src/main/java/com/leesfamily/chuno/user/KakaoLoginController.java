@@ -128,6 +128,43 @@ public class KakaoLoginController {
         return new ResponseEntity<>(res, httpStatus);
     }
 
+    @PostMapping("/mobile/login")
+    ResponseEntity<Map<String, Object>> getAccessTokenFromMobile(@RequestBody String access_Token) {
+//    	String access_Token = map.get("key");
+        System.out.println("토큰 : " + access_Token);
+        Map<String, Object> res = new HashMap<>();
+        HttpStatus httpStatus = null;
+        String email;
+        try {
+            email = getInfo(access_Token);
+            System.out.println(email);
+
+            if (email.equals("no_email")) {
+                res.put("code", "no_email");
+                httpStatus = HttpStatus.OK;
+            }
+            System.out.println("여기까지");
+
+            //이메일을 데이터베이스에서 뒤져요
+            UserEntity user = userService.findUserByEmail(email);
+            //이메일이 있으면 이미 가입한 유저에요 JWT토큰을 만들어 홈으로 userDto와 함께 가요
+            //이메일이 없으면 가입한 적이 없는 유저에요
+            if (user == null) {
+                res.put("code", "no_email");
+                res.put("result", email);
+                httpStatus = HttpStatus.OK;
+            } else {
+                res.put("code", "member");
+                res.put("result", makeToken(user.getId()));
+                httpStatus = HttpStatus.OK;
+            }
+        } catch (Exception e) {
+            res.put("code", e.getMessage());
+            httpStatus = HttpStatus.EXPECTATION_FAILED;
+        }
+        return new ResponseEntity<>(res, httpStatus);
+    }
+
     String makeToken(Long user_id) {
         System.out.println("여기도 잘되는데요");
         Date now = new Date();
