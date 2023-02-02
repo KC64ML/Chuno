@@ -21,4 +21,4 @@ COPY ./nginx/chuno.conf /etc/nginx/conf.d/chuno.conf
 
 EXPOSE 3000
 
-CMD["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
