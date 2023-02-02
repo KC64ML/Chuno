@@ -11,13 +11,14 @@ COPY package*.json ./
 
 RUN npm install
 
-# COPY . .
+COPY . .
+
 RUN npm run build
 
 # nginx config
 FROM nginx:stable-alpine as production-stage
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ./nginx/chuno.conf /etc/nginx/conf.d
+COPY ./nginx/chuno.conf /etc/nginx/conf.d/chuno.conf
 
 # COPY --from=build-stage ./real/dist /usr/share/nginx/html
 
