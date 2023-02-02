@@ -1,6 +1,7 @@
 package com.leesfamily.chuno.configure;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -13,6 +14,11 @@ public class WebConfigure implements WebMvcConfigurer {
 //                .excludePathPatterns("/kakao/**", "/swagger-ui/**"
 //                        ,"/v3/api-docs/**", "/swagger-resources/**"
 //                        , "/webjars/**"); // 제외할 URL (/kakao/하위로 오는 URL 제외)
-
+    }
+    @Override
+    public void addCorsMappings(CorsRegistry registry){
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE");
     }
 }
