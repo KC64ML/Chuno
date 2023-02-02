@@ -16,6 +16,7 @@ export default {
     },
     methods: {
         async testBtn() {
+            console.log(this.axios)
             this.axios.get("http://3.36.87.75:8000/user", {headers:{ "Authorization": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhY2Nlc3Nfa2V5IiwiaWF0IjoxNjc1MjM2NjMyLCJleHAiOjE2NzUzMjMwMzIsInVzZXJfaWQiOjF9.St63ziKC0rmrzPbNsDaN4hAEoUhgRethHvW0A6Yx29O0rhPC4RXn6xB9wd2zs-YzxKQ6KljVPxROGrymkXZnDg" }}).then((response => console.log(response)));
         }
     }
