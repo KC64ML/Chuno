@@ -6,6 +6,8 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+  ssl:
+    enabled: false
 #  address: localhost
 spring:
   mvc:
@@ -48,3 +50,6 @@ jwt:
     expire-length: 1800000
   refresh-token:
     expire-length: 1209600000
+
+OPENVIDU_URL: http://3.36.87.75:4443/
+OPENVIDU_SECRET: D208_CHUNO
