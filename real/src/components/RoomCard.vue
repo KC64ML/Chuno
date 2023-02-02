@@ -1,5 +1,5 @@
 <template>
-    <div id="container">
+    <div id="container" @click="goWaitingRoom">
         <div style="display: flex; align-items: center;">
             <img src="@/assets/Lock.svg" v-if="room.is_public">
             <img src="@/assets/Unlock.svg" v-else>
@@ -50,6 +50,11 @@
             }
         },
         created() {
+        },
+        methods: {
+            goWaitingRoom() {
+                this.$router.push("/waitingRoom/"+this.room.room_id);
+            }
         }
     }
 </script>
