@@ -19,7 +19,7 @@ FROM nginx:stable-alpine as production-stage
 RUN rm /etc/nginx/conf.d/default.conf
 COPY ./nginx/chuno.conf /etc/nginx/conf.d/chuno.conf
 
-COPY --from=build-stage ./real/dist /usr/share/nginx/html
+# COPY --from=build-stage ./real/dist /usr/share/nginx/html
 
 EXPOSE 3000
 # nginx config
