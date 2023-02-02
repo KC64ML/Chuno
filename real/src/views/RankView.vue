@@ -3,6 +3,9 @@
     :title="'랭킹'"
   ></HeaderVue>
   <RankListView/>
+  <p @click="onGame">
+    game router test
+  </p>
 </template>
 
 <script>
@@ -14,7 +17,12 @@ export default {
   components: {
     HeaderVue,
     RankListView,
-  }
+  },
+  methods:{
+    onGame() {
+      this.$router.push({name: 'game'})
+    }
+  },
 }
 </script>
 

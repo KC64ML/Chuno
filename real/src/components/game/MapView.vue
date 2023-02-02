@@ -7,31 +7,33 @@
       mapTypeControl: false,
       streetViewControl: false,
       fullscreenControl: false,
-      minZoom: 16,
+      minZoom: 10,
       maxZoom: 18,
     }"
     style="width: 100vw; height: 25rem"
   >
+    <!-- 내 위치 -->
+    <div v-if="myMarker">
+      <GMapMarker
+        :animation=4
+        :position=this.player
+      />
+      <GMapCircle
+        :radius="50"
+        :center="player"
+        :options="circleOptions"
+      />
+    </div>
 
-    <GMapMarker
-      :animation=4
-      :position=this.player
-    />
     <GMapMarker
       :key="index"
       :animation=1
       v-for="(m, index) in markers"
       :position="m.position"
       :clickable="true"
-
       @click="center = m.position"
     />
 
-    <GMapCircle
-      :radius="50"
-      :center="player"
-      :options="circleOptions"
-    />
   </GMapMap>
 </template>
 
@@ -40,7 +42,8 @@ export default {
   name: {},
   data() {
     return {
-      center: { lat: 36.0, lng: 128.1163344 },
+      myMarker: true,
+      // center: { lat: 36.0, lng: 128.1163344 },
       markers: [
         {
           position: {
@@ -56,8 +59,8 @@ export default {
         },
       ],
       player: {
-          lat: 36.107,
-          lng: 128.420,
+        lat: null,
+        lng: null,
       },
       circleOptions: {
         strokeColor: "#0000FF",
@@ -66,19 +69,49 @@ export default {
         fillColor: "#0000FF",
         fillOpacity: 0.15,
       },
-
+      // 
+      auto_reload: false,
+      auto_reload_delay: 1000,
+      auto_reload_func: null,
     };
   },
   mounted() {
-      navigator.geolocation.getCurrentPosition(
-      (position) => {
-          this.player.lat= position.coords.latitude;
-          this.player.lng= position.coords.longitude;
-          // this.center.lat = position.coords.latitude;
-          // this.center.lng = position.coords.longitude;
-      })
+    // 자이로 센서 인식
+    window.addEventListener('deviceorientation', this.handleOrientation)
+    // 내 위치
+    this.myLocation()
   },
-
+  methods: {
+    handleOrientation(event) {
+      const beta = event.beta
+      console.log(beta)
+      if(beta > 130 || beta < 40) {
+        this.myMarker = true
+      } else {
+        this.myMarker = false
+      }
+      console.log(this.myMarker)
+    },
+    myLocation() {
+        this.$watchLocation({enableHighAccuracy: true})
+        .then((coordinates) => {
+          // console.log(coordinates)
+            this.player.lat = coordinates.lat
+            this.player.lng = coordinates.lng
+            console.log(this.player.lat)
+            console.log(this.player.lng)
+        })
+        .catch((error) => {
+            console.log(error);
+      })
+    }
+  },
+  created() {
+    // this.myLocation()
+  },
+  unmounted() {
+    // clearInterval(this.auto_reload_func)
+  }
 };
 </script>
 
