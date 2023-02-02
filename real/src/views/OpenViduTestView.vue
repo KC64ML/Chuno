@@ -70,7 +70,7 @@
   <script>
   import { OpenVidu } from "openvidu-browser";
   import axios from "axios";
-  import UserVideo from "./components/openvidutest/UserVideo";
+  import UserVideo from "@/components/openvidutest/UserVideo";
   
   axios.defaults.headers.post["Content-Type"] = "application/json";
   
