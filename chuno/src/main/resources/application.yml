@@ -51,5 +51,5 @@ jwt:
   refresh-token:
     expire-length: 1209600000
 
-OPENVIDU_URL: http://3.36.87.75:4443/
+OPENVIDU_URL: https://i8d208.p.ssafy.io:4443/
 OPENVIDU_SECRET: D208_CHUNO
