@@ -4,7 +4,7 @@
       <label for="file">
         <!-- <img src="@/assets/profile_frame.png" alt="profileFrame"> -->
         <!-- <img src="@/assets/camera.svg" alt="upload pic"> -->
-        <img :src="img ? img : img_default" alt="profilePic" class="uploadedImg">
+        <img :src="img ? img : imgDefault" alt="profilePic" class="uploadedImg">
         <input type="file" id="file" class="inputfile" @change="upload">
       </label>
 
@@ -36,13 +36,13 @@
 
 <script>
 import axios from 'axios'
-import img_default from '@/assets/profile_default.svg'
+import imgDefault from '@/assets/profile_default.svg'
 
 export default {
   name: 'RegisterView',
   data() {
     return {
-      img_default,
+      imgDefault,
       img: null,
       nickname: '',
       valid: true,
@@ -54,6 +54,18 @@ export default {
   methods: {
     // 프로필 사진
     upload(event) {
+      // this.axios.post(url, formData, { headers: {'Content-Type': 'multipart/form-data'}})
+      // .then( response => {
+      //       if(!!response && response.status === 200){
+            
+      //           commonUtils.$alert('감사합니다.\n정상등록되었습니다.');
+      //           this.scndhandReg = Object.assign({}, this.defScndhangReg);
+  
+      //       }
+      //     }).catch( error => {
+      //     console.log(error);
+      //         commonUtils.$alertUncatchedError(error);
+      //     });
       let file = event.target.files
       let reader = new FileReader()
 
