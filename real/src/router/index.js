@@ -59,6 +59,11 @@ const routes = [
     name: 'game',
     component: GameView
   },
+  {
+    path: '/openvidutest',
+    name: 'Openvidutest',
+    component: () => import("@/views/OpenViduTestView.vue")
+  },
 
   ...module
 

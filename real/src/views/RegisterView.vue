@@ -83,13 +83,21 @@ export default {
         this.lengthValid = false
       } else {
         this.lengthValid = true
+        axios.get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname)
+          .then(({ data }) => {
+            if (data.result == 0) {
+              this.useValid = true;
+            } else {
+              this.useValid = false;
+            }
+          })
       }
       // 중복체크 코드로 바꾸기
-      if(this.nickname.length < 3){
-        this.useValid = false
-      } else {
-        this.useValid = true
-      }
+      // if(this.nickname.length < 3){
+      //   this.useValid = false
+      // } else {
+      //   this.useValid = true
+      // }
     },
     async onSave() {
       if(this.lengthValid && this.useValid) {
@@ -97,12 +105,12 @@ export default {
         const nick = this.nickname
         // const email = new URL(window.location.href).searchParams.get('email');
         const email = this.$route.params.email
-        var token = await axios.post("http://3.34.138.191:9997/kakao/register", {"nick": nick, "email": email});
+        var token = await axios.post(process.env.VUE_APP_SPRING + "kakao/register", {"nickname": nick, "email": email});
         console.log("회원가입 완료", token.data);
         // token에 토큰이 담겨있어요 쎄션스토리지에 넣어서 사용해하세요
         sessionStorage.setItem("token", token.data);
         //이곳에 회원가입이 완료하고 돌아갈 곳을 달아주세요
-        this.$router.push({ name: 'Home' })
+        this.$router.push({ name: 'home' })
       } else {
         alert('닉네임을 바르게 설정하세요.')
       }
