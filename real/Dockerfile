@@ -17,7 +17,7 @@ RUN npm run build
 # nginx config
 FROM nginx:stable-alpine as production-stage
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ./nginx/chuno.conf /etc/nginx/conf.d/chuno.conf
+COPY ./nginx/chuno.conf /etc/nginx/conf.d
 
 # COPY --from=build-stage ./real/dist /usr/share/nginx/html
 
