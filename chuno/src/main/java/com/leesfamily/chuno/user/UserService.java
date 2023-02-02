@@ -119,4 +119,9 @@ public class UserService {
         UserEntity result = userRepository.saveAndFlush(user);
         return 0;
     }
+
+    public Long isExistNickname(String nickname) {
+        Long result = userRepository.countByNicknameIs(nickname);
+        return result;
+    }
 }

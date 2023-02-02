@@ -20,7 +20,17 @@ public class StatusCodeGeneratorUtils {
         return res;
     }
 
-    public Map<String, Object> checkResultByInteger(int result) {
+    public Map<String, Object> checkResultByNumber(Long result) {
+        Map<String, Object> res = new HashMap<>();
+        res.put("result", result);
+        if(result == 0) {
+            res.put("code", 0);
+        }else {
+            res.put("code", 1);
+        }
+        return res;
+    }
+    public Map<String, Object> checkResultByNumber(int result) {
         Map<String, Object> res = new HashMap<>();
         res.put("result", result);
         if(result == 0) {

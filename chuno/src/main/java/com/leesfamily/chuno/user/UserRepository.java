@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    public Optional<UserEntity> findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
+    Long countByNicknameIs(String nickname);
 }

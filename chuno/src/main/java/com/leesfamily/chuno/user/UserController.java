@@ -53,6 +53,14 @@ public class UserController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @Operation(summary = "닉네임 중복체크")
+    @GetMapping("/nickname/{nickname}")
+    public ResponseEntity<Map<String, Object>> nestedCheckNickname(@PathVariable("nickname") String nickname) {
+        Long result = userService.isExistNickname(nickname);
+        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByNumber(result);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @Operation(summary = "내 프로필 수정하기(닉네임)", description = "")
     @Parameters({
             @Parameter(name = "nickname", description = "닉네임", example = "내가전설이다"),
@@ -96,7 +104,7 @@ public class UserController {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
         friend.setFromUserId(userId);
         int result = userService.requestFriend(friend);
-        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByInteger(result);
+        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByNumber(result);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
