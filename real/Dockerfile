@@ -15,4 +15,4 @@ RUN npm install
 EXPOSE 3000
 # nginx config
 
-CMD ["npm", "run", "build"]
+CMD ["npm", "run", "serve"]
