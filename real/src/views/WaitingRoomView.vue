@@ -4,11 +4,11 @@
             <div style="display: flex" class="menu_box" @click="info_on">
                 <img class="modal_menu_image" src="@/assets/info_yanggak.svg" /> 방 정보
             </div>
-            <div style="display: flex" class="menu_box" @click="notting_off">
+            <div style="display: flex" class="menu_box" @click="notting" v-if="is_notified">
                 <img class="modal_menu_image" src="@/assets/note_on.svg" />
                 <div>알림끄기</div>
             </div>
-            <div style="display: flex" class="menu_box" @click="notting_on">
+            <div style="display: flex" class="menu_box" @click="notting" v-else>
                 <img class="modal_menu_image" src="@/assets/note_off.svg" />
                 <div>알림켜기</div>
             </div>
@@ -44,8 +44,8 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
                 menu_modal: false,
                 roomInfo: undefined,
                 hostNickName: undefined,
-                is_noted: undefined,
                 subscribers: [],
+                is_notified: undefined,
             }
         },
         created() {
@@ -80,7 +80,9 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
                 {"level": 43, "nickname": "conn5", "isReady": false}
             ]
 
-            // 아이디 키와, 방 키를 보내서 방 알람 설정을 했는지 아닌지 알아봐요            
+            // 아이디 키와, 방 키를 보내서 방 알람 설정을 했는지 아닌지 알아봐요 
+            console.log("방키:" + this.$route.params.roomId)
+            this.is_notified = true;
 
             /*
             //여기 부터 오픈비두 소스로 사용할 거같아요
@@ -98,11 +100,15 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
             info_on() {
                 alert("정보");
             },
-            notting_on() {
-                alert("알림켜기");
-            },
-            notting_off() {
-                alert("알림끄기");
+            notting() {
+                // 방 아이디를 보내면 유저가 방에대해 한 알림설정의 상태를 바꿔주세요
+                console.log("방키:" + this.$route.params.roomId)
+                // 임시로 바꾼 정보를 받았다 칠게요
+                this.is_notified = !this.is_notified;
+                // 아마 카카오톡으로 메세지 보내기예약을 여기서 짤거 같아요
+                /**
+                 * 카카오톡 메세지 보내기 코드
+                 */
             },
             exiting_room() {
                 alert("나가기")
@@ -140,7 +146,7 @@ $dot_right_position: 20px;
         background-color: rgb(0,0,0,0.2);
         width: 100%;
         height: 100%;
-        z-index: 1;
+        z-index: 2;
     }
     #waiting_room_modal {
         background-color: #F5F5F5;
@@ -149,6 +155,7 @@ $dot_right_position: 20px;
         position: absolute;
         top: $header_height - 10px;
         right: $dot_right_position;
+        z-index:1;
     }
     .modal_menu_image {
         margin-right: 10px;
