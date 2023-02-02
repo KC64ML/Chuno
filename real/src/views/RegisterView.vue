@@ -97,7 +97,7 @@ export default {
         const nick = this.nickname
         // const email = new URL(window.location.href).searchParams.get('email');
         const email = this.$route.params.email
-        var token = await axios.post("http://3.34.138.191:9997/kakao/register", {"nick": nick, "email": email});
+        var token = await axios.post(process.env.VUE_APP_SPRING + "kakao/register", {"nick": nick, "email": email});
         console.log("회원가입 완료", token.data);
         // token에 토큰이 담겨있어요 쎄션스토리지에 넣어서 사용해하세요
         sessionStorage.setItem("token", token.data);
