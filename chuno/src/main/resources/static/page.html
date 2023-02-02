@@ -17,7 +17,7 @@
         async function start() {
             var token = sessionStorage.getItem("token");
             if (token != null) {
-                var { data } = await axios.post("http://3.36.87.75:8000/kakao/tokenConfirm", token, {headers: {'Content-Type': 'text/plain'}});
+                var { data } = await axios.post("http://i8d208.p.ssafy.io/api/kakao/tokenConfirm", token, {headers: {'Content-Type': 'text/plain'}});
                 if (data.validation == "not_valid") {
                     document.getElementById("islogin").value = "로그인X";
                 } else {

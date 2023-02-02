@@ -19,7 +19,7 @@
                     "email"
                 );
                 var token = await axios.post(
-                    "http://3.36.87.75:8000/kakao/register",
+                    "http://i8d208.p.ssafy.io/api/kakao/register",
                     { nickname: nick, email: email }
                 );
                 console.log("회원가입 완료", token.data);
