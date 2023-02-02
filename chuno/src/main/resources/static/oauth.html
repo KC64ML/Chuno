@@ -18,7 +18,7 @@
                 // 핸들러로 가서 카카오 유저 정보를 가져올 수 있는 토큰을 받을 거에요. 그 토큰으로 유저의 정보를 얻고 유저의 정보를 가진 우리 서비스의 토큰을 만들어서
                 // 우리 웹페이지의 세션스토리지에 보관할 거에요
                 var { data } = await axios.post(
-                    "http://i8d208.p.ssafy.io/api/kakao/login",
+                    "https://i8d208.p.ssafy.io/api/kakao/login",
                     code,
                     { headers: { "Content-Type": "text/plain" } }
                 );
