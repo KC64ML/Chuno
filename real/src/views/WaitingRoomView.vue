@@ -27,6 +27,9 @@
             <NicknameCardVue :sub="sub"></NicknameCardVue>
         </div>
     </div>
+    <div id="ready_button" @click="ready_button">
+        준비하고 시작하기
+    </div>
 </template>
 
 <script>
@@ -112,6 +115,9 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
             },
             exiting_room() {
                 alert("나가기")
+            },
+            ready_button() {
+                this.$router.push("/game/" + this.$route.params.roomId);
             }
         }
     }
@@ -120,6 +126,7 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
 <style lang="scss" scoped>
 @import "@/assets/scss/variable";
 $dot_right_position: 20px;
+$ready_button_height: 50px;
     #dot_menu {
         position: absolute;
         top: $header_margin;
@@ -165,5 +172,15 @@ $dot_right_position: 20px;
     }
     .menu_box:hover {
         background-color: #888888;
+    }
+    #ready_button {
+        background-color: #f2f2f2;
+        box-shadow: 0 10px 10px $shadow_color;
+        height: $ready_button_height;
+        line-height: $ready_button_height;
+        padding: 0 30px;
+        border-radius: $ready_button_height / 2;
+        position: absolute;
+        bottom: $footer_height + 20px;
     }
 </style>

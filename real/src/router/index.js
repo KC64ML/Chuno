@@ -55,7 +55,7 @@ const routes = [
     component: RegisterView
   },
   {
-    path: '/game',
+    path: '/game/:roomId',
     name: 'game',
     component: GameView
   },
