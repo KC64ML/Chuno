@@ -7,7 +7,7 @@
       mapTypeControl: false,
       streetViewControl: false,
       fullscreenControl: false,
-      minZoom: 10,
+      minZoom: 15,
       maxZoom: 18,
     }"
     style="width: 100vw; height: 25rem"
@@ -19,12 +19,12 @@
         :position=this.player
       />
       <GMapCircle
-        :radius="50"
+        :radius="30"
         :center="player"
         :options="circleOptions"
       />
     </div>
-
+    <!-- 다른 사람 위치 -->
     <GMapMarker
       :key="index"
       :animation=1
@@ -70,9 +70,9 @@ export default {
         fillOpacity: 0.15,
       },
       // 
-      auto_reload: false,
-      auto_reload_delay: 1000,
-      auto_reload_func: null,
+      // auto_reload: false,
+      // auto_reload_delay: 1000,
+      // auto_reload_func: null,
     };
   },
   mounted() {
@@ -91,6 +91,7 @@ export default {
         this.myMarker = false
       }
       console.log(this.myMarker)
+      console.log(window)
     },
     myLocation() {
         this.$watchLocation({enableHighAccuracy: true})
@@ -103,11 +104,13 @@ export default {
         })
         .catch((error) => {
             console.log(error);
-      })
-    }
+      }
+      )
+    },
+
   },
   created() {
-    // this.myLocation()
+    // console.log(window)
   },
   unmounted() {
     // clearInterval(this.auto_reload_func)

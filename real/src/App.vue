@@ -5,13 +5,17 @@
     <FooterVue class="footer_fix"
         v-if="this.$route.name != 'game' && this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth'">
     </FooterVue>
+    <GameFooterView class="footer_fix" v-else-if="this.$route.name='game'"/>
 </template>
 
 <script>
 import FooterVue from "@/components/FooterVue.vue"
+import GameFooterView from "./components/GameFooterView.vue"
+
 export default {
     components: {
-        FooterVue
+      FooterVue,
+      GameFooterView,
     },
     methods: {
         async testBtn() {

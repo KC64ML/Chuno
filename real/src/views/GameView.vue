@@ -1,6 +1,6 @@
 <template>
   <OpenViduVue style="z-index: 100;"></OpenViduVue>
-  <MapView/>
+  <MapView></MapView>
 </template>
 
 <script>
