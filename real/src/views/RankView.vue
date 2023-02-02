@@ -1,5 +1,7 @@
 <template>
-  <HeaderVue></HeaderVue>
+  <HeaderVue
+    :title="'랭킹'"
+  ></HeaderVue>
   <RankListView/>
   <p @click="onGame">
     game router test

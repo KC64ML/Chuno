@@ -1,5 +1,7 @@
 <template>
-  <HeaderVue></HeaderVue>
+  <HeaderVue
+    :title="'상점'"
+  ></HeaderVue>
   <div class="container-col" style="height:75%">
     <SelectedItemView
       :item="selected"

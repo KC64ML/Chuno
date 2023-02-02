@@ -4,7 +4,9 @@
   <DeleteAccountModal v-if="deleteAccountModal" @on-delete="onDelete"/>
   <EditProfileModal v-if="editProfileModal"/>
   
-  <HeaderVue></HeaderVue>
+  <HeaderVue
+    :title="'내 프로필'"
+  ></HeaderVue>
 
   <div style="height: 75%;">
     <MyProfileView @on-edit="onEdit"/>
