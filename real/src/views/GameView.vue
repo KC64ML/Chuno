@@ -1,5 +1,14 @@
 <template>
-  <MapView/>
+  <div>
+    <p>dkdkdk</p>
+    <p>dkdkdk</p>
+    <p>dkdkdk</p>
+    <p>dkdkdk</p>
+    <p>dkdkdk</p>
+    <p>dkdkdk</p>
+    <p>dkdkdk</p>
+    <MapView/>
+  </div>
 </template>
 
 <script>
