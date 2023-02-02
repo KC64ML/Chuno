@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @RestController("/api")
 public class OpenViduController {
 
