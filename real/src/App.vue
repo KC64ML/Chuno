@@ -5,7 +5,7 @@
     <FooterVue class="footer_fix"
         v-if="this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth'">
     </FooterVue>
-    <button @click="testBtn">테스트버튼</button>1111111111111111111111111
+    <button @click="testBtn">테스트버튼</button>2222222222222
 </template>
 
 <script>
