@@ -2,6 +2,7 @@ package com.leesfamily.chuno.user;
 
 import com.leesfamily.chuno.common.util.StatusCodeGeneratorUtils;
 import com.leesfamily.chuno.common.util.TokenUtils;
+import com.leesfamily.chuno.item.ItemService;
 import com.leesfamily.chuno.user.model.FriendDTO;
 import com.leesfamily.chuno.user.model.FriendEntity;
 import com.leesfamily.chuno.user.model.UserEntity;
@@ -35,6 +36,7 @@ public class UserController {
     private Logger log = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
+    final private ItemService itemService;
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
     private final TokenUtils tokenUtils;
@@ -96,6 +98,16 @@ public class UserController {
         int result = userService.requestFriend(friend);
         Map<String, Object> res = statusCodeGeneratorUtils.checkResultByInteger(result);
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PostMapping("/shop/{itemId}")
+    public ResponseEntity<Map<String, Object>> buyItem(
+            @PathVariable("itemId") Long itemId,
+            @RequestHeader HttpHeaders requestHeader) {
+        Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
+        int result = userService.buyItem(userId, itemId);
+
+        return null;
     }
 
 
