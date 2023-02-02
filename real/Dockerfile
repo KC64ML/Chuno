@@ -7,12 +7,27 @@ WORKDIR /admin
 # WORKDIR 뒤에 오는 모든 RUN, CMD, ENTRYPOINT에 적용되며, 중간에 다른 디렉터리를 설정하여 실행 디렉터리를 바꿀 수 있습니다.
  
 # 복사할 파일 경로 : 이미지에서 파일이 위치할 경로
-COPY package.json .
+COPY package*.json ./
 
-ADD . .
 RUN npm install
+<<<<<<< HEAD
 
+=======
+COPY . .
+RUN npm run build
+
+# nginx config
+FROM nginx:stable-alpine as production-stage
+RUN rm /etc/nginx/conf.d/default.conf
+COPY ./nginx/chuno.conf /etc/nginx/conf.d/chuno.conf
+
+COPY --from=build-stage ./chuno/dist /usr/share/nginx/html
+>>>>>>> 25b99abb ([feat] frontend docekrfile - nginx 설정 추가)
 EXPOSE 3000
 # nginx config
 
+<<<<<<< HEAD
 CMD ["npm", "run", "serve"]
+=======
+CMD ["nginx", "-g", "daemon off;"]
+>>>>>>> 25b99abb ([feat] frontend docekrfile - nginx 설정 추가)
