@@ -57,17 +57,17 @@ public class OpenViduController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 //		.fromJson(params)
-        ConnectionProperties properties = new ConnectionProperties
-//				.fromJson(params)
-                .Builder()
-                .type(ConnectionType.WEBRTC)
-                .data(new Gson().toJson(params))
-                .role(OpenViduRole.PUBLISHER)
-                .kurentoOptions(
-                        new KurentoOptions.Builder()
-                                .allowedFilters(new String[]{"GStreamerFilter", "FaceOverlayFilter"})
-                                .build())
-                .build();
+        ConnectionProperties properties = ConnectionProperties
+				.fromJson(params).build();
+//                .Builder()
+//                .type(ConnectionType.WEBRTC)
+//                .data(new Gson().toJson(params))
+//                .role(OpenViduRole.PUBLISHER)
+//                .kurentoOptions(
+//                        new KurentoOptions.Builder()
+//                                .allowedFilters(new String[]{"GStreamerFilter", "FaceOverlayFilter"})
+//                                .build())
+//                .build();
         Connection connection = session.createConnection(properties);
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
