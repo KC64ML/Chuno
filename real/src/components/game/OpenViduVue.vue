@@ -2,6 +2,7 @@
     <div id="main_vedio_container" style="z-index: 1000">
         <!-- <user-video :stream-manager="mainStreamManager" style="border: dashed;"/> -->
         <user-video :stream-manager="myStreamManager" style="border: dashed;"/>
+        <video autoplay ref="video" style="border:solid"></video>
     </div>
 </template>
 
@@ -9,8 +10,8 @@
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "@/components/game/UserVideo.vue";
 
-const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
-
+// const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
+const APPLICATION_SERVER_URL = "http://localhost:5000/";
     export default {
         components: {
             UserVideo,
@@ -68,8 +69,7 @@ const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
                         this.myStreamManager = publisher;
                         this.publisher = publisher;
                         this.session.publish(this.publisher);
-                        console.log("-----publisher", this.publisher)
-                        console.log("-----ref", this.$refs.my_cam);
+                        this.myStreamManager.addVideoElement(this.$refs.video);
                     })
                     .catch((error) => {
                         console.log("There was an error connecting to the session:", error.code, error.message);
