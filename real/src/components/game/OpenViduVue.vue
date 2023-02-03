@@ -1,21 +1,26 @@
 <template>
     <div id="container">
         <div id="video_box">
+            <img class="camera_arrow" src="@/assets/camera_left.svg" alt="">
+            <img class="camera_arrow" src="@/assets/camera_right.svg" alt="">
             <div class="camera_name">
                 <!-- {{ clientData }} -->
                 임시이름
             </div>
-            <video ref="video" autoplay></video>
+            <video ref="video" autoplay ></video>
             <!-- @click.native는 하위컴포넌트가 지금 보고있는 컴포넌트의 method를 사용할 수 있게 해줌 -->
+        </div>
+        <div>
+            {{ subscribers }}
         </div>
     </div>
 </template>
 
 <script>
 import { OpenVidu } from "openvidu-browser";
-// const APPLICATION_SERVER_URL = "https://demos.openvidu.io/"
+const APPLICATION_SERVER_URL = "https://demos.openvidu.io/"
 // const APPLICATION_SERVER_URL = process.env.VUE_APP_SPRING;
-const APPLICATION_SERVER_URL = "http://localhost:5000/";
+// const APPLICATION_SERVER_URL = "http://localhost:5000/";
 
 export default {
     data() {
@@ -151,12 +156,12 @@ export default {
 
 #video_box {
     width: 100%;
-    height: 100%;
+    height: 280px;
+    overflow: hidden;
 }
 
 video {
     width: 100%;
-    height: 100%;
 }
 
 .camera_name {
@@ -167,5 +172,10 @@ video {
     background-color: rgb(0,0,0,0.5);
     padding: 4px;
     border-radius: 10px;
+}
+
+.camera_arrow {
+    position: absolute;
+    height: 30px;
 }
 </style>
