@@ -3,6 +3,8 @@
         <div id="video_box">
             <img class="camera_arrow left_arrow" src="@/assets/camera_left.svg" alt="">
             <img class="camera_arrow right_arrow" src="@/assets/camera_right.svg" alt="">
+            <div class="arrow_box left_box" @click="leftArrow"></div>
+            <div class="arrow_box right_box" @click="rightArrow"></div>
             <div class="camera_name">
                 <!-- {{ clientData }} -->
                 임시이름
@@ -84,6 +86,7 @@ export default {
                         this.session.publish(this.publisher);
                         
                         this.streamManager = this.mainStreamManager;
+                        this.$emit('test', "kkk");
                         console.log("여기까지 옴");
                         this.streamManager.addVideoElement(this.$refs.video);
                     })
@@ -137,6 +140,12 @@ export default {
             console.log("제발:", response.data)
             return response.data; // The token
         },
+        leftArrow() {
+            alert('왼쪽화살표')
+        },
+        rightArrow() {
+            alert('오른쪽화살표');
+        }
     },
     created() {
         console.log(process.env.VUE_APP_SPRING);
@@ -173,6 +182,10 @@ video {
     padding: 4px;
     border-radius: 10px;
 }
+.arrow_box:hover {
+    background-color: blue;
+    cursor: pointer;
+}
 
 .camera_arrow {
     position: absolute;
@@ -186,5 +199,19 @@ video {
 }
 .right_arrow {
     right: 5px
+}
+.arrow_box {
+    position: absolute;
+    top: $video_height / 2;
+    transform: translateY(-50%);
+    height: 100px;
+    width: 50px;
+    z-index: 100;
+}
+.left_box {
+    left: 0;
+}
+.right_box {
+    right: 0;
 }
 </style>

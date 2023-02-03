@@ -1,5 +1,5 @@
 <template>
-  <OpenViduVue style="z-index: 100;"></OpenViduVue>
+  <OpenViduVue style="z-index: 100;" @test="testa"></OpenViduVue>
   <MapView></MapView>
   <GameFooterView class="footer_fix"></GameFooterView>
 </template>
@@ -17,6 +17,11 @@ export default {
     MapView,
     OpenViduVue
   },
+  methods: {
+    testa(ttt) {
+      console.log(ttt);
+    }
+  }
 }
 
 </script>
@@ -24,5 +29,5 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/variable.scss";
   
-  
+
 </style>
