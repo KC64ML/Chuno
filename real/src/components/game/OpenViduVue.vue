@@ -1,13 +1,14 @@
 <template>
-    <div id="container" style="z-index: 10000;">
+    <div id="container" style="z-index: 100;">
         <div id="video_box">
-            <video ref="video" autoplay ></video>
+            <video ref="video" autoplay style="border: dashed"></video>
+            <!-- <MainVideo :stream_manager="mainStreamManager"></MainVideo> -->
             <div class="arrow_box right_box" @click="rightArrow"></div>
             <div class="arrow_box left_box" @click="leftArrow"></div>
             <img class="camera_arrow left_arrow" src="@/assets/camera_left.svg" alt="">
             <img class="camera_arrow right_arrow" src="@/assets/camera_right.svg" alt="">
             <div class="camera_name">
-                <!-- {{ clientData }} -->
+                {{ clientData }}
                 임시이름
             </div>
             <!-- @click.native는 하위컴포넌트가 지금 보고있는 컴포넌트의 method를 사용할 수 있게 해줌 -->
@@ -23,12 +24,17 @@
 
 <script>
 import { OpenVidu } from "openvidu-browser";
+// import MainVideo from "@/components/game/MainVideo.vue"
+
 const APPLICATION_SERVER_URL = "https://demos.openvidu.io/"
 // const APPLICATION_SERVER_URL = process.env.VUE_APP_SPRING;
 // const APPLICATION_SERVER_URL = "http://localhost:5000/";
 
 
 export default {
+    components: {
+        // MainVideo
+    },
     props: {
         my_cam_modal: undefined,
     },
@@ -44,19 +50,14 @@ export default {
             myUserName: "dddd",
         }
     },
-    mounted() {
-        if(this.subscribers.length > 0) {
-            this.subscribers[0].addVideoElement(this.$refs.video);
-        }
-    },
     computed: {
         clientData() {
-            const { clientData } = this.getConnectionData();
-            return clientData;
+            // const { clientData } = this.getConnectionData();
+            return this.subscribers.length;
         }
     },
     methods: {
-        init() {
+        async init() {
             console.log("세션이름:" + this.$route.params.roomId);
 
             // OV 객체를 만들어요
@@ -67,6 +68,8 @@ export default {
             this.session.on("streamCreated", ({ stream }) => {
                 const subscriber = this.session.subscribe(stream);
                 this.subscribers.push(subscriber);
+                this.mainStreamManager = subscriber;
+                this.mainStreamManager.addVideoElement(this.$refs.video);
                 console.log("********************", this.subscribers);
             });
             this.session.on("streamDestroyed", ({ stream }) => {
@@ -78,7 +81,7 @@ export default {
                 console.warn(exception);
             });
             console.log("와써여")
-            this.getToken(this.mySessionId).then((token) => {
+            await this.getToken(this.mySessionId).then((token) => {
                 console.log("토큰가지고왔어요",token, this.myUserName);
                 this.session.connect(token, { clientData: this.myUserName })
                     .then(() => {
@@ -92,14 +95,12 @@ export default {
                             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                             mirror: true, // Whether to mirror your local video or not
                         });
-                        this.mainStreamManager = publisher;
                         this.publisher = publisher;
 
                         this.session.publish(this.publisher);
                         
-                        this.streamManager = this.mainStreamManager;
                         console.log("여기까지 옴");
-                        this.streamManager.addVideoElement(this.$refs.my_cam);
+                        this.publisher.addVideoElement(this.$refs.my_cam);
                     })
                     .catch((error) => {
                         console.log("세션에 연결하는데 오류가 있어요:", error.code, error.message);
