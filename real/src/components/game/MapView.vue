@@ -97,6 +97,7 @@ export default {
     window.addEventListener('deviceorientation', this.handleOrientation)
     // 내 위치
     this.myLocation()
+    // setInterval(this.myLocation(),1000)
     
   },
   methods: {
