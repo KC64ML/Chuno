@@ -1,10 +1,11 @@
 <template>
   <div id="record">
     <div id="container">
-      <!-- <div> -->
-        <img src="@/assets/Fist.svg" alt="record" id="iconBg">
-      <!-- </div> -->
-      <div>전적</div>
+      <img src="@/assets/Fist.svg" alt="record" id="iconBg">
+      <div class="container-col">
+        <br>
+        <div>전적</div>
+      </div>
     </div>
 
   </div>
@@ -28,9 +29,7 @@ export default {
   flex-direction: column;
   background-color: #F5F5F5;
   width: 50%;
-  /* height: 100%; */
   border-radius: 10%;
-  margin: 3%;
 }
 
 #record div p {
@@ -44,6 +43,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  vertical-align: middle;
 }
 #container div {
   padding: 5%;
@@ -51,5 +51,8 @@ export default {
 }
 #container img {
   width: 30px;
+}
+.container-col div{
+  width: 50px;
 }
 </style>
