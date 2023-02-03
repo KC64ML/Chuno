@@ -13,7 +13,7 @@
             <!-- @click.native는 하위컴포넌트가 지금 보고있는 컴포넌트의 method를 사용할 수 있게 해줌 -->
         </div>
         <div>
-            {{ subscribers }}
+            {{ subscribers.length }}
         </div>
     </div>
 </template>
@@ -57,6 +57,7 @@ export default {
             this.session.on("streamCreated", ({ stream }) => {
                 const subscriber = this.session.subscribe(stream);
                 this.subscribers.push(subscriber);
+                console.log("********************", this.subscribers);
             });
             this.session.on("streamDestroyed", ({ stream }) => {
                 const index = this.subscribers.indexOf(stream.streamManager, 0);
