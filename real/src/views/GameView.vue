@@ -1,7 +1,7 @@
 <template>
-  <MenuView v-if="menu" />
+  <MenuView v-if="menu"/>
   <div>
-    <OpenViduVue style="z-index: 100;"></OpenViduVue>
+    <!-- <OpenViduVue style="z-index: 100;"></OpenViduVue> -->
     <MapView />
 
     <div id="footer_container">
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import OpenViduVue from '@/components/game/OpenViduVue.vue'
+// import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue'
 import MenuView from '@/components/game/MenuView.vue'
 
@@ -33,12 +33,12 @@ export default {
   name: 'GameView',
   components: {
     MapView,
-    OpenViduVue,
+    // OpenViduVue,
     MenuView,
   },
   data() {
     return {
-      menu: true,
+      menu: false,
     }
   },
   methods: {
