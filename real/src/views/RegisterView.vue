@@ -71,11 +71,20 @@ export default {
         this.lengthValid = true
       }
       // 중복체크 코드로 바꾸기
-      if(this.nickname.length < 3){
-        this.useValid = false
-      } else {
-        this.useValid = true
-      }
+      this.axios.get(
+        process.env + `user/nickname/${this.nickname}`
+      )
+        .then(res => {
+          console.log(res.data)
+          const validity = res.data.code
+          if (validity) {
+            console.log('가능')
+            this.useValid = false
+          } else {
+            console.log('불가능')
+            this.useValid = true
+          }
+        })
     },
     async onSave() {
       if(this.lengthValid && this.useValid) {
