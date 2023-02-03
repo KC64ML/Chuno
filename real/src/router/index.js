@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ProfileView from '@/views/ProfileView.vue'
+import FriendsView from '@/components/profile/FriendsView.vue'
 import ShopView from '@/views/ShopView.vue'
 import RankView from '@/views/RankView.vue'
 import OauthView from '@/views/OauthView.vue'
@@ -33,6 +34,11 @@ const routes = [
     path: '/profile/:uid',
     name: 'Profile',
     component: ProfileView
+  },
+  {
+    path: '/profile/:uid/friend',
+    name: 'friends',
+    component: FriendsView
   },
   {
     path: '/shop',

@@ -8,14 +8,16 @@
     :title="'내 프로필'"
   ></HeaderVue>
 
-  <div style="height: 75%;">
+  <div style="height: 75%; width:300px;">
     <MyProfileView @on-edit="onEdit"/>
     <div class="container">
       <PlayTimeView/>
       <RecordView/>
     </div>
-    <span @click="onDelete">회원탈퇴</span> |
-    <span @click="onLogout">로그아웃</span>
+    <div id="checkout">
+      <span @click="onDelete">회원탈퇴</span> |
+      <span @click="onLogout">로그아웃</span>
+    </div>
     <br>
     <br>
   </div>
@@ -71,5 +73,8 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+#checkout{
+  text-align: center;
 }
 </style>

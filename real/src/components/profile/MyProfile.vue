@@ -12,14 +12,22 @@
         </div>
       </div>
       
-      <div class="container-row">
+      <!-- <div class="container-row"> -->
         <div class="button" @click="onModal">
-          프로필 편집
+          <p>프로필 편집</p>
         </div>
-        <div class="button" @click="addFriend">
-          친구추가
+        <div class="button" @click="this.$router.push({name: 'friends', params: {uid: 1}})">
+          <p>친구 관리</p>
         </div>
-      </div>
+      <!-- </div> -->
+      <!-- <div class="container-row" @click="addFriend"> -->
+        <div class="button" v-if="!friend" @click="addFriend">
+          <p>친구 추가</p>
+        </div>
+        <div class="button" v-if="friend" @click="addFriend">
+          <p>친구 끊기</p>
+        </div>
+      <!-- </div> -->
 
     </div>
   </div>
@@ -36,6 +44,7 @@ export default {
   data() {
     return {
       modal: false,
+      friend: true,
     }
   },
   methods: {
@@ -44,7 +53,7 @@ export default {
       console.log(this.modal)
     },
     addFriend() {
-      console.log()
+      this.friend = !this.friend
     }
   },
 }
@@ -60,6 +69,11 @@ export default {
 .button {
   background-color: #1D182C;
   color: #F5F5F5;
+  border-radius: 10%;
+}
+.button p{
+  text-align: center;
+  margin: 3%;
 }
 .container-row {
   display: flex;
@@ -74,5 +88,9 @@ export default {
   flex-direction: column;
   /* align-items: center; */
   /* border-radius: 10%; */
+}
+.container-row #button{
+  width: max-content;
+  text-align: center;
 }
 </style>

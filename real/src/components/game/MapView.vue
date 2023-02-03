@@ -157,14 +157,8 @@ export default {
     },
   },
   created() {
-    // console.log(window)
-
   },
   watch: {
-    // clearInterval(this.auto_reload_func)
-    // player(){
-    //   this.catch()
-    // }
   }
 };
 </script>

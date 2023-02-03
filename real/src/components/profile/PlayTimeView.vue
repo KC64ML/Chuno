@@ -30,9 +30,7 @@ export default {
   flex-direction: column;
   background-color: #F5F5F5;
   width: 50%;
-  /* height: 100%; */
   border-radius: 10%;
-  margin: 3%;
 }
 
 #record div p {
@@ -45,7 +43,9 @@ export default {
 #container{
   display: flex;
   flex-direction: row;
+  /* text-align: left; */
   justify-content: space-around;
+  vertical-align: middle;
 }
 #container div {
   padding: 5%;
@@ -53,5 +53,9 @@ export default {
 }
 #container img {
   width: 30px;
+}
+.container-col div{
+  width: 50px;
+  text-align: left;
 }
 </style>
