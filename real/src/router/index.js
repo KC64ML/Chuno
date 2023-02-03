@@ -60,7 +60,7 @@ const routes = [
     component: GameView
   },
   {
-    path: '/openvidutest',
+    path: '/whatthefuck',
     name: 'Openvidutest',
     component: () => import("@/views/OpenViduTestView.vue")
   },
