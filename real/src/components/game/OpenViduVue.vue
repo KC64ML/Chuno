@@ -1,22 +1,22 @@
 <template>
-    <div id="container">
+    <div id="container" style="z-index: 10000;">
         <div id="video_box">
+            <video ref="video" autoplay ></video>
+            <div class="arrow_box right_box" @click="rightArrow"></div>
+            <div class="arrow_box left_box" @click="leftArrow"></div>
             <img class="camera_arrow left_arrow" src="@/assets/camera_left.svg" alt="">
             <img class="camera_arrow right_arrow" src="@/assets/camera_right.svg" alt="">
-            <div class="arrow_box left_box" @click="leftArrow"></div>
-            <div class="arrow_box right_box" @click="rightArrow"></div>
             <div class="camera_name">
                 <!-- {{ clientData }} -->
                 임시이름
             </div>
-            <video ref="video" autoplay ></video>
             <!-- @click.native는 하위컴포넌트가 지금 보고있는 컴포넌트의 method를 사용할 수 있게 해줌 -->
         </div>
         <div>
             {{ subscribers.length }}
         </div>
     </div>
-    <div id="my_cam_modal" v-if="my_cam_modal" class="flex_center">
+    <div id="my_cam_modal" :class="{my_cam_hidden : !my_cam_modal}" class="flex_center">
       <video ref="my_cam" autoplay style="border:dashed;"></video>
     </div>
 </template>
@@ -45,6 +45,9 @@ export default {
         }
     },
     mounted() {
+        if(this.subscribers.length > 0) {
+            this.subscribers[0].addVideoElement(this.$refs.video);
+        }
     },
     computed: {
         clientData() {
@@ -96,7 +99,7 @@ export default {
                         
                         this.streamManager = this.mainStreamManager;
                         console.log("여기까지 옴");
-                        this.streamManager.addVideoElement(this.$refs.video);
+                        this.streamManager.addVideoElement(this.$refs.my_cam);
                     })
                     .catch((error) => {
                         console.log("세션에 연결하는데 오류가 있어요:", error.code, error.message);
@@ -232,5 +235,8 @@ video {
   right: 0;
   bottom: $footer-height;
   margin: $my_video_margin;
+}
+.my_cam_hidden {
+    visibility: hidden;
 }
 </style>
