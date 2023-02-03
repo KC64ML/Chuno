@@ -1,11 +1,11 @@
 <template>
-    <div id="container" style="border: dashed;">
+    <div id="container">
         <div id="video_box">
-            <div style="position: absolute; color: white">
+            <div class="camera_name">
                 <!-- {{ clientData }} -->
                 임시이름
             </div>
-            <video ref="video" autoplay style="border:solid"></video>
+            <video ref="video" autoplay></video>
             <!-- @click.native는 하위컴포넌트가 지금 보고있는 컴포넌트의 method를 사용할 수 있게 해줌 -->
         </div>
     </div>
@@ -147,7 +147,6 @@ export default {
     position: absolute;
     top: 0;
     width: 100vw;
-    height: $video_height;
 }
 
 #video_box {
@@ -158,5 +157,15 @@ export default {
 video {
     width: 100%;
     height: 100%;
+}
+
+.camera_name {
+    position: absolute;
+    color: white;
+    top: 10px;
+    left: 20px;
+    background-color: rgb(0,0,0,0.5);
+    padding: 4px;
+    border-radius: 10px;
 }
 </style>
