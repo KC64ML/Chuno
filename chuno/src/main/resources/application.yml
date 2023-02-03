@@ -51,5 +51,5 @@ jwt:
   refresh-token:
     expire-length: 1209600000
 
-OPENVIDU_URL: http://localhost:4443
+OPENVIDU_URL: https://localhost:8443
 OPENVIDU_SECRET: D208_CHUNO
