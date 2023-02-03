@@ -328,9 +328,9 @@
                     android:id="@+id/constraintLayout2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
                     android:background="@drawable/btn_square"
                     android:backgroundTint="@color/secondary"
-                    android:layout_marginEnd="20dp"
                     android:padding="20dp">
 
                     <LinearLayout
@@ -795,6 +795,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/empty">
 
                 <TextView
+                    android:id="@+id/logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="20dp"
@@ -815,6 +816,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/unlink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="20dp"

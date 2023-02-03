@@ -38,6 +38,7 @@ class RoomListFragment : Fragment(), CreateRoomDialogInterface {
             this,
             ViewModelProvider.NewInstanceFactory()
         )[RoomItemViewModel::class.java]
+
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)

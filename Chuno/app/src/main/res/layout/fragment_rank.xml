@@ -6,36 +6,167 @@
     android:layout_height="match_parent"
     android:background="@color/secondary">
 
-    <include
-        android:id="@+id/toolbar_include"
-        layout="@layout/toolbar"
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.AppCompatSeekBar
-        android:id="@+id/room_round_edit"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
+            <LinearLayout
+                android:id="@+id/views_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <FrameLayout
+                    android:id="@+id/peer_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="212dp"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:id="@+id/main_participant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/secondary" />
+
+                    <org.webrtc.SurfaceViewRenderer
+                        android:id="@+id/local_gl_surface_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="212dp"
+                        android:visibility="visible" />
+                </FrameLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="50dp"
-        android:progressDrawable="@drawable/seekbar_bar"
-        android:thumb="@drawable/seekbar_thumb"
-        android:tickMarkTint="@color/blue"
+        android:layout_marginTop="8dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_include"
-        app:layout_constraintVertical_bias="0.45" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="1.0">
 
-    <TextView
-        android:id="@+id/room_round_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="245dp"
-        android:text="500"
-        app:layout_constraintStart_toStartOf="@+id/room_round_edit"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_include" />
+        <Button
+            android:id="@+id/start_finish_call"
+            style="@android:style/Widget.Material.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="@string/start_button"
+            android:textColor="@color/primary" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:gravity="end"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <EditText
+                android:id="@+id/application_server_url"
+                style="@android:style/Widget.Material.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/primary"
+                android:hint="@string/application_server_url"
+                android:inputType="text"
+                android:text="@string/application_server_url" />
+
+            <EditText
+                android:id="@+id/session_name"
+                style="@android:style/Widget.Material.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/primary"
+                android:hint="@string/session_name"
+                android:inputType="text"
+                android:text="@string/default_session_name" />
+
+            <EditText
+                android:id="@+id/participant_name"
+                style="@android:style/Widget.Material.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/primary"
+                android:hint="@string/participant_name"
+                android:inputType="text"
+                android:text="@string/default_participant_name" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- activity_screen_slide.xml -->
+<!--    <androidx.viewpager2.widget.ViewPager2-->
+<!--        android:id="@+id/game_view_pager"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <!--    <include-->
+    <!--        android:id="@+id/toolbar_include"-->
+    <!--        layout="@layout/toolbar"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

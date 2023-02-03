@@ -25,7 +25,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.CreateRoomDialog2Binding
 import com.leesfamily.chuno.util.PermissionHelper
@@ -78,6 +77,7 @@ class CreateRoomDialog2(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate: ")
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity())
         getDeviceLocation(requireActivity(), mContext!!)
@@ -85,6 +85,7 @@ class CreateRoomDialog2(
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "onResume: ")
         context?.dialogFragmentResize(this, 0.8f)
     }
 
@@ -94,7 +95,7 @@ class CreateRoomDialog2(
         savedInstanceState: Bundle?
     ): View? {
         binding = CreateRoomDialog2Binding.inflate(inflater, container, false)
-
+        Log.d(TAG, "onCreateView: ")
         dialog?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
 
@@ -140,16 +141,7 @@ class CreateRoomDialog2(
                     progress: Int,
                     fromUser: Boolean
                 ) {
-//                    val before = Integer.parseInt(roundValue.text.toString())
                     val curValue = setSeekBarChange(progress, roundValue)
-//                    when {
-//                        curValue - before > 0 -> {
-//                            mMap!!.animateCamera(CameraUpdateFactory.zoomOut())
-//                        }
-//                        else -> {
-//                            mMap!!.animateCamera(CameraUpdateFactory.zoomIn())
-//                        }
-//                    }
 
                     onAddCircle(curValue.toDouble())
                 }
@@ -221,6 +213,7 @@ class CreateRoomDialog2(
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
+        Log.d(TAG, "onMapReady: ")
         mMap = googleMap
 
         mMap!!.apply {
@@ -244,12 +237,13 @@ class CreateRoomDialog2(
             )
 
         }
-
 //        onAddCircle(defValue.toDouble())
     }
 
     //마커 , 원추가
     private fun onAddCircle(meter: Double) {
+        Log.d(TAG, "onAddCircle: ")
+        Log.d(TAG, "onAddCircle: $lastKnownLocation")
         // 반경 1KM원
         circle?.remove()
         circle = mMap!!.addCircle(
@@ -289,17 +283,23 @@ class CreateRoomDialog2(
     @SuppressLint("MissingPermission")
     fun getDeviceLocation(activity: Activity, context: Context) {
         try {
-            if (PermissionHelper.hasGPSPermission(context)) {
+            if (PermissionHelper.hasLocationPermission(context)) {
                 val locationResult = fusedLocationProviderClient.lastLocation
 
                 locationResult.addOnCompleteListener(activity) { task ->
                     if (task.isSuccessful) {
+                        Log.d(TAG, "getDeviceLocation: ")
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.result
+                        Log.d(TAG, "getDeviceLocation: lastKnownLocation : $lastKnownLocation")
+                        Log.d(
+                            TAG,
+                            "getDeviceLocation: lastKnownLocation : ${lastKnownLocation!!.latitude}, ${lastKnownLocation!!.longitude}"
+                        )
                         if (lastKnownLocation != null) {
                             mMap?.moveCamera(
                                 CameraUpdateFactory.newLatLngZoom(
-                                    LatLng(
+                                    LatLng( // 이전으로 돌아갈 때, java.lang.NullPointerException
                                         lastKnownLocation!!.latitude,
                                         lastKnownLocation!!.longitude
                                     ), DEFAULT_ZOOM.toFloat()

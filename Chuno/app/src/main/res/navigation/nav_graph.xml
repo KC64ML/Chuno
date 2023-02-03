@@ -5,8 +5,6 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/room_list">
 
-    <include app:graph="@navigation/start_nav_graph" />
-
     <fragment
         android:id="@+id/game_view"
         android:name="com.leesfamily.chuno.game.GameViewFragment"
@@ -30,9 +28,6 @@
         <action
             android:id="@+id/action_room_list_to_rankFragment"
             app:destination="@id/rank" />
-        <action
-            android:id="@+id/action_room_list_to_start_nav_graph"
-            app:destination="@+id/start_nav_graph"/>
     </fragment>
     <fragment
         android:id="@+id/search_room"

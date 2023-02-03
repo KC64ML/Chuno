@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentMyPageBinding
+import com.leesfamily.chuno.util.login.LoginManager
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -31,6 +32,15 @@ class MyPageFragment : Fragment() {
     ): View? {
         binding = FragmentMyPageBinding.inflate(inflater, container, false)
         binding.toolbarInclude.toolbarTitle.text = getString(R.string.my_page_title)
+
+        binding.logout.setOnClickListener {
+            LoginManager.logout(this)
+        }
+
+        binding.unlink.setOnClickListener {
+            LoginManager.unlink(this)
+        }
+
         return binding.root
     }
 

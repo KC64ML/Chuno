@@ -6,15 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentRoomItemBinding
 import com.leesfamily.chuno.room.placeholder.PlaceholderContent.PlaceholderItem
