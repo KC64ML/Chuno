@@ -1,8 +1,8 @@
 <template>
+  <MenuView v-if="menu" />
   <div>
     <OpenViduVue style="z-index: 100;"></OpenViduVue>
     <MapView />
-    <MenuView v-if="menu" />
 
     <div id="footer_container">
       <div class="menu_box flex_center" @click="this.$router.push('/home')">

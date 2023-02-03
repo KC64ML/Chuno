@@ -1,40 +1,39 @@
 <template>
-  <GMapMap
-    :center="player"
-    :zoom="18"
-    :options="{
-      zoomControl: false,
-      mapTypeControl: false,
-      streetViewControl: false,
-      fullscreenControl: false,
-      minZoom: 15,
-      maxZoom: 18,
-    }"
-    style="width: 100vw; height: 25rem"
-  >
-    <!-- 내 위치 -->
-    <div v-if="myMarker">
+    <GMapMap
+      :center="player"
+      :zoom="18"
+      :options="{
+        zoomControl: false,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+        minZoom: 15,
+        maxZoom: 18,
+      }"
+      style="width: 100vw; height: 25rem"
+    >
+      <!-- 내 위치 -->
+      <div v-if="myMarker">
+        <GMapMarker
+          :animation=4
+          :position=this.player
+        />
+        <GMapCircle
+          :radius="30"
+          :center="player"
+          :options="circleOptions"
+        />
+      </div>
+      <!-- 다른 사람 위치 -->
       <GMapMarker
-        :animation=4
-        :position=this.player
+        :key="index"
+        :animation=1
+        v-for="(m, index) in markers"
+        :position="m.position"
+        :clickable="true"
+        @click="center = m.position"
       />
-      <GMapCircle
-        :radius="30"
-        :center="player"
-        :options="circleOptions"
-      />
-    </div>
-    <!-- 다른 사람 위치 -->
-    <GMapMarker
-      :key="index"
-      :animation=1
-      v-for="(m, index) in markers"
-      :position="m.position"
-      :clickable="true"
-      @click="center = m.position"
-    />
-
-  </GMapMap>
+    </GMapMap>
 </template>
 
 <script>

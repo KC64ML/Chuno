@@ -1,23 +1,25 @@
 <template>
-  <div id="game-menu">
-    <p id="menu-title">아이템</p>
-    <div
-      id="menu-item"
-      v-for="item in items"
-      :key="item.id"
-    >
-    <img :src="item.imgPath" alt="item">
-    <p>{{ item.name }}</p>
-  </div>
-  <p id="menu-title">메뉴</p>
-  <div id="menu-item">
-    <img src="@/assets/game_search.png" alt="search">
-    <p>검색</p>
-  </div>
-  <div id="menu-item">
-    <img src="@/assets/game_whisper.png" alt="whisper">
-    <p>귓속말</p>
-  </div>
+  <div>
+    <div id="game-menu">
+      <p id="menu-title">아이템</p>
+      <div
+        id="menu-item"
+        v-for="item in items"
+        :key="item.id"
+      >
+        <img :src="item.imgPath" alt="item">
+        <p>{{ item.name }}</p>
+      </div>
+      <p id="menu-title">메뉴</p>
+      <div id="menu-item">
+        <img src="@/assets/game_search.png" alt="search">
+        <p>검색</p>
+      </div>
+      <div id="menu-item">
+        <img src="@/assets/game_whisper.png" alt="whisper">
+        <p>귓속말</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -57,6 +59,7 @@ export default {
 #game-menu{
   background: rgba(67, 64, 57, 0.3);
   border-radius: 10%;
+  width: 50px;
 }
 #menu-title{
   color: #F5F5F5;
