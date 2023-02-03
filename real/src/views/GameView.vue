@@ -1,6 +1,6 @@
 <template>
   <div>
-    <OpenViduVue :my_cam_modal="my_cam_modal" style="z-index: 1000;"></OpenViduVue>
+    <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue>
     <MapView />
     <MenuView v-if="menu" />
 
