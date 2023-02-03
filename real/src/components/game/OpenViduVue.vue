@@ -1,8 +1,8 @@
 <template>
     <div id="container">
         <div id="video_box">
-            <img class="camera_arrow" src="@/assets/camera_left.svg" alt="">
-            <img class="camera_arrow" src="@/assets/camera_right.svg" alt="">
+            <img class="camera_arrow left_arrow" src="@/assets/camera_left.svg" alt="">
+            <img class="camera_arrow right_arrow" src="@/assets/camera_right.svg" alt="">
             <div class="camera_name">
                 <!-- {{ clientData }} -->
                 임시이름
@@ -156,7 +156,7 @@ export default {
 
 #video_box {
     width: 100%;
-    height: 280px;
+    height: $video_height;
     overflow: hidden;
 }
 
@@ -176,6 +176,15 @@ video {
 
 .camera_arrow {
     position: absolute;
-    height: 30px;
+    top: $video_height / 2;
+    transform: translateY(-50%);
+    height: 60px;
+}
+
+.left_arrow {
+    left: -10px;
+}
+.right_arrow {
+    right: 5px
 }
 </style>
