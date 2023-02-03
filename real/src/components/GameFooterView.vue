@@ -1,5 +1,5 @@
 <template>
-  <div id="container">
+  <div id="footer_container">
       <div class="menu_box flex_center" @click="this.$router.push('/home')">
           <img class="menu" src="@/assets/game_chat.png">
       </div>
@@ -34,7 +34,7 @@
 @import "@/assets/scss/variable.scss";
 $button_width: 60px;
 
-  #container {
+  #footer_container {
       background-color: black;
       height: $footer_height;
       width: 100vw;
@@ -43,7 +43,7 @@ $button_width: 60px;
       justify-content: space-around;
       align-items: center;
   }
-  #container > div {
+  #footer_container > div {
     width: 100%;
   }
   // .menu {
@@ -59,4 +59,5 @@ $button_width: 60px;
     width: 100%;
     height: 40px;
   }
+  
 </style>
