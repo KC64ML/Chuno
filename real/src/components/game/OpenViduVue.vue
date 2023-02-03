@@ -16,6 +16,9 @@
             {{ subscribers.length }}
         </div>
     </div>
+    <div id="my_cam_modal" v-if="my_cam_modal" class="flex_center">
+      <video ref="my_cam" autoplay style="border:dashed;"></video>
+    </div>
 </template>
 
 <script>
@@ -24,7 +27,11 @@ const APPLICATION_SERVER_URL = "https://demos.openvidu.io/"
 // const APPLICATION_SERVER_URL = process.env.VUE_APP_SPRING;
 // const APPLICATION_SERVER_URL = "http://localhost:5000/";
 
+
 export default {
+    props: {
+        my_cam_modal: undefined,
+    },
     data() {
         return {
             streamManager: Object,
@@ -60,6 +67,7 @@ export default {
                 console.log("********************", this.subscribers);
             });
             this.session.on("streamDestroyed", ({ stream }) => {
+                console.log("-----------------------------", stream)
                 const index = this.subscribers.indexOf(stream.streamManager, 0);
                 if (index >= 0) this.subscribers.splice(index, 1);
             });
@@ -79,7 +87,7 @@ export default {
                             resolution: "640x480", // The resolution of your video
                             frameRate: 30, // The frame rate of your video
                             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-                            mirror: false, // Whether to mirror your local video or not
+                            mirror: true, // Whether to mirror your local video or not
                         });
                         this.mainStreamManager = publisher;
                         this.publisher = publisher;
@@ -87,7 +95,6 @@ export default {
                         this.session.publish(this.publisher);
                         
                         this.streamManager = this.mainStreamManager;
-                        this.$emit('test', "kkk");
                         console.log("여기까지 옴");
                         this.streamManager.addVideoElement(this.$refs.video);
                     })
@@ -157,6 +164,8 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/_variable";
+$my_video_width: 150px;
+$my_video_margin: 20px;
 
 #container {
     position: absolute;
@@ -214,5 +223,14 @@ video {
 }
 .right_box {
     right: 0;
+}
+#my_cam_modal {
+  background-color: red;
+  width: $my_video_width;
+  height: $my_video_width;
+  position: absolute;
+  right: 0;
+  bottom: $footer-height;
+  margin: $my_video_margin;
 }
 </style>
