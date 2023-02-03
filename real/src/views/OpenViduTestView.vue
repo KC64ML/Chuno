@@ -74,7 +74,7 @@
   
   axios.defaults.headers.post["Content-Type"] = "application/json";
   
-  const APPLICATION_SERVER_URL = "https://i8d208.p.ssafy.io/openvidu/";
+  const APPLICATION_SERVER_URL = "https://i8d208.p.ssafy.io/api/";
   
   export default {
     name: "OpenViduTestView",
