@@ -7,7 +7,7 @@
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: false,
-        minZoom: 15,
+        minZoom: 11,
         maxZoom: 18,
       }"
       style="width: 100vw; height: 25rem"
@@ -19,7 +19,7 @@
           :position=this.player
         />
         <GMapCircle
-          :radius="50"
+          :radius="1000"
           :center="player"
           :options="circleOptions"
         />
@@ -49,32 +49,7 @@ export default {
         url: truePaper,
         scaledSize: { width: 40, height: 40 }
       },
-      markers: [
-        {
-          position: {
-            lat: 36.108135,
-            lng: 128.42335,
-          },
-        },
-        {
-          position: {
-            lat: 36.10565,
-            lng: 128.42335,
-          },
-        },
-        {
-          position: {
-            lat: 36.0923108,
-            lng: 128.4245156,
-          },
-        },
-        {
-          position: {
-            lat: 36.1070778,
-            lng: 128.4164495,
-          },
-        },
-      ],
+      markers: [],
       player: {
         lat: null,
         lng: null,
@@ -155,8 +130,38 @@ export default {
         }
       }
     },
+    generatePapers(center, radius, count) {
+      var points = [];
+      for (var i=0; i<count; i++) {
+        points.push({ position: this.generatePaper(center, radius)});
+      }
+      // return points;
+      console.log(points)
+      this.markers = points
+    },
+    generatePaper(center, radius) {
+      var x0 = center.lng;
+      var y0 = center.lat;
+      // Convert Radius from meters to degrees.
+      var rd = radius/111300;
+
+      var u = Math.random();
+      var v = Math.random();
+
+      var w = rd * Math.sqrt(u);
+      var t = 2 * Math.PI * v;
+      var x = w * Math.cos(t);
+      var y = w * Math.sin(t);
+
+      var xp = x/Math.cos(y0);
+
+      // Resulting point.
+      return {'lat': y+y0, 'lng': xp+x0};
+    },
   },
   created() {
+    this.generatePapers({lat: 0, lng: 0}, 100, 10)
+    // this.generatePapers({lat: 36.0923108, lng: 128.4245156}, 100, 10)
   },
   watch: {
   }
