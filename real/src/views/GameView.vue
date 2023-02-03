@@ -1,9 +1,11 @@
 <template>
   <MenuView v-if="menu"/>
   <div>
-    <!-- <OpenViduVue style="z-index: 100;"></OpenViduVue> -->
+    <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue>
     <MapView />
 
+    
+    
     <div id="footer_container">
       <div class="menu_box flex_center" @click="this.$router.push('/home')">
         <img class="menu" src="@/assets/game_chat.png">
@@ -18,7 +20,6 @@
       <div class="menu_box" @click="onMenu">
         <img class="menu" src="@/assets/game_menu.png">
       </div>
-
     </div>
   </div>
 </template>
@@ -38,7 +39,8 @@ export default {
   },
   data() {
     return {
-      menu: false,
+      menu: true,
+      my_cam_modal: true,
     }
   },
   methods: {
@@ -47,7 +49,7 @@ export default {
       this.menu = !this.menu
     },
     myCam() {
-      alert('myCam눌림')
+      this.my_cam_modal = !this.my_cam_modal
     },
   }
 }
@@ -98,4 +100,5 @@ $button_width: 60px;
 .map_search::placeholder {
   color: rgba(255, 255, 255, 0.56)
 }
+
 </style>

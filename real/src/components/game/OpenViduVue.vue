@@ -1,75 +1,61 @@
 <template>
-    <div id="container">
-        <div id="video_box">
-            <img class="camera_arrow left_arrow" src="@/assets/camera_left.svg" alt="">
-            <img class="camera_arrow right_arrow" src="@/assets/camera_right.svg" alt="">
-            <div class="arrow_box left_box" @click="leftArrow"></div>
-            <div class="arrow_box right_box" @click="rightArrow"></div>
-            <div class="camera_name">
-                <!-- {{ clientData }} -->
-                임시이름
-            </div>
-            <video ref="video" autoplay ></video>
-            <!-- @click.native는 하위컴포넌트가 지금 보고있는 컴포넌트의 method를 사용할 수 있게 해줌 -->
-        </div>
-        <div>
-            {{ subscribers }}
-        </div>
+    <div id="main_vedio_container" style="z-index: 1000">
+        <!-- <user-video :stream-manager="mainStreamManager" style="border: dashed;"/> -->
+        <user-video :stream-manager="myStreamManager" style="border: dashed;"/>
+        <video autoplay ref="video" style="border:solid"></video>
     </div>
 </template>
 
 <script>
 import { OpenVidu } from "openvidu-browser";
-const APPLICATION_SERVER_URL = "https://demos.openvidu.io/"
-// const APPLICATION_SERVER_URL = process.env.VUE_APP_SPRING;
-// const APPLICATION_SERVER_URL = "http://localhost:5000/";
+import UserVideo from "@/components/game/UserVideo.vue";
 
-export default {
-    data() {
-        return {
-            streamManager: Object,
-            OV: undefined,
-            session: undefined,
-            mainStreamManager: undefined,
-            publisher: undefined,
-            subscribers: [],
-            mySessionId: this.$route.params.roomId,
-            myUserName: "dddd",
-        }
-    },
-    mounted() {
-    },
-    computed: {
-        clientData() {
-            const { clientData } = this.getConnectionData();
-            return clientData;
-        }
-    },
-    methods: {
-        init() {
-            console.log("세션이름:" + this.$route.params.roomId);
+// const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
+const APPLICATION_SERVER_URL = "http://localhost:5000/";
+    export default {
+        components: {
+            UserVideo,
+        },
+        props: {
+            my_cam_modal: undefined
+        },
+        data() {
+            return {
+                // OpenVidu objects
+                OV: undefined,
+                session: undefined,
+                mainStreamManager: undefined,
+                myStreamManager: undefined,
+                publisher: undefined,
+                subscribers: [],
 
-            // OV 객체를 만들어요
-            this.OV = new OpenVidu();
-
-            // 세션 객체를 만들어요
-            this.session = this.OV.initSession();
-            this.session.on("streamCreated", ({ stream }) => {
-                const subscriber = this.session.subscribe(stream);
-                this.subscribers.push(subscriber);
-            });
-            this.session.on("streamDestroyed", ({ stream }) => {
-                const index = this.subscribers.indexOf(stream.streamManager, 0);
-                if (index >= 0) this.subscribers.splice(index, 1);
-            });
-            this.session.on("exception", ({ exception }) => {
-                console.warn(exception);
-            });
-            console.log("와써여")
-            this.getToken(this.mySessionId).then((token) => {
-                console.log("토큰가지고왔어요",token, this.myUserName);
-                this.session.connect(token, { clientData: this.myUserName })
-                    .then(() => {
+                // Join form
+                mySessionId: this.$route.params.roomId,
+                myUserName: "dddd",
+            };
+        },
+        methods: {
+            async init() {
+                this.OV = new OpenVidu();
+                this.session = this.OV.initSession();
+                this.session.on("streamCreated", ({ stream }) => {
+                    console.log("스트림을 발견했어요!")
+                    const subscriber = this.session.subscribe(stream);
+                    this.subscribers.push(subscriber);
+                });
+                this.session.on("streamDestroyed", ({ stream }) => {
+                    console.log("누군가가 스트림을 종료했어요!")
+                    const index = this.subscribers.indexOf(stream.streamManager, 0);
+                    if (index >= 0) {
+                        this.subscribers.splice(index, 1);
+                    }
+                });
+                this.session.on("exception", ({ exception }) => {
+                    console.warn("오류ㅠㅠ" + exception);
+                });
+                await this.getToken(this.mySessionId).then(async (token) => {
+                    console.log("토큰을생성해요");
+                    await this.session.connect(token, { clientData: this.myUserName }).then(() => {
                         let publisher = this.OV.initPublisher(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone
                             videoSource: undefined, // The source of video. If undefined default webcam
@@ -80,138 +66,68 @@ export default {
                             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                             mirror: false, // Whether to mirror your local video or not
                         });
-                        this.mainStreamManager = publisher;
+                        this.myStreamManager = publisher;
                         this.publisher = publisher;
-
                         this.session.publish(this.publisher);
-                        
-                        this.streamManager = this.mainStreamManager;
-                        this.$emit('test', "kkk");
-                        console.log("여기까지 옴");
-                        this.streamManager.addVideoElement(this.$refs.video);
+                        this.myStreamManager.addVideoElement(this.$refs.video);
                     })
                     .catch((error) => {
-                        console.log("세션에 연결하는데 오류가 있어요:", error.code, error.message);
+                        console.log("There was an error connecting to the session:", error.code, error.message);
                     });
-            });
-            window.addEventListener("beforeunload", this.leaveSession);
-        },
+                });
+                window.addEventListener("beforeunload", this.leaveSession);
+            },
+            leaveSession() {
+                if (this.session) this.session.disconnect();
 
-        getConnectionData() {
-            const { connection } = this.streamManager.stream;
-            return JSON.parse(connection.data);
-        },
+                this.session = undefined;
+                this.mainStreamManager = undefined;
+                this.publisher = undefined;
+                this.subscribers = [];
+                this.OV = undefined;
 
-        leaveSession() {
-            // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
-            if (this.session) this.session.disconnect();
-
-            // Empty all properties...
-            this.session = undefined;
-            this.mainStreamManager = undefined;
-            this.publisher = undefined;
-            this.subscribers = [];
-            this.OV = undefined;
-
-            // Remove beforeunload listener
-            window.removeEventListener("beforeunload", this.leaveSession);
+                window.removeEventListener("beforeunload", this.leaveSession);
+            },
+            updateMainVideoStreamManager(stream) {
+                if (this.mainStreamManager === stream) return;
+                this.mainStreamManager = stream;
+            },
+            async getToken(mySessionId) {
+                const sessionId = await this.createSession(mySessionId);
+                return await this.createToken(sessionId);
+            },
+            async createSession(sessionId) {
+                const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
+                    headers: { 'Content-Type': 'application/json', },
+                });
+                return response.data; // The sessionId
+            },
+            async createToken(sessionId) {
+                const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
+                    headers: { 'Content-Type': 'application/json', },
+                });
+                return response.data; // The token
+            },
         },
-        updateMainVideoStreamManager(stream) {
-            if (this.mainStreamManager === stream) return;
-            this.mainStreamManager = stream;
-        },
-        async getToken(mySessionId) {
-            console.log("토큰을 받아와 볼게요", mySessionId)
-            const sessionId = await this.createSession(mySessionId);
-            return await this.createToken(sessionId);
-        },
-        async createSession(sessionId) {
-            console.log("여기?")
-            const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
-                headers: { 'Content-Type': 'application/json', },
-            });
-            console.log("여기능ㄴ?", response)
-            return response.data; // The sessionId
-        },
-        async createToken(sessionId) {
-            const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
-                headers: { 'Content-Type': 'application/json', },
-            });
-            console.log("제발:", response.data)
-            return response.data; // The token
-        },
-        leftArrow() {
-            alert('왼쪽화살표')
-        },
-        rightArrow() {
-            alert('오른쪽화살표');
+        async created() {
+            await this.init();
+            console.log("--------------ffff--------------");
+            console.log(this.subscribers);
+            for (var sub of this.subscribers) {
+                console.log("---", sub);
+            }
         }
-    },
-    created() {
-        console.log(process.env.VUE_APP_SPRING);
-        this.init();
-    },
-}
+    }
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/_variable";
+$my_video_width: 150px;
+$my_video_margin: 20px;
 
-#container {
+#main_vedio_container {
     position: absolute;
     top: 0;
-    width: 100vw;
-}
-
-#video_box {
-    width: 100%;
-    height: $video_height;
-    overflow: hidden;
-}
-
-video {
-    width: 100%;
-}
-
-.camera_name {
-    position: absolute;
-    color: white;
-    top: 10px;
-    left: 20px;
-    background-color: rgb(0,0,0,0.5);
-    padding: 4px;
-    border-radius: 10px;
-}
-.arrow_box:hover {
-    background-color: blue;
-    cursor: pointer;
-}
-
-.camera_arrow {
-    position: absolute;
-    top: $video_height / 2;
-    transform: translateY(-50%);
-    height: 60px;
-}
-
-.left_arrow {
-    left: -10px;
-}
-.right_arrow {
-    right: 5px
-}
-.arrow_box {
-    position: absolute;
-    top: $video_height / 2;
-    transform: translateY(-50%);
-    height: 100px;
-    width: 50px;
-    z-index: 100;
-}
-.left_box {
-    left: 0;
-}
-.right_box {
-    right: 0;
+    width: 100vw
 }
 </style>

@@ -74,7 +74,7 @@
   
   axios.defaults.headers.post["Content-Type"] = "application/json";
   
-  const APPLICATION_SERVER_URL = "https://i8d208.p.ssafy.io/openvidu/";
+  const APPLICATION_SERVER_URL = "https://i8d208.p.ssafy.io/api/";
   
   export default {
     name: "OpenViduTestView",
@@ -114,7 +114,8 @@
         // --- 1) Get an OpenVidu object ---
         this.OV = new OpenVidu();
         // --- 2) Init a session ---
-        this.session = this.OV.initSession();
+            this.session = this.OV.initSession();
+            console.log("init sesstion");
   
         // --- 3) Specify the actions when events take place in the session ---
   
@@ -152,12 +153,14 @@
         // --- 4) Connect to the session with a valid user token ---
   
         // Get a token from the OpenVidu deployment
-        this.getToken(this.mySessionId).then((token) => {
+            this.getToken(this.mySessionId).then((token) => {
+            console.log(`token : ${token}`);
           // First param is the token. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
           this.session
             .connect(token, { clientData: this.myUserName })
-            .then(() => {
+              .then(() => {
+                  console.log("session connected");
               // --- 5) Get your own camera stream with the desired properties ---
   
               // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video

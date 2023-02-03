@@ -50,7 +50,7 @@ export default {
                     room_start_time: new Date(2023, 1, 1, 13, 20, 0)
                 },
                 {
-                    roomId: 2,
+                    room_id: 4,
                     title: "방이름2",
                     is_public: false,
                     password: "abc111",
