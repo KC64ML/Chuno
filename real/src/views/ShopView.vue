@@ -13,8 +13,8 @@
         </div>
         <ItemView
           @click="onSelect(item)"
-          v-for="(item, i) in items.filter((i) => i.forR == 1)"
-          :key="i"
+          v-for="item in items.filter((i) => i.forRunner == 1)"
+          :key="item.id"
           :item="item"
         />
       </div>
@@ -24,8 +24,8 @@
         </div>
         <ItemView
           @click="onSelect(item)"
-          v-for="(item, i) in items.filter((i) => i.forR == 0)"
-          :key="i"
+          v-for="item in items.filter((i) => i.forRunner == 0)"
+          :key="item.id"
           :item="item"
         />
       </div>
@@ -47,46 +47,37 @@
     },
     data() {
       return {
-        selected: [],
+        selected: {
+          name: ' ',
+          price: ' ',
+          description: ' ',
+          imgPath: ' ',
+          forRunner: ' ',
+        },
         items:[],
       }
     },
     methods: {
       onSelect(res) {
         this.selected = res
-      }
+      },
+      getItems(){
+        this.axios.get(
+          process.env.VUE_APP_SPRING + "item",
+        )
+          .then((res) => {
+            const items = res.data.result
+            const code = res.data.code
+            if (code) {
+              this.items = items
+            } else {
+              console.log('error')
+            }
+          })
+      },
     },
     mounted() {
-      this.items = [
-        {
-          forR: 1,
-          name: '천리안',
-          description: '자신의 위치를 드러내지 않고 가장 가까운 추노꾼의 위치를 확인할 수 있다.',
-          price: 20,
-          img_path: require('@/assets/logo.png'),
-        },
-        {
-          forR: 1,
-          name: '위장',
-          description: '추노꾼이 자신을 잡을 수 있는 범위를 축소한다.',
-          price: 30,
-          img_path: require('@/assets/logo.png'),
-        },
-        {
-          forR: 0,
-          name: '조명탄',
-          description: 'n초간 노비의 위치를 지도에 표시할 수 있다.',
-          price: 15,
-          img_path: require('@/assets/logo.png'),
-        },
-        {
-          forR: 0,
-          name: '긴 오랏줄',
-          description: '자신이 노비를 잡을 수 있는 범위를 확대할 수 있다.',
-          price: 15,
-          img_path: require('@/assets/logo.png'),
-        },
-      ]
+      this.getItems()
     }
   }
 </script>

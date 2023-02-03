@@ -2,26 +2,20 @@
   <HeaderVue
     :title="'랭킹'"
   ></HeaderVue>
-  <div>
-    <RankTop3View/>
-    <RankListView/>
-    <hr>
-    <p @click="onGame">
-      game router test
-    </p>
-  </div>
+  <RankListView/>
+  <p @click="onGame">
+    game router test
+  </p>
 </template>
 
 <script>
 import HeaderVue from '@/components/HeaderVue.vue';
 import RankListView from '@/components/rank/RankListView.vue';
-import RankTop3View from '@/components/rank/RankTop3View.vue';
 
 export default {
   name: 'RankView',
   components: {
     HeaderVue,
-    RankTop3View,
     RankListView,
   },
   methods:{
