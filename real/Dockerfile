@@ -10,5 +10,4 @@ WORKDIR /real
 COPY package.json .
 ADD . .
 RUN npm install
-EXPOSE 3000
 CMD ["npm", "run", "serve"]
