@@ -3,7 +3,7 @@ package com.leesfamily.chuno.room;
 import com.leesfamily.chuno.common.model.Direction;
 import com.leesfamily.chuno.common.model.Location;
 import com.leesfamily.chuno.common.util.GeometryUtils;
-import com.leesfamily.chuno.room.model.RoomDto;
+import com.leesfamily.chuno.room.model.RoomResponse;
 import com.leesfamily.chuno.room.model.RoomEntity;
 import com.leesfamily.chuno.room.model.RoomRequest;
 import com.leesfamily.chuno.user.UserRepository;
@@ -26,9 +26,10 @@ public class RoomService {
     final private EntityManager em;
     final private RoomRepository roomRepository;
     final private UserRepository userRepository;
+    final private PushRepository pushRepository;
 
     @Transactional(readOnly = true)
-    public List<RoomDto> getNearByRooms(Double latitude, Double longitude, Double distance) {
+    public List<RoomResponse> getNearByRooms(Double latitude, Double longitude, Double distance) {
         Location northEast = GeometryUtils
                 .calculate(latitude, longitude, distance, Direction.NORTHEAST.getBearing());
         Location southWest = GeometryUtils
@@ -39,18 +40,22 @@ public class RoomService {
         double x2 = southWest.getLat();
         double y2 = southWest.getLng();
 
-        String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
-        Query query = em.createNativeQuery("SELECT r.*, u.* "
+//        String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
+        Query query = em.createNativeQuery("SELECT r.*, u.*, " +
+                        " ST_Distance_Sphere(r.location, POINT(" + longitude + ", " + latitude + ")) as distance "
                         + " FROM rooms AS r " +
                         " LEFT JOIN users AS u " +
-                        " ON r.host_id = u.user_id "
-                        + " WHERE MBRContains(ST_LINESTRINGFROMTEXT(" + pointFormat + ", r.location)", RoomEntity.class)
-                .setMaxResults(10);
+                        " ON r.host_id = u.user_id " +
+                        " LEFT JOIN pushes p " +
+                        " ON  "
+//                        + " WHERE distance  " +
+                        + " ORDER BY distance ", RoomEntity.class)
+                .setMaxResults(20);
 
         List<RoomEntity> rooms = query.getResultList();
 
-        List<RoomDto> roomRes = rooms.stream().map(room ->
-            new RoomDto(room)
+        List<RoomResponse> roomRes = rooms.stream().map(room ->
+            new RoomResponse(room)
         ).collect(Collectors.toList());
         return roomRes;
     }
@@ -83,7 +88,7 @@ public class RoomService {
             }else {
                 room.setCurrentPlayers(currentPlayers + 1);
                 roomRepository.saveAndFlush(room);
-                RoomDto dto = new RoomDto(room);
+                RoomResponse dto = new RoomResponse(room);
                 resMap.put("result", dto);
                 resMap.put("code", "1");
             }
@@ -92,4 +97,7 @@ public class RoomService {
         }
         return resMap;
     }
+
+
+
 }

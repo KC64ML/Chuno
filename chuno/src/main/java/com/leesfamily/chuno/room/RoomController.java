@@ -3,11 +3,9 @@ package com.leesfamily.chuno.room;
 import com.leesfamily.chuno.common.model.Location;
 import com.leesfamily.chuno.common.util.StatusCodeGeneratorUtils;
 import com.leesfamily.chuno.common.util.TokenUtils;
-import com.leesfamily.chuno.room.model.RoomDto;
+import com.leesfamily.chuno.room.model.RoomResponse;
 import com.leesfamily.chuno.room.model.RoomEntity;
 import com.leesfamily.chuno.room.model.RoomRequest;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -28,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +58,7 @@ public class RoomController {
     })
     @GetMapping
     public ResponseEntity<Map<String, Object>> getRoomList(Location loc) {
-        List<RoomDto> roomList = roomService.getNearByRooms(loc.getLat(), loc.getLng(), 300.0);
+        List<RoomResponse> roomList = roomService.getNearByRooms(loc.getLat(), loc.getLng(), 300.0);
         Map<String, Object> res = new HashMap<>();
         res.put("result", roomList);
         return new ResponseEntity<>(res, HttpStatus.OK);
@@ -88,7 +85,7 @@ public class RoomController {
         log.info(String.valueOf(point));
         room.setLocation(point);
         RoomEntity res = roomService.insRoom(room, room.getHostId());
-        RoomDto dto = new RoomDto(res);
+        RoomResponse dto = new RoomResponse(res);
         Map<String, Object> response = statusCodeGeneratorUtils.checkResultByObject(dto);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

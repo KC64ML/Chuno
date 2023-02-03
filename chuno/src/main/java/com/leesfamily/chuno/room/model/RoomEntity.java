@@ -63,4 +63,10 @@ public class RoomEntity {
     @JoinColumn(name = "host_id", referencedColumnName = "user_id", nullable = false)
     private UserEntity host;
 
+    @Transient
+    private double distance;
+
+    @Transient
+    private boolean isPushed;
+
 }

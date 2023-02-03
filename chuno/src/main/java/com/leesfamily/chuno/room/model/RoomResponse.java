@@ -4,14 +4,10 @@ import com.leesfamily.chuno.user.model.UserEntity;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.locationtech.jts.geom.Point;
 
-import javax.persistence.Column;
-
 @Data
-public class RoomDto {
+public class RoomResponse {
 
         private Long id;
 
@@ -24,7 +20,7 @@ public class RoomDto {
         private PointDto location;
         private int radius;
         private UserEntity host;
-        public RoomDto(RoomEntity entity) {
+        public RoomResponse(RoomEntity entity) {
             this.id = entity.getId();
             this.title = entity.getTitle();
             this.password = entity.getPassword();
