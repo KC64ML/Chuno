@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.leesfamily.chuno.R
@@ -56,14 +58,14 @@ class RoomListFragment : Fragment(), CreateRoomDialogInterface {
                 columnCount <= 1 -> LinearLayoutManager(requireContext())
                 else -> GridLayoutManager(requireContext(), columnCount)
             }
-            adapter = RoomItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
+            adapter = RoomItemRecyclerViewAdapter(PlaceholderContent.ITEMS, navigate())
         }
         binding.allRoomList.apply {
             layoutManager = when {
                 columnCount <= 1 -> LinearLayoutManager(requireContext())
                 else -> GridLayoutManager(requireContext(), columnCount)
             }
-            adapter = RoomItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
+            adapter = RoomItemRecyclerViewAdapter(PlaceholderContent.ITEMS, navigate())
 
         }
         binding.refreshLayout.apply {
@@ -94,7 +96,13 @@ class RoomListFragment : Fragment(), CreateRoomDialogInterface {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
 
+    private fun navigate():NavController{
+        Log.d(TAG, "navigate: 나 네비")
+        val navHostFragment =
+            activity?.supportFragmentManager?.findFragmentById(R.id.start_nav_host_fragment) as NavHostFragment
+        return navHostFragment.navController
     }
 
     companion object {

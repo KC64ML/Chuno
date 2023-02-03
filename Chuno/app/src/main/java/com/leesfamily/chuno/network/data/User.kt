@@ -28,5 +28,5 @@ data class User(
 
     val profile: UserProfile,
 
-    val inventory: Inventory
+    val inventory: List<Inventory>
 )

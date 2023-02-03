@@ -109,7 +109,7 @@ class RankFragment : Fragment(), OnMapReadyCallback {
     private var session: Session? = null
     private var httpClient: CustomHttpClient? = null
 
-    fun buttonPressed(view: View?) {
+    private fun buttonPressed(view: View?) {
         if (binding.startFinishCall.text == resources.getString(R.string.hang_up)) {
             // Already connected to a session
             Log.d(TAG, "buttonPressed: leave")
@@ -269,15 +269,6 @@ class RankFragment : Fragment(), OnMapReadyCallback {
             binding.sessionName.isEnabled = false
             binding.participantName.isEnabled = false
             binding.participantName.isEnabled = false
-//        runOnUiThread(Runnable {
-//            start_finish_call!!.isEnabled = false
-//            application_server_url!!.isEnabled = false
-//            application_server_url!!.isFocusable = false
-//            session_name!!.isEnabled = false
-//            session_name!!.isFocusable = false
-//            participant_name!!.isEnabled = false
-//            participant_name!!.isFocusable = false
-//        })
         }
     }
 

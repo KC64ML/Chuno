@@ -12,6 +12,8 @@
 
     <color name="primary">#000000</color>
     <color name="gray">#4D434039</color>
+    <color name="button">#48474A</color>
+    <color name="chat">#87848E</color>
     <color name="wine">#FFA03A2C</color>
     <color name="secondary">#F5F5F5</color>
     <color name="highlight">#F66A03</color>

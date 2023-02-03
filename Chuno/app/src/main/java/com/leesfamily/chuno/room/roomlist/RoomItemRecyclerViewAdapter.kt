@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentRoomItemBinding
@@ -15,17 +16,22 @@ import com.leesfamily.chuno.room.placeholder.PlaceholderContent.PlaceholderItem
 import com.leesfamily.chuno.util.custom.*
 
 class RoomItemRecyclerViewAdapter(
-    private val values: List<PlaceholderItem>
+    private val values: List<PlaceholderItem>,
+    navigate: NavController
 ) : RecyclerView.Adapter<RoomItemRecyclerViewAdapter.ViewHolder>(), CreateRoomDialogInterface,
     MyCustomDialogInterface {
 
     private lateinit var binding: FragmentRoomItemBinding
     private lateinit var manager: FragmentManager
     private lateinit var mContext: Context
-
-
     private lateinit var dialog1: CreateRoomDialog1
     private lateinit var dialog2: CreateRoomDialog2
+
+    private var navigate: NavController? = null
+
+    init {
+        this.navigate = navigate
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
@@ -38,6 +44,7 @@ class RoomItemRecyclerViewAdapter(
             showCustomDialog(mContext)
         }
         binding.roomInView.setOnClickListener {
+            navigate?.navigate(R.id.waitingRoomFragment)
             Log.d(TAG, "onCreateViewHolder: 입장")
 
         }
@@ -104,4 +111,6 @@ class RoomItemRecyclerViewAdapter(
     companion object {
         private const val TAG = "추노_RoomItemRecyclerViewAda"
     }
+
+
 }

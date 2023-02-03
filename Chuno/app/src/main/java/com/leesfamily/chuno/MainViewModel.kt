@@ -33,9 +33,9 @@ class MainViewModel : ViewModel() {
 
     fun loadLoginInfo() {
         val lastToken = LoginPrefManager.getLastLoginToken() ?: return
-        val mUser = LoginGetter().requestUser(lastToken)?.let {
-//            user = it
-        }
+//        val mUser = LoginGetter().requestUser(lastToken)?.let {
+////            user = it
+//        }
 
     }
 

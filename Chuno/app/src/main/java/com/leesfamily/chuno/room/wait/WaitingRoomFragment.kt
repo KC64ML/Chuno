@@ -1,13 +1,18 @@
 package com.leesfamily.chuno.room.wait
 
+import android.annotation.SuppressLint
+import android.graphics.drawable.InsetDrawable
+import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
+import android.view.*
+import androidx.annotation.MenuRes
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentWaitingRoomListBinding
 import com.leesfamily.chuno.room.wait.placeholder.PlaceholderContent
@@ -32,19 +37,43 @@ class WaitingRoomFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding.toolbarInclude.toolbarTitle.text = "나는 방 이름"
         binding = FragmentWaitingRoomListBinding.inflate(inflater, container, false)
+        binding.toolbarInclude.toolbarTitle.text = "나는 방 이름"
+        binding.toolbarInclude.toolbar.inflateMenu(R.menu.menu_toolbar)
         binding.userList.apply {
 
-            layoutManager = when {
-                columnCount <= 3 -> LinearLayoutManager(context)
-                else -> GridLayoutManager(context, columnCount)
-            }
+            layoutManager =
+                GridLayoutManager(context, columnCount)
+
             adapter = UserItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
 
         }
 
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.room_info->{
+
+                true
+            }
+            R.id.notify_off->{
+                true
+            }
+            R.id.notify_on->{
+                true
+            }
+            R.id.out->{
+                true
+            }
+            else -> super.onContextItemSelected(item)
+        }
+
     }
 
     companion object {

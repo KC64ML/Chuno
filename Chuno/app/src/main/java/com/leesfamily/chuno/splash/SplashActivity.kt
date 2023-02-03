@@ -36,12 +36,7 @@ class SplashActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             val start = System.currentTimeMillis()
 //            viewModelInit()
-            val delay = System.currentTimeMillis() - start
 
-            val limitTime = 300
-
-            if (delay < limitTime)
-                delay(limitTime - delay)
             if (isConnectNetwork())
                 LoginPrefManager.getLastLoginToken()?.let {
                     LoginGetter().requestUser(it)?.let { user ->
@@ -49,6 +44,14 @@ class SplashActivity : AppCompatActivity() {
                         UserDB.setToken(it)
                     }
                 }
+
+            val delay = System.currentTimeMillis() - start
+
+            val limitTime = 300
+
+            if (delay < limitTime)
+                delay(limitTime - delay)
+
 
             launch(Dispatchers.Main) {
                 startMainActivity()

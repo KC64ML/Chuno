@@ -1,8 +1,11 @@
 package com.leesfamily.chuno.network
 
 import android.util.Log
+import com.google.gson.Gson
 import com.leesfamily.chuno.network.data.DataForm
+import com.leesfamily.chuno.network.data.LoginForm
 import com.leesfamily.chuno.network.data.User
+import com.leesfamily.chuno.util.login.LoginPrefManager
 import com.leesfamily.chuno.util.login.UserDB
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -10,7 +13,8 @@ import retrofit2.Response
 
 
 class LoginGetter {
-    private var data: DataForm? = null
+    private var loginData: LoginForm? = null
+    private var userData: DataForm? = null
 
     fun requestUser(token: String): User? {
 
@@ -22,8 +26,8 @@ class LoginGetter {
         Log.d(TAG, "requestLogin: requestCode\n $requestCode")
         Log.d(TAG, "requestLogin: networkResponse\n $networkResponse")
         if (requestCode == 200) {
-            data = userResponse.body()
-            val user: User = data?.result as User
+            userData = userResponse.body()
+            val user: User? = userData?.result
 
             Log.d(TAG, "requestLogin: request success, $user")
             return user
@@ -31,9 +35,14 @@ class LoginGetter {
         return null
     }
 
+    //array 를 json String 으로 변환
+    fun <T> arrayToString(list: ArrayList<T>?): String? {
+        val g = Gson()
+        return g.toJson(list)
+    }
     fun requestLogin(token: String): String? {
 
-        val loginResponse: Response<DataForm> = ChunoServer.loginServer.login(token).execute()
+        val loginResponse: Response<LoginForm> = ChunoServer.loginServer.login(token).execute()
 
         val networkResponse = loginResponse.raw().networkResponse?.code
         val requestCode = loginResponse.code()
@@ -41,19 +50,20 @@ class LoginGetter {
         Log.d(TAG, "requestLogin: requestCode\n $requestCode")
         Log.d(TAG, "requestLogin: networkResponse\n $networkResponse")
         if (requestCode == 200) {
-            data = loginResponse.body()
+            loginData = loginResponse.body()
 
-            when (data?.code) {
+            when (loginData?.code) {
                 "member" -> {
-                    UserDB.setToken(data!!.result.toString())
+                    UserDB.setToken(loginData!!.result)
+                    LoginPrefManager.setLastLoginToken(loginData!!.result)
                 }
                 "no_email" -> {
-                    UserDB.setEmail(data!!.result.toString())
+                    UserDB.setEmail(loginData!!.result)
                 }
             }
-            Log.d(TAG, "requestLogin: request success, $data")
+            Log.d(TAG, "requestLogin: request success, $loginData")
         }
-        return data?.code.toString()
+        return loginData?.code.toString()
     }
 
     fun requestTokenConfirm(token: String): Boolean {
