@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <OpenViduVue style="z-index: 100;"></OpenViduVue>
     <MapView/>
     <MenuView v-if="menu"/>
@@ -27,6 +26,7 @@ export default {
     OpenViduVue,
     MenuView,
   },
+<<<<<<< HEAD
   data(){
     return {
       menu: true,
@@ -36,6 +36,11 @@ export default {
     onMenu(){
       console.log('menu clicked')
       this.menu = !this.menu
+=======
+  methods: {
+    testa(ttt) {
+      console.log(ttt);
+>>>>>>> 4e1c161a5b72d35b7e3827b59fe4f11d906e460d
     }
   }
 }
@@ -43,5 +48,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/variable.scss";
   
+
 </style>
