@@ -10,7 +10,7 @@
       <div class="menu_box" @click="this.$router.push('/home')">
           <img class="menu" src="@/assets/game_myCam.png">
       </div>
-      <div class="menu_box" @click="this.$router.push('/home')">
+      <div class="menu_box" @click="this.$emit('on-menu')">
           <img class="menu" src="@/assets/game_menu.png">
       </div>
       

@@ -5,7 +5,7 @@
         <!-- <img src="@/assets/profile_frame.png" alt="profileFrame"> -->
         <!-- <img src="@/assets/camera.svg" alt="upload pic"> -->
         <img :src="img ? img : imgDefault" alt="profilePic" class="uploadedImg">
-        <input type="file" id="file" class="inputfile" @change="upload">
+        <input type="file" accept="image/*" id="file" class="inputfile" @change="upload">
       </label>
 
     </div>
@@ -28,14 +28,13 @@
       </div>
       <div class="container" @click="onSave">
         <p>저장</p>
-        <img alt="Vue logo" src="@/assets/main_button1.png">
+        <img alt="btn" src="@/assets/main_button1.png">
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 import imgDefault from '@/assets/profile_default.svg'
 
 export default {
@@ -54,28 +53,15 @@ export default {
   methods: {
     // 프로필 사진
     upload(event) {
-      // this.axios.post(url, formData, { headers: {'Content-Type': 'multipart/form-data'}})
-      // .then( response => {
-      //       if(!!response && response.status === 200){
-            
-      //           commonUtils.$alert('감사합니다.\n정상등록되었습니다.');
-      //           this.scndhandReg = Object.assign({}, this.defScndhangReg);
-  
-      //       }
-      //     }).catch( error => {
-      //     console.log(error);
-      //         commonUtils.$alertUncatchedError(error);
-      //     });
       let file = event.target.files
       let reader = new FileReader()
 
       reader.readAsDataURL(file[0])
       reader.onload = event => {
-        // console.log(event.target.result)
+        console.log('img added')
         this.img = event.target.result
         console.log(this.img)
       }
-      // DB업로드 코드 추가하기
     },
     // 닉네임 유효성 검사
     check() {
@@ -83,21 +69,13 @@ export default {
         this.lengthValid = false
       } else {
         this.lengthValid = true
-        axios.get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname)
-          .then(({ data }) => {
-            if (data.result == 0) {
-              this.useValid = true;
-            } else {
-              this.useValid = false;
-            }
-          })
       }
       // 중복체크 코드로 바꾸기
-      // if(this.nickname.length < 3){
-      //   this.useValid = false
-      // } else {
-      //   this.useValid = true
-      // }
+      if(this.nickname.length < 3){
+        this.useValid = false
+      } else {
+        this.useValid = true
+      }
     },
     async onSave() {
       if(this.lengthValid && this.useValid) {
@@ -105,12 +83,12 @@ export default {
         const nick = this.nickname
         // const email = new URL(window.location.href).searchParams.get('email');
         const email = this.$route.params.email
-        var token = await axios.post(process.env.VUE_APP_SPRING + "kakao/register", {"nickname": nick, "email": email});
+        var token = await this.axios.post(process.env + "register", {"nick": nick, "email": email});
         console.log("회원가입 완료", token.data);
         // token에 토큰이 담겨있어요 쎄션스토리지에 넣어서 사용해하세요
         sessionStorage.setItem("token", token.data);
         //이곳에 회원가입이 완료하고 돌아갈 곳을 달아주세요
-        this.$router.push({ name: 'home' })
+        this.$router.push({ name: 'Home' })
       } else {
         alert('닉네임을 바르게 설정하세요.')
       }
@@ -124,15 +102,17 @@ export default {
 </script>
 
 <style>
+.profile{
+  text-align: center;
+}
 .profile .uploadedImg {
-  /* position: absolute; */
   top: 0;
   left: 40%;
   height: 100px;
   width: 100px;
   border-radius: 100%;
   object-fit: cover;
-  /* border: 2px solid #1D182C */
+  border: 2px solid #1D182C
 }
 .inputfile {
   width: 0;
@@ -150,16 +130,18 @@ export default {
   font-size: 11px;
   color: red;
 }
+.container{
+  /* text-align: center; */
+  display: flex;
+  justify-content: center;
+}
 .container p {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 57%;
   color: white;
   font-size: 24pt;
-  margin: 0;
 }
 .container img{
-  height: 80px;
+  height: 70px;
 }
 </style>
