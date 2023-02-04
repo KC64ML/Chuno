@@ -39,7 +39,7 @@ export default {
   },
   data() {
     return {
-      menu: true,
+      menu: false,
       my_cam_modal: true,
     }
   },

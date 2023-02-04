@@ -3,7 +3,7 @@
       :center="player"
       :zoom="18"
       :options="{
-        zoomControl: false,
+        zoomControl: true,
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: false,
@@ -61,10 +61,20 @@ export default {
         fillColor: "#0000FF",
         fillOpacity: 0.15,
       },
-      // 
-      // auto_reload: false,
-      // auto_reload_delay: 1000,
-      // auto_reload_func: null,
+      
+      // OpenVidu objects
+      OV: undefined,
+      session: undefined,
+      myVideoStream: null,
+      mainStreamManager: undefined,
+      publisher: undefined,
+      subscribers: [],
+
+      txtmsg: "",
+
+      // Join form
+      mySessionId: "SessionA",
+      myUserName: "Participant" + Math.floor(Math.random() * 100),
     };
   },
   mounted() {
@@ -76,6 +86,21 @@ export default {
     
   },
   methods: {
+    // Open vidu
+    // sendData() {
+    //   ssession.connect(token, "USER_DATA")
+    //   .then(
+    //     console.log(USER_DATA)
+    //   )
+    //   .catch(
+    //     console.log('err')
+    //   )
+  
+    //   session.on("streamCreated", function (event) {
+    //     session.subscribe(event.stream, "subscriber");
+    //     console.log("USER DATA: " + event.stream.connection.data);
+    //   });
+    // },
     // 자이로 센서 인식
     handleOrientation(event) {
       const beta = event.beta
@@ -160,8 +185,8 @@ export default {
     },
   },
   created() {
-    this.generatePapers({lat: 0, lng: 0}, 100, 10)
-    // this.generatePapers({lat: 36.0923108, lng: 128.4245156}, 100, 10)
+    // this.generatePapers({lat: 0, lng: 0}, 100, 10)
+    this.generatePapers({lat: 36.0923108, lng: 128.4245156}, 100, 10)
   },
   watch: {
   }
