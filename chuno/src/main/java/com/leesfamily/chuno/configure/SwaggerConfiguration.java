@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.management.MXBean;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -85,14 +86,8 @@ public class SwaggerConfiguration {
                         .components(components);
     }
 
-
-    // https로 접속가능하게
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI().addServersItem(new Server().url("https://i8d208.p.ssafy.io/"))
-                .components(new Components().addSecuritySchemes("basicScheme",
-                        new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))
-                .info(new Info().title("SpringShop API").version("V0")
-                        .license(new License().name("Apache 2.0").url("http://springdoc.org")));
-    }
+//    @Bean
+//    public OpenAPI openAPI(){
+//        return new OpenAPI().addServersItem(new Server().url("/"));
+//    }
 }

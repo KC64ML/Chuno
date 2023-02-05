@@ -46,7 +46,7 @@ dependencies {
 //	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
 //	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
 //	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
-//	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.14'
 
