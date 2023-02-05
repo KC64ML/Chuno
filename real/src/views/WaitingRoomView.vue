@@ -24,7 +24,7 @@
     </div>
     <div class="subscribers-container">
         <NicknameCardVue :sub="this.publisher_show"></NicknameCardVue>
-        <div v-for="(sub, idx) in subscribers" :key="idx">
+        <div v-for="(sub, idx) in subscribers_show" :key="idx">
             <NicknameCardVue :sub="sub"></NicknameCardVue>
         </div>
     </div>
@@ -44,15 +44,10 @@ import { OpenVidu } from "openvidu-browser";
 
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
-// import { OpenVidu } from "openvidu-browser";
-
     export default {
         beforeRouteLeave(to, from, next) {
-            confirm("ffff");
-            var flag = false;
-            if (flag) {
-                next();
-            }
+            this.leaveSession();
+            next();
         },
         components: {
             HeaderVue,
@@ -67,8 +62,11 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 user: undefined,
 
                 is_host: undefined,
-                publisher_show: undefined,
-                subscribers_show: undefined,
+                publisher_show: {
+                    isHost: false,
+                    isReady: false,
+                },
+                subscribers_show: [],
 
                 menu_modal: false,
                 roomInfo: undefined,
@@ -129,12 +127,20 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 const { connection } = subscriber.stream;
                 console.log("커넥션 데이터에요:", connection.data)
                 const { clientData } = JSON.parse(connection.data);
-                this.enemy_name = clientData;
+                const { clientLevel } = JSON.parse(connection.data);
+                console.log(clientData, clientLevel, "*/*/*/*/");
+                this.subscribers_show.push({
+                    "level": clientLevel,
+                    "nickname": clientData,
+                    "isHost": false,
+                    "isReady": false,
+                })
             });
             this.session.on("streamDestroyed", ({ stream }) => {
                 const index = this.subscribers.indexOf(stream.streamManager, 0);
                 if (index >= 0) {
                     this.subscribers.splice(index, 1);
+                    this.subscribers_show.splice(index, 1);
                 }
                 console.log("누군가가 스트림을 종료했어요!")
                 console.log("남은 사람은 " + this.subscribers.length + "명이에요");
@@ -146,7 +152,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
             await this.getToken(this.$route.params.roomId).then(async (token) => {
                 console.log("토큰을생성해요:" + token);
-                await this.session.connect(token, { clientData: this.$store.state.nickname }).then(() => {
+                await this.session.connect(token, { clientData: this.$store.state.nickname, clientLevel: this.user.level }).then(() => {
                     let publisher = this.OV.initPublisher(undefined, {
                         audioSource: undefined, // The source of audio. If undefined default microphone
                         videoSource: undefined, // The source of video. If undefined default webcam
@@ -186,11 +192,11 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
             */
         },
-        watch: {
-            $route(to, from) {
-                if(to.path !== from.path) alert('ffffff');
-            }
-        },
+        // watch: {
+        //     $route(to, from) {
+        //         if(to.path !== from.path) alert('ffffff');
+        //     }
+        // },
         methods: {
             dot_menu() {
                 this.menu_modal = true;
@@ -215,7 +221,11 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 alert("나가기")
             },
             ready_button() {
-                this.$router.push("/game/" + this.$route.params.roomId);
+                alert("준비 버튼");
+                // this.$router.push("/game/" + this.$route.params.roomId);
+            },
+            start_button() {
+                alert("스타트버튼");
             },
             leaveSession() {
                 alert('페이지를 나가요');

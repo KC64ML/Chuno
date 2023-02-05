@@ -1,11 +1,10 @@
 <template>
     <div id="container" class="white" :class="[ {yellow : sub.isReady, green : sub.isHost} ]">
-        {{ sub.level }} {{ sub.nickname }} {{ sub.isReady }}
+        {{ sub.level }} {{ sub.nickname }}
     </div>
 </template>
 
 <script>
-
     export default {
         props: {
             sub: undefined
