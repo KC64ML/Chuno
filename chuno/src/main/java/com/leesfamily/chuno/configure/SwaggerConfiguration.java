@@ -89,10 +89,10 @@ public class SwaggerConfiguration {
     // https로 접속가능하게
     @Bean
     public OpenAPI customOpenAPI() {
-        return new OpenAPI().addServersItem(new Server().url("/"))
+        return new OpenAPI().addServersItem(new Server().url("https://i8d208.p.ssafy.io/"))
                 .components(new Components().addSecuritySchemes("basicScheme",
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))
-                .info(new Info().title("SpringShop API").version("V1")
+                .info(new Info().title("SpringShop API").version("V0")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")));
     }
 }
