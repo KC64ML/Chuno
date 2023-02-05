@@ -25,7 +25,7 @@
     <div class="subscribers-container">
         <NicknameCardVue :sub="this.publisher_show"></NicknameCardVue>
         <div v-for="(sub, idx) in subscribers" :key="idx">
-            <!-- <NicknameCardVue :sub="sub"></NicknameCardVue> -->
+            <NicknameCardVue :sub="sub"></NicknameCardVue>
         </div>
     </div>
     {{ subscribers.length }}
@@ -47,6 +47,13 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 // import { OpenVidu } from "openvidu-browser";
 
     export default {
+        beforeRouteLeave(to, from, next) {
+            confirm("ffff");
+            var flag = false;
+            if (flag) {
+                next();
+            }
+        },
         components: {
             HeaderVue,
             NicknameCardVue
@@ -178,13 +185,6 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 // 세션 연결하고 자기 이름을 메세지로 모내서 누군지 그이름을 subscribers에 저장하면 될듯
 
             */
-        },
-        beforeRouteLeave(to, from, next) {
-            confirm("ffff");
-            var flag = false;
-            if (flag) {
-                next();
-            }
         },
         watch: {
             $route(to, from) {
