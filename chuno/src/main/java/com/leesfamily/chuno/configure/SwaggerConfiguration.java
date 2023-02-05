@@ -3,16 +3,13 @@ package com.leesfamily.chuno.configure;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.management.MXBean;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -85,9 +82,4 @@ public class SwaggerConfiguration {
                         .addSecurityItem(securityRequirement)
                         .components(components);
     }
-
-//    @Bean
-//    public OpenAPI openAPI(){
-//        return new OpenAPI().addServersItem(new Server().url("/"));
-//    }
 }
