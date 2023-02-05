@@ -6,12 +6,6 @@
     app:startDestination="@id/room_list">
 
     <fragment
-        android:id="@+id/game_view"
-        android:name="com.leesfamily.chuno.game.GameViewFragment"
-        android:label="GameViewFragment"
-        tools:layout="@layout/fragment_game_view" />
-
-    <fragment
         android:id="@+id/room_list"
         android:name="com.leesfamily.chuno.room.roomlist.RoomListFragment"
         android:label="RoomListFragment"

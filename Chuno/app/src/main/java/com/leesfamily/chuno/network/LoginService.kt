@@ -1,7 +1,9 @@
 package com.leesfamily.chuno.network
 
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Param
 import com.leesfamily.chuno.network.data.DataForm
 import com.leesfamily.chuno.network.data.LoginForm
+import com.leesfamily.chuno.network.data.NickForm
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -18,6 +20,8 @@ interface LoginService {
     @GET("user")
     fun getUserData(@Header("Authorization") auth: String): Call<DataForm>
 
+    @GET("user/nickname/{nickname}")
+    fun getNickDuplic(@Path("nickname") nickname: String): Call<NickForm>
 //
 //    @FormUrlEncoded
 //    @GET("/posts")

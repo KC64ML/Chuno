@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.leesfamily.chuno.network.data.DataForm
 import com.leesfamily.chuno.network.data.LoginForm
+import com.leesfamily.chuno.network.data.NickForm
 import com.leesfamily.chuno.network.data.User
 import com.leesfamily.chuno.util.login.LoginPrefManager
 import com.leesfamily.chuno.util.login.UserDB
@@ -25,6 +26,7 @@ class LoginGetter {
         Log.d(TAG, "requestLogin: loginResponse\n $userResponse")
         Log.d(TAG, "requestLogin: requestCode\n $requestCode")
         Log.d(TAG, "requestLogin: networkResponse\n $networkResponse")
+        Log.d(TAG, "requestLogin: token\n $token")
         if (requestCode == 200) {
             userData = userResponse.body()
             val user: User? = userData?.result
@@ -40,6 +42,7 @@ class LoginGetter {
         val g = Gson()
         return g.toJson(list)
     }
+
     fun requestLogin(token: String): String? {
 
         val loginResponse: Response<LoginForm> = ChunoServer.loginServer.login(token).execute()
@@ -89,6 +92,33 @@ class LoginGetter {
                 1 -> {
                     Log.d(TAG, "requestTokenConfirm: 유효한 토큰")
                     return true
+                }
+            }
+        }
+        return false
+    }
+
+    fun requestNickDuplic(nick: String): Boolean {
+
+        val loginResponse: Response<NickForm> =
+            ChunoServer.loginServer.getNickDuplic(nick).execute()
+
+        val networkResponse = loginResponse.raw().networkResponse?.code
+        val requestCode = loginResponse.code()
+        Log.d(TAG, "requestLogin: loginResponse\n $loginResponse")
+        Log.d(TAG, "requestLogin: requestCode\n $requestCode")
+        Log.d(TAG, "requestLogin: networkResponse\n $networkResponse")
+        if (requestCode == 200) {
+            Log.d(TAG, "requestTokenConfirm: loginResponse.body() : ${loginResponse.body()}")
+            val check = loginResponse.body()?.code
+            when (check) {
+                0 -> {
+                    Log.d(TAG, "nick: 중복되지 않은 닉네임")
+                    return true
+                }
+                1 -> {
+                    Log.d(TAG, "nick: 중복된 닉네임")
+                    return false
                 }
             }
         }

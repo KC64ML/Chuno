@@ -25,11 +25,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentInputInfoBinding
+import com.leesfamily.chuno.network.LoginGetter
 import com.leesfamily.chuno.util.custom.MyCustomDialog
 import com.leesfamily.chuno.util.custom.MyCustomDialogInterface
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class InputInfoFragment : Fragment(), MyCustomDialogInterface {
@@ -96,11 +101,21 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
                     override fun afterTextChanged(arg0: Editable) {
                         // 입력이 끝났을 때 조치
                         val count = arg0.length
+                        Log.d(TAG, "afterTextChanged: arg0 $arg0")
                         if (count in 1..6) {
-                            // 중복
-                            flag = 1
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                val result = LoginGetter().requestNickDuplic(arg0.toString())
+                                if (!result) {
+                                    // 중복
+                                    flag = 1
+                                    Log.d(TAG, "afterTextChanged: flag $flag")
+                                } else {
+                                    flag = 2
+
+                                }
+                                setLimitText(flag)
+                            }
                             // 가능
-                            flag = 2
                         } else if (count > 6) {
                             // 초과
                             flag = 3
@@ -158,25 +173,26 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
     }
 
     private fun setLimitText(flag: Int) {
-        binding.limitText.apply {
-            when (flag) {
-                1 -> {
-                    // 중복
-                    setText(R.string.nick_overlap_message)
-                    setTextColor(Color.RED)
-                }
-                2 -> {
-                    // 가능
-                    setText(R.string.nick_allow_message)
-                    setTextColor(Color.GREEN)
-                }
-                3 -> {
-                    // 글자 수 초과
-                    setText(R.string.nick_limit_message)
-                    setTextColor(Color.RED)
+        lifecycleScope.launch (Dispatchers.Main){
+            binding.limitText.apply {
+                when (flag) {
+                    1 -> {
+                        // 중복
+                        setText(R.string.nick_overlap_message)
+                        setTextColor(Color.RED)
+                    }
+                    2 -> {
+                        // 가능
+                        setText(R.string.nick_allow_message)
+                        setTextColor(Color.GREEN)
+                    }
+                    3 -> {
+                        // 글자 수 초과
+                        setText(R.string.nick_limit_message)
+                        setTextColor(Color.RED)
+                    }
                 }
             }
-
         }
     }
 

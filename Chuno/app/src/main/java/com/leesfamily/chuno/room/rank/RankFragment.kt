@@ -28,10 +28,7 @@ import com.leesfamily.chuno.openvidu.openvidu.RemoteParticipant
 import com.leesfamily.chuno.openvidu.openvidu.Session
 import com.leesfamily.chuno.openvidu.utils.CustomHttpClient
 import com.leesfamily.chuno.openvidu.websocket.CustomWebSocket
-import com.leesfamily.chuno.util.map.MapsUtil.DEFAULT_ZOOM
-import com.leesfamily.chuno.util.map.MapsUtil.defaultLocation
-import com.leesfamily.chuno.util.map.MapsUtil.getDeviceLocation
-import com.leesfamily.chuno.util.map.MapsUtil.lastKnownLocation
+import com.leesfamily.chuno.util.PermissionHelper
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -51,6 +48,7 @@ class RankFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentRankBinding
     private var param1: String? = null
     private var param2: String? = null
+
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
 
@@ -65,7 +63,7 @@ class RankFragment : Fragment(), OnMapReadyCallback {
         }
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity())
-        getDeviceLocation(requireActivity(), requireContext(),fusedLocationProviderClient)
+//        getDeviceLocation(requireActivity(), requireContext(), fusedLocationProviderClient)
     }
 
     override fun onCreateView(
@@ -185,7 +183,7 @@ class RankFragment : Fragment(), OnMapReadyCallback {
 
     private fun getTokenSuccess(token: String?, sessionId: String) {
         // Initialize our session
-        session = Session(sessionId, token, binding.viewsContainer, this)
+//        session = Session(sessionId, token, binding.viewsContainer, this)
 
         // Initialize our local participant and start local camera
         val participantName = binding.participantName.text.toString()
@@ -205,9 +203,9 @@ class RankFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun startWebSocket() {
-        val webSocket = CustomWebSocket(session, this)
-        webSocket.execute()
-        session?.setWebSocket(webSocket)
+//        val webSocket = CustomWeb/*Socket(session, this)
+//        webSocket.execute()
+//        session?.setWebSocket(webSoc*/ket)
     }
 
     private fun connectionError(url: String?) {
@@ -244,20 +242,6 @@ class RankFragment : Fragment(), OnMapReadyCallback {
             binding.mainParticipant.setPadding(0, 0, 0, 0)
         }
 
-//        runOnUiThread(Runnable {
-//            localVideoView!!.clearImage()
-//            localVideoView!!.release()
-//            start_finish_call!!.text = resources.getString(R.string.start_button)
-//            start_finish_call!!.isEnabled = true
-//            application_server_url!!.isEnabled = true
-//            application_server_url!!.isFocusableInTouchMode = true
-//            session_name!!.isEnabled = true
-//            session_name!!.isFocusableInTouchMode = true
-//            participant_name!!.isEnabled = true
-//            participant_name!!.isFocusableInTouchMode = true
-//            main_participant.setText(null)
-//            main_participant!!.setPadding(0, 0, 0, 0)
-//        })
     }
 
     fun viewToConnectingState() {
@@ -324,14 +308,7 @@ class RankFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun arePermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) != PackageManager.PERMISSION_DENIED &&
-                ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.RECORD_AUDIO
-                ) != PackageManager.PERMISSION_DENIED
+        return PermissionHelper.hasCameraPermission(requireContext()) && PermissionHelper.hasAudioPermission(requireContext())
     }
 
     override fun onDestroy() {
@@ -367,19 +344,19 @@ class RankFragment : Fragment(), OnMapReadyCallback {
 
             uiSettings.setAllGesturesEnabled(false)
             mapType = GoogleMap.MAP_TYPE_NORMAL
-            moveCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    if (lastKnownLocation == null) {
-                        defaultLocation
-                    } else {
-                        LatLng(
-                            lastKnownLocation!!.latitude,
-                            lastKnownLocation!!.longitude
-                        )
-                    },
-                    DEFAULT_ZOOM.toFloat()
-                )
-            )
+//            moveCamera(
+//                CameraUpdateFactory.newLatLngZoom(
+//                    if (lastKnownLocation == null) {
+//                        defaultLocation
+//                    } else {
+//                        LatLng(
+//                            lastKnownLocation!!.latitude,
+//                            lastKnownLocation!!.longitude
+//                        )
+//                    },
+//                    DEFAULT_ZOOM.toFloat()
+//                )
+//            )
 
         }
     }

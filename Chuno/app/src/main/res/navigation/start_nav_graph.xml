@@ -53,6 +53,9 @@
         android:name="com.leesfamily.chuno.room.wait.WaitingRoomFragment"
         android:label="fragment_waiting_room_list"
         tools:layout="@layout/fragment_waiting_room_list" >
+        <action
+            android:id="@+id/action_waitingRoomFragment_to_game_view"
+            app:destination="@id/game_view" />
     </fragment>
 
 </navigation>

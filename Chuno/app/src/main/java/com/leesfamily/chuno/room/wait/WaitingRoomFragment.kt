@@ -10,6 +10,9 @@ import androidx.annotation.MenuRes
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavDestination
+import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,6 +52,9 @@ class WaitingRoomFragment : Fragment() {
 
         }
 
+        binding.footer.readyButton.setOnClickListener {
+                 findNavController().navigate(R.id.action_waitingRoomFragment_to_game_view)
+        }
         return binding.root
     }
 

@@ -61,6 +61,7 @@ class LoginFragment : Fragment() {
                                     "member" -> {
                                         Log.d(TAG, "loginSuccess: member")
                                         findNavController().navigate(R.id.homeFragment)
+//                                        findNavController().navigate(R.id.inputInfoFragment)
                                     }
                                     "no_email" -> {
                                         Log.d(TAG, "loginSuccess: no_email")

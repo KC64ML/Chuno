@@ -4,12 +4,13 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.leesfamily.chuno.game.GameViewFragment;
 import com.leesfamily.chuno.openvidu.observers.CustomPeerConnectionObserver;
 import com.leesfamily.chuno.openvidu.observers.CustomSdpObserver;
 import com.leesfamily.chuno.openvidu.websocket.CustomWebSocket;
-import com.leesfamily.chuno.room.rank.RankFragment;
-
 import org.webrtc.IceCandidate;
 import org.webrtc.MediaConstraints;
 import org.webrtc.MediaStream;
@@ -24,14 +25,12 @@ import org.webrtc.SoftwareVideoDecoderFactory;
 import org.webrtc.SoftwareVideoEncoderFactory;
 import org.webrtc.VideoDecoderFactory;
 import org.webrtc.VideoEncoderFactory;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class Session {
 
@@ -44,12 +43,12 @@ public class Session {
             Arrays.asList(IceServer.builder("stun:stun.l.google.com:19302").createIceServer());
     private List<IceServer> iceServers = new ArrayList();
 
-    private LinearLayout views_container;
+    private ViewPager2 views_container;
     private PeerConnectionFactory peerConnectionFactory;
     private CustomWebSocket websocket;
-    private RankFragment fragment;
+    private GameViewFragment fragment;
 
-    public Session(String id, String token, LinearLayout views_container, RankFragment fragment) {
+    public Session(String id, String token, ViewPager2 views_container, GameViewFragment fragment) {
         this.id = id;
         this.token = token;
         this.views_container = views_container;

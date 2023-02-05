@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/gray"
+    android:background="@drawable/btn_square"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="아이템"
+        android:textColor="@color/secondary"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/item_view1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView12">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/item_view1_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/round_square"
+            android:elevation="8dp"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/eye_icon" />
+
+        <TextView
+            android:id="@+id/item_view1_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="아이템 이름"
+            android:textColor="@color/secondary"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="104dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_view2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_view1">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/item_view2_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/round_square"
+            android:elevation="8dp"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/eye_icon" />
+
+        <TextView
+            android:id="@+id/item_view2_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="아이템 이름"
+            android:textColor="@color/secondary"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="104dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_view3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_view2">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/item_view3_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/round_square"
+            android:elevation="8dp"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/eye_icon" />
+
+        <TextView
+            android:id="@+id/item_view3_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="아이템 이름"
+            android:textColor="@color/secondary"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="104dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_view4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_view3">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/item_view4_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/round_square"
+            android:elevation="8dp"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/eye_icon" />
+
+        <TextView
+            android:id="@+id/item_view4_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="아이템 이름"
+            android:textColor="@color/secondary"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="104dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/menu_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="메뉴"
+        android:textColor="@color/secondary"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_view4" />
+
+    <LinearLayout
+        android:id="@+id/menu_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/menu_text">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/round_square"
+            android:backgroundTint="@color/button"
+            android:elevation="8dp"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/search" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="검색"
+            android:textColor="@color/secondary"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="104dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_whisper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/menu_search">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/round_square"
+            android:backgroundTint="@color/button"
+            android:elevation="8dp"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/hearing"
+            android:tint="@color/secondary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="귓속말"
+            android:textColor="@color/secondary"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="104dp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

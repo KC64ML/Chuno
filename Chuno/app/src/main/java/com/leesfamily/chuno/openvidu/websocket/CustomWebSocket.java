@@ -6,6 +6,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
+import com.leesfamily.chuno.game.GameViewFragment;
 import com.leesfamily.chuno.openvidu.constants.JsonConstants;
 import com.leesfamily.chuno.openvidu.observers.CustomSdpObserver;
 import com.leesfamily.chuno.openvidu.openvidu.LocalParticipant;
@@ -85,11 +86,11 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
     private Set<Integer> IDS_ONICECANDIDATE = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private Session session;
     private String mediaServer;
-    private RankFragment fragment;
+    private GameViewFragment fragment;
     private WebSocket websocket;
     private boolean websocketCancelled = false;
 
-    public CustomWebSocket(Session session, RankFragment fragment) {
+    public CustomWebSocket(Session session, GameViewFragment fragment) {
         this.session = session;
         this.fragment = fragment;
     }

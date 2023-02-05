@@ -16,4 +16,8 @@ object ChunoServer {
     val loginServer: LoginService by lazy {
         retrofit.create(LoginService::class.java)
     }
+
+    val itemServer: ItemService by lazy {
+        retrofit.create(ItemService::class.java)
+    }
 }

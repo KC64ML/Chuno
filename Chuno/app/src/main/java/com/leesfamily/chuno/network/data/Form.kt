@@ -8,3 +8,11 @@ data class DataForm(
     val result: User,
     val code: Int
 )
+data class ItemForm(
+    val result: List<Item>,
+    val code: Int
+)
+data class NickForm(
+    val result: Int,
+    val code: Int
+)

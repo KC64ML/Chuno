@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.Window
 import androidx.appcompat.app.AlertDialog
@@ -13,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.leesfamily.chuno.MainActivity
 import com.leesfamily.chuno.MainViewModel
 import com.leesfamily.chuno.R
+import com.leesfamily.chuno.network.ItemGetter
 import com.leesfamily.chuno.network.LoginGetter
 import com.leesfamily.chuno.util.NetworkManager
 import com.leesfamily.chuno.util.custom.MyCustomDialog
@@ -44,6 +46,9 @@ class SplashActivity : AppCompatActivity() {
                         UserDB.setToken(it)
                     }
                 }
+            ItemGetter().requestItem()?.let {
+                Log.d("추노 아이템", "onCreate: item $it")
+            }
 
             val delay = System.currentTimeMillis() - start
 
