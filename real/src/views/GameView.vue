@@ -1,5 +1,5 @@
 <template>
-  <MenuView v-if="menu"/>
+  <MenuView v-if="menu" style="position:absolute; bottom: 60px;"/>
   <div>
     <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue>
     <MapView />
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-// import OpenViduVue from '@/components/game/OpenViduVue.vue'
+import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue'
 import MenuView from '@/components/game/MenuView.vue'
 
@@ -34,7 +34,7 @@ export default {
   name: 'GameView',
   components: {
     MapView,
-    // OpenViduVue,
+    OpenViduVue,
     MenuView,
   },
   data() {
