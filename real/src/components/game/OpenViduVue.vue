@@ -2,7 +2,7 @@
     <div id="main_vedio_container" style="z-index: 1000">
         <video autoplay ref="video" class="enemy_video"></video>
         <div class="camera_name">
-            임시이름
+            임시이름 {{ enemy_name }}
         </div>
         <img class="camera_arrow left_arrow" src="@/assets/camera_left.svg" alt="">
         <img class="camera_arrow right_arrow" src="@/assets/camera_right.svg" alt="">
@@ -19,7 +19,8 @@ import { OpenVidu } from "openvidu-browser";
 // import UserVideo from "@/components/game/UserVideo.vue";
 
 // const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
-const APPLICATION_SERVER_URL = "http://localhost:5000/";
+// const APPLICATION_SERVER_URL = "http://localhost:5000/";
+const APPLICATION_SERVER_URL = process.env.RTC;
 // const APPLICATION_SERVER_URL = "http://:8000/";
 
 
@@ -39,18 +40,19 @@ const APPLICATION_SERVER_URL = "http://localhost:5000/";
                 myStreamManager: undefined,
                 publisher: undefined,
                 subscribers: [],
+                enemy_name: undefined,
 
                 // Join form
                 mySessionId: this.$route.params.roomId,
                 myUserName: "dddd",
             };
         },
-        computed: {
-            clientData () {
-                const { clientData } = this.getConnectionData();
-                return clientData;
-            },
-        },
+        // computed: {
+        //     clientData () {
+        //         const { clientData } = this.getConnectionData();
+        //         return clientData;
+        //     },
+        // },
         methods: {
             async init() {
                 this.OV = new OpenVidu();
@@ -61,7 +63,12 @@ const APPLICATION_SERVER_URL = "http://localhost:5000/";
                     console.log("스트림을 발견했어요!")
                     console.log("현재 사람은 " + this.subscribers.length + "명이에요")
                     this.mainStreamManager = subscriber;
-                    this.mainStreamManager.addVideoElement(this.$refs.video)
+                    this.mainStreamManager.addVideoElement(this.$refs.video);
+                    const { connection } = this.mainStreamManager.stream;
+                    console.log("커넥션 데이터에요:", connection.data)
+                    const { clientData } = JSON.parse(connection.data);
+                    this.enemy_name = clientData;
+                    
                 });
                 this.session.on("streamDestroyed", ({ stream }) => {
                     const index = this.subscribers.indexOf(stream.streamManager, 0);
@@ -74,16 +81,15 @@ const APPLICATION_SERVER_URL = "http://localhost:5000/";
                 this.session.on("exception", ({ exception }) => {
                     console.warn("오류ㅠㅠ" + exception);
                 });
-                console.log("fffffdewfe")
                 await this.getToken(this.mySessionId).then(async (token) => {
                     console.log("토큰을생성해요:" + token);
-                    await this.session.connect(token, { clientData: this.myUserName }).then(() => {
+                    await this.session.connect(token, { clientData: this.myUserName, role: "good" }).then(() => {
                         let publisher = this.OV.initPublisher(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone
                             videoSource: undefined, // The source of video. If undefined default webcam
                             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                            resolution: "640x480", // The resolution of your video
+                            resolution: "160x120", // The resolution of your video
                             frameRate: 30, // The frame rate of your video
                             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                             mirror: false, // Whether to mirror your local video or not

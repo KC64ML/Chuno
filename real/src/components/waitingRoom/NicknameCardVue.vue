@@ -1,6 +1,6 @@
 <template>
-    <div id="container" :class="[ sub.isReady? 'yellow' : 'white' ]">
-        {{ sub.level }} {{ sub.nickname }}
+    <div id="container" class="white" :class="[ {yellow : sub.isReady, green : sub.isHost} ]">
+        {{ sub.level }} {{ sub.nickname }} {{ sub.isReady }}
     </div>
 </template>
 
@@ -9,7 +9,7 @@
     export default {
         props: {
             sub: undefined
-        } 
+        },
     }
 </script>
 
@@ -26,10 +26,13 @@ $container_height: 30px;
         border-radius: $container_height;
         font-size: 13px;
     }
+    .white {
+        background-color: #F2F2F2;
+    }
     .yellow {
         background-color: #F9CF65;
     }
-    .white {
-        background-color: #F2F2F2;
+    .green {
+        background-color: #34ff74
     }
 </style>
