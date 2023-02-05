@@ -6,6 +6,7 @@
         id="menu-item"
         v-for="item in items"
         :key="item.id"
+        @click="useItem(item)"
       >
         <img :src="item.imgPath" alt="item">
         <p>{{ item.name }}</p>
@@ -24,7 +25,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'MenuView',
   data() {
@@ -33,6 +33,7 @@ export default {
     }
   },
   methods: {
+    // 아이템 불러오기
     getItems(){
       this.axios.get(
         process.env.VUE_APP_SPRING + "item/1",
@@ -47,6 +48,14 @@ export default {
           }
         })
     },
+    // 아이템 사용
+    useItem(item) {
+      console.log(item)
+      this.$store.state.item = [item]
+      this.$store.dispatch('useItem')
+      this.$store.state.menu = false
+
+    }
   },
   mounted(){
     this.getItems()
@@ -59,7 +68,6 @@ export default {
 #game-menu{
   background: rgba(67, 64, 57, 0.3);
   border-radius: 10%;
-  width: 50px;
 }
 #menu-title{
   color: #F5F5F5;

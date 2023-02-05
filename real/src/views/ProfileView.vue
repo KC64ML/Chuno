@@ -54,6 +54,19 @@ export default {
     }
   },
   methods: {
+    getUser(){
+      console.log('getuser')
+      this.axios.get(process.env + 'user', { headers: { Authorization: 'token' } })
+        .catch( res => {
+          const code = res.data.code
+          console.log(code)
+          if(code) {
+            console.log('성공')
+          } else{ 
+            console.log('실패')
+          }
+        })
+    },
     onLogout() {
       this.logoutModal = !this.logoutModal
     },
@@ -64,6 +77,9 @@ export default {
       this.editProfileModal != this.editProfileModal
       console.log(this.editProfileModal)
     },
+  },
+  created(){
+    this.getUser()
   }
 }
 </script>

@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ this.email }}
     <div class="profile">   
       <label for="profilePic">
         <!-- <img src="@/assets/profile_frame.png" alt="profileFrame"> -->
@@ -11,7 +12,7 @@
 
     <div>
       <label for="nickname_input">닉네임</label>
-      <input type="text" id="nickname_input" v-model="paht.nickname" maxlength="6">
+      <input type="text" id="nickname_input" v-model="paht.nickname" maxlength="6" @change="check()">
     
       <div class="check" v-if="nickname.length">
         <div v-if="!lengthValid || !useValid">
@@ -41,6 +42,7 @@ export default {
   data() {
     return {
       imgDefault,
+      email: null,
       // profile: {
       path: null,
       // },
@@ -52,10 +54,34 @@ export default {
     }
   },
   methods: {
+    // 프사
     fetchProfileImg(e){
       this.path = e.target.files
       // console.log(this.profile)
     },
+    // 닉네임
+    check() {
+      if(this.nickname.length > 6) {
+        this.lengthValid = false
+      } else {
+        this.lengthValid = true
+      }
+      // 중복체크 코드로 바꾸기
+      this.axios.get(
+        process.env + `user/nickname/${this.nickname}`
+      )
+        .then(res => {
+          const validity = res.data.code
+          console.log(validity)
+          if (validity) {
+            this.useValid = true
+            this.useValid = false
+          } else {
+            this.useValid = true
+          }
+        })
+    },
+    // 저장
     save(){
       var frm = new FormData()
       frm.append('path', this.path)
@@ -90,34 +116,13 @@ export default {
     //   }
     // },
     // 닉네임 유효성 검사
-    check() {
-      if(this.nickname.length > 6) {
-        this.lengthValid = false
-      } else {
-        this.lengthValid = true
-      }
-      // 중복체크 코드로 바꾸기
-      this.axios.get(
-        process.env + `user/nickname/${this.nickname}`
-      )
-        .then(res => {
-          const validity = res.data.code
-          if (validity) {
-            console.log('가능')
-            this.useValid = false
-          } else {
-            console.log('불가능')
-            this.useValid = true
-          }
-        })
-    },
     async onSave() {
       if(this.lengthValid && this.useValid) {
         alert("가입하기");
         const nick = this.nickname
         // const email = new URL(window.location.href).searchParams.get('email');
         const email = this.$route.params.email
-        var token = await this.axios.post(process.env + "register", {"nick": nick, "email": email});
+        var token = await this.axios.post(process.env + "register", {"nickname": nick, "email": email});
         console.log("회원가입 완료", token.data);
         // token에 토큰이 담겨있어요 쎄션스토리지에 넣어서 사용해하세요
         sessionStorage.setItem("token", token.data);
@@ -132,7 +137,9 @@ export default {
     'nickname': 'check',
   },
   created() {
-    this.onSave()
+    // this.onSave()
+    this.email = this.$route.params.email
+    console.log(this.email)
   }
 }
 </script>

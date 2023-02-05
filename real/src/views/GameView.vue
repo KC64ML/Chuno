@@ -1,10 +1,17 @@
 <template>
-  <MenuView v-if="menu"/>
   <div>
+    <MenuView v-if="this.$store.state.menu" class="menu-window"/>
+    
     <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue>
     <MapView />
 
-    
+    <div v-if="this.$store.state.itemModal">
+      <ItemModal 
+        v-for="item in this.$store.state.item"
+        :key="item.name"
+        :item="item"
+      />
+    </div>
     
     <div id="footer_container">
       <div class="menu_box flex_center" @click="this.$router.push('/home')">
@@ -28,6 +35,7 @@
 // import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue'
 import MenuView from '@/components/game/MenuView.vue'
+import ItemModal from '@/components/game/ItemModal.vue'
 
 export default {
 
@@ -36,17 +44,17 @@ export default {
     MapView,
     // OpenViduVue,
     MenuView,
+    ItemModal,
   },
   data() {
     return {
-      menu: false,
       my_cam_modal: true,
     }
   },
   methods: {
     onMenu() {
       console.log('menu clicked')
-      this.menu = !this.menu
+      this.$store.state.menu = true
     },
     myCam() {
       this.my_cam_modal = !this.my_cam_modal
@@ -76,9 +84,10 @@ $button_width: 60px;
   width: 100%;
 }
 
-// .menu {
-//     height: 25px;
-// }
+.menu-window {
+  float: right;
+  // position: absolute;
+}
 .menu_box {
   width: 20%;
   display: flex;

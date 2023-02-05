@@ -19,7 +19,7 @@
           :position=this.player
         />
         <GMapCircle
-          :radius="1000"
+          :radius="500"
           :center="player"
           :options="circleOptions"
         />
@@ -39,6 +39,7 @@
 
 <script>
 import truePaper from '@/assets/TruePaper.png'
+import randomLocation from 'random-location'
 
 export default {
   name: 'MapView',
@@ -70,22 +71,21 @@ export default {
       publisher: undefined,
       subscribers: [],
 
-      txtmsg: "",
-
       // Join form
       mySessionId: "SessionA",
       myUserName: "Participant" + Math.floor(Math.random() * 100),
     };
   },
-  mounted() {
-    // 자이로 센서 인식
-    window.addEventListener('deviceorientation', this.handleOrientation)
-    // 내 위치
-    this.myLocation()
-    // setInterval(this.myLocation(),1000)
-    
-  },
   methods: {
+    // 노비 문서 생성
+    generatePapers(){
+      for(let i = 0; i < 10; i++) {
+        const randomPoint = randomLocation.randomCirclePoint({latitude: 36.107084, longitude: 128.420823}, 400)
+        this.markers.push({ position: { lat: randomPoint.latitude, lng: randomPoint.longitude } })
+      }
+      console.log(this.markers)
+    },
+    
     // Open vidu
     // sendData() {
     //   ssession.connect(token, "USER_DATA")
@@ -101,10 +101,27 @@ export default {
     //     console.log("USER DATA: " + event.stream.connection.data);
     //   });
     // },
+
+    
+    // 내 위치
+    myLocation() {
+      this.$watchLocation({enableHighAccuracy: true})
+      .then((coordinates) => {
+        this.player.lat = coordinates.lat
+        this.player.lng = coordinates.lng
+        console.log(this.player.lat)
+        console.log(this.player.lng)
+        this.catch()
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
+    
     // 자이로 센서 인식
     handleOrientation(event) {
       const beta = event.beta
-      // console.log(beta)
+      console.log(beta)
       if(beta > 130 || beta < 40) {
         this.myMarker = true
       } else {
@@ -113,24 +130,7 @@ export default {
       // console.log(window)
     },
 
-    // 내 위치
-    myLocation() {
-      this.$watchLocation({enableHighAccuracy: true})
-        .then((coordinates) => {
-          this.player.lat = coordinates.lat
-          this.player.lng = coordinates.lng
-          console.log(this.player.lat)
-          console.log(this.player.lng)
-          this.catch()
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
-    // deg2rad(deg) {
-    //   return deg * (Math.PI/180)
-    // },
+    // 노비문서 찢기, 노비 잡기
     catch(){
       const lat1 = this.player.lat
       const lng1 = this.player.lng
@@ -146,47 +146,21 @@ export default {
         const d = r * c; // Distance in km
         const distance = Math.round(d*1000);
 
-        if(distance <= 50){
+        if(distance <= 500){
           console.log('잡을 수 있음')
-          // alert('잡을 수 있음')
         } else {
           console.log('잡을 수 없음')
-          // alert('잡을 수 있는 사람 없음')
         }
       }
     },
-    generatePapers(center, radius, count) {
-      var points = [];
-      for (var i=0; i<count; i++) {
-        points.push({ position: this.generatePaper(center, radius)});
-      }
-      // return points;
-      console.log(points)
-      this.markers = points
-    },
-    generatePaper(center, radius) {
-      var x0 = center.lng;
-      var y0 = center.lat;
-      // Convert Radius from meters to degrees.
-      var rd = radius/111300;
-
-      var u = Math.random();
-      var v = Math.random();
-
-      var w = rd * Math.sqrt(u);
-      var t = 2 * Math.PI * v;
-      var x = w * Math.cos(t);
-      var y = w * Math.sin(t);
-
-      var xp = x/Math.cos(y0);
-
-      // Resulting point.
-      return {'lat': y+y0, 'lng': xp+x0};
-    },
   },
   created() {
-    // this.generatePapers({lat: 0, lng: 0}, 100, 10)
-    this.generatePapers({lat: 36.0923108, lng: 128.4245156}, 100, 10)
+    // 자이로 센서 인식
+    window.addEventListener('deviceorientation', this.handleOrientation)
+    // 내 위치
+    this.myLocation()
+    // setInterval(this.myLocation(),1000)
+    this.generatePapers()
   },
   watch: {
   }
