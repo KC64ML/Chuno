@@ -33,7 +33,7 @@
                     document.querySelector("#tokenValue").value = token;
                     // data에는 토큰의 정보가 들어가 있어요. 토큰정보는 유효성, 닉네임, 이메일이에요. 유효성이 없다면 닉네임과 이메일도 없어요 3.34.138.191
                     var { data } = await axios.get(
-                        "https://i8d208.p.ssafy.io/api/user",
+                        "http://localhost:8080/api/user",
                         {
                             headers: {
                                 "Content-Type": "text/plain",
@@ -60,7 +60,7 @@
             function login5500() {
                 alert("로그인");
                 var REST_API_KEY = "9733352823239497d6928853e1e59954";
-                var REDIRECT_URI = "https://i8d208.p.ssafy.io/api/oauth.html";
+                var REDIRECT_URI = "http://localhost:8080/api/oauth.html";
                 window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
             }
             //로그아웃은 단순히 세션스토리지에 있는 토큰을 없애는 거에요

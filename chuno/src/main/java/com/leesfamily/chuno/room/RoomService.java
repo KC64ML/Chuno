@@ -51,7 +51,7 @@ public class RoomService {
         List<RoomEntity> rooms = query.getResultList();
 
         List<RoomResponse> roomRes = rooms.stream().map(room ->
-            new RoomResponse(room)
+            new RoomResponse(room, loc)
         ).collect(Collectors.toList());
         return roomRes;
     }
@@ -83,7 +83,7 @@ public class RoomService {
             }else {
                 room.setCurrentPlayers(currentPlayers + 1);
                 roomRepository.saveAndFlush(room);
-                RoomResponse dto = new RoomResponse(room);
+                RoomResponse dto = new RoomResponse(room, null);
                 resMap.put("result", dto);
                 resMap.put("code", "1");
             }
@@ -95,6 +95,10 @@ public class RoomService {
 
 
     public List<RoomResponse> getRoomsByConditinos(Location loc, String condition, String keyword) {
+        return null;
+    }
+
+    public Map<String, Object> pushRoom(long roomId, Long userId) {
         return null;
     }
 }

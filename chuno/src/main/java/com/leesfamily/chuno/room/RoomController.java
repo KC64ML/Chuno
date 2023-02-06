@@ -108,4 +108,13 @@ public class RoomController {
         return new ResponseEntity<>(resMap, HttpStatus.OK);
     }
 
+    @PostMapping("/push/{roomId}")
+    public ResponseEntity<Map<String, Object>> pushRoom(
+            @PathVariable("roomId") long roomId,
+            @RequestHeader HttpHeaders requestHeader) {
+        Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
+        Map<String, Object> res = roomService.pushRoom(roomId, userId);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
 }
