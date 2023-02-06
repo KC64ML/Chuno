@@ -72,6 +72,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 roomInfo: undefined,
                 hostNickName: undefined,
                 is_notified: undefined,
+                is_ready: false,
             }
         },
         async created() {
@@ -128,12 +129,12 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 console.log("커넥션 데이터에요:", connection.data)
                 const { clientData } = JSON.parse(connection.data);
                 const { clientLevel } = JSON.parse(connection.data);
-                console.log(clientData, clientLevel, "*/*/*/*/");
+                const { clientReady } = JSON.parse(connection.data);
                 this.subscribers_show.push({
                     "level": clientLevel,
                     "nickname": clientData,
-                    "isHost": false,
-                    "isReady": false,
+                    "isHost": this.is_host,
+                    "isReady": clientReady,
                 })
             });
             this.session.on("streamDestroyed", ({ stream }) => {
@@ -149,10 +150,20 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 console.warn("오류ㅠㅠ" + exception);
             });
 
+            this.session.on("signal:ready_button", (e) => {
+                console.log(e.from.connectionId);
+                var index;
+                for (var i = 0; i < this.subscribers.length; i++) {
+                    if (e.from.connectionId == this.subscribers[i].stream.connection.connectionId) {
+                        index = i;
+                    }
+                }
+                console.log(index)
+            })
 
-            await this.getToken(this.$route.params.roomId).then(async (token) => {
+            await this.getToken(this.$route.params.roomId + "game").then(async (token) => {
                 console.log("토큰을생성해요:" + token);
-                await this.session.connect(token, { clientData: this.$store.state.nickname, clientLevel: this.user.level }).then(() => {
+                await this.session.connect(token, { clientData: this.$store.state.nickname, clientLevel: this.user.level, clientReady: this.is_ready }).then(() => {
                     let publisher = this.OV.initPublisher(undefined, {
                         audioSource: undefined, // The source of audio. If undefined default microphone
                         videoSource: undefined, // The source of video. If undefined default webcam
@@ -222,6 +233,10 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             },
             ready_button() {
                 alert("준비 버튼");
+                this.session.signal({
+                    data: this.user.nickname,
+                    type: "ready_button"
+                })
                 // this.$router.push("/game/" + this.$route.params.roomId);
             },
             start_button() {

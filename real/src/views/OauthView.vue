@@ -22,7 +22,8 @@ export default {
       // console.log(code)
       // 아이피 주소 고쳐주세요
       var { data } = await this.axios.post(
-        process.env.VUE_APP_SPRING + "kakao/login",
+        // process.env.VUE_APP_SPRING + "kakao/login",
+        "https://i8d208.p.ssafy.io/api/kakao/login",
         code,
         { headers: { "Content-Type": "text/plain" } }
       );
