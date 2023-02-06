@@ -71,7 +71,7 @@ export default {
       }
       const token = await this.axios.post(process.env.VUE_APP_SPRING + "kakao/register", {"nickname": this.nickname, "email": this.email})
       console.log(token);
-      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("token", token.data);
       if (this.one_file) {
         const formData = new FormData();
         formData.append("file", this.oneFile);
