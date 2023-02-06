@@ -42,12 +42,16 @@ public class RoomService {
 
 //        String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
         Query query = em.createNativeQuery("SELECT r.*, u.*, " +
-                        " ST_Distance_Sphere(r.location, POINT(" + longitude + ", " + latitude + ")) as distance "
+                        " (6371*acos(cos(radians(" + latitude + ")) " +
+                        " * cos(radians(r.lat)) " +
+                        " * cos(radians(r.lng) - radians(" + longitude + ")) " +
+                        " + sin(radians(" + latitude + ")) * sin(radians(r.lat)))) as distance," +
+                        " IF(p.room_id = r.room_id, true, false) as isPushed "
                         + " FROM rooms AS r " +
                         " LEFT JOIN users AS u " +
                         " ON r.host_id = u.user_id " +
                         " LEFT JOIN pushes p " +
-                        " ON  "
+                        " ON p.user_id = u.user_id "
 //                        + " WHERE distance  " +
                         + " ORDER BY distance ", RoomEntity.class)
                 .setMaxResults(20);

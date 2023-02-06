@@ -32,6 +32,7 @@ import java.util.Map;
 
 @Tag(name = "posts", description = "게시물 API")
 @RestController
+@CrossOrigin
 @RequestMapping("/room")
 @RequiredArgsConstructor
 public class RoomController {

@@ -19,6 +19,8 @@ public class RoomResponse {
         private int maxPlayers;
         private PointDto location;
         private int radius;
+        private double distance;
+        private boolean isPushed;
         private UserEntity host;
         public RoomResponse(RoomEntity entity) {
             this.id = entity.getId();
@@ -31,6 +33,8 @@ public class RoomResponse {
             this.radius = entity.getRadius();
             this.host = entity.getHost();
             this.location = new PointDto(entity.getLocation());
+            this.isPushed = entity.isPushed();
+            this.distance = entity.getDistance();
         }
 
     @Getter
