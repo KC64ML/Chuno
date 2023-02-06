@@ -40,14 +40,9 @@
 
 export default {
   name: 'RegisterView',
-  props: {
-    email: {
-      type: String,
-      default: '',
-    }
-  },
   data() {
     return {
+      email: '',
       nickname: '',
       can_use: false,
       one_file: undefined,
@@ -96,8 +91,8 @@ export default {
     'nickname': 'check'
   },
   created() {
-    console.log("fffff")
-    console.log(this.email);
+    console.log("ffffef")
+    console.log(this.$route.params);
   }
 }
 </script>
