@@ -23,11 +23,16 @@
         <img src="@/assets/dot_menu.svg">
     </div>
     <div class="subscribers-container">
-        <div v-for="(sub, idx) in subscribers" :key="idx">
+        <NicknameCardVue :sub="this.publisher_show"></NicknameCardVue>
+        <div v-for="(sub, idx) in subscribers_show" :key="idx">
             <NicknameCardVue :sub="sub"></NicknameCardVue>
         </div>
     </div>
-    <div id="ready_button" @click="ready_button">
+    {{ subscribers.length }}
+    <div v-if="is_host" id="start_button" class="ready_start" @click="start_button">
+        게임 시작하기!
+    </div>
+    <div v-else id="ready_button" class="ready_start" @click="ready_button">
         준비하고 시작하기
     </div>
 </template>
@@ -35,23 +40,63 @@
 <script>
 import HeaderVue from '@/components/HeaderVue.vue';
 import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
-// import { OpenVidu } from "openvidu-browser";
+import { OpenVidu } from "openvidu-browser";
+
+const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
     export default {
+        beforeRouteLeave(to, from, next) {
+            this.leaveSession();
+            next();
+        },
         components: {
             HeaderVue,
             NicknameCardVue
         },
         data() {
             return {
+                OV: undefined,
+                session: undefined,
+                publisher: undefined,
+                subscribers: [],
+                user: undefined,
+
+                is_host: undefined,
+                publisher_show: {
+                    isHost: false,
+                    isReady: false,
+                },
+                subscribers_show: [],
+
                 menu_modal: false,
                 roomInfo: undefined,
                 hostNickName: undefined,
-                subscribers: [],
                 is_notified: undefined,
+                is_ready: false,
             }
         },
-        created() {
+        async created() {
+            // 잠깐 닉네임 딴거 좀 쓸게요
+            if (!this.$store.state.nickname) {
+                this.$store.state.nickname = "ddddfff"
+            }
+            // 방장인지 구해요
+            // this.is_host = this.$route.params.isHost
+            this.is_host = false;
+
+            // 내정보를 일단 가져와요
+            // this.user = this.axios.get(process.env.VUE_APP_SPRING/user, '', {headers: {Authentication: sessionStorage.getItem("token")}}).then(res => {
+            //     user = {
+            //         "user_id": res.data.result.id,
+            //         "level": res.data.result.level,
+            //         "nickname": res.data.result.nickname,
+            //     }
+            // })
+            this.user = {
+                "user_id": 2,
+                "level" : 11,
+                "nickname" : this.$store.state.nickname,
+            }
             // 이걸로 방 번호를 알게 되었으니까 이걸로 요청을 보내요
             console.log("방번호:" + this.$route.params.roomId);
             // 가상으로 응답을 받았다 칠게요
@@ -64,24 +109,89 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
                 host_id: 3,
                 radius: 500
             }
+            // this.roomInfo = await this.axios.get(process.env.VUE_APP_SPRING + "room/join/" + this.$route.params.roomId).then(res => res.data.result);
+            console.log("****", this.roomInfo)
+            
             // 이걸로 방장의 아이디키를 아니 방장 닉네임을 가져올게요
             console.log("방장아이디:" + this.roomInfo.host_id);
             // 방장 닉네임을 받아왔다 칠게요
             this.hostNickName = "asdf";
 
-            // 오픈비두에서 subscribers들을 받아오는 소스로 부터 subscribers를 추출해요
-            if (this.$store.state.nickname == undefined) {
-                this.$store.state.nickname = "werwer";
-            }
-            var myNickname = this.$store.state.nickname
-            var hostNickName = this.hostNickName
-            this.subscribers = [
-                {"level": 15, "nickname": myNickname, "isReady": false},
-                {"level": 1, "nickname": hostNickName, "isReady": false},
-                {"level": 5, "nickname": "conn3", "isReady": false},
-                {"level": 77, "nickname": "conn4", "isReady": true},
-                {"level": 43, "nickname": "conn5", "isReady": false}
-            ]
+            this.OV = new OpenVidu();
+            this.session = this.OV.initSession();
+            this.session.on("streamCreated", ({ stream }) => {
+                const subscriber = this.session.subscribe(stream);
+                this.subscribers.push(subscriber);
+                console.log("스트림을 발견했어요!")
+                console.log("현재 사람은 " + this.subscribers.length + "명이에요")
+            
+                const { connection } = subscriber.stream;
+                console.log("커넥션 데이터에요:", connection.data)
+                const { clientData } = JSON.parse(connection.data);
+                const { clientLevel } = JSON.parse(connection.data);
+                const { clientReady } = JSON.parse(connection.data);
+                this.subscribers_show.push({
+                    "level": clientLevel,
+                    "nickname": clientData,
+                    "isHost": this.is_host,
+                    "isReady": clientReady,
+                })
+            });
+            this.session.on("streamDestroyed", ({ stream }) => {
+                const index = this.subscribers.indexOf(stream.streamManager, 0);
+                if (index >= 0) {
+                    this.subscribers.splice(index, 1);
+                    this.subscribers_show.splice(index, 1);
+                }
+                console.log("누군가가 스트림을 종료했어요!")
+                console.log("남은 사람은 " + this.subscribers.length + "명이에요");
+            });
+            this.session.on("exception", ({ exception }) => {
+                console.warn("오류ㅠㅠ" + exception);
+            });
+
+            this.session.on("signal:ready_button", (e) => {
+                console.log(e.from.connectionId);
+                var index;
+                for (var i = 0; i < this.subscribers.length; i++) {
+                    if (e.from.connectionId == this.subscribers[i].stream.connection.connectionId) {
+                        index = i;
+                    }
+                }
+                console.log(index)
+            })
+
+            await this.getToken(this.$route.params.roomId).then(async (token) => {
+                console.log("토큰을생성해요:" + token);
+                await this.session.connect(token, { clientData: this.$store.state.nickname, clientLevel: this.user.level, clientReady: this.is_ready }).then(() => {
+                    let publisher = this.OV.initPublisher(undefined, {
+                        audioSource: undefined, // The source of audio. If undefined default microphone
+                        videoSource: undefined, // The source of video. If undefined default webcam
+                        publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+                        publishVideo: false, // Whether you want to start publishing with your video enabled or not
+                        resolution: "80x60", // The resolution of your video
+                        frameRate: 5, // The frame rate of your video
+                        insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+                        mirror: false, // Whether to mirror your local video or not
+                    });
+                    this.publisher = publisher;
+
+                    this.publisher_show = {
+                        "level" : this.user.level,
+                        "nickname" : this.user.nickname,
+                        "isReady": false,
+                        "isHost": this.is_host
+                    }
+                    this.session.publish(this.publisher);
+                })
+                .catch((error) => {
+                    console.log("There was an error connecting to the session:", error.code, error.message);
+                });
+            });
+            window.addEventListener("beforeunload", this.leaveSession);
+
+            console.log("퍼블리싱을 완료했어요")
+            console.log(this.subscribers.length);
 
             // 아이디 키와, 방 키를 보내서 방 알람 설정을 했는지 아닌지 알아봐요 
             console.log("방키:" + this.$route.params.roomId)
@@ -93,6 +203,11 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
 
             */
         },
+        // watch: {
+        //     $route(to, from) {
+        //         if(to.path !== from.path) alert('ffffff');
+        //     }
+        // },
         methods: {
             dot_menu() {
                 this.menu_modal = true;
@@ -117,8 +232,48 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
                 alert("나가기")
             },
             ready_button() {
-                this.$router.push("/game/" + this.$route.params.roomId);
-            }
+                alert("준비 버튼");
+                this.session.signal({
+                    data: this.user.nickname,
+                    type: "ready_button"
+                })
+                // this.$router.push("/game/" + this.$route.params.roomId);
+            },
+            start_button() {
+                alert("스타트버튼");
+            },
+            leaveSession() {
+                alert('페이지를 나가요');
+
+                if (this.session) this.session.disconnect();
+
+                this.session = undefined;
+                this.mainStreamManager = undefined;
+                this.publisher = undefined;
+                this.subscribers = [];
+                this.OV = undefined;
+
+                window.removeEventListener("beforeunload", this.leaveSession);
+            },
+            async getToken(mySessionId) {
+                console.log("getToken 시작")
+                const sessionId = await this.createSession(mySessionId);
+                return await this.createToken(sessionId);
+            },
+            async createSession(sessionId) {
+                console.log("createSeesion 시작")
+                const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
+                    headers: { 'Content-Type': 'application/json', },
+                });
+                return response.data; // The sessionId
+            },
+            async createToken(sessionId) {
+                console.log("createToken 시작")
+                const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
+                    headers: { 'Content-Type': 'application/json', },
+                });
+                return response.data; // The token
+            },
         }
     }
 </script>
@@ -173,7 +328,7 @@ $ready_button_height: 50px;
     .menu_box:hover {
         background-color: #888888;
     }
-    #ready_button {
+    .ready_start {
         background-color: #f2f2f2;
         box-shadow: 0 10px 10px $shadow_color;
         height: $ready_button_height;

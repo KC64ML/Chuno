@@ -1,21 +1,7 @@
 <template>
   <CreateRoomModal v-if="this.$store.state.CreateRoomModal"/>
-    <!-- <div id="modal_container" v-if="make_room_modal1 || make_room_modal2">
-        <div class="modal" ref="modal" v-if="make_room_modal1" style="width: 300px;">
-            <div style="position: absolute; top: 10px; right: 10px;" @click="close_modal">X</div>
-            <div style="text-align: center">방만들기</div>
-            <div style="margin-top: 20px"></div>
-            <div class="flex_center">
-                <div>방 제목 :&nbsp;</div><input v-model="room_title">
-            </div>
-        </div>
-        <div class="modal" ref="modal" v-else>
-
-        </div>
-    </div> -->
     <HeaderVue :title="'홈'"></HeaderVue>
-    <div style="height: 75%">
-        <!-- <div style="text-align: center">저잣거리</div> -->
+    <div id="room_box" style="height: 75%; overflow: scroll;">
         <room-card v-for="(room, idx) in roomList" :key="idx" v-bind:room="room"></room-card>
     </div>
     <div id="plus_button" @click="createRoom">+</div>
@@ -35,41 +21,24 @@ export default {
     },
     data() {
         return {
+            lat: undefined,
+            lng: undefined,
             room_title: "",
             roomSearch: "",
-            roomList: [
-                {
-                    room_id: 1,
-                    title: "방이름1",
-                    is_public: true,
-                    password: null,
-                    lat: 36.119485,
-                    lng: 128.3445734,
-                    radius: 50,
-                    host_id: "gogo",
-                    room_start_time: new Date(2023, 1, 1, 13, 20, 0)
-                },
-                {
-                    room_id: 4,
-                    title: "방이름2",
-                    is_public: false,
-                    password: "abc111",
-                    lat: 36.119485,
-                    lng: 127.3445734,
-                    radius: 50,
-                    host_id: "toto",
-                    // month는 하나가 적어야 한다
-                    room_start_time: new Date(2023, 0, 30, 12, 20, 0)
-                },
-            ]
+            roomList: [],
         }
     },
-    created() {
-        
+    async created() {
+        navigator.geolocation.getCurrentPosition(this.getPositionValue);
     },
     mounted() {
     },
     methods: {
+        async getPositionValue (val) {
+            this.lat = val.coords.latitude;
+            this.lng = val.coords.longitude;
+            this.roomList = await this.axios.get(process.env.VUE_APP_SPRING + "room?lat=" + this.lat + "&lng=" + this.lng).then(res => res.data.result);
+        },
         createRoom() {
             // alert("눌렸어요")
             this.$store.state.CreateRoomModal = true
@@ -116,5 +85,12 @@ export default {
         background-color: #F2F2F2;
         padding: 20px;
         border-radius: 10px;
+    }
+    #room_box {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    #room_box::-webkit-scrollbar {
+        display: none;
     }
 </style>

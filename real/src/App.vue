@@ -5,6 +5,7 @@
     <FooterVue class="footer_fix"
         v-if="this.$route.name != 'game' && this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth'">
     </FooterVue>
+    <button @click="retreat">탈퇴</button>
 </template>
 
 <script>
@@ -15,9 +16,13 @@ export default {
       FooterVue,
     },
     methods: {
-        async testBtn() {
-            console.log(this.axios)
-            this.axios.get("http://3.36.87.75:8000/user", {headers:{ "Authorization": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhY2Nlc3Nfa2V5IiwiaWF0IjoxNjc1MjM2NjMyLCJleHAiOjE2NzUzMjMwMzIsInVzZXJfaWQiOjF9.St63ziKC0rmrzPbNsDaN4hAEoUhgRethHvW0A6Yx29O0rhPC4RXn6xB9wd2zs-YzxKQ6KljVPxROGrymkXZnDg" }}).then((response => console.log(response)));
+        async retreat() {
+            alert('탈퇴');
+            console.log(sessionStorage.getItem("token"));
+            this.axios.delete(process.env.VUE_APP_SPRING + "user", '', {headers: {Authentication: sessionStorage.getItem("token")}})
+        },
+        test() {
+            this.$router.push({name: "Test", params: {namee: "eeeee"}});
         }
     }
 }

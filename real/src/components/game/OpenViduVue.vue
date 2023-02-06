@@ -16,11 +16,10 @@
 
 <script>
 import { OpenVidu } from "openvidu-browser";
-// import UserVideo from "@/components/game/UserVideo.vue";
 
 // const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 // const APPLICATION_SERVER_URL = "http://localhost:5000/";
-const APPLICATION_SERVER_URL = process.env.RTC;
+const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 // const APPLICATION_SERVER_URL = "http://:8000/";
 
 
@@ -81,7 +80,7 @@ const APPLICATION_SERVER_URL = process.env.RTC;
                 this.session.on("exception", ({ exception }) => {
                     console.warn("오류ㅠㅠ" + exception);
                 });
-                await this.getToken(this.mySessionId).then(async (token) => {
+                await this.getToken(this.mySessionId + "game").then(async (token) => {
                     console.log("토큰을생성해요:" + token);
                     await this.session.connect(token, { clientData: this.myUserName, role: "good" }).then(() => {
                         let publisher = this.OV.initPublisher(undefined, {
@@ -89,8 +88,8 @@ const APPLICATION_SERVER_URL = process.env.RTC;
                             videoSource: undefined, // The source of video. If undefined default webcam
                             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                            resolution: "160x120", // The resolution of your video
-                            frameRate: 30, // The frame rate of your video
+                            resolution: "8x6", // The resolution of your video
+                            frameRate: 5, // The frame rate of your video
                             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                             mirror: false, // Whether to mirror your local video or not
                         });
@@ -126,7 +125,6 @@ const APPLICATION_SERVER_URL = process.env.RTC;
                 return await this.createToken(sessionId);
             },
             async createSession(sessionId) {
-                console.log("createSeesion 시작")
                 const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
                     headers: { 'Content-Type': 'application/json', },
                 });
