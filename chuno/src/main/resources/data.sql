@@ -5,8 +5,7 @@ VALUES
     ('chaen511@naver.com', '성곡초짱이채은', NOW()),
     ('souk0712@naver.com', '아름병아리', NOW()),
     ('ljc1025@nate.com', '노예킹', NOW()),
-    ('lkc263@naver.com', '아리따움', NOW()),
-    ('siganshoyou@google.com', '추노장인', NOW());
+    ('lkc263@naver.com', '아리따움', NOW());
 
 INSERT INTO rooms
 (is_public, lat, lng, password, radius, title, host_id, year, month, day, hour, minute)
