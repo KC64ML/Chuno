@@ -160,8 +160,8 @@ export default {
     },
   },
   created() {
-    this.generatePapers({lat: 0, lng: 0}, 100, 10)
-    // this.generatePapers({lat: 36.0923108, lng: 128.4245156}, 100, 10)
+    // this.generatePapers({lat: 0, lng: 0}, 100, 10)
+    this.generatePapers({lat: 36.0923108, lng: 128.4245156}, 100, 10)
   },
   watch: {
   }
