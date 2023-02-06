@@ -23,7 +23,7 @@ export default {
       // 아이피 주소 고쳐주세요
       var { data } = await this.axios.post(
         // process.env.VUE_APP_SPRING + "kakao/login",
-        "https://i8d208.p.ssafy.io/api/kakao/login",
+        "http://3.36.87.75:8000/api/kakao/login",
         code,
         { headers: { "Content-Type": "text/plain" } }
       );
@@ -32,7 +32,7 @@ export default {
       if (data.code == "no_email") {
         console.log(data.result);
         // 아직 우리 서비스에 가입하지 않았어요 회원 가입 페이지로 넘어가요 뷰에서는 패러미터를 안고 라우터뷰를 이동하면 될거에요
-        this.$router.push({ name: "Register", params: { email: data.result } });
+        this.$router.push({ path: "/register", params: { email: data.result } });
         // window.location.href="register/" + data.email;
       } else if (data.code == "member") {
         // 우리 서비스의 멤버에요 세션스토리지에 토큰을 저장하고 홈페이지로 이동해요

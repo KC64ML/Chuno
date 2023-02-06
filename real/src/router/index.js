@@ -56,7 +56,7 @@ const routes = [
     component: OauthView
   },
   {
-    path: '/register/:email',
+    path: '/register/',
     name: 'Register',
     component: RegisterView
   },

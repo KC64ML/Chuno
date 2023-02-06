@@ -16,7 +16,7 @@
         </div>
       </div>
       <div v-else>
-        <img src="@/assets/profile_default_with_cam.svg" alt="" @click="profile_click">
+        <img id="blank_img" src="@/assets/profile_default_with_cam.svg" alt="" @click="profile_click">
       </div>
       <input ref="file_input" type="file" @change="oneFileSelect" style="display:none"/>
     </div>
@@ -42,6 +42,7 @@ export default {
   name: 'RegisterView',
   data() {
     return {
+      email: '',
       nickname: '',
       can_use: false,
       one_file: undefined,
@@ -60,7 +61,7 @@ export default {
       this.one_file = e.target.files[0];
       this.img_url = URL.createObjectURL(e.target.files[0]);
     },
-    save() {
+    async save() {
       if (this.nickname.length == 0) {
         alert("닉네임을 확인해 주세요");
         return;
@@ -68,12 +69,14 @@ export default {
         alert("이미 사용 중인 닉네임이에요");
         return;
       }
-      this.axios.get(process.env.VUE_APP_SPRING + "/saveUserNickname", '', {headers: {Authentication: sessionStorage.getItem("token")}})
+      const token = await this.axios.post(process.env.VUE_APP_SPRING + "/kakao/register", {"nick": this.nickname, "email": this.email})
+      sessionStorage.setItem("token", token);
       if (this.one_file) {
         const formData = new FormData();
         formData.append("file", this.oneFile);
-        this.axios.post(process.env.VUE_APP_SPRING + "/saveUserProfile", formData, {headers: {'Content-Type': 'multipart/form-data', 'Authentication': sessionStorage.getItem("token")}})
+        await this.axios.post(process.env.VUE_APP_SPRING + "/saveUserProfile", formData, {headers: {'Content-Type': 'multipart/form-data', 'email': this.email}})
       }
+      alert("등록완료");
     },
     reSelect() {
       alert("다시선택");
@@ -86,16 +89,19 @@ export default {
   },
   watch: {
     'nickname': 'check'
+  },
+  created() {
+    console.log(this.$route.params.email);
+    this.email = this.$route.params.email;
   }
-
 }
 </script>
 
 <style lang="scss" scoped>
 $input_height: 40px;
 $button_height: 40px;
-$logo_size: 100vw * 0.25;
-$image_size: 100vw * 0.3;
+$logo_size: 120px;
+$image_size: 140px;
 $div_interval: 40px;
 #main_logo {
   position: absolute;
@@ -105,7 +111,7 @@ $div_interval: 40px;
   width: $logo_size;
 }
 
-#profile_image > img{
+#blank_img{
   width: $image_size;
 }
 #container {
