@@ -92,7 +92,8 @@ export default {
   },
   created() {
     console.log("ffffeft")
-    console.log(this.$route.params);
+    console.log(this.$route.params.email);
+    this.email = this.$route.params.email;
   }
 }
 </script>
