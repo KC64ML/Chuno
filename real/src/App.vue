@@ -18,7 +18,8 @@ export default {
     methods: {
         async retreat() {
             alert('탈퇴');
-            this.axios.delete("http://3.36.87.75:8000/user", '', {headers: {Authentication: sessionStorage.getItem("token")}})
+            console.log(sessionStorage.getItem("token"));
+            this.axios.delete(process.env.VUE_APP_SPRING + "user", '', {headers: {Authentication: sessionStorage.getItem("token")}})
         },
         test() {
             this.$router.push({name: "Test", params: {namee: "eeeee"}});
