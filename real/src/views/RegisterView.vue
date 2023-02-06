@@ -4,7 +4,7 @@
   </div>
   <div id="container">
     <div style="font-size: 25px;">
-      프로필 입력
+      프로필 입력 {{ email }}
     </div>
     <div id="profile_image">
       <div v-if="this.img_url">
@@ -40,9 +40,14 @@
 
 export default {
   name: 'RegisterView',
+  props: {
+    email: {
+      type: String,
+      default: '',
+    }
+  },
   data() {
     return {
-      email: '',
       nickname: '',
       can_use: false,
       one_file: undefined,
@@ -92,8 +97,8 @@ export default {
   },
   created() {
     console.log("fffff")
-    console.log(this.$route);
-    this.email = this.$route.params.email;
+    console.log(this.email);
+    this.email = this.email;
   }
 }
 </script>

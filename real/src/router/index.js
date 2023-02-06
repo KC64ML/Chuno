@@ -57,7 +57,8 @@ const routes = [
   {
     path: '/register/',
     name: 'Register',
-    component: () => import('@/views/RegisterView.vue')
+    component: () => import('@/views/RegisterView.vue'),
+    props: true,
   },
   {
     path: '/game/:roomId',
