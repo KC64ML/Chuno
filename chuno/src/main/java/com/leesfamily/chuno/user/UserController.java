@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,12 +91,17 @@ public class UserController {
 
     @Operation(summary = "내 프로필 수정하기(프로필사진)", description = "")
     @Parameters( {
-            @Parameter(name = "imgFile", description = "이미지 파일")
+            @Parameter(name = "file", description = "이미지 파일"),
+            @Parameter(name = "nickname", description = "닉네임")
     })
-    @PutMapping("/profileImg")
-    public ResponseEntity<Map<String, Object>> putMyProfileImg(MultipartFile file, @RequestHeader HttpHeaders requestHeader) {
+    @PutMapping(value = "/profile",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> putMyProfileImg(
+            @RequestPart MultipartFile file,
+            @RequestParam String nickname,
+            @RequestHeader HttpHeaders requestHeader) {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
-        UserEntity result = userService.putMyProfileImg(file, userId);
+        UserEntity result = userService.putMyProfileImg(userId, file, nickname);
         Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByObject(result);
         return ResponseEntity.ok().body(resMap);
     }
