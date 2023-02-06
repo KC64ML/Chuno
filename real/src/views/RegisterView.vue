@@ -91,7 +91,7 @@ export default {
     'nickname': 'check'
   },
   created() {
-    console.log("ffffef")
+    console.log("ffffeft")
     console.log(this.$route.params);
   }
 }

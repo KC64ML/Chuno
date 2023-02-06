@@ -55,10 +55,9 @@ const routes = [
     component: OauthView
   },
   {
-    path: '/register/',
+    path: '/register/:email',
     name: 'Register',
     component: () => import('@/views/RegisterView.vue'),
-    props: true,
   },
   {
     path: '/game/:roomId',

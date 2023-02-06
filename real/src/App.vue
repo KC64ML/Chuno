@@ -5,7 +5,7 @@
     <FooterVue class="footer_fix"
         v-if="this.$route.name != 'game' && this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth'">
     </FooterVue>
-    <button @click="retreat">탈퇴</button>
+    <button @click="retreat">탈퇴</button><button @click="test">테스트</button>
 </template>
 
 <script>
@@ -19,6 +19,9 @@ export default {
         async retreat() {
             alert('탈퇴');
             this.axios.delete("http://3.36.87.75:8000/user", '', {headers: {Authentication: sessionStorage.getItem("token")}})
+        },
+        test() {
+            this.$router.push({name: "Test", params: {namee: "eeeee"}});
         }
     }
 }
