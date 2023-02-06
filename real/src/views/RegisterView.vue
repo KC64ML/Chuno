@@ -98,7 +98,6 @@ export default {
   created() {
     console.log("fffff")
     console.log(this.email);
-    this.email = this.email;
   }
 }
 </script>
