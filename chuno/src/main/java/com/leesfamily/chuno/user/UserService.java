@@ -95,15 +95,16 @@ public class UserService {
         return null;
     }
 
-    public UserEntity putMyProfileImg(MultipartFile img, Long userId) {
+    public UserEntity putMyProfileImg( Long userId, MultipartFile img, String nickname) {
         Optional<UserEntity> option = userRepository.findById(userId);
         UserEntity userEntity = option.get();
+        userEntity.setNickname(nickname);
 
         String target = "profile/"+userId;
 
-
         String saveFileNm = fileUtils.transferTo(img, target);
         String path = "/pic/" + target + "/" + saveFileNm;
+        log.info("path : " + path);
         if(saveFileNm != null){
             userEntity.getProfile().setPath(path);
             userEntity.getProfile().setSaveName(saveFileNm);
