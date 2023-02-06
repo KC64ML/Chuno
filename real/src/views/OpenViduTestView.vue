@@ -153,7 +153,7 @@
         // --- 4) Connect to the session with a valid user token ---
   
         // Get a token from the OpenVidu deployment
-            this.getToken(this.mySessionId).then((token) => {
+            this.getToken(this.mySessionId + "game").then((token) => {
             console.log(`token : ${token}`);
           // First param is the token. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname

@@ -80,7 +80,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 this.session.on("exception", ({ exception }) => {
                     console.warn("오류ㅠㅠ" + exception);
                 });
-                await this.getToken(this.mySessionId).then(async (token) => {
+                await this.getToken(this.mySessionId + "game").then(async (token) => {
                     console.log("토큰을생성해요:" + token);
                     await this.session.connect(token, { clientData: this.myUserName, role: "good" }).then(() => {
                         let publisher = this.OV.initPublisher(undefined, {

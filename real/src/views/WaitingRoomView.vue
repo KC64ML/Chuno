@@ -161,14 +161,14 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 console.log(index)
             })
 
-            await this.getToken(this.$route.params.roomId + "game").then(async (token) => {
+            await this.getToken(this.$route.params.roomId).then(async (token) => {
                 console.log("토큰을생성해요:" + token);
                 await this.session.connect(token, { clientData: this.$store.state.nickname, clientLevel: this.user.level, clientReady: this.is_ready }).then(() => {
                     let publisher = this.OV.initPublisher(undefined, {
                         audioSource: undefined, // The source of audio. If undefined default microphone
                         videoSource: undefined, // The source of video. If undefined default webcam
-                        publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-                        publishVideo: true, // Whether you want to start publishing with your video enabled or not
+                        publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+                        publishVideo: false, // Whether you want to start publishing with your video enabled or not
                         resolution: "80x60", // The resolution of your video
                         frameRate: 5, // The frame rate of your video
                         insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
