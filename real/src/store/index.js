@@ -4,7 +4,6 @@ export default createStore({
   state: {
     nickname: undefined,
     // Modal
-    createRoomModal: false,
     passwordModal: false,
     pushModal: false,
 

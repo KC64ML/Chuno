@@ -173,7 +173,7 @@ export default {
 }
 </script>
 
-<style src="@vueform/slider/themes/default.css"></style>
+<style lang="scss" src="@vueform/slider/themes/default.css"></style>
 <style>
   .container-row{
     display: flex;
