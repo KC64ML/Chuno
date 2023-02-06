@@ -29,17 +29,9 @@ public class RoomService {
     final private PushRepository pushRepository;
 
     @Transactional(readOnly = true)
-    public List<RoomResponse> getNearByRooms(Double latitude, Double longitude, Double distance) {
-        Location northEast = GeometryUtils
-                .calculate(latitude, longitude, distance, Direction.NORTHEAST.getBearing());
-        Location southWest = GeometryUtils
-                .calculate(latitude, longitude, distance, Direction.SOUTHWEST.getBearing());
-
-        double x1 = northEast.getLat();
-        double y1 = northEast.getLng();
-        double x2 = southWest.getLat();
-        double y2 = southWest.getLng();
-
+    public List<RoomResponse> getNearByRooms(Location loc) {
+        Double latitude = loc.getLat();
+        Double longitude = loc.getLat();
 //        String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
         Query query = em.createNativeQuery("SELECT r.*, u.*, " +
                         " (6371*acos(cos(radians(" + latitude + ")) " +
@@ -72,7 +64,6 @@ public class RoomService {
                 .isPublic(room.isPublic())
                 .radius(room.getRadius())
                 .password(room.getPassword())
-                .location(room.getLocation())
                 .host(userRepository.getOne(host_id))
                 .build();
         RoomEntity res = roomRepository.save(roomEntity);
@@ -103,5 +94,7 @@ public class RoomService {
     }
 
 
-
+    public List<RoomResponse> getRoomsByConditinos(Location loc, String condition, String keyword) {
+        return null;
+    }
 }

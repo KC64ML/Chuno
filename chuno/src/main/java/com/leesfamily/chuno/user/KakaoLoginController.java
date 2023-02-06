@@ -44,6 +44,90 @@ public class KakaoLoginController {
 
     final private UserService userService;
 
+    @PostMapping("/getTokken")
+    public ResponseEntity<Map<String, Object>> getToken(@RequestBody String code) {
+        System.out.println("컨트롤러에서 받은 코드 : " + code);
+        String access_Token = "";
+        String refresh_Token = "";//
+        String reqURL = "https://kauth.kakao.com/oauth/token";
+        Map<String, Object> res = new HashMap<>();
+        HttpStatus httpStatus = null;
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            //POST 요청을 위해 기본값이 false인 setDoOutput을 true로
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
+            //POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+            StringBuilder sb = new StringBuilder();
+            sb.append("grant_type=authorization_code");
+            sb.append("&client_id=9733352823239497d6928853e1e59954"); // TODO REST_API_KEY 입력
+            sb.append("&redirect_uri=https://i8d208.p.ssafy.io/oauth"); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&code=" + code);
+            bw.write(sb.toString());
+            bw.flush();
+
+            //결과 코드가 200이라면 성공
+            int responseCode = conn.getResponseCode();
+            String ctnt = conn.getResponseMessage();
+            System.out.println("성공여부 : " + responseCode);
+            System.out.println("내용 : " + ctnt);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println("response body : " + result);
+
+            //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+            JsonObject jsonObject = element.getAsJsonObject();
+
+            access_Token = jsonObject.get("access_token").getAsString();
+            refresh_Token = jsonObject.get("refresh_token").getAsString();
+
+            System.out.println("토큰 : " + access_Token);
+
+            br.close();
+            bw.close();
+
+            String email = getInfo(access_Token);
+
+            System.out.println(email);
+
+            if (email.equals("no_email")) {
+                res.put("code", "no_email");
+                httpStatus = HttpStatus.OK;
+            }
+            System.out.println("여기까지");
+
+            //이메일을 데이터베이스에서 뒤져요
+            UserEntity user = userService.findUserByEmail(email);
+            //이메일이 있으면 이미 가입한 유저에요 JWT토큰을 만들어 홈으로 userDto와 함께 가요
+            //이메일이 없으면 가입한 적이 없는 유저에요
+            if (user == null) {
+                res.put("code", "no_email");
+                res.put("result", email);
+                httpStatus = HttpStatus.OK;
+            } else {
+                res.put("code", "member");
+                res.put("result", makeToken(user.getId()));
+                httpStatus = HttpStatus.OK;
+            }
+        } catch (Exception e) {
+            res.put("code", e.getMessage());
+            httpStatus = HttpStatus.EXPECTATION_FAILED;
+        }
+        return new ResponseEntity<>(res, httpStatus);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> getAccessToken(@RequestBody String code) {
         System.out.println("컨트롤러에서 받은 코드 : " + code);
