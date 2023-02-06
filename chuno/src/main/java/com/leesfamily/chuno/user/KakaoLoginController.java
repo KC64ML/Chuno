@@ -302,6 +302,7 @@ public class KakaoLoginController {
         }
     }
 
+
     @PostMapping("/register")
     String register(@RequestBody UserEntity user) {
         Long user_id = userService.register(user);

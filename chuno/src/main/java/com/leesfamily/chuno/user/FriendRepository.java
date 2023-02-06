@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface FriendRepository extends JpaRepository<FriendEntity, Long> {
     Optional<List<FriendEntity>> findFriendEntitiesByFromUser(UserEntity fromUser);
+
+    Optional<FriendEntity> findByFromUserAndToUser(UserEntity me, UserEntity you);
 }
