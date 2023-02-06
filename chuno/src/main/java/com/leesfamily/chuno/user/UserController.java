@@ -48,7 +48,15 @@ public class UserController {
             @RequestHeader HttpHeaders requestHeader) {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
         log.info("userId : " + userId);
-        UserEntity user = userService.getMyProfile(userId);
+        UserEntity user = userService.getProfile(userId);
+        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByObject(user);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @Operation(summary = "상대 프로필 불러오기", description = "")
+    @GetMapping("/{userId}")
+    public ResponseEntity<Map<String, Object>> getOtherProfile(@PathVariable("userId") Long userId) {
+        UserEntity user = userService.getProfile(userId);
         Map<String, Object> res = statusCodeGeneratorUtils.checkResultByObject(user);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

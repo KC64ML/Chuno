@@ -36,7 +36,7 @@ public class UserService {
     final private TokenUtils tokenUtils;
 
 
-    public UserEntity getMyProfile(Long id) {
+    public UserEntity getProfile(Long id) {
         Optional<UserEntity> user = userRepository.findById(id);
         if(user.isEmpty()) {
             return null;
@@ -124,4 +124,5 @@ public class UserService {
         Long result = userRepository.countByNicknameIs(nickname);
         return result;
     }
+
 }

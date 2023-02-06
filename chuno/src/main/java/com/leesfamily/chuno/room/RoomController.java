@@ -45,7 +45,7 @@ public class RoomController {
     String secretKey;
 
 
-    @Operation(summary = "방 목록 가져오기", description = "사용자의 위치정보를 기반으로 주변 10km 내의 방들을 리턴한다.")
+    @Operation(summary = "방 목록 가져오기", description = "사용자의 위치정보를 기반으로 주변 방들을 리턴한다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = RoomEntity.class))),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
