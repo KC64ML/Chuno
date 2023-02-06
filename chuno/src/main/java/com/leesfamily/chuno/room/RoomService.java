@@ -32,7 +32,7 @@ public class RoomService {
     @Transactional(readOnly = true)
     public List<RoomResponse> getNearByRooms(Location loc) {
         Double latitude = loc.getLat();
-        Double longitude = loc.getLat();
+        Double longitude = loc.getLng();
 //        String pointFormat = String.format("'LINESTRING(%f %f, %f %f)')", x1, y1, x2, y2);
         Query query = em.createNativeQuery("SELECT r.*, u.*, " +
                         " (6371*acos(cos(radians(" + latitude + ")) " +

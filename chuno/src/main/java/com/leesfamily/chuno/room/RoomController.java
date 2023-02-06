@@ -119,4 +119,11 @@ public class RoomController {
         Map<String, Object> res = roomService.pushRoom(roomId, userId);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+//    @PostMapping("/gamestart")
+//    public ResponseEntity<> gameStart(
+//            @PathVariable("roomId") long roomId
+//    ){
+//
+//    }
 }
