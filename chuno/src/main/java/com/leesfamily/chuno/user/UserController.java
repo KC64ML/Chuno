@@ -55,6 +55,9 @@ public class UserController {
     }
 
     @Operation(summary = "상대 프로필 불러오기", description = "")
+    @Parameters(
+            @Parameter(name = "userId", example = "1")
+    )
     @GetMapping("/{userId}")
     public ResponseEntity<Map<String, Object>> getOtherProfile(@PathVariable("userId") Long userId) {
         UserEntity user = userService.getProfile(userId);
