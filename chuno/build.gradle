@@ -1,7 +1,17 @@
+// 추가
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.7'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+
+	// 추가
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'com.leesfamily'
@@ -68,6 +78,13 @@ dependencies {
 	implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.25.0'
 
 
+	//querydsl 추가
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	// 테스트에서 lombok 사용 - 추가
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -75,4 +92,34 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// 추가
+// querydsl 설정 추가
+
+// querydsl에서 사용할 경로를 설정한다.
+def querydslDir = "$buildDir/generated/querydsl"
+
+// JPA 사용 여부와 사용할 경로를 설정
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+
+// build 시 사용할 sourceSet 추가한다.
+sourceSets {
+	main.java.srcDir querydslDir
+}
+
+// querydsl이 compileClassPath를 상속하도록 설정
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
+
+// querydsl 컴파일 시 사용할 옵션 설정
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
 }

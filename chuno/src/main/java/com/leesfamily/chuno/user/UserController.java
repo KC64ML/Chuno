@@ -137,6 +137,11 @@ public class UserController {
         return null;
     }
 
+    // getHighPriorityList
+    @GetMapping("/priority")
+    public ResponseEntity<List> getRankingList(){
+        return ResponseEntity.ok(userService.getRankingList());
+    }
     @DeleteMapping
     public ResponseEntity<Map<String, Object>> deleteUser(
             @RequestHeader HttpHeaders requestHeader

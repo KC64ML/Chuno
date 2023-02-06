@@ -1,0 +1,55 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  ssl:
+    enabled: false
+#  address: localhost
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://i8d208.p.ssafy.io:3305/chuno?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    hikari:
+      username: root
+      password: ssafy
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
+    hibernate:
+      ddl-auto: create
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+  servlet:
+    multipart:
+      location: /chuno/resources
+logging:
+  level:
+    root: info
+    org.hibernate.type: trace
+
+secret:
+  key: believ8ebeli7ev6ethat5lifeisno4tadrea1mitsfal3lWhatthoughourBestOerhopeaheavyswayHopeagain2eriemfojc
+jwt:
+  token:
+    secret-key: [secret-key]
+  access-token:
+    expire-length: 1800000
+  refresh-token:
+    expire-length: 1209600000
+
+OPENVIDU_URL: https://i8d208.p.ssafy.io:8443/
+OPENVIDU_SECRET: D208_CHUNO
