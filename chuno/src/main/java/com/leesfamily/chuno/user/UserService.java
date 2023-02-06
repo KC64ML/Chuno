@@ -8,13 +8,13 @@ import com.leesfamily.chuno.user.model.FriendDTO;
 import com.leesfamily.chuno.user.model.FriendEntity;
 import com.leesfamily.chuno.user.model.UserEntity;
 import com.leesfamily.chuno.user.model.UserProfile;
+import com.leesfamily.chuno.user.model.dto.UserRankingListDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,6 +131,11 @@ public class UserService {
         return result;
     }
 
+
+    // 랭킹 얻기
+    public List<UserRankingListDto> getRankingList(){
+        return userRepository.getRankingList();
+    }
     public UserEntity deleteUser(Long userId) {
         UserEntity user = userRepository.findById(userId).get();
         try {
