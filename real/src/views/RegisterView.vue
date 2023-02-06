@@ -69,7 +69,7 @@ export default {
         alert("이미 사용 중인 닉네임이에요");
         return;
       }
-      const token = await this.axios.post(process.env.VUE_APP_SPRING + "kakao/register", {"nick": this.nickname, "email": this.email})
+      const token = await this.axios.post(process.env.VUE_APP_SPRING + "kakao/register", {"nickname": this.nickname, "email": this.email})
       sessionStorage.setItem("token", token);
       if (this.one_file) {
         const formData = new FormData();
