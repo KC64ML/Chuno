@@ -43,17 +43,21 @@
                 // 후에 서버에서 시간 가져오는 걸로 할게요
                 now: Date.now(),
                 // 2월은 1월로 표시됨
-                month: this.room.room_start_time.getMonth() + 1,
-                date: this.room.room_start_time.getDate(),
-                hour: this.room.room_start_time.getHours() % 12,
-                minute: this.room.room_start_time.getMinutes()
+                month: 0,
+                date: 0,
+                hour: 0,
+                minute: 0
             }
         },
         created() {
+            this.month = this.room.dateTime.month;
+            this.date = this.room.dateTime.day;
+            this.hour = this.room.dateTime.hour;
+            this.minute = this.room.dateTime.minute;
         },
         methods: {
             goWaitingRoom() {
-                this.$router.push("/waitingRoom/"+this.room.room_id);
+                this.$router.push("/waitingRoom/"+this.room.id);
             }
         }
     }

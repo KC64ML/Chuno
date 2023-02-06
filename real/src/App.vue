@@ -5,7 +5,7 @@
     <FooterVue class="footer_fix"
         v-if="this.$route.name != 'game' && this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth'">
     </FooterVue>
-    <button @click="retreat">탈퇴</button><button @click="test">테스트</button>
+    <button @click="retreat">탈퇴</button>
 </template>
 
 <script>

@@ -78,6 +78,7 @@ export default {
         await this.axios.post(process.env.VUE_APP_SPRING + "user/saveUserProfile", formData, {headers: {'Content-Type': 'multipart/form-data', 'email': this.email}})
       }
       alert("등록완료");
+      this.$router.push({ name: "home" });
     },
     reSelect() {
       alert("다시선택");
