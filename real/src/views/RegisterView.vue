@@ -4,7 +4,7 @@
   </div>
   <div id="container">
     <div style="font-size: 25px;">
-      프로필 입력 {{ email }}
+      프로필 입력
     </div>
     <div id="profile_image">
       <div v-if="this.img_url">
@@ -52,7 +52,7 @@ export default {
   methods: {
     async check() {
       console.log(this.nickname);
-      this.can_use = await this.axios.get(process.env.VUE_APP_SPRING + "nicknameConfirm/" + this.nickname);
+      this.can_use = await this.axios.get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname);
     },
     profile_click() {
       this.$refs.file_input.click();
@@ -74,7 +74,7 @@ export default {
       if (this.one_file) {
         const formData = new FormData();
         formData.append("file", this.oneFile);
-        await this.axios.post(process.env.VUE_APP_SPRING + "/saveUserProfile", formData, {headers: {'Content-Type': 'multipart/form-data', 'email': this.email}})
+        await this.axios.post(process.env.VUE_APP_SPRING + "user/saveUserProfile", formData, {headers: {'Content-Type': 'multipart/form-data', 'email': this.email}})
       }
       alert("등록완료");
     },
