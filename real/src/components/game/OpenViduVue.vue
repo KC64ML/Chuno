@@ -1,20 +1,32 @@
 <template>
     <div id="main_vedio_container" style="z-index: 1000">
-        <!-- <user-video :stream-manager="mainStreamManager" style="border: dashed;"/> -->
-        <user-video :stream-manager="myStreamManager" style="border: dashed;"/>
-        <video autoplay ref="video" style="border:solid"></video>
+        <video autoplay ref="video" class="enemy_video"></video>
+        <div class="camera_name">
+            임시이름 {{ enemy_name }}
+        </div>
+        <img class="camera_arrow left_arrow" src="@/assets/camera_left.svg" alt="">
+        <img class="camera_arrow right_arrow" src="@/assets/camera_right.svg" alt="">
+        <div class="arrow_box right_box" @click="rightArrow"></div>
+        <div class="arrow_box left_box" @click="leftArrow"></div>
+    </div>
+    <div class="my_video_box" :class="{hidden_modal:!my_cam_modal}">
+        <video autoplay ref="my_video" class="my_video"></video>
     </div>
 </template>
 
 <script>
 import { OpenVidu } from "openvidu-browser";
-import UserVideo from "@/components/game/UserVideo.vue";
+// import UserVideo from "@/components/game/UserVideo.vue";
 
 // const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
-const APPLICATION_SERVER_URL = "http://localhost:5000/";
+// const APPLICATION_SERVER_URL = "http://localhost:5000/";
+const APPLICATION_SERVER_URL = process.env.RTC;
+// const APPLICATION_SERVER_URL = "http://:8000/";
+
+
     export default {
         components: {
-            UserVideo,
+            // UserVideo,
         },
         props: {
             my_cam_modal: undefined
@@ -28,40 +40,56 @@ const APPLICATION_SERVER_URL = "http://localhost:5000/";
                 myStreamManager: undefined,
                 publisher: undefined,
                 subscribers: [],
+                enemy_name: undefined,
 
                 // Join form
                 mySessionId: this.$route.params.roomId,
                 myUserName: "dddd",
             };
         },
+        // computed: {
+        //     clientData () {
+        //         const { clientData } = this.getConnectionData();
+        //         return clientData;
+        //     },
+        // },
         methods: {
             async init() {
                 this.OV = new OpenVidu();
                 this.session = this.OV.initSession();
                 this.session.on("streamCreated", ({ stream }) => {
-                    console.log("스트림을 발견했어요!")
                     const subscriber = this.session.subscribe(stream);
                     this.subscribers.push(subscriber);
+                    console.log("스트림을 발견했어요!")
+                    console.log("현재 사람은 " + this.subscribers.length + "명이에요")
+                    this.mainStreamManager = subscriber;
+                    this.mainStreamManager.addVideoElement(this.$refs.video);
+                    const { connection } = this.mainStreamManager.stream;
+                    console.log("커넥션 데이터에요:", connection.data)
+                    const { clientData } = JSON.parse(connection.data);
+                    this.enemy_name = clientData;
+                    
                 });
                 this.session.on("streamDestroyed", ({ stream }) => {
-                    console.log("누군가가 스트림을 종료했어요!")
                     const index = this.subscribers.indexOf(stream.streamManager, 0);
                     if (index >= 0) {
                         this.subscribers.splice(index, 1);
                     }
+                    console.log("누군가가 스트림을 종료했어요!")
+                    console.log("남은 사람은 " + this.subscribers.length + "명이에요")
                 });
                 this.session.on("exception", ({ exception }) => {
                     console.warn("오류ㅠㅠ" + exception);
                 });
                 await this.getToken(this.mySessionId).then(async (token) => {
-                    console.log("토큰을생성해요");
-                    await this.session.connect(token, { clientData: this.myUserName }).then(() => {
+                    console.log("토큰을생성해요:" + token);
+                    await this.session.connect(token, { clientData: this.myUserName, role: "good" }).then(() => {
                         let publisher = this.OV.initPublisher(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone
                             videoSource: undefined, // The source of video. If undefined default webcam
                             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                            resolution: "640x480", // The resolution of your video
+                            resolution: "160x120", // The resolution of your video
                             frameRate: 30, // The frame rate of your video
                             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                             mirror: false, // Whether to mirror your local video or not
@@ -69,7 +97,7 @@ const APPLICATION_SERVER_URL = "http://localhost:5000/";
                         this.myStreamManager = publisher;
                         this.publisher = publisher;
                         this.session.publish(this.publisher);
-                        this.myStreamManager.addVideoElement(this.$refs.video);
+                        this.myStreamManager.addVideoElement(this.$refs.my_video);
                     })
                     .catch((error) => {
                         console.log("There was an error connecting to the session:", error.code, error.message);
@@ -93,26 +121,39 @@ const APPLICATION_SERVER_URL = "http://localhost:5000/";
                 this.mainStreamManager = stream;
             },
             async getToken(mySessionId) {
+                console.log("getToken 시작")
                 const sessionId = await this.createSession(mySessionId);
                 return await this.createToken(sessionId);
             },
             async createSession(sessionId) {
+                console.log("createSeesion 시작")
                 const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
                     headers: { 'Content-Type': 'application/json', },
                 });
                 return response.data; // The sessionId
             },
             async createToken(sessionId) {
+                console.log("createToken 시작")
                 const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
                     headers: { 'Content-Type': 'application/json', },
                 });
                 return response.data; // The token
             },
+            getConnectionData () {
+                const { connection } = this.mainStreamManager.stream;
+                return JSON.parse(connection.data);
+            },
+            leftArrow() {
+                alert(this.my_cam_modal)
+            },
+            rightArrow() {
+                alert("오른쪽 ㅋ르릭");
+            },
         },
         async created() {
             await this.init();
             console.log("--------------ffff--------------");
-            console.log(this.subscribers);
+            console.log(this.subscribers.length + "명의 사람이 있어요");
             for (var sub of this.subscribers) {
                 console.log("---", sub);
             }
@@ -128,6 +169,73 @@ $my_video_margin: 20px;
 #main_vedio_container {
     position: absolute;
     top: 0;
-    width: 100vw
+    width: 100vw;
+    height: $video_height;
+    overflow: hidden;
+    border: dashed;
+    background-color: black;
+}
+
+.camera_name {
+    position: absolute;
+    color: white;
+    top: 10px;
+    left: 20px;
+    background-color: rgb(0,0,0,0.5);
+    padding: 4px;
+    border-radius: 10px;
+    font-size: 15px;
+}
+.enemy_video{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.camera_arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60px;
+}
+
+.left_arrow {
+    left: -10px;
+}
+.right_arrow {
+    right: 5px
+}
+.arrow_box {
+    border: solid;
+    border-color: white;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 100px;
+    width: 50px;
+}
+.left_box {
+    left: 0;
+}
+.right_box {
+    right: 0;
+}
+
+.my_video_box {
+    background-color: red;
+    position: absolute;
+    bottom: $footer_height;
+    right: 0;
+    margin: 10px;
+    z-index: 100;
+    width: 200px;
+}
+.my_video {
+    width: 100%;
+    border: solid blue;
+}
+.hidden_modal{
+    visibility: hidden;
 }
 </style>

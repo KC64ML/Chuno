@@ -1,19 +1,19 @@
 <template>
   <div>
+    {{ this.email }}
     <div class="profile">   
-      <label for="file">
+      <label for="profilePic">
         <!-- <img src="@/assets/profile_frame.png" alt="profileFrame"> -->
         <!-- <img src="@/assets/camera.svg" alt="upload pic"> -->
         <img :src="img ? img : imgDefault" alt="profilePic" class="uploadedImg">
-        <input type="file" accept="image/*" id="file" class="inputfile" @change="upload">
+        <input type="file" accept="image/*" id="profilePic" class="inputfile" @change="fetchProfileImg">
       </label>
-
     </div>
 
     <div>
       <label for="nickname_input">닉네임</label>
-      <input type="text" id="nickname_input" v-model="nickname" maxlength="6">
-
+      <input type="text" id="nickname_input" v-model="paht.nickname" maxlength="6" @change="check()">
+    
       <div class="check" v-if="nickname.length">
         <div v-if="!lengthValid || !useValid">
           <p v-if="!lengthValid">닉네임은 최대 6글자까지 가능합니다.</p>
@@ -42,8 +42,11 @@ export default {
   data() {
     return {
       imgDefault,
-      img: null,
-      nickname: '',
+      email: null,
+      // profile: {
+      path: null,
+      // },
+      nickname: null,
       valid: true,
       lengthValid: true,
       useValid: true,
@@ -51,19 +54,12 @@ export default {
     }
   },
   methods: {
-    // 프로필 사진
-    upload(event) {
-      let file = event.target.files
-      let reader = new FileReader()
-
-      reader.readAsDataURL(file[0])
-      reader.onload = event => {
-        console.log('img added')
-        this.img = event.target.result
-        console.log(this.img)
-      }
+    // 프사
+    fetchProfileImg(e){
+      this.path = e.target.files
+      // console.log(this.profile)
     },
-    // 닉네임 유효성 검사
+    // 닉네임
     check() {
       if(this.nickname.length > 6) {
         this.lengthValid = false
@@ -75,29 +71,63 @@ export default {
         process.env + `user/nickname/${this.nickname}`
       )
         .then(res => {
-          console.log(res.data)
           const validity = res.data.code
+          console.log(validity)
           if (validity) {
-            console.log('가능')
+            this.useValid = true
             this.useValid = false
           } else {
-            console.log('불가능')
             this.useValid = true
           }
         })
     },
+    // 저장
+    save(){
+      var frm = new FormData()
+      frm.append('path', this.path)
+      frm.append('nickname', this.nickname)
+      this.axios.post(process.evn + 'kakao/register', frm, {
+        headers: {
+          Authorization: 'token',
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then(res => {
+          const code = res.data.code
+          if(code) {
+            console.log('success')
+          } else {
+            console.log('err')
+          }
+        }
+        )
+
+    },
+    // 프로필 사진
+    // upload(event) {
+    //   let file = event.target.files
+    //   let reader = new FileReader()
+
+    //   reader.readAsDataURL(file[0])
+    //   reader.onload = event => {
+    //     console.log('img added')
+    //     this.img = event.target.result
+    //     console.log(this.img)
+    //   }
+    // },
+    // 닉네임 유효성 검사
     async onSave() {
       if(this.lengthValid && this.useValid) {
         alert("가입하기");
         const nick = this.nickname
         // const email = new URL(window.location.href).searchParams.get('email');
         const email = this.$route.params.email
-        var token = await this.axios.post(process.env + "register", {"nick": nick, "email": email});
+        var token = await this.axios.post(process.env + "register", {"nickname": nick, "email": email});
         console.log("회원가입 완료", token.data);
         // token에 토큰이 담겨있어요 쎄션스토리지에 넣어서 사용해하세요
         sessionStorage.setItem("token", token.data);
         //이곳에 회원가입이 완료하고 돌아갈 곳을 달아주세요
-        this.$router.push({ name: 'Home' })
+        // this.$router.push({ name: 'Home' })
       } else {
         alert('닉네임을 바르게 설정하세요.')
       }
@@ -105,8 +135,12 @@ export default {
   },
   watch: {
     'nickname': 'check',
+  },
+  created() {
+    // this.onSave()
+    this.email = this.$route.params.email
+    console.log(this.email)
   }
-
 }
 </script>
 

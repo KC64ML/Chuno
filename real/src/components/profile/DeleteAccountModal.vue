@@ -40,9 +40,9 @@ img {
 }
 
 .container p {
-  position: absolute;
-  top: 0;
-  left: 50%;
+  /* position: absolute; */
+  /* top: 0; */
+  /* left: 50%; */
   /* transform: translate(-50%, -50%); */
   color: #F5F5F5;
   font-size: 18pt;

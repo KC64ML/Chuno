@@ -86,7 +86,7 @@ export default {
     margin: 0 20%;
     justify-content: center;
   }
-  input{
+  #room_search{
     border: none;
     background-color: #F5F5F5;
     padding-left: 7%;

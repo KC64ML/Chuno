@@ -1,10 +1,18 @@
 <template>
-  <MenuView v-if="menu"/>
   <div>
+    <MenuView v-if="this.$store.state.menu" class="menu-window"/>
+    
     <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue>
     <MapView />
 
-    
+    <!-- 아이템 사용 -->
+    <div v-if="this.$store.state.itemModal">
+      <ItemModal 
+        v-for="item in this.$store.state.item"
+        :key="item.name"
+        :item="item"
+      />
+    </div>
     
     <div id="footer_container">
       <div class="menu_box flex_center" @click="this.$router.push('/home')">
@@ -25,28 +33,30 @@
 </template>
 
 <script>
-// import OpenViduVue from '@/components/game/OpenViduVue.vue'
+import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue'
 import MenuView from '@/components/game/MenuView.vue'
+import ItemModal from '@/components/game/ItemModal.vue'
 
 export default {
 
   name: 'GameView',
   components: {
     MapView,
-    // OpenViduVue,
+    OpenViduVue,
     MenuView,
+    ItemModal,
   },
   data() {
     return {
-      menu: true,
       my_cam_modal: true,
     }
   },
   methods: {
     onMenu() {
       console.log('menu clicked')
-      this.menu = !this.menu
+      this.$store.state.menu = !this.$store.state.menu
+      console.log(this.$store.state.menu)
     },
     myCam() {
       this.my_cam_modal = !this.my_cam_modal
@@ -76,9 +86,12 @@ $button_width: 60px;
   width: 100%;
 }
 
-// .menu {
-//     height: 25px;
-// }
+.menu-window {
+  float: right;
+  // position: absolute;
+  position:absolute; 
+  bottom: 60px;
+}
 .menu_box {
   width: 20%;
   display: flex;
