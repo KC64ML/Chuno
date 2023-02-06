@@ -9,13 +9,13 @@ VALUES
     ('siganshoyou@google.com', '추노장인', NOW());
 
 INSERT INTO rooms
-(is_public, lat, lng, location, password, radius, title, host_id, year, month, day, hour, minute)
+(is_public, lat, lng, password, radius, title, host_id, year, month, day, hour, minute)
 VALUES
-    (false, 36.12345, 125.12345, POINT(36.12345, 125.12345), 123, 500, '사이좋은 구미 친구들', 2, 2023, 02, 02, 14, 49),
-    (true, 36.12345, 125.12345, POINT(36.12345, 125.12345), null, 500, '구미 공개방임', 2, 2023, 02, 02, 14, 49),
-    (true, 35.5534, 37.14123, POINT(35.5534, 37.14123), null, 2000, '드루와', 1, 2023, 02, 01, 10, 22),
-    (true, 35.5534, 37.14123, POINT(35.5535, 37.14123), 1234, 4000, '드루와', 3, 2023, 02, 01, 14, 55),
-    (true, 35.5534, 37.14123, POINT(35.5534, 37.14123), null, 1000, '드루와', 4, 2023, 02, 02, 1, 05);
+    (false, 36.12345, 125.12345, 123, 500, '사이좋은 구미 친구들', 2, 2023, 02, 02, 14, 49),
+    (true, 36.12345, 125.12345, null, 500, '구미 공개방임', 2, 2023, 02, 02, 14, 49),
+    (true, 35.5534, 37.14123, null, 2000, '드루와', 1, 2023, 02, 01, 10, 22),
+    (true, 35.5534, 37.14123, 1234, 4000, '드루와', 3, 2023, 02, 01, 14, 55),
+    (true, 35.5534, 37.14123, null, 1000, '드루와', 4, 2023, 02, 02, 1, 05);
 
 INSERT INTO items
 (description, img_path, name, price, for_runner)
