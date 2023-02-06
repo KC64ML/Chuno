@@ -6,6 +6,7 @@ import com.leesfamily.chuno.common.util.GeometryUtils;
 import com.leesfamily.chuno.room.model.RoomResponse;
 import com.leesfamily.chuno.room.model.RoomEntity;
 import com.leesfamily.chuno.room.model.RoomRequest;
+import com.leesfamily.chuno.room.model.dto.RoomListByConditionsDto;
 import com.leesfamily.chuno.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -94,8 +95,34 @@ public class RoomService {
     }
 
 
-    public List<RoomResponse> getRoomsByConditinos(Location loc, String condition, String keyword) {
-        return null;
+    public List<RoomResponse> getRoomsByConditinos(RoomListByConditionsDto roomListByConditionDto){
+        Double latitude = roomListByConditionDto.getLoc().getLat(); // 위도
+        Double longitude = roomListByConditionDto.getLoc().getLat(); // 경도
+
+        // condition
+        // 조건은 방제목으로 구현
+
+        Query query = em.createNativeQuery("SELECT r.*, u.*, " +
+                        " (6371*acos(cos(radians(" + latitude + ")) " +
+                        " * cos(radians(r.lat)) " +
+                        " * cos(radians(r.lng) - radians(" + longitude + ")) " +
+                        " + sin(radians(" + latitude + ")) * sin(radians(r.lat)))) as distance," +
+                        " IF(p.room_id = r.room_id, true, false) as isPushed "
+                        + " FROM rooms AS r " +
+                        " LEFT JOIN users AS u " +
+                        " ON r.host_id = u.user_id " +
+                        " LEFT JOIN pushes p " +
+                        " ON p.user_id = u.user_id " +
+                        " WHERE r.title LIKE '%" + roomListByConditionDto.getKeyword() +"%' " +
+                        " ORDER BY distance ", RoomEntity.class)
+                .setMaxResults(20);
+
+        List<RoomEntity> rooms = query.getResultList();
+
+        List<RoomResponse> roomRes = rooms.stream().map(room ->
+                new RoomResponse(room, roomListByConditionDto.getLoc())
+        ).collect(Collectors.toList());
+        return roomRes;
     }
 
     public Map<String, Object> pushRoom(long roomId, Long userId) {

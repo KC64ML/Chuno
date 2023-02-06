@@ -138,7 +138,8 @@ public class UserController {
     }
 
     // getHighPriorityList
-    @GetMapping("/priority")
+    @Operation(summary = "User Rank 조회", description = "")
+    @GetMapping("/rank")
     public ResponseEntity<List> getRankingList(){
         return ResponseEntity.ok(userService.getRankingList());
     }
@@ -160,5 +161,10 @@ public class UserController {
         return null;
     }
 
+    // 이미지 저장
+    @PostMapping("/saveUserProfile")
+    public void  saveUserProfile(){
+
+    }
 
 }

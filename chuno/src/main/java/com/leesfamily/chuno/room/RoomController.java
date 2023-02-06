@@ -6,6 +6,7 @@ import com.leesfamily.chuno.common.util.TokenUtils;
 import com.leesfamily.chuno.room.model.RoomResponse;
 import com.leesfamily.chuno.room.model.RoomEntity;
 import com.leesfamily.chuno.room.model.RoomRequest;
+import com.leesfamily.chuno.room.model.dto.RoomListByConditionsDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -64,12 +65,14 @@ public class RoomController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/{condition}/{keyword}")
-    public ResponseEntity<Map<String, Object>> getRoomListByConditions(
-            Location loc,
-            @PathVariable("conditino") String condition,
-            @PathVariable("keyword") String keyword) {
-        List<RoomResponse> roomList = roomService.getRoomsByConditinos(loc, condition, keyword);
+    @Operation(summary = "방 제목 검색", description = "(경도, 위도), 방제목 keyword 입력")
+    @Parameters({
+            @Parameter(name = "lat", description = "위도", example = "36.10734231483315"),
+            @Parameter(name = "lng", description = "경도", example = "128.4168157734013")
+    })
+    @PostMapping("/search")
+    public ResponseEntity<Map<String, Object>> getRoomListByConditions(@RequestBody RoomListByConditionsDto roomListByConditionDto) {
+        List<RoomResponse> roomList = roomService.getRoomsByConditinos(roomListByConditionDto);
         Map<String, Object> res = statusCodeGeneratorUtils.checkResultByList(roomList);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -116,5 +119,4 @@ public class RoomController {
         Map<String, Object> res = roomService.pushRoom(roomId, userId);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
-
 }
