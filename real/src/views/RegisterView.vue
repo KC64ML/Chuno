@@ -6,13 +6,13 @@
         <!-- <img src="@/assets/profile_frame.png" alt="profileFrame"> -->
         <!-- <img src="@/assets/camera.svg" alt="upload pic"> -->
         <img :src="img ? img : imgDefault" alt="profilePic" class="uploadedImg">
-        <input type="file" accept="image/*" id="profilePic" class="inputfile" @change="fetchProfileImg">
+        <input type="file" accept="image/*" id="profilePic" class="inputfile" @change="upload">
       </label>
     </div>
 
     <div>
       <label for="nickname_input">닉네임</label>
-      <input type="text" id="nickname_input" v-model="paht.nickname" maxlength="6" @change="check()">
+      <input type="text" id="nickname_input" v-model="nickname" maxlength="6" @change="check()">
     
       <div class="check" v-if="nickname.length">
         <div v-if="!lengthValid || !useValid">
@@ -44,9 +44,9 @@ export default {
       imgDefault,
       email: null,
       // profile: {
-      path: null,
+      path: '',
       // },
-      nickname: null,
+      nickname: '',
       valid: true,
       lengthValid: true,
       useValid: true,
@@ -105,17 +105,18 @@ export default {
 
     },
     // 프로필 사진
-    // upload(event) {
-    //   let file = event.target.files
-    //   let reader = new FileReader()
+    upload(event) {
+      let file = event.target.files
+      let reader = new FileReader()
 
-    //   reader.readAsDataURL(file[0])
-    //   reader.onload = event => {
-    //     console.log('img added')
-    //     this.img = event.target.result
-    //     console.log(this.img)
-    //   }
-    // },
+      reader.readAsDataURL(file[0])
+      reader.onload = event => {
+        console.log('img added')
+        this.img = event.target.result
+        console.log(event)
+        // console.log(this.img)
+      }
+    },
     // 닉네임 유효성 검사
     async onSave() {
       if(this.lengthValid && this.useValid) {

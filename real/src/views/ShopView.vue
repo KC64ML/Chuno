@@ -7,7 +7,7 @@
       :item="selected"
     />
     <div class="container-row">
-      <div class="box">
+      <div class="box" style="margin-right: 3%">
         <div id="item-title">
           <p>노비용</p>
         </div>
@@ -18,7 +18,7 @@
           :item="item"
         />
       </div>
-      <div class="box">
+      <div class="box" style="margin-left: 3%">
         <div id="item-title">
           <p>추노꾼용</p>
         </div>
@@ -70,6 +70,7 @@
             const code = res.data.code
             if (code) {
               this.items = items
+              console.log(this.items)
             } else {
               console.log('error')
             }
