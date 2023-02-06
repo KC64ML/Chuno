@@ -157,15 +157,15 @@
             console.log(`token : ${token}`);
           // First param is the token. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-          this.session
+            this.session
             .connect(token, { clientData: this.myUserName })
-              .then(() => {
-                  console.log("session connected");
+                .then(() => {
+                    console.log("session connected");
               // --- 5) Get your own camera stream with the desired properties ---
-  
+
               // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
               // element: we will manage it on our own) and with the desired properties
-              let publisher = this.OV.initPublisher(undefined, {
+            let publisher = this.OV.initPublisher(undefined, {
                 audioSource: undefined, // The source of audio. If undefined default microphone
                 videoSource: this.myVideoStream, // The source of video. If undefined default webcam
                 publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
