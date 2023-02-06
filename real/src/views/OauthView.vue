@@ -1,11 +1,5 @@
 <template>
   <div>
-    <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Document</title>
-    </head>
     <p>열심히 로그인 중이에요!</p>
   </div>
 </template>
@@ -23,7 +17,7 @@ export default {
       // 아이피 주소 고쳐주세요
       var { data } = await this.axios.post(
         // process.env.VUE_APP_SPRING + "kakao/login",
-        "http://3.36.87.75:8000/api/kakao/login",
+        process.env.VUE_APP_SPRING + "/kakao/login",
         code,
         { headers: { "Content-Type": "text/plain" } }
       );
