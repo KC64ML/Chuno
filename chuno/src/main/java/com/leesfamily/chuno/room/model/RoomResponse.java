@@ -1,5 +1,6 @@
 package com.leesfamily.chuno.room.model;
 
+import com.leesfamily.chuno.common.model.Location;
 import com.leesfamily.chuno.user.model.UserEntity;
 import lombok.Data;
 import lombok.Getter;
@@ -17,9 +18,11 @@ public class RoomResponse {
         private double lng;
         private int currentPlayers;
         private int maxPlayers;
-        private PointDto location;
         private int radius;
+        private double distance;
+        private boolean isPushed;
         private UserEntity host;
+
         public RoomResponse(RoomEntity entity) {
             this.id = entity.getId();
             this.title = entity.getTitle();
@@ -30,8 +33,29 @@ public class RoomResponse {
             this.maxPlayers = entity.getMaxPlayers();
             this.radius = entity.getRadius();
             this.host = entity.getHost();
-            this.location = new PointDto(entity.getLocation());
+            this.isPushed = entity.isPushed();
+            this.distance = entity.getDistance();
         }
+        public RoomResponse(RoomEntity entity, Location loc) {
+            this.id = entity.getId();
+            this.title = entity.getTitle();
+            this.password = entity.getPassword();
+            this.lat = entity.getLat();
+            this.lng = entity.getLng();
+            this.currentPlayers = entity.getCurrentPlayers();
+            this.maxPlayers = entity.getMaxPlayers();
+            this.radius = entity.getRadius();
+            this.host = entity.getHost();
+            this.isPushed = entity.isPushed();
+            double lat = loc.getLat();
+            double lng = loc.getLat();
+            double elat = entity.getLat();
+            double elng = entity.getLng();
+            this.distance = (6371*Math.acos(Math.cos(Math.toRadians(lat))
+                    * Math.cos(Math.toRadians(elat)) * Math.cos(Math.toRadians(elng) - Math.toRadians(lng))
+                    + Math.sin(Math.toRadians(lat)) * Math.sin(Math.toRadians(elat))));
+        }
+
 
     @Getter
     @NoArgsConstructor

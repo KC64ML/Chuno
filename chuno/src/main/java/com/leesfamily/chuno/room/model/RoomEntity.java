@@ -49,9 +49,9 @@ public class RoomEntity {
     @ColumnDefault("10")
     private int maxPlayers;
 
-    @Column(nullable = false, columnDefinition = "GEOMETRY")
-    @JsonDeserialize(as = Point.class)
-    private Point location;
+//    @Column(nullable = false, columnDefinition = "GEOMETRY")
+//    @JsonDeserialize(as = Point.class)
+//    private Point location;
 
     @Column(nullable = false)
     private int radius;

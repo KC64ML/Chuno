@@ -32,6 +32,7 @@ import java.util.Map;
 
 @Tag(name = "posts", description = "게시물 API")
 @RestController
+@CrossOrigin
 @RequestMapping("/room")
 @RequiredArgsConstructor
 public class RoomController {
@@ -58,9 +59,18 @@ public class RoomController {
     })
     @GetMapping
     public ResponseEntity<Map<String, Object>> getRoomList(Location loc) {
-        List<RoomResponse> roomList = roomService.getNearByRooms(loc.getLat(), loc.getLng(), 300.0);
-        Map<String, Object> res = new HashMap<>();
-        res.put("result", roomList);
+        List<RoomResponse> roomList = roomService.getNearByRooms(loc);
+        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByList(roomList);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PostMapping("/{condition}/{keyword}")
+    public ResponseEntity<Map<String, Object>> getRoomListByConditions(
+            Location loc,
+            @PathVariable("conditino") String condition,
+            @PathVariable("keyword") String keyword) {
+        List<RoomResponse> roomList = roomService.getRoomsByConditinos(loc, condition, keyword);
+        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByList(roomList);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -83,7 +93,6 @@ public class RoomController {
         log.info(pointWKT);
         Point point = (Point) new WKTReader().read(pointWKT);
         log.info(String.valueOf(point));
-        room.setLocation(point);
         RoomEntity res = roomService.insRoom(room, room.getHostId());
         RoomResponse dto = new RoomResponse(res);
         Map<String, Object> response = statusCodeGeneratorUtils.checkResultByObject(dto);
@@ -97,6 +106,15 @@ public class RoomController {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
         Map<String, Object> resMap = roomService.joinRoom(roomId, userId);
         return new ResponseEntity<>(resMap, HttpStatus.OK);
+    }
+
+    @PostMapping("/push/{roomId}")
+    public ResponseEntity<Map<String, Object>> pushRoom(
+            @PathVariable("roomId") long roomId,
+            @RequestHeader HttpHeaders requestHeader) {
+        Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
+        Map<String, Object> res = roomService.pushRoom(roomId, userId);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
 }

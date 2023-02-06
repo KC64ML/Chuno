@@ -6,6 +6,7 @@ import com.leesfamily.chuno.item.ItemService;
 import com.leesfamily.chuno.user.model.FriendDTO;
 import com.leesfamily.chuno.user.model.FriendEntity;
 import com.leesfamily.chuno.user.model.UserEntity;
+import io.swagger.models.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -115,6 +116,16 @@ public class UserController {
         Map<String, Object> res = statusCodeGeneratorUtils.checkResultByNumber(result);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+    @DeleteMapping("/friend/{userId}")
+    public ResponseEntity<Map<String, Object>> deleteFriend(
+            @PathVariable long userId,
+            @RequestHeader HttpHeaders requestHeader
+    ) {
+        Long myId = tokenUtils.getUserIdFromHeader(requestHeader);
+        int result = userService.deleteFriend(userId, myId);
+        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByNumber(result);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 
     @PostMapping("/shop/{itemId}")
     public ResponseEntity<Map<String, Object>> buyItem(
@@ -131,5 +142,23 @@ public class UserController {
     public ResponseEntity<List> getRankingList(){
         return ResponseEntity.ok(userService.getRankingList());
     }
+    @DeleteMapping
+    public ResponseEntity<Map<String, Object>> deleteUser(
+            @RequestHeader HttpHeaders requestHeader
+    ) {
+        Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
+        UserEntity user = userService.deleteUser(userId);
+        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByObject(user);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/dev/delete/{nickname}")
+    public ResponseEntity<Map<String, Object>> deleteUserForDev(
+            @PathVariable("nickname") String nickname
+    ) {
+        userService.deleteUserByNickname(nickname);
+        return null;
+    }
+
 
 }

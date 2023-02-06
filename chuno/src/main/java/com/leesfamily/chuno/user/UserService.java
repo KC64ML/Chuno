@@ -130,4 +130,26 @@ public class UserService {
     public List<UserRankingListDto> getRankingList(){
         return userRepository.getRankingList();
     }
+    public UserEntity deleteUser(Long userId) {
+        UserEntity user = userRepository.findById(userId).get();
+        try {
+            userRepository.delete(user);
+        }catch (Exception e) {
+            return null;
+        }
+        return user;
+    }
+
+    public void deleteUserByNickname(String nickname) {
+        UserEntity user = userRepository.findByNickname(nickname).get();
+        userRepository.delete(user);
+    }
+
+    public int deleteFriend(long userId, Long myId) {
+        UserEntity you = userRepository.findById(userId).get();
+        UserEntity me = userRepository.findById(myId).get();
+        FriendEntity friendEntity = friendRepository.findByFromUserAndToUser(me, you).get();
+        friendRepository.delete(friendEntity);
+        return 1;
+    }
 }
