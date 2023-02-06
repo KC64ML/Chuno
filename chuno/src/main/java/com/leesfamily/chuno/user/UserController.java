@@ -126,5 +126,10 @@ public class UserController {
         return null;
     }
 
+    // getHighPriorityList
+    @GetMapping("/priority")
+    public ResponseEntity<List> getRankingList(){
+        return ResponseEntity.ok(userService.getRankingList());
+    }
 
 }
