@@ -4,7 +4,6 @@ import FriendsView from '@/components/profile/FriendsView.vue'
 import ShopView from '@/views/ShopView.vue'
 import RankView from '@/views/RankView.vue'
 import OauthView from '@/views/OauthView.vue'
-import RegisterView from '@/views/RegisterView.vue'
 import GameView from '@/views/GameView.vue'
 
 import module from '@/router/module.js'
@@ -58,7 +57,7 @@ const routes = [
   {
     path: '/register/',
     name: 'Register',
-    component: RegisterView
+    component: () => import('@/views/RegisterView.vue')
   },
   {
     path: '/game/:roomId',

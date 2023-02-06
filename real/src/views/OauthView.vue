@@ -24,9 +24,11 @@ export default {
       console.log(data);
       // console.log(data.result);
       if (data.code == "no_email") {
-        console.log(data.result, "첫번째 시도");
+        console.log(data.result, "세 번째 시도");
         // 아직 우리 서비스에 가입하지 않았어요 회원 가입 페이지로 넘어가요 뷰에서는 패러미터를 안고 라우터뷰를 이동하면 될거에요
-        this.$router.push({ name: "Register", params: { email: data.result } });
+        this.$router.push({name:"Register", params: {
+          email: data.result,
+        }})
         // window.location.href="register/" + data.email;
       } else if (data.code == "member") {
         // 우리 서비스의 멤버에요 세션스토리지에 토큰을 저장하고 홈페이지로 이동해요
