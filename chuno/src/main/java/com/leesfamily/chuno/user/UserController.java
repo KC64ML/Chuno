@@ -126,5 +126,27 @@ public class UserController {
         return null;
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> deleteUser(
+            @PathVariable("id") long id,
+            @RequestHeader HttpHeaders requestHeader
+    ) {
+        Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
+        if(userId != id) {
+            return new ResponseEntity<>(statusCodeGeneratorUtils.checkResultByObject(null), HttpStatus.OK);
+        }
+        UserEntity user = userService.deleteUser(userId);
+        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByObject(user);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/dev/delete/{nickname}")
+    public ResponseEntity<Map<String, Object>> deleteUserForDev(
+            @PathVariable("nickname") String nickname
+    ) {
+        userService.deleteUserByNickname(nickname);
+        return null;
+    }
+
 
 }

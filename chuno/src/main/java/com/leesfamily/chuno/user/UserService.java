@@ -125,4 +125,18 @@ public class UserService {
         return result;
     }
 
+    public UserEntity deleteUser(Long userId) {
+        UserEntity user = userRepository.findById(userId).get();
+        try {
+            userRepository.delete(user);
+        }catch (Exception e) {
+            return null;
+        }
+        return user;
+    }
+
+    public void deleteUserByNickname(String nickname) {
+        UserEntity user = userRepository.findByNickname(nickname).get();
+        userRepository.delete(user);
+    }
 }
