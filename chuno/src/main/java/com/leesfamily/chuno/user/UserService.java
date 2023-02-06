@@ -7,6 +7,7 @@ import com.leesfamily.chuno.item.model.ItemEntity;
 import com.leesfamily.chuno.user.model.FriendDTO;
 import com.leesfamily.chuno.user.model.FriendEntity;
 import com.leesfamily.chuno.user.model.UserEntity;
+import com.leesfamily.chuno.user.model.UserProfile;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,6 +99,9 @@ public class UserService {
     public UserEntity putMyProfileImg( Long userId, MultipartFile img, String nickname) {
         Optional<UserEntity> option = userRepository.findById(userId);
         UserEntity userEntity = option.get();
+        if(userEntity.getProfile() == null) {
+            userEntity.setProfile(new UserProfile());
+        }
         userEntity.setNickname(nickname);
 
         String target = "profile/"+userId;
@@ -105,6 +109,7 @@ public class UserService {
         String saveFileNm = fileUtils.transferTo(img, target);
         String path = "/pic/" + target + "/" + saveFileNm;
         log.info("path : " + path);
+        log.info("userEntity.getProfile() : " + userEntity.getProfile());
         if(saveFileNm != null){
             userEntity.getProfile().setPath(path);
             userEntity.getProfile().setSaveName(saveFileNm);
