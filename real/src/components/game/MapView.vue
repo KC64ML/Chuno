@@ -1,6 +1,6 @@
 <template>
     <GMapMap
-      :center="player"
+      :center="me"
       :zoom="18"
       :options="{
         zoomControl: true,
@@ -22,50 +22,59 @@
       <div v-if="myMarker">
         <GMapMarker
           :animation=4
-          :position=this.player
+          :position=this.me
         />
         <GMapCircle
           :radius="catchRadius"
-          :center="player"
+          :center="me"
           :options="circleOptions"
         />
       </div>
       <!-- 노비문서 위치 -->
       <div
-        v-for="m in markers"
+        v-for="m in papers"
         :key="m.id"
         @click="ripPaper(m)"
       >
         <GMapMarker
           v-if="!m.ripped"
-          :icon=otherMarkerImg
+          :icon=paperMarkerImg
           :animation=1
           :position="m.position"
           :clickable="true"
         />
-
+      </div>
+      <!-- 다른 플레이어 위치 -->
+      <div
+        v-for="m in others"
+        :key="m.id"
+        @click="ripPaper(m)"
+      >
+        <GMapMarker
+          v-if="!m.ripped"
+          :icon=othersMarkerImg
+          :position="m.position"
+          :clickable="true"
+        />
       </div>
     </GMapMap>
 </template>
 
 <script>
-import { OpenVidu } from "openvidu-browser";
-const APPLICATION_SERVER_URL = process.env.RTC;
+// import { OpenVidu } from "openvidu-browser";
+// const APPLICATION_SERVER_URL = process.env.RTC;
 
 import truePaper from '@/assets/TruePaper.png'
+import othersMarker from '@/assets/runner.png'
 import randomLocation from 'random-location'
 
 export default {
   name: 'MapView',
   data() {
     return {
+      // 나랑 관련된 정보
       myMarker: true,
-      otherMarkerImg: {
-        url: truePaper,
-        scaledSize: { width: 40, height: 40 }
-      },
-      markers: [],
-      player: {
+      me: {
         lat: null,
         lng: null,
       },
@@ -76,6 +85,20 @@ export default {
         fillColor: "#0000FF",
         fillOpacity: 0.15,
       },
+      // 노비 문서 관련 정보
+      papers: [],
+      paperMarkerImg: {
+        url: truePaper,
+        scaledSize: { width: 40, height: 40 }
+      },
+      // 다른 플레이어 관련 정보
+      others: [],
+      othersMarkerImg: {
+        url: othersMarker,
+        scaledSize: { width: 40, height: 40 }
+      },
+
+      // 게임 반경 표시
       playgroundOptions: {
         strokeColor: "#FF0000",
         strokeOpacity: 0.3,
@@ -107,123 +130,25 @@ export default {
       },
 
       
-      // OpenVidu objects
-      OV: undefined,
-      session: undefined,
-      mainStreamManager: undefined,
-      myStreamManager: undefined,
-      publisher: undefined,
-      subscribers: [],
-      enemy_name: undefined,
+      // // OpenVidu objects
+      // OV: undefined,
+      // session: undefined,
+      // mainStreamManager: undefined,
+      // myStreamManager: undefined,
+      // publisher: undefined,
+      // subscribers: [],
+      // enemy_name: undefined,
 
-      // Join form
-      mySessionId: this.$route.params.roomId,
-      myUserName: "dddd",
+      // // Join form
+      // mySessionId: this.$route.params.roomId,
+      // myUserName: "dddd",
     };
   },
-  methods: {
-    // Web RTC
-    async init() {
-      this.OV = new OpenVidu();
-      this.session = this.OV.initSession();
-      this.session.on("streamCreated", ({ stream }) => {
-          const subscriber = this.session.subscribe(stream);
-          this.subscribers.push(subscriber);
-          console.log("스트림을 발견했어요!")
-          console.log("현재 사람은 " + this.subscribers.length + "명이에요")
-          this.mainStreamManager = subscriber;
-          this.mainStreamManager.addVideoElement(this.$refs.video);
-          const { connection } = this.mainStreamManager.stream;
-          console.log("커넥션 데이터에요:", connection.data)
-          const { clientData } = JSON.parse(connection.data);
-          this.enemy_name = clientData;
-          
-      });
-      this.session.on("streamDestroyed", ({ stream }) => {
-          const index = this.subscribers.indexOf(stream.streamManager, 0);
-          if (index >= 0) {
-              this.subscribers.splice(index, 1);
-          }
-          console.log("누군가가 스트림을 종료했어요!")
-          console.log("남은 사람은 " + this.subscribers.length + "명이에요")
-      });
-      this.session.on("exception", ({ exception }) => {
-          console.warn("오류ㅠㅠ" + exception);
-      });
-      await this.getToken(this.mySessionId).then(async (token) => {
-        console.log("토큰을생성해요:" + token);
-        await this.session.connect(token, { clientData: this.myUserName, role: "good" })
-          .then(() => {
-            let publisher = this.OV.initPublisher(undefined, {
-                audioSource: undefined, // The source of audio. If undefined default microphone
-                videoSource: undefined, // The source of video. If undefined default webcam
-                publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-                publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                resolution: "160x120", // The resolution of your video
-                frameRate: 30, // The frame rate of your video
-                insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-                mirror: false, // Whether to mirror your local video or not
-            });
-            this.myStreamManager = publisher;
-            this.publisher = publisher;
-            this.session.publish(this.publisher);
-            this.myStreamManager.addVideoElement(this.$refs.my_video);
-          })
-          .catch((error) => {
-            console.log("There was an error connecting to the session:", error.code, error.message);
-          });
-      });
-      window.addEventListener("beforeunload", this.leaveSession);
-  },
-  leaveSession() {
-      if (this.session) this.session.disconnect();
-
-      this.session = undefined;
-      this.mainStreamManager = undefined;
-      this.publisher = undefined;
-      this.subscribers = [];
-      this.OV = undefined;
-
-      window.removeEventListener("beforeunload", this.leaveSession);
-  },
-  
-  async getToken(mySessionId) {
-      console.log("getToken 시작")
-      const sessionId = await this.createSession(mySessionId);
-      return await this.createToken(sessionId);
-  },
-  async createSession(sessionId) {
-      console.log("createSeesion 시작")
-      const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
-          headers: { 'Content-Type': 'application/json', },
-      });
-      return response.data; // The sessionId
-  },
-  async createToken(sessionId) {
-      console.log("createToken 시작")
-      const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
-          headers: { 'Content-Type': 'application/json', },
-      });
-      return response.data; // The token
-  },
-    // Open vidu
-    // sendData() {
-      //   ssession.connect(token, "USER_DATA")
-      //   .then(
-        //     console.log(USER_DATA)
-        //   )
-        //   .catch(
-          //     console.log('err')
-          //   )
-          
-    //   session.on("streamCreated", function (event) {
-      //     session.subscribe(event.stream, "subscriber");
-      //     console.log("USER DATA: " + event.stream.connection.data);
-      //   });
-      // },
-                            
-    // 노비 문서 생성
+  methods: {                  
+    // 노비 문서 생성 -> 백에서 받아오는 API로 수정하기
     generatePapers(){
+      console.log('2. generatePapers 함수 실행')
+
       for(let i = 0; i < 10; i++) {
         const randomPoint = randomLocation.randomCirclePoint({latitude: this.roomInfo.lat, longitude: this.roomInfo.lng}, this.roomInfo.radius*0.9)
         let real
@@ -232,17 +157,39 @@ export default {
         } else {
           real = false
         }
-        this.markers.push({ 
+        this.papers.push({ 
           id: i,
           position: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
-          real,
+          real: real,
           ripped: false,
         })
       }
-      console.log(this.markers)
+      console.log(this.papers)
     },
+    generatePlayer(){
+      console.log('2. generatePapers 함수 실행')
+
+      for(let i = 0; i < 10; i++) {
+        const randomPoint = randomLocation.randomCirclePoint({latitude: this.roomInfo.lat, longitude: this.roomInfo.lng}, this.roomInfo.radius*0.9)
+        let real
+        if(i < 5){
+          real = true
+        } else {
+          real = false
+        }
+        this.others.push({ 
+          id: i,
+          position: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
+          real: real,
+          ripped: false,
+        })
+      }
+      console.log(this.papers)
+    },
+
     // 노비문서 찢기
     ripPaper(marker){
+      console.log('3. ripPaper 함수 실행')
       const distance = this.calculateDistance(marker)
       if(distance > this.catchRadius) {
         console.log('노비문서를 확인하시겠습니까?')
@@ -250,18 +197,22 @@ export default {
     },
     // 범위 밖으로 나갈 시 경고
     outOfPlayground(location){
+      console.log('4. outOfPlayground 함수 실행')
       if(this.calculateDistance(location) <= this.roomInfo.radius){
         console.log('범위밖으로 나왔습니다!! 플레이 범위 안으로 돌아가세요')
+      } else{
+        console.log('정상 범위 안 입니다.')
       }
     },
     // 내 위치
     myLocation() {
+      console.log('1. myLocation 함수 실행')
       this.$watchLocation({enableHighAccuracy: true})
       .then((coordinates) => {
-        this.player.lat = coordinates.lat
-        this.player.lng = coordinates.lng
-        console.log(this.player.lat)
-        console.log(this.player.lng)
+        this.me.lat = coordinates.lat
+        this.me.lng = coordinates.lng
+        console.log(this.me.lat)
+        console.log(this.me.lng)
         // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
         this.catch()
         // this.ripPaper()
@@ -293,9 +244,10 @@ export default {
       // console.log(window)
     },
     calculateDistance(marker){
+      console.log('!!calculateDistance 함수 실행됨')
       console.log(marker)
-      const lat1 = this.player.lat
-      const lng1 = this.player.lng
+      const lat1 = this.me.lat
+      const lng1 = this.me.lng
       const lat2 = marker.position.lat
       const lng2 = marker.position.lng
       const r = 6371; //지구의 반지름(km)
@@ -309,7 +261,8 @@ export default {
     },
     // 노비 잡기
     catch(){
-      for(const marker of this.markers){
+      console.log('!! catch 함수 실행되기는 함')
+      for(const marker of this.papers){
         const distance = this.calculateDistance(marker)
         if(distance <= this.catchRadius){
           console.log('잡을 수 있음')
@@ -326,11 +279,12 @@ export default {
     this.myLocation()
     // setInterval(this.myLocation(),1000)
     this.generatePapers()
+    this.generatePlayer()
   },
   mounted() {
     this.ripPaper()
+    this.outOfPlayground({position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}})
     // this.catch()
-    this.outOfPlayground({ position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} })
 
   },
   computed: {
