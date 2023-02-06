@@ -28,17 +28,16 @@
         <div class="container-row">
           <label for="reservation">예약</label>
           <div class="container-col">
-            <input type="date" id="reservation" v-model="date" >
             <div class="container-row">
-              <div :id="dateBtn ? 'date-btn1' : 'date-btn2'" @click="onDate"><p>오늘</p></div>
-              <div :id="dateBtn ? 'date-btn2' : 'date-btn1'" @click="onDate"><p>내일</p></div>
+              <div  class="date-btn1" :id="today ? 'date-btn1' : 'date-btn2'" @click="onDate"><p>오늘</p></div>
+              <div  class="date-btn2" :id="today ? 'date-btn2' : 'date-btn1'" @click="onDate"><p>내일</p></div>
             </div>
-            <input type="time" id="reservation" v-model="time">
+            <input type="time" id="reservation" v-model="timeInput" @change="onTime">
           </div>
         </div>
       </div>
-      <div class="container" @click="onNext">
-        <p>다음</p>
+      <div class="art-button" @click="onNext">
+        <div>다음</div>
         <img alt="btn" src="@/assets/main_button1.png">
       </div>
     </div>
@@ -62,12 +61,12 @@
         :max="1000"
         :step="50"
       ></Slider>
-      <div class="container" @click="onNext">
-        <p>이전</p>
+      <div class="art-button" @click="onNext">
+        <div>이전</div>
         <img alt="btn" src="@/assets/main_button1.png">
       </div>
-      <div class="container" @click="onCreate">
-        <p>확인</p>
+      <div class="art-button" @click="onCreate">
+        <div>확인</div>
         <img alt="btn" src="@/assets/main_button1.png">
       </div>
     </div>
@@ -91,7 +90,7 @@ export default {
       title: '',
       maxPlayer: 4,
       password: null,
-      dateBtn: true,
+      today: true,
       date: {
         year: null,
         month: null,
@@ -101,11 +100,17 @@ export default {
         hour: null,
         min: null,
       },
+      timeInput: '',
       // page2
       radius: 500,
     }
   },
   methods: {
+    // Modal off
+    onClose() {
+      this.$store.state.CreateRoomModal = false
+    },
+
     // 페이지 전환
     onNext() {
       this.page = !this.page
@@ -114,7 +119,11 @@ export default {
     // 방 생성
     // params 수정 필요
     onCreate() {
-      this.$router.push({ name: 'WaitingRoom', params: { room_num: 1 } })
+      this.axios.post(process.evn + `room`)
+        .then(res=>{
+          console.log(res)
+        })
+      this.$router.push({ name: 'game', params: { roomId: 1 } })
     },
 
     // 최대인원
@@ -132,26 +141,41 @@ export default {
         alert('플레이 최대인원은 10명입니다.')
       } 
     },
-    // Modal off
-    onClose() {
-      this.$store.state.CreateRoomModal = false
-    },
     // 오늘 내일
     onDate() {
-      this.dateBtn = !this.dateBtn
+      this.today = !this.today
       const today = new Date()
-      if(this.dateBtn){
+      console.log(today)
+      if(this.today){
         this.date.year = today.getFullYear()
-        this.date.month = today.getMonth()
-        this.date.day = today.getDay()
+        this.date.month = today.getMonth() + 1
+        this.date.day = today.getDate()
       } else{
         this.date.year = today.getFullYear()
-        this.date.month = today.getMonth()
-        this.date.day = today.getDay() + 1
+        this.date.month = today.getMonth() + 1
+        this.date.day = today.getDate() + 1
       }
       console.log(this.date.year)
       console.log(this.date.month)
       console.log(this.date.day)
+    },
+    // 예약 시간
+    onTime() {
+      const selectedTime = this.timeInput.split(':')
+      console.log(selectedTime)
+      this.time.hour = Number(selectedTime[0])
+      this.time.min = Number(selectedTime[1])
+      const today = new Date()
+      if(this.today){
+        console.log(this.today)
+        const hrs = today.getHours()
+        const min = today.getMinutes()
+        if(this.time.hour < hrs) {
+          console.log('wrong time')
+        } else if(this.time.hour == hrs && this.time.min < min) {
+          console.log('wrong time')
+        }
+      }
     }
   },
   computed(){
@@ -161,15 +185,11 @@ export default {
       }
     }
   },
-  watch: {
-    time(res){
-      const time = res.split(':')
-      this.hour = Number(time[0])
-      this.min = Number(time[1])
-      console.log(this.hour)
-      console.log(this.min)
-    }
-  }
+  // watch: {
+  //   time(){
+  //     this.onTime()
+  //   }
+  // }
 }
 </script>
 
@@ -210,14 +230,18 @@ export default {
   }
 
   #date-btn1{
-    color: #F5F5F5;
     background-color: black;
+  }
+  #date-btn2{
+    background-color: rgba(67, 64, 57, 1);
+  }
+  .date-btn1{
+    color: #F5F5F5;
     padding: 5%;
     border-radius: 20% 0 0 20%;
   }
-  #date-btn2{
+  .date-btn2{
     color: #F5F5F5;
-    background-color: #434039;
     padding: 5%;
     border-radius: 0 20% 20% 0;
   }

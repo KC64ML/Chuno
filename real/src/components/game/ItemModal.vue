@@ -47,8 +47,7 @@ export default {
 </script>
 
 <style>
-#modal {
-  /* width: 30rem; */
+/* #modal {
   padding: 5%;
   margin: 5%;
   background-color: #F5F5F5;
@@ -66,5 +65,5 @@ export default {
   top: 30%;
   left: 20%;
   font-size: 20pt;
-}
+} */
 </style>

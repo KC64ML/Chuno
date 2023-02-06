@@ -7,7 +7,8 @@ export default createStore({
     createRoomModal: false,
     passwordModal: false,
     pushModal: false,
-    itemModal: true,
+    menuModal: false,
+    itemModal: false,
     // Game
     menu: false,
     item : [],
