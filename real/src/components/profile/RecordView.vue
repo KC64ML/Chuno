@@ -7,13 +7,23 @@
         <div>전적</div>
       </div>
     </div>
-
+    <div>
+      <div>
+        {{ userInfo.chaserWinCount }}
+      </div>
+      <div>
+        {{ userInfo.runnerWinCount }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'RecordView',
+  props: {
+    userInfo: Object,
+  },
   data() {
     // record: null,
   },

@@ -9,12 +9,23 @@
         <div>타임</div>
       </div>
     </div>
+    <div>
+      <div>
+        {{ userInfo.chaserPlayCount }}
+      </div>
+      <div>
+        {{ userInfo.runnerPlayCount }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'PlayTimeView',
+  props: {
+    userInfo: Object,
+  },
   data() {
     // playTime: null,
   },

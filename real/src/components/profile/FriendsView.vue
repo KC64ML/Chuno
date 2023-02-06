@@ -39,6 +39,16 @@ export default {
   },
   methods: {
     getFriends(){
+      const token = sessionStorage.token
+      this.axios.get(process.env + 'user/friend', {headers: {Authorization: token}})
+        .catch((res) => {
+          const code = res.data.code
+          if(code) {
+            this.friends = res.data.result
+          } else {
+            console.log('실패')
+          }
+        })
       this.friends = [
         {
           friendId: 1,

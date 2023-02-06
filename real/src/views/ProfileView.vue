@@ -5,14 +5,27 @@
   <EditProfileModal v-if="editProfileModal"/>
   
   <HeaderVue
-    :title="'내 프로필'"
+    v-if="me"
+    :title="'프로필'"
+  ></HeaderVue>
+  <HeaderVue
+    v-if="!me"
+    :title= "userInfo.nickname"
   ></HeaderVue>
 
   <div style="height: 75%; width:300px;">
-    <MyProfileView @on-edit="onEdit"/>
+    <MyProfileView 
+      @on-edit="onEdit"
+      :me="me"
+      :userInfo="userInfo"
+      />
     <div class="container">
-      <PlayTimeView/>
-      <RecordView/>
+      <PlayTimeView
+        :userInfo="userInfo"
+      />
+      <RecordView
+        :userInfo="userInfo"
+      />
     </div>
     <div id="checkout">
       <span @click="onDelete">회원탈퇴</span> |
@@ -25,7 +38,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import HeaderVue from '@/components/HeaderVue.vue'
 import MyProfileView from '../components/profile/MyProfile.vue'
 import PlayTimeView from '@/components/profile/PlayTimeView.vue'
@@ -51,20 +63,42 @@ export default {
       logoutModal: false,
       deleteAccountModal: false,
       editProfileModal: false,
+      me: true,
+      userInfo: {
+        nickname: '바보',
+        runnerPlayCount: 1,
+        chaserPlayCount: 1,
+        runnerWinCount: 1,
+        chaserWinCount: 1,
+      },
     }
   },
   methods: {
     getUser(){
       console.log('getuser')
-      this.axios.get(process.env + 'user', { headers: { Authorization: 'token' } })
-        .catch( res => {
+      const token = sessionStorage.token
+      const uid = this.$route.params.uid
+      this.axios.get(process.env + 'user', { headers: { Authrization: token } })
+        .then((res) => {
+          console.log(res)
           const code = res.data.code
-          console.log(code)
-          if(code) {
-            console.log('성공')
-          } else{ 
+          if (code) {
+            if(res.data.result.userId == uid){
+              this.userInfo = res.data.result
+              this.me = true
+            } else{
+              this.axios.get(process.env + 'user/' + uid, { headers: { Authrization: token } })
+              .then((res) => {
+                  this.userInfo = res.data.result
+                  this.me = false
+                })
+            }
+          } else {
             console.log('실패')
           }
+        })
+        .catch(()=>{
+          console.log('실패')
         })
     },
     onLogout() {
@@ -93,4 +127,5 @@ export default {
 #checkout{
   text-align: center;
 }
+
 </style>

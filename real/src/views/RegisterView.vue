@@ -86,6 +86,7 @@ export default {
       var frm = new FormData()
       frm.append('path', this.path)
       frm.append('nickname', this.nickname)
+      frm.append('email', this.$route.params.email)
       this.axios.post(process.evn + 'kakao/register', frm, {
         headers: {
           Authorization: 'token',
@@ -122,7 +123,7 @@ export default {
         const nick = this.nickname
         // const email = new URL(window.location.href).searchParams.get('email');
         const email = this.$route.params.email
-        var token = await this.axios.post(process.env + "register", {"nickname": nick, "email": email});
+        var token = await this.axios.post(process.env + "/kakao/register", {"nickname": nick, "email": email});
         console.log("회원가입 완료", token.data);
         // token에 토큰이 담겨있어요 쎄션스토리지에 넣어서 사용해하세요
         sessionStorage.setItem("token", token.data);

@@ -1,36 +1,35 @@
 <template>
   <EditProfileModal v-if="modal"/>
 
-  <div id="myProfile">  
-    <div class="container-col">
-
+  <!-- <div>   -->
+    <div class="container-col" id="myProfile">
       <div class="container-row">
         <img src="@/assets/profile_default.svg" alt="profile pic" class="uploadedImg">
         <div>
-          <p>My Profile</p>
-          <p>nickname</p>
+          <p style="font-size: 20pt;">{{ userInfo.nickname }}</p>
+          <p>레벨 | 소지금</p>
         </div>
       </div>
       
-      <!-- <div class="container-row"> -->
+      <div class="container-row" v-if="me">
         <div class="button" @click="onModal">
           <p>프로필 편집</p>
         </div>
         <div class="button" @click="this.$router.push({name: 'friends', params: {uid: 1}})">
           <p>친구 관리</p>
         </div>
-      <!-- </div> -->
-      <!-- <div class="container-row" @click="addFriend"> -->
-        <div class="button" v-if="!friend" @click="addFriend">
+      </div>
+      <div v-if="!me">
+        <div class="button profile" v-if="!friend" @click="addFriend(this.$route.params.uid)">
           <p>친구 추가</p>
         </div>
-        <div class="button" v-if="friend" @click="addFriend">
+        <div class="button profile" v-if="friend" @click="deleteFriend(this.$route.params.uid)">
           <p>친구 끊기</p>
         </div>
-      <!-- </div> -->
+      </div>
 
     </div>
-  </div>
+  <!-- </div> -->
 
 </template>
 <script>
@@ -40,6 +39,10 @@ export default {
   name: 'MyProfile',
   components: {
     EditProfileModal,
+  },
+  props: {
+    me: Boolean,
+    userInfo: Object,
   },
   data() {
     return {
@@ -52,34 +55,69 @@ export default {
       this.modal = true
       console.log(this.modal)
     },
-    addFriend() {
-      this.friend = !this.friend
-    }
+    addFriend(yourUid) {
+      const token = sessionStorage.token
+      let myUid
+      this.axios.post(process.env + 'user', { headers: { Authorization: token } })
+        .then((res) => {
+          myUid = res.data.result.userId
+        })
+      
+      const data = { toUserId: myUid, fromUserId: yourUid }
+      this.axios.get()
+      if (!this.friend) {
+        this.axios.post(process.env + 'user/friend', data, { headers: { Authorization: token } })
+          .then((res) => {
+            const code = res.data.code
+            if(code) {
+              this.friend = !this.friend
+            } else {
+              console.log('code error')
+            }
+          })
+        }
+      },
+    deleteFriend(yourUid) {
+      const token = sessionStorage.token
+      this.axios.delete(process.env +'user/friend/' + yourUid, { headers: { Authorization: token } })
+      .then((res) => {
+        const code = res.data.code
+        if(code) {
+          this.friend = !this.friend
+        } else {
+          console.log('code error')
+        }
+        })
+    },
+
   },
 }
 </script>
 
-<style>
+<style scoped>
 #myProfile {
-  display: flex;
-  flex-direction: row;
+  /* display: flex; */
+  /* flex-direction: row; */
   border-radius: 10%;
   background-color: #F5F5F5;
+  justify-content: space-between;
+  padding: 5% 0;
+  margin: 5% 0;
 }
 .button {
   background-color: #1D182C;
   color: #F5F5F5;
   border-radius: 10%;
-}
-.button p{
   text-align: center;
   margin: 3%;
+  padding: 3% 5%;
 }
 .container-row {
   display: flex;
   flex-direction: row;
   /* border-radius: 10%; */
   /* background-color: #F5F5F5; */
+  /* justify-content: left; */
   justify-content: space-around;
 }
 
@@ -89,8 +127,7 @@ export default {
   /* align-items: center; */
   /* border-radius: 10%; */
 }
-.container-row #button{
-  width: max-content;
-  text-align: center;
+.profile {
+  margin:0 10%;
 }
 </style>
