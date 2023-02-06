@@ -21,11 +21,8 @@ export default {
   name: 'LogoutModal',
   data() {
     return {
-      
+      item: []
     }
-  },
-  props :{
-    item: Object,
   },
   methods: {
     itemYes() {
@@ -39,7 +36,8 @@ export default {
       this.$store.state.itemModal = false
     },
   },
-  created(){
+  mounted(){
+    this.item = this.$store.state.item
     console.log(this.item)
   },
   

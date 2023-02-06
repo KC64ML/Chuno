@@ -102,7 +102,7 @@ export default {
         })
     },
     onLogout() {
-      this.logoutModal = !this.logoutModal
+      this.$store.state.logoutModal = !this.$store.state.logoutModal
     },
     onDelete() {
       this.deleteAccountModal = !this.deleteAccountModal

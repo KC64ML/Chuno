@@ -114,7 +114,7 @@ export default {
         console.log('img added')
         this.img = event.target.result
         console.log(event)
-        // console.log(this.img)
+        console.log(this.img)
       }
     },
     // 닉네임 유효성 검사

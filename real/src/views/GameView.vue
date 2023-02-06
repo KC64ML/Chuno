@@ -1,18 +1,15 @@
 <template>
   <div>
-    <MenuView v-if="this.$store.state.menu" class="menu-window"/>
+    <!-- <MenuView class="menu-window"/> -->
+    <MenuView class="menu-window" v-if="this.$store.state.menu == true"/>
     
     <!-- <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue> -->
     <MapView />
 
     <!-- 아이템 사용 -->
-    <div v-if="this.$store.state.itemModal">
-      <ItemModal 
-        v-for="item in this.$store.state.item"
-        :key="item.name"
-        :item="item"
-      />
-    </div>
+    <!-- <div v-if="this.$store.state.itemModal"> -->
+    <ItemModal v-if="this.$store.state.itemModal"/>
+    <!-- </div> -->
     
     <div id="footer_container">
       <div class="menu_box flex_center" @click="this.$router.push('/home')">
@@ -88,7 +85,6 @@ $button_width: 60px;
 
 .menu-window {
   float: right;
-  // position: absolute;
   position:absolute; 
   bottom: 60px;
 }

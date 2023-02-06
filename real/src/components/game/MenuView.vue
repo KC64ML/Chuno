@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="game-menu">
-      <p id="menu-title">아이템</p>
+      <!-- <p id="menu-title">아이템</p> -->
       <div
         id="menu-item"
         v-for="item in items"
@@ -11,7 +11,7 @@
         <img :src="item.imgPath" alt="item">
         <p>{{ item.name }}</p>
       </div>
-      <p id="menu-title">메뉴</p>
+      <!-- <p id="menu-title">메뉴</p>
       <div id="menu-item">
         <img src="@/assets/game_search.png" alt="search">
         <p>검색</p>
@@ -19,7 +19,7 @@
       <div id="menu-item">
         <img src="@/assets/game_whisper.png" alt="whisper">
         <p>귓속말</p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -47,18 +47,59 @@ export default {
             console.log('error')
           }
         })
+        .catch(() => {
+          console.log('error')
+        })
+      
     },
     // 아이템 사용
     useItem(item) {
-      console.log(item)
-      this.$store.state.item = [item]
-      this.$store.dispatch('useItem')
+      console.log('아이템 썻다')
+      console.log(this.item)
+      this.$store.state.item = item
+      console.log(this.$store.state.item)
+      // this.$store.dispatch('useItem')
       this.$store.state.menu = false
+      this.$store.state.itemModal = true
 
     }
   },
-  mounted(){
-    this.getItems()
+  created(){
+    // this.getItems()
+    this.items = [
+      {
+        "id": 1,
+        "name": "천리안",
+        "price": 1500,
+        "description": "자신의 위치를 드러내지 않고 가장 가까운 추노꾼의 위치를 확인할 수 있다.",
+        "imgPath": "",
+        "forRunner": 1
+      },
+      {
+        "id": 2,
+        "name": "위장",
+        "price": 2000,
+        "description": "추노꾼이 자신을 잡을 수 있는 범위를 축소한다.",
+        "imgPath": "",
+        "forRunner": 1
+      },
+      {
+        "id": 3,
+        "name": "확실한 정보통",
+        "price": 1000,
+        "description": "진짜 노비문서의 위치를 확인할 수 있다.",
+        "imgPath": "",
+        "forRunner": 1
+      },
+      {
+        "id": 4,
+        "name": "먹물탄",
+        "price": 1300,
+        "description": "먹물을 뿌려 내 화면을 가릴 수 있다.",
+        "imgPath": "",
+        "forRunner": 1
+      }
+    ]
   }
 }
 
