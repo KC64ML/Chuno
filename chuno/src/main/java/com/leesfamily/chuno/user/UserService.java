@@ -139,4 +139,12 @@ public class UserService {
         UserEntity user = userRepository.findByNickname(nickname).get();
         userRepository.delete(user);
     }
+
+    public int deleteFriend(long userId, Long myId) {
+        UserEntity you = userRepository.findById(userId).get();
+        UserEntity me = userRepository.findById(myId).get();
+        FriendEntity friendEntity = friendRepository.findByFromUserAndToUser(me, you).get();
+        friendRepository.delete(friendEntity);
+        return 1;
+    }
 }

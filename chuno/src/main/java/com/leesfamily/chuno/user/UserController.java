@@ -6,6 +6,7 @@ import com.leesfamily.chuno.item.ItemService;
 import com.leesfamily.chuno.user.model.FriendDTO;
 import com.leesfamily.chuno.user.model.FriendEntity;
 import com.leesfamily.chuno.user.model.UserEntity;
+import io.swagger.models.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -112,6 +113,16 @@ public class UserController {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
         friend.setFromUserId(userId);
         int result = userService.requestFriend(friend);
+        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByNumber(result);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+    @DeleteMapping("/friend/{userId}")
+    public ResponseEntity<Map<String, Object>> deleteFriend(
+            @PathVariable long userId,
+            @RequestHeader HttpHeaders requestHeader
+    ) {
+        Long myId = tokenUtils.getUserIdFromHeader(requestHeader);
+        int result = userService.deleteFriend(userId, myId);
         Map<String, Object> res = statusCodeGeneratorUtils.checkResultByNumber(result);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
