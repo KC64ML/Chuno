@@ -28,7 +28,6 @@
           <p>친구 끊기</p>
         </div>
       </div>
-
     </div>
   <!-- </div> -->
 
@@ -127,6 +126,11 @@ export default {
   text-align: center;
   margin: 3%;
   padding: 3% 5%;
+}
+#uploadedImg{
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
 }
 .container-row {
   display: flex;
