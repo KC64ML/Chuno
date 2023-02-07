@@ -128,20 +128,6 @@ export default {
         host_id: "gogo",
         room_start_time: new Date(2023, 1, 1, 13, 20, 0)
       },
-
-      
-      // // OpenVidu objects
-      // OV: undefined,
-      // session: undefined,
-      // mainStreamManager: undefined,
-      // myStreamManager: undefined,
-      // publisher: undefined,
-      // subscribers: [],
-      // enemy_name: undefined,
-
-      // // Join form
-      // mySessionId: this.$route.params.roomId,
-      // myUserName: "dddd",
     };
   },
   methods: {                  

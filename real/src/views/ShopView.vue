@@ -3,8 +3,13 @@
     :title="'상점'"
   ></HeaderVue>
   <div class="container-col" style="height:75%">
+    <div class="container" id="money">
+      <img src="@/assets/nyang.svg" alt="nyang">
+      {{ money }}
+    </div>
     <SelectedItemView
       :item="selected"
+      :money="money"
     />
     <div class="container-row">
       <div class="box" style="margin-right: 3%">
@@ -55,11 +60,13 @@
           forRunner: ' ',
         },
         items:[],
+        money: 0,
       }
     },
     methods: {
       onSelect(res) {
         this.selected = res
+        console.log(this.selected)
       },
       getItems(){
         this.axios.get(
@@ -75,7 +82,29 @@
               console.log('error')
             }
           })
+          .catch((e)=>{
+            console.log(e)
+          })
       },
+      getUser(){
+        const token = sessionStorage.token
+        this.axios.get(
+          process.env.VUE_APP_SPRING + "item", { headers: { Authorization: token } }
+          )
+          .then((res) => {
+            const user = res.data.result
+            const code = res.data.code
+            if (code) {
+              this.money = user.money
+              console.log(this.money)
+            } else {
+              console.log('code error')
+            }
+          })
+          .catch((e)=>{
+            console.log(e)
+          })
+      }
     },
     mounted() {
       this.getItems()
@@ -92,4 +121,11 @@
   margin: 10%;
   text-align: center;
 }
+#money{
+  width: 5rem;
+  border-radius: 30%;
+  background-color: #F5F5F5;
+  padding: 0 5%;
+}
+
 </style>

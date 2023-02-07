@@ -78,7 +78,7 @@ export default {
       console.log('getuser')
       const token = sessionStorage.token
       const uid = this.$route.params.uid
-      this.axios.get(process.env + 'user', { headers: { Authrization: token } })
+      this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authrization: token } })
         .then((res) => {
           console.log(res)
           const code = res.data.code
@@ -87,18 +87,18 @@ export default {
               this.userInfo = res.data.result
               this.me = true
             } else{
-              this.axios.get(process.env + 'user/' + uid, { headers: { Authrization: token } })
+              this.axios.get(process.env.VUE_APP_SPRING + 'user' + uid, { headers: { Authrization: token } })
               .then((res) => {
                   this.userInfo = res.data.result
                   this.me = false
                 })
             }
           } else {
-            console.log('실패')
+            console.log('code err')
           }
         })
-        .catch(()=>{
-          console.log('실패')
+        .catch((e)=>{
+          console.log(e)
         })
     },
     onLogout() {
