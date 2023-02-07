@@ -83,7 +83,8 @@ export default {
       if (this.one_file) {
         const formData = new FormData();
         formData.append("file", this.oneFile);
-        await this.axios.put(process.env.VUE_APP_SPRING + "user/profile", formData, {headers: {'Content-Type': 'multipart/form-data', Authorization: token}})
+        formData.append("nickname", this.email);
+        await this.axios.put(process.env.VUE_APP_SPRING + "user/profile", formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: token } })
       }
       alert("등록완료");
       this.$router.push({ name: "home" });
