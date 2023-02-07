@@ -1,5 +1,6 @@
 <template>
-    <NewCreateRoomModal v-if="modal_show" @modal_off="modalOff()" />
+    <!-- <CreateRoomModal></CreateRoomModal> -->
+    <NewCreateRoomModal v-if="modal_show" @modal_off="modalOff()" :player="{'lat': lat, 'lng': lng}"/>
     <HeaderVue :title="'홈'"></HeaderVue>
     <div id="room_box" style="height: 75%; overflow: scroll;">
         <room-card v-for="(room, idx) in roomList" :key="idx" v-bind:room="room"></room-card>
@@ -8,22 +9,23 @@
 </template>
 
 <script>
+// import CreateRoomModal from "@/components/home/CreateRoomModal.vue"
 import HeaderVue from "@/components/HeaderVue.vue"
 import RoomCard from "@/components/RoomCard.vue"
 import NewCreateRoomModal from '@/components/home/NewCreateRoomModal.vue'
-// import variables from "@/assets/scss/_variable.scss"
 
 export default {
     components: {
+        // CreateRoomModal,
         HeaderVue,
         RoomCard,
         NewCreateRoomModal,
     },
     data() {
         return {
-            modal_show: true,
-            lat: undefined,
-            lng: undefined,
+            modal_show: false,
+            lat: 0,
+            lng: 0,
             room_title: "",
             roomSearch: "",
             roomList: [],
