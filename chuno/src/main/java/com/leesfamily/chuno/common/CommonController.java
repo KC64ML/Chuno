@@ -15,7 +15,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 
 @RestController
-@RequestMapping
+@RequestMapping("/resources")
 public class CommonController {
 
     @Value("${spring.servlet.multipart.location}") //
