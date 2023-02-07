@@ -21,7 +21,7 @@ export default {
         code,
         { headers: { "Content-Type": "text/plain" } }
       );
-      console.log(data);
+      // console.log(data);
       // console.log(data.result);
       if (data.code == "no_email") {
         console.log(data.result, "네 번째 시도");

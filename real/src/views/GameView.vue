@@ -1,10 +1,23 @@
 <template>
-  <MenuView v-if="menu" style="position:absolute; bottom: 60px;"/>
+  <MenuView 
+    v-if="menu" 
+    @use-item="useItem"
+    style="position:absolute; bottom: 60px;"
+  />
+  <ItemModal 
+    v-if="itemModal" 
+    :usedItem="usedItem" 
+    @item-yes="itemYes"
+    @item-no="itemNo"
+    style="position:absolute; bottom: 60px;"/>
   <div>
+    
     <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue>
     <MapView />
 
-    
+    <!-- 아이템 사용 -->
+    <!-- <div v-if="this.$store.state.itemModal"> -->
+    <!-- </div> -->
     
     <div id="footer_container">
       <div class="menu_box flex_center" @click="this.$router.push('/home')">
@@ -28,6 +41,7 @@
 import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue'
 import MenuView from '@/components/game/MenuView.vue'
+import ItemModal from '@/components/game/ItemModal.vue'
 
 export default {
 
@@ -36,20 +50,36 @@ export default {
     MapView,
     OpenViduVue,
     MenuView,
+    ItemModal,
   },
   data() {
     return {
-      menu: true,
-      my_cam_modal: true,
+      my_cam_modal: false,
+      menu: false,
+      itemModal: false,
+      usedItem: [],
     }
   },
   methods: {
     onMenu() {
       console.log('menu clicked')
       this.menu = !this.menu
+      console.log(this.menu)
     },
     myCam() {
       this.my_cam_modal = !this.my_cam_modal
+    },
+    useItem(item){
+      this.usedItem = item
+      console.log('아이템 사용')
+      console.log(item)
+    },
+    itemYes(){
+      this.itemModal = false
+      //아이템 사용
+    },
+    itemNo(){
+      this.itemModal = false
     },
   }
 }
@@ -76,9 +106,11 @@ $button_width: 60px;
   width: 100%;
 }
 
-// .menu {
-//     height: 25px;
-// }
+.menu-window {
+  float: right;
+  position:absolute; 
+  bottom: 60px;
+}
 .menu_box {
   width: 20%;
   display: flex;

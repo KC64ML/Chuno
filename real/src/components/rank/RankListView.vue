@@ -9,15 +9,15 @@
       <th>승률</th>
     </tr>
     <tr
-      v-for="user in users.filter((u) => u.rank > 3)"
-      :key="user.nickname"
+      v-for="(user, i) in users"
+      :key="i"
     >
-      <td><span>{{ user.rank }}</span></td>
-      <td @click="onProfile"><span>{{ user.nickname }}</span></td>
-      <td><span>{{ user.level }}</span></td>
-      <td><span>{{ user.runner_win_count }}</span></td>
-      <td><span>{{ user.chaser_win_count }}</span></td>
-      
+      <td v-if="i>=3"><span>{{ i + 1 }}</span></td>
+      <td v-if="i>=3" @click="onProfile"><span>{{ user.nickname }}</span></td>
+      <td v-if="i>=3"><span>{{ user.level }}</span></td>
+      <td v-if="i>=3"><span>{{ user.runnerWinCount }}</span></td>
+      <td v-if="i>=3"><span>{{ user.chaserWinCount }}</span></td>
+      <td v-if="i>=3"><span>{{ user.userCountAvg }}</span></td>
     </tr>
   </table>
 
@@ -26,87 +26,10 @@
 <script>
 export default {
   name: 'RankListView',
-  data() {
-    return {
-      users: [],
-    }
-  },
-  methods: {
-    getUsers() {
-      this.users = [
-        {
-          rank: 1 ,
-          nickname: '이채은',
-          level: 3,
-          runner_win_count: 12,
-          chaser_win_count: 132,
-          // odds: 
-        },
-        {
-          rank: 2,
-          nickname: '이아름스스',
-          level: 12,
-          runner_win_count: 3,
-          chaser_win_count: 5435
-          // odds: 
-        },
-        {
-          rank: 3,
-          nickname: '이경창',
-          level: 1,
-          runner_win_count: 9,
-          chaser_win_count: 76,
-          // odds: 
-        },
-        {
-          rank: 4,
-          nickname: '이주찬',
-          level: 75,
-          runner_win_count: 66,
-          chaser_win_count: 72,
-          // odds: 
-        },
-        {
-          rank: 5,
-          nickname: '이동하',
-          level: 65,
-          runner_win_count: 21,
-          chaser_win_count: 34,
-          // odds: 
-        },
-        {
-          rank: 6,
-          nickname: '이석훈',
-          level: 90,
-          runner_win_count: 2,
-          chaser_win_count: 3,
-          // odds: 
-        },
-        {
-          rank: 7,
-          nickname: '투썸',
-          level: 35,
-          runner_win_count: 51,
-          chaser_win_count: 3,
-          // odds: 
-        },
-        {
-          rank: 8,
-          nickname: '플레이스스슷',
-          level: 5,
-          runner_win_count: 1,
-          chaser_win_count: 43,
-          // odds: 
-        },
-      ]
-    },
-    onProfile() {
-      this.$router.push({ name: 'profile' })
-    }
-  },
-  mounted() {
-    this.getUsers()
+  props: {
+    users: Object
   }
+    
 }
 </script>
 
