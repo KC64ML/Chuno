@@ -107,7 +107,7 @@ public class UserService {
         String target = "profile/"+userId;
 
         String saveFileNm = fileUtils.transferTo(img, target);
-        String path = "/pic/" + target + "/" + saveFileNm;
+        String path = target + "/" + saveFileNm;
         log.info("path : " + path);
         log.info("userEntity.getProfile() : " + userEntity.getProfile());
         if(saveFileNm != null){
