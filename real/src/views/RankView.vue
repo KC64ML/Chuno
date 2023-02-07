@@ -35,8 +35,6 @@ export default {
   },
   methods:{
     getRank(){
-      // const token = sessionStorage.token
-      console.log('getRank 실행됨')
       this.axios.get(process.env.VUE_APP_SPRING + 'user/priority',)
       .then((res) => {
         this.users = res.data
