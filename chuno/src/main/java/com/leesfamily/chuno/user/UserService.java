@@ -123,7 +123,7 @@ public class UserService {
         ItemEntity item = itemRepository.findById(itemId).get();
         user.getInventory().add(item);
         UserEntity result = userRepository.saveAndFlush(user);
-        return 0;
+        return 1;
     }
 
     public Long isExistNickname(String nickname) {

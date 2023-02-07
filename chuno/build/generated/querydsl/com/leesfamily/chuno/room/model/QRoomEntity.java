@@ -36,8 +36,6 @@ public class QRoomEntity extends EntityPathBase<RoomEntity> {
 
     public final NumberPath<Double> lng = createNumber("lng", Double.class);
 
-    public final ComparablePath<org.locationtech.jts.geom.Point> location = createComparable("location", org.locationtech.jts.geom.Point.class);
-
     public final NumberPath<Integer> maxPlayers = createNumber("maxPlayers", Integer.class);
 
     public final StringPath password = createString("password");
