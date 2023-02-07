@@ -64,13 +64,7 @@ export default {
       deleteAccountModal: false,
       editProfileModal: false,
       me: true,
-      userInfo: {
-        nickname: '바보',
-        runnerPlayCount: 1,
-        chaserPlayCount: 1,
-        runnerWinCount: 1,
-        chaserWinCount: 1,
-      },
+      userInfo: []
     }
   },
   methods: {

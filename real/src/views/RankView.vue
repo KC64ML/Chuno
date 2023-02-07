@@ -38,12 +38,7 @@ export default {
       const token = sessionStorage.token
       this.axios.get(process.env.VUE_APP_SPRING + 'user/priority', { headers: { Authorization: token } })
       .then((res) => {
-        const code = res.data.code
-        if(code) {
-          this.users = res.data.result
-        } else {
-          console.log('code error')
-        }
+        this.users = res.data.result
       })
       .catch(() => {
         console.log('error')
