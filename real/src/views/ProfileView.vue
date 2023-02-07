@@ -73,7 +73,7 @@ export default {
       // 프로필 주인 아이디
       const uid = this.$route.params.uid
       // 내 정보 불러와서
-      this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authrization: token } })
+      this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
         .then((res) => {
           console.log('-----------내 정보 불러오기----------')
           console.log(res)
