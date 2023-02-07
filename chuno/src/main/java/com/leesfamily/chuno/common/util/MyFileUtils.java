@@ -16,7 +16,7 @@ public class MyFileUtils {
 
     Logger logger = LoggerFactory.getLogger(MyFileUtils.class);
 
-    @Value("${spring.servlet.multipart.location}") // "C:\res_file\chuno"
+    @Value("${spring.servlet.multipart.location}") //
     private String uploadFilePath;
 
     // make folder
