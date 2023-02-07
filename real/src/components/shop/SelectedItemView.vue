@@ -1,8 +1,6 @@
 <template>
-  <div class="box container-row" style="width:80vw; height: 20vh; margin:5% 0;">
-    <div>
-      <img :src="item.img_path" alt="selected" style="width: 70px;">
-    </div>
+  <div class="box container-row selected" style="width:80vw; height: 20vh; margin:5% 0;">
+    <img :src="URL + 'resources/images?path=' + item.imgPath" alt="item" style="height:60px;">
     <div>
       <p>{{ item.name }}</p>
       <p>{{ item.description }}</p>
@@ -21,6 +19,11 @@ export default {
   props: {
     item: Object,
     money: Number,
+  },
+  data(){
+    return {
+      URL: process.env.VUE_APP_SPRING,
+    }
   },
   methods: {
     buy(){
@@ -45,6 +48,9 @@ export default {
   background-color: #F5F5F5;
   border-radius: 10%;
   padding: 5%;
+}
+.selected {
+  vertical-align: middle;
 }
 .button-black{
   background-color: #1D182C;

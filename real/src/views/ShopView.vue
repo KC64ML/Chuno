@@ -77,6 +77,7 @@
             const code = res.data.code
             if (code) {
               this.items = items
+              console.log("여기 아이템");
               console.log(this.items)
             } else {
               console.log('error')
@@ -106,7 +107,7 @@
           })
       }
     },
-    mounted() {
+    created() {
       this.getItems()
     }
   }
