@@ -36,9 +36,11 @@
           const token = sessionStorage.token
           this.axios.post(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
             .then((res) => {
+
               const code = res.data.result
               if(code) {
                 this.userInfo = res.data.result
+                console.log(res.data)
               } else {
                 console.log('code err')
               }
@@ -57,8 +59,7 @@
     #container {
         background-color: black;
         height: $footer_height;
-        width: 100vw;
-        display: flex;
+        width: 1;
         justify-content: space-around;
         align-items: center;
     }
