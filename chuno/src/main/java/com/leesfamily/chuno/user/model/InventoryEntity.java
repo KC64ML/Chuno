@@ -19,6 +19,7 @@ import javax.persistence.*;
 @DynamicUpdate
 public class InventoryEntity {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inventory_key")

@@ -6,6 +6,7 @@ import com.leesfamily.chuno.item.ItemService;
 import com.leesfamily.chuno.user.model.FriendDTO;
 import com.leesfamily.chuno.user.model.FriendEntity;
 import com.leesfamily.chuno.user.model.UserEntity;
+import com.leesfamily.chuno.user.model.dto.UserInventoryResponse;
 import io.swagger.models.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -50,7 +51,7 @@ public class UserController {
             @RequestHeader HttpHeaders requestHeader) {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
         log.info("userId : " + userId);
-        UserEntity user = userService.getProfile(userId);
+        UserInventoryResponse user = userService.getProfile(userId);
         Map<String, Object> res = statusCodeGeneratorUtils.checkResultByObject(user);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -61,7 +62,7 @@ public class UserController {
     )
     @GetMapping("/{userId}")
     public ResponseEntity<Map<String, Object>> getOtherProfile(@PathVariable("userId") Long userId) {
-        UserEntity user = userService.getProfile(userId);
+        UserInventoryResponse user = userService.getProfile(userId);
         Map<String, Object> res = statusCodeGeneratorUtils.checkResultByObject(user);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -97,7 +98,7 @@ public class UserController {
     @PutMapping(value = "/profile",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> putMyProfileImg(
-            @RequestPart(value = "file") MultipartFile file,
+            @RequestPart(value = "file", required = false) MultipartFile file,
             @RequestPart(value = "nickname") String nickname,
             @RequestHeader HttpHeaders requestHeader) {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);

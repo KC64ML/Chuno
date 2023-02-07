@@ -1,5 +1,6 @@
 package com.leesfamily.chuno.user.model.dto;
 
+import com.leesfamily.chuno.item.model.ItemEntity;
 import com.leesfamily.chuno.user.model.InventoryEntity;
 import com.leesfamily.chuno.user.model.UserEntity;
 import com.leesfamily.chuno.user.model.UserProfile;
@@ -29,7 +30,8 @@ public class UserInventoryResponse {
     private boolean isManager;
     private int money;
     private UserProfile profile;
-    public UserInventoryResponse toUserInventoryResponse(UserEntity user) {
+    private int[] items;
+    public static UserInventoryResponse toUserInventoryResponse(UserEntity user) {
         return UserInventoryResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -46,8 +48,11 @@ public class UserInventoryResponse {
                 .profile(user.getProfile())
                 .build();
     }
-    private int[] items;
     public void countingItems(List<InventoryEntity> inventory) {
-        this.items = new int[inventory.size()];
+        this.items = new int[ItemEntity.AMOUNT_OF_ITEMS];
+        inventory.forEach((item) -> {
+            int itemNum = Integer.parseInt(Long.toString(item.getId()));
+            this.items[itemNum]++;
+        });
     }
 }

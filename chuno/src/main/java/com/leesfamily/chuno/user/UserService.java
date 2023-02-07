@@ -5,6 +5,7 @@ import com.leesfamily.chuno.common.util.TokenUtils;
 import com.leesfamily.chuno.item.ItemRepository;
 import com.leesfamily.chuno.item.model.ItemEntity;
 import com.leesfamily.chuno.user.model.*;
+import com.leesfamily.chuno.user.model.dto.UserInventoryResponse;
 import com.leesfamily.chuno.user.model.dto.UserRankingListDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -36,12 +37,15 @@ public class UserService {
     private final InventoryEntityRepository inventoryEntityRepository;
 
 
-    public UserEntity getProfile(Long id) {
+    public UserInventoryResponse getProfile(Long id) {
         Optional<UserEntity> user = userRepository.findById(id);
+        List<InventoryEntity> inventoryList = inventoryEntityRepository.findAllByUser(user.get());
+        UserInventoryResponse userInventoryResponse = UserInventoryResponse.toUserInventoryResponse(user.get());
+        userInventoryResponse.countingItems(inventoryList);
         if(user.isEmpty()) {
             return null;
         }else {
-            return user.get();
+            return userInventoryResponse;
         }
     }
 
@@ -116,16 +120,20 @@ public class UserService {
             userEntity.setProfile(new UserProfile());
         }
         userEntity.setNickname(nickname);
+        if(img != null) {
+            String target = "profile/"+userId;
 
-        String target = "profile/"+userId;
-
-        String saveFileNm = fileUtils.transferTo(img, target);
-        String path = target + "/" + saveFileNm;
-        log.info("path : " + path);
-        log.info("userEntity.getProfile() : " + userEntity.getProfile());
-        if(saveFileNm != null){
-            userEntity.getProfile().setPath(path);
-            userEntity.getProfile().setSaveName(saveFileNm);
+            String saveFileNm = fileUtils.transferTo(img, target);
+            String path = target + "/" + saveFileNm;
+            log.info("path : " + path);
+            log.info("userEntity.getProfile() : " + userEntity.getProfile());
+            if(saveFileNm != null){
+                userEntity.getProfile().setPath(path);
+                userEntity.getProfile().setSaveName(saveFileNm);
+            }
+        }
+        if(img == null) {
+            userEntity.setProfile(null);
         }
         userRepository.saveAndFlush(userEntity);
         return userEntity;
