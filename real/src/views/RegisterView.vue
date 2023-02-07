@@ -51,9 +51,16 @@ export default {
   },
   methods: {
 
-    async check() {
+    check() {
       console.log(this.nickname);
-      this.can_use = await this.axios.get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname);
+      this.axios.get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname)
+        .then(({data})=>{
+          if(data.code) {
+            this.can_use = false;
+          }else {
+            this.can_use = true;
+          }
+        })
     },
     profile_click() {
       this.$refs.file_input.click();

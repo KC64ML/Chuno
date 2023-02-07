@@ -11,10 +11,16 @@
     </div>
     <div>
       <div>
-        {{ userInfo.chaserPlayCount }}
+        <div>플레이한 게임</div>
+        <div>{{ totalPlay }}회</div>
       </div>
       <div>
-        {{ userInfo.runnerPlayCount }}
+        <div>추노꾼 플레이</div>
+        <div>{{ userInfo.chaserPlayCount }}회</div>
+      </div>
+      <div>
+        <div>노비 플레이</div>
+        <div>{{ userInfo.runnerPlayCount }}회</div>
       </div>
     </div>
   </div>
@@ -29,9 +35,11 @@ export default {
   data() {
     // playTime: null,
   },
-  methods: {
-    
-  },
+  computed:{
+    totalPlay(){
+      return this.userInfo.chaserPlayCount + this.userInfo.runnerPlayCount
+    }
+  }
 }
 </script>
 
