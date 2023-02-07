@@ -4,9 +4,10 @@
             <div id="close_button" @click="offing">x</div>
             <div id="modal_title" style="font-size: 24px;">방 만들기</div>
             <div v-if="page1">
-                <table style="width: 90%; margin: 0 auto;">
+                <table style="width: 300px; margin: 0 auto;">
                     <colgroup>
                         <col style="width: 90px">
+                        <col style="width: 200px">
                     </colgroup>
                     <tr>
                         <td>방 제목</td>

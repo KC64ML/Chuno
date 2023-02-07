@@ -112,7 +112,7 @@
   }
 </script>
 
-<style>
+<style scoped>
 #item-title{
   color: white;
   background-color: black;
