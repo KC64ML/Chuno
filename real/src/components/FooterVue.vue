@@ -56,13 +56,15 @@
 <style lang="scss" scoped>
 @import "@/assets/scss/variable.scss";
 
-    #container {
+#container {
         background-color: black;
         height: $footer_height;
-        width: 1;
+        width: 100vw;
+        display: flex;
         justify-content: space-around;
         align-items: center;
     }
+
     .menu {
         height: 25px;
     }
