@@ -8,11 +8,17 @@
       </div>
     </div>
     <div>
-      <div>
-        {{ userInfo.chaserWinCount }}
+      <div class="record">
+        <div>총 승리</div>
+        <div id="cnt">{{ totalWin }}회</div>
       </div>
       <div>
-        {{ userInfo.runnerWinCount }}
+        <div>추노꾼 승리</div>
+        <div id="cnt">{{ userInfo.chaserWinCount }}</div>
+      </div>
+      <div>
+        <div>노비 승리</div>
+        <div id="cnt">{{ userInfo.runnerWinCount }}</div>
       </div>
     </div>
   </div>
@@ -27,9 +33,11 @@ export default {
   data() {
     // record: null,
   },
-  methods: {
-
-  },
+  computed:{
+    totalWin(){
+      return this.userInfo.chaserWinCount + this.userInfo.runnerWinCount
+    }
+  }
 }
 </script>
 

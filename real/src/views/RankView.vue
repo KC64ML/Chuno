@@ -2,7 +2,7 @@
   <HeaderVue
     :title="'랭킹'"
   ></HeaderVue>
-  <div>
+  <div >
     <RankTop3View
       :users="users"
     />
@@ -35,7 +35,8 @@ export default {
   },
   methods:{
     getRank(){
-      this.axios.get(process.env.VUE_APP_SPRING + 'user/priority',)
+      const token = sessionStorage.token
+      this.axios.get(process.env.VUE_APP_SPRING + 'user/rank', { headers: { Authorization: token } })
       .then((res) => {
         this.users = res.data
       })
