@@ -2,7 +2,11 @@
   <!-- 모달 -->
   <LogoutModal v-if="logoutModal" @on-logout="onLogout"/>
   <DeleteAccountModal v-if="deleteAccountModal" @on-delete="onDelete"/>
-  <EditProfileModal v-if="editProfileModal"/>
+  <EditProfileModal 
+    v-if="editProfileModal"
+    @on-edit="onEdit"
+    :userInfo="userInfo"
+  />
   
   <HeaderVue
     v-if="me"
@@ -105,7 +109,7 @@ export default {
       this.deleteAccountModal = !this.deleteAccountModal
     },
     onEdit() {
-      this.editProfileModal != this.editProfileModal
+      this.editProfileModal = !this.editProfileModal
       console.log(this.editProfileModal)
     },
   },

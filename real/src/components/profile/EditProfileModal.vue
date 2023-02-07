@@ -1,7 +1,10 @@
 <template>
   <div class="modal-bg">
     <div class="modal">
-      <p>프로필 편집</p>
+      <div class="container-row" id="modal-title">
+        <p>프로필 편집</p>
+        <p @click="onEdit">X</p>
+      </div>
       
       <label for="file">
         <!-- <img src="@/assets/profile_frame.png" alt="profileFrame"> -->
@@ -46,13 +49,21 @@ export default {
   data() {
     return {
       img_default,
-      img: null,
-      nickname: '',
+      img: this.userInfo.profile,
+      nickname: this.userInfo.nickname,
       valid: true,
       lengthValid: true,
       useValid: true,
     }
   },
+  props:{
+    userInfo: Object,
+  },
+  methods: {
+    onEdit(){
+      this.$emit('on-emdit')
+    }
+  }
 
 }
 </script>
