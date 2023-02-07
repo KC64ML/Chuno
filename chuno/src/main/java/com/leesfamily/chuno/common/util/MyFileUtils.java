@@ -1,5 +1,7 @@
 package com.leesfamily.chuno.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -11,6 +13,8 @@ import java.util.UUID;
 
 @Component
 public class MyFileUtils {
+
+    Logger logger = LoggerFactory.getLogger(MyFileUtils.class);
 
     @Value("${spring.servlet.multipart.location}") // "C:\res_file\chuno"
     private String uploadFilePath;
@@ -73,7 +77,9 @@ public class MyFileUtils {
         makeFolders(basePath);
         File saveFile = new File(basePath, fileNm);
         try{
+            logger.info(basePath + "/" + fileNm);
             mf.transferTo(saveFile);
+            logger.info("위 경로로 파일 업로드 완료");
             return fileNm;
         }catch (Exception e) {
             e.printStackTrace();

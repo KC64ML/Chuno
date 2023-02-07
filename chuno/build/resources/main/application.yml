@@ -35,7 +35,7 @@ spring:
       mode: always
   servlet:
     multipart:
-      location: /chuno/resources
+      location: /media/chuno/resources
 logging:
   level:
     root: info
