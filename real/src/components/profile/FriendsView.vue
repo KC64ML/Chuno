@@ -40,7 +40,7 @@ export default {
   methods: {
     getFriends(){
       const token = sessionStorage.token
-      this.axios.get(process.env + 'user/friend', {headers: {Authorization: token}})
+      this.axios.get(process.env.VUE_APP_SPRING + 'user/friend', { headers: { Authorization: token } })
         .catch((res) => {
           const code = res.data.code
           if(code) {
