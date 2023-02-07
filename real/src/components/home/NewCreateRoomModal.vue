@@ -200,29 +200,21 @@ export default {
             this.page1 = true;
             this.page2 = false;
         },
-        modalConfirm() {
+        async modalConfirm() {
             alert('게임방을 만들어요')
             
             // 방을 데이터 베이스에 등록해요
-            // this.axios.post(process.env.VUE_APP_SPRING + "/room", {
-            //     lat: this.player.lat,
-            //     lng: this.player.lng,
-            //     title: this.title,
-            //     isPublic: this.is_public,
-            //     password: this.is_public ? null : this.password,
-            //     radius: this.radius,
-            // }) 방번호 리스폰스
-            console.log(`
-                lat:${this.player.lat},
-                lng:${this.player.lng},
-                title:${this.title},
-                isPublic:${this.is_public},
-                password:${this.is_public ? null : this.password},
-                radius:${this.radius},
-                isToday:${this.is_today},
-                hour: ${this.hour + this.is_am ? 0 : 12},
-                minute: ${this.minute},`);
-            var data = 7;
+            var data = await this.axios.post(process.env.VUE_APP_SPRING + "/room", {
+                lat: this.player.lat,
+                lng: this.player.lng,
+                title: this.title,
+                isPublic: this.is_public,
+                password: this.is_public ? null : this.password,
+                radius: this.radius,
+                isToday: this.is_today,
+                hour:  (this.hour + (this.is_am ? 0 : 12)) % 24,
+                minute:  this.minute,
+            }).then(res => res.data.result)
             this.$router.push({ path: "/game/" + data })
         }
     },
