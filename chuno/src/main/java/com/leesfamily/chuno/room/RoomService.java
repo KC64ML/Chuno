@@ -7,7 +7,8 @@ import com.leesfamily.chuno.room.model.RoomRequest;
 import com.leesfamily.chuno.room.model.dto.*;
 import com.leesfamily.chuno.room.model.*;
 import com.leesfamily.chuno.user.UserRepository;
-import com.leesfamily.chuno.user.model.UserEntity;
+import com.leesfamily.chuno.user.UserService;
+import com.leesfamily.chuno.user.model.dto.UserInventoryResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class RoomService {
     final private RoomRepository roomRepository;
     final private UserRepository userRepository;
     final private PushRepository pushRepository;
+    final private UserService userService;
 
     @Transactional(readOnly = true)
     public List<RoomResponse> getNearByRooms(Location loc) {
@@ -53,7 +55,7 @@ public class RoomService {
         List<RoomEntity> rooms = query.getResultList();
 
         List<RoomResponse> roomRes = rooms.stream().map(room ->
-            new RoomResponse(room, loc)
+                new RoomResponse(room, loc)
         ).collect(Collectors.toList());
         return roomRes;
     }
@@ -89,27 +91,27 @@ public class RoomService {
     public Map<String, Object> joinRoom(long roomId, Long userId) {
         Optional<RoomEntity> res = roomRepository.findById(roomId);
         Map<String, Object> resMap = new HashMap<>();
-        if(res.isPresent()) {
+        if (res.isPresent()) {
             RoomEntity room = res.get();
             int currentPlayers = room.getCurrentPlayers();
             int maxPlayers = room.getMaxPlayers();
-            if(currentPlayers == maxPlayers) {
+            if (currentPlayers == maxPlayers) {
                 resMap.put("code", "2");
-            }else {
+            } else {
                 room.setCurrentPlayers(currentPlayers + 1);
                 roomRepository.saveAndFlush(room);
                 RoomResponse dto = new RoomResponse(room, null);
                 resMap.put("result", dto);
                 resMap.put("code", "1");
             }
-        }else {
+        } else {
             resMap.put("code", 0);
         }
         return resMap;
     }
 
 
-    public List<RoomResponse> getRoomsByConditinos(RoomListByConditionsDto roomListByConditionDto){
+    public List<RoomResponse> getRoomsByConditinos(RoomListByConditionsDto roomListByConditionDto) {
         Double latitude = roomListByConditionDto.getLoc().getLat(); // 위도
         Double longitude = roomListByConditionDto.getLoc().getLat(); // 경도
 
@@ -127,7 +129,7 @@ public class RoomService {
                         " ON r.host_id = u.user_id " +
                         " LEFT JOIN pushes p " +
                         " ON p.user_id = u.user_id " +
-                        " WHERE r.title LIKE '%" + roomListByConditionDto.getKeyword() +"%' " +
+                        " WHERE r.title LIKE '%" + roomListByConditionDto.getKeyword() + "%' " +
                         " ORDER BY distance ", RoomEntity.class)
                 .setMaxResults(20);
 
@@ -176,34 +178,69 @@ public class RoomService {
         log.info("현재 좌표 : " + roomStartDto.getLat() + " " + roomStartDto.getLng());
         log.info("반지름 : " + roomStartDto.getRadius());
         log.info("좌표 : " + randomLatLng.get(0).getLat() + " " + randomLatLng.get(0).getLng()
-                + " " + randomLatLng.get(1).getLat() + " "  + randomLatLng.get(1).getLng()
+                + " " + randomLatLng.get(1).getLat() + " " + randomLatLng.get(1).getLng()
                 + " " + randomLatLng.get(2).getLat() + " " + randomLatLng.get(2).getLng()
         );
 
         // (3) 노비, 추노꾼 랜덤
         // 사용자 정보를 조회한 후, 거기서 아이템을 조회해햐아 한다.
         // user 기반 item 조회
-//        randomUserCS();
+        // chaser, runner
+        List<RoomGameStartDecideChaserRunnerDto> roomGameUserChaserOrRunnerItemCntResultList = randomUserChaserRunner(roomStartRequestDto);
 
-
-        return null;
+        return RoomGameStartResponseDto.of(roomStartDto, randomLatLng, roomGameUserChaserOrRunnerItemCntResultList);
 
     }
 
-    private void randomUserCS(RoomGameStartRequestDto roomStartRequestDto) {
+    private List<RoomGameStartDecideChaserRunnerDto> randomUserChaserRunner(RoomGameStartRequestDto roomStartRequestDto) {
         // 사용자들에게 추노꾼, 노비 랜덤 지정
         int userCount = roomStartRequestDto.getUserIdList().size() + 1;
         boolean[] visited = new boolean[userCount];
-
+        List<RoomGameStartDecideChaserRunnerDto> roomGameUserChaserOrRunnerItemCntDtoList = new ArrayList<>();
         int addUserCnt = 0;
 
-        while(true){
-            int randomIndex = (int)(Math.random() * userCount) + 1;
-            if(!visited[randomIndex]){
+        // 노비 선정
+        while (true) {
+            int randomIndex = (int) (Math.random() * userCount) - 1;
+            if (!visited[randomIndex]) {
                 visited[randomIndex] = true;
- 
+                // 인벤토리를 가져온다.
+                // 넘거야할 것
+                // 아이템 횟수
+                log.info("random Index : " + randomIndex);
+                log.info("items : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems()[0]);
+                log.info("items : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems()[1]);
+                log.info("items : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems()[2]);
+                int[] items = userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems();
+
+
+                Long userId = roomStartRequestDto.getUserIdList().get(randomIndex); // userId
+                List<Integer> list = Arrays.stream(items).boxed().collect(Collectors.toList()); // int형 -> list형으로
+                roomGameUserChaserOrRunnerItemCntDtoList.add(new RoomGameStartDecideChaserRunnerDto(userId, list));
+
+                addUserCnt += 1;
+            }
+
+            // 절반이상 노비가 판결되면 종료
+            // 인원 수 : 8
+            // 0 ~ 3 : 노비
+            // 4 ~ 7 : 추노
+            if (addUserCnt >= userCount / 2) break;
+        }
+
+        // 추노 선정
+        for (int userIdx = 1; userIdx <= userCount - 1; userIdx++) {
+            if (!visited[userIdx]) {
+                // 아직 포지션 정해지지 못했다면
+                log.info("for문 index : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(userIdx)).getNickname());
+                int[] items = userService.getProfile(roomStartRequestDto.getUserIdList().get(userIdx)).getItems();
+                Long userId = roomStartRequestDto.getUserIdList().get(userIdx); // userId
+                List<Integer> list = Arrays.stream(items).boxed().collect(Collectors.toList()); // int형 -> list형으로
+                roomGameUserChaserOrRunnerItemCntDtoList.add(new RoomGameStartDecideChaserRunnerDto(userId, list));
             }
         }
+
+        return roomGameUserChaserOrRunnerItemCntDtoList;
     }
 
     private List<Location> randomLatLngCoordinate(RoomStartDto roomStartDto) {
@@ -218,29 +255,29 @@ public class RoomService {
 
         List<Location> locStoreLatLng = new ArrayList<>();
 
-        while(true){
+        while (true) {
             double randomLat = (Math.random() * (radius * 2) - radius) * 0.9 + centerLat;
             double randomLng = (Math.random() * (radius * 2) - radius) * 0.9 + centerLng;
 
             // 거리를 계산
-            double distance = (6371*Math.acos(Math.cos(Math.toRadians(centerLat))
+            double distance = (6371 * Math.acos(Math.cos(Math.toRadians(centerLat))
                     * Math.cos(Math.toRadians(randomLat)) * Math.cos(Math.toRadians(randomLng) - Math.toRadians(centerLng))
                     + Math.sin(Math.toRadians(centerLat)) * Math.sin(Math.toRadians(randomLat))));
 
             // 거리가 반지름보다 작다면 추가
-            if(distance < radius){
+            if (distance < radius) {
                 locStoreLatLng.add(new Location(randomLat, randomLng));
             }
 
             // 현재 참여한 인원수 x 2일 경우 종료한다.
-            if(locStoreLatLng.size() == roomStartDto.getCurrentPlayers() * 2) break;
+            if (locStoreLatLng.size() == roomStartDto.getCurrentPlayers() * 2) break;
         }
 
         return locStoreLatLng;
     }
 
 
-    public RoomGameEndResponseDto endRoom(RoomGameEndRequestDto roomGameEndRequestDto, Long userId){
+    public RoomGameEndResponseDto endRoom(RoomGameEndRequestDto roomGameEndRequestDto, Long userId) {
         return roomRepository.endRoom(roomGameEndRequestDto, userId);
     }
 }
