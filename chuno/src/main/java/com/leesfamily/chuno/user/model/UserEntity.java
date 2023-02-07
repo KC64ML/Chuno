@@ -41,6 +41,9 @@ public class UserEntity extends BaseTimeEntity {
     private int paperCount;
     @Column(nullable = false)
     @ColumnDefault("0")
+    private int catchCount;
+    @Column(nullable = false)
+    @ColumnDefault("0")
     private int runnerPlayCount;
     @Column(nullable = false)
     @ColumnDefault("0")
