@@ -18,7 +18,6 @@
   ></HeaderVue>
 
   <div style="height: 75%; width:300px;">
-    <div class="uploadedImg">gkgk</div>
 
     <MyProfileView 
       @on-edit="onEdit"
