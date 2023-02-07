@@ -7,10 +7,8 @@ import com.leesfamily.chuno.room.model.PushEntity;
 import com.leesfamily.chuno.room.model.RoomResponse;
 import com.leesfamily.chuno.room.model.RoomEntity;
 import com.leesfamily.chuno.room.model.RoomRequest;
-import com.leesfamily.chuno.room.model.dto.RoomGameStartRequestDto;
-import com.leesfamily.chuno.room.model.dto.RoomGameStartResponseDto;
-import com.leesfamily.chuno.room.model.dto.RoomListByConditionsDto;
-import com.leesfamily.chuno.room.model.dto.RoomStartDto;
+import com.leesfamily.chuno.room.model.dto.*;
+import io.swagger.annotations.ResponseHeader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -30,6 +28,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -139,7 +138,7 @@ public class RoomController {
         return new ResponseEntity<>(resMap, HttpStatus.OK);
     }
 
-    @Operation(summary = "게임 시작 - 추노 노비 정함, 노비 문서 위치, 방 정보 전달")
+    @Operation(summary = "게임 시작", description = "추노 노비 정함, 노비 문서 위치, 방 정보 전달")
     @ApiResponse(
             content = {
                     @Content(
@@ -151,5 +150,21 @@ public class RoomController {
     @PostMapping("/startRoom")
     public ResponseEntity<RoomGameStartResponseDto> startRoom(@RequestBody RoomGameStartRequestDto roomStartRequestDto){
         return ResponseEntity.ok(roomService.startRoom(roomStartRequestDto));
+    }
+
+
+    // 게임 끝났을 때 api 요청
+    // - 승리한 사람은 승리 증가
+    // - 게임 수 증가 (추노꾼이라면 추노 횟수 증가, 노비라면 노비 횟수 증가
+    @Transactional
+    @Operation(summary = " 게임 종료 후 정보 업데이트", description = "승리 했을 경우 승리 횟수 + 1, 게임 횟수 + 1 (추노 승 + 1, 추노 게임 횟수 + 1) 넣어주세요. ")
+    @PutMapping("/endRoom")
+    public ResponseEntity<RoomGameEndResponseDto> endRoom(
+            @RequestBody RoomGameEndRequestDto roomGameEndRequestDto,
+            @RequestHeader HttpHeaders requestHeader
+    ){
+        Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
+
+        return ResponseEntity.ok(roomService.endRoom(roomGameEndRequestDto, userId));
     }
 }
