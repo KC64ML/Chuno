@@ -302,11 +302,9 @@ public class KakaoLoginController {
 
     @PostMapping("/register")
     String register(
-            @RequestPart MultipartFile file,
             @RequestBody UserEntity user
     ) {
         Long userId = userService.register(user);
-        UserEntity result = userService.putMyProfileImg(userId, file, user.getNickname());
         return makeToken(userId);
     }
 

@@ -70,10 +70,10 @@ public class UserEntity extends BaseTimeEntity {
 //    @OneToMany(mappedBy = "toUser")
 //    private List<FriendEntity> friendsIn = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(name = "inventory",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id")
-    )
-    private List<ItemEntity> inventory = new ArrayList<>();
+//    @ManyToMany
+//    @JoinTable(name = "inventory",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "item_id")
+//    )
+//    private List<ItemEntity> inventory = new ArrayList<>();
 }
