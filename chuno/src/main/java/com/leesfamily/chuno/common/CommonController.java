@@ -6,10 +6,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -28,9 +25,9 @@ public class CommonController {
         return new UrlResource("file:" + file.getPath());
     }*/
 
-    @GetMapping("/images/{filename}")
-    public ResponseEntity<byte[]> userSearch(@PathVariable("imagename") String imagename) throws IOException {
-        InputStream imageStream = new FileInputStream(uploadFilePath + "/" + imagename);
+    @GetMapping("/images")
+    public ResponseEntity<byte[]> userSearch(@RequestParam("path") String path) throws IOException {
+        InputStream imageStream = new FileInputStream(uploadFilePath + "/" + path);
         byte[] imageByteArray = toByteArray(imageStream);
         imageStream.close();
         return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
