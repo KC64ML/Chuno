@@ -18,18 +18,18 @@
                 // 핸들러로 가서 카카오 유저 정보를 가져올 수 있는 토큰을 받을 거에요. 그 토큰으로 유저의 정보를 얻고 유저의 정보를 가진 우리 서비스의 토큰을 만들어서
                 // 우리 웹페이지의 세션스토리지에 보관할 거에요
                 var { data } = await axios.post(
-                    "https://i8d208.p.ssafy.io/api/kakao/login",
+                    "https://i8d208.p.ssafy.io/api/kakao/getTokken",
                     code,
                     { headers: { "Content-Type": "text/plain" } }
                 );
                 console.log(data);
                 if (data.code == "no_email") {
                     // 아직 우리 서비스에 가입하지 않았어요 회원 가입 페이지로 넘어가요 뷰에서는 패러미터를 안고 라우터뷰를 이동하면 될거에요
-                    window.location.href = "register.html?email=" + data.result;
+                    window.location.href = "https://i8d208.p.ssafy.io/api/register.html?email=" + data.result;
                 } else if (data.code == "member") {
                     // 우리 서비스의 멤버에요 세션스토리지에 토큰을 저장하고 홈페이지로 이동해요
                     sessionStorage.setItem("token", data.result);
-                    window.location.href = "/index.html";
+                    window.location.href = "https://i8d208.p.ssafy.io/api/index.html";
                 }
             }
             start();
