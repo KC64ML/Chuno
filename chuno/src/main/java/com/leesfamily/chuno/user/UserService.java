@@ -96,6 +96,19 @@ public class UserService {
         return null;
     }
 
+    public int isMyFriend(Long myId, Long userId) {
+        Optional<FriendEntity> option = friendRepository
+                .findByFromUserAndToUser(
+                        userRepository.findById(myId).get(),
+                        userRepository.findById(userId).get()
+                );
+        if(option.isPresent()) {
+            return 1;
+        }else {
+            return 0;
+        }
+    }
+
     public UserEntity putMyProfileImg( Long userId, MultipartFile img, String nickname) {
         Optional<UserEntity> option = userRepository.findById(userId);
         UserEntity userEntity = option.get();
@@ -158,4 +171,6 @@ public class UserService {
         friendRepository.delete(friendEntity);
         return 1;
     }
+
+
 }

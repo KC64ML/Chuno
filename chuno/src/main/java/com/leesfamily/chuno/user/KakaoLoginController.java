@@ -20,11 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -32,6 +28,7 @@ import com.google.gson.JsonParser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin("*")
@@ -304,9 +301,13 @@ public class KakaoLoginController {
 
 
     @PostMapping("/register")
-    String register(@RequestBody UserEntity user) {
-        Long user_id = userService.register(user);
-        return makeToken(user_id);
+    String register(
+            @RequestPart MultipartFile file,
+            @RequestBody UserEntity user
+    ) {
+        Long userId = userService.register(user);
+        UserEntity result = userService.putMyProfileImg(userId, file, user.getNickname());
+        return makeToken(userId);
     }
 
     @PostMapping("/tokenConfirm")
