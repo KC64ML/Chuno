@@ -18,6 +18,8 @@ import javax.persistence.*;
 @DynamicInsert
 @DynamicUpdate
 public class ItemEntity {
+
+    public static final int AMOUNT_OF_ITEMS = 8;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
