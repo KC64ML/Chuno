@@ -51,7 +51,7 @@ public class UserService {
 
     public UserEntity findUserByEmail(String email) {
         Optional<UserEntity> option = userRepository.findByEmail(email);
-        if(option.isPresent()) {
+        if(option.isPresent() && !option.get().isDeleted()) {
             return option.get();
         }else {
             return null;
@@ -59,6 +59,11 @@ public class UserService {
     }
 
     public Long register(UserEntity user) {
+        Optional<UserEntity> option = userRepository.findByEmail(user.getEmail());
+        if(option.isPresent()) {
+            user = option.get();
+            user.setDeleted(false);
+        }
         user.setLevel(1);
         UserEntity userEntity = userRepository.saveAndFlush(user);
         return userEntity.getId();
@@ -165,10 +170,13 @@ public class UserService {
     public List<UserRankingListDto> getRankingList(){
         return userRepository.getRankingList();
     }
+
+    // 회원 탈퇴 처리
     public UserEntity deleteUser(Long userId) {
         UserEntity user = userRepository.findById(userId).get();
+        user.setDeleted(true);
         try {
-            userRepository.delete(user);
+            userRepository.saveAndFlush(user);
         }catch (Exception e) {
             return null;
         }

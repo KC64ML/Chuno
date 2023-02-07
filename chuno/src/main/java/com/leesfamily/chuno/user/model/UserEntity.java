@@ -31,7 +31,7 @@ public class UserEntity extends BaseTimeEntity {
     private Long id;
     @Column(nullable = false, length = 40, unique = true)
     private String email;
-    @Column(nullable = false, length = 7)
+    @Column(nullable = true, length = 7, unique = true)
     private String nickname;
     @Column(nullable = false)
     @ColumnDefault("1")
@@ -66,6 +66,11 @@ public class UserEntity extends BaseTimeEntity {
 
     @Embedded
     private UserProfile profile;
+
+    @Column
+    @ColumnDefault("false")
+    private boolean isDeleted;
+
 
 //    @OneToMany(mappedBy = "fromUser")
 //    private List<FriendEntity> friendsOut = new ArrayList<>();
