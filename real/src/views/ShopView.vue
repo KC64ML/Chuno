@@ -5,7 +5,7 @@
   <div class="container-col" style="height:75%">
     <div class="container" id="money">
       <img src="@/assets/nyang.svg" alt="nyang">
-      {{ money }}
+      {{ userInfo.money }}
     </div>
     <SelectedItemView
       :item="selected"
@@ -60,10 +60,22 @@
           forRunner: ' ',
         },
         items:[],
-        money: 0,
+        userInfo: [],
       }
     },
     methods: {
+      getUser(){
+        const token = sessionStorage.token
+        this.axios.get(process.env.VUE_APP_SPRING +'user', { headers: { Authorization: token } })
+          .then((res) => {
+            const code = res.data.code
+            if(code) {
+              this.userInfo = res.data.result
+            } else {
+              console.log('code err')
+            }
+          })
+      },
       onSelect(res) {
         this.selected = res
         console.log(this.selected)
@@ -109,6 +121,7 @@
     },
     created() {
       this.getItems()
+      this.getUser()
     }
   }
 </script>
