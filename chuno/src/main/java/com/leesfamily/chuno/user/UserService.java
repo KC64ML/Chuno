@@ -107,7 +107,7 @@ public class UserService {
         String target = "profile/"+userId;
 
         String saveFileNm = fileUtils.transferTo(img, target);
-        String path = "/pic/" + target + "/" + saveFileNm;
+        String path = target + "/" + saveFileNm;
         log.info("path : " + path);
         log.info("userEntity.getProfile() : " + userEntity.getProfile());
         if(saveFileNm != null){
@@ -123,7 +123,7 @@ public class UserService {
         ItemEntity item = itemRepository.findById(itemId).get();
         user.getInventory().add(item);
         UserEntity result = userRepository.saveAndFlush(user);
-        return 0;
+        return 1;
     }
 
     public Long isExistNickname(String nickname) {
