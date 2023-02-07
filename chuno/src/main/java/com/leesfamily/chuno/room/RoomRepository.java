@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
+public interface RoomRepository extends JpaRepository<RoomEntity, Long>, RoomRepositoryCustom {
 
     Optional<RoomEntity> findById(String id);
 }

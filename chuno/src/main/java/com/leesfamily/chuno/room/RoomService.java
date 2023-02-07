@@ -4,12 +4,10 @@ import com.leesfamily.chuno.common.model.Location;
 import com.leesfamily.chuno.room.model.RoomResponse;
 import com.leesfamily.chuno.room.model.RoomEntity;
 import com.leesfamily.chuno.room.model.RoomRequest;
-import com.leesfamily.chuno.room.model.dto.RoomGameStartRequestDto;
-import com.leesfamily.chuno.room.model.dto.RoomGameStartResponseDto;
-import com.leesfamily.chuno.room.model.dto.RoomListByConditionsDto;
-import com.leesfamily.chuno.room.model.dto.RoomStartDto;
+import com.leesfamily.chuno.room.model.dto.*;
 import com.leesfamily.chuno.room.model.*;
 import com.leesfamily.chuno.user.UserRepository;
+import com.leesfamily.chuno.user.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -188,9 +186,6 @@ public class RoomService {
 //        randomUserCS();
 
 
-
-
-
         return null;
 
     }
@@ -242,5 +237,10 @@ public class RoomService {
         }
 
         return locStoreLatLng;
+    }
+
+
+    public RoomGameEndResponseDto endRoom(RoomGameEndRequestDto roomGameEndRequestDto, Long userId){
+        return roomRepository.endRoom(roomGameEndRequestDto, userId);
     }
 }
