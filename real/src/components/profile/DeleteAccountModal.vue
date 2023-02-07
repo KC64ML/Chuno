@@ -19,10 +19,12 @@ export default {
   methods: {
     async del() {
       alert("탈퇴");
-      var del_user_email = document.getElementById("del_user").value;
-      await axios.post("http://3.34.138.191:9997/kakao/delUser", del_user_email, {headers: {'Content-Type': 'text/plain'}});
+      // var del_user_email = document.getElementById("del_user").value;
+      const token = sessionStorage.token
+      await this.axios.post(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
+
       console.log("탈퇴완료");
-      this.logout();
+      // this.logout();
       this.$router.push({ name: 'Start'})
     },
   }
