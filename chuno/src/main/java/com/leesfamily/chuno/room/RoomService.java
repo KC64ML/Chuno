@@ -161,11 +161,29 @@ public class RoomService {
                 + " " + randomLatLng.get(2).getLat() + " " + randomLatLng.get(2).getLng()
         );
 
-        // (3)
+        // (3) 노비, 추노꾼 랜덤
+        randomUserCS();
+
+
+
+        roomStartRequestDto.getUserIdList().get()
 
 
         return null;
 
+    }
+
+    private void randomUserCS(RoomGameStartRequestDto roomStartRequestDto) {
+        // 사용자들에게 추노꾼, 노비 랜덤 지정
+        int userCount = roomStartRequestDto.getUserIdList().size() + 1;
+        boolean[] visited = new boolean[userCount];
+
+        int addUserCnt = 0;
+
+        while(true){
+            int randomIndex = (int)(Math.random() * userCount) + 1;
+            if(addUserCnt == )
+        }
     }
 
     private List<Location> randomLatLngCoordinate(RoomStartDto roomStartDto) {
