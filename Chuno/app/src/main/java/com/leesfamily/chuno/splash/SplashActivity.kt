@@ -1,24 +1,23 @@
 package com.leesfamily.chuno.splash
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.Window
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.leesfamily.chuno.MainActivity
 import com.leesfamily.chuno.MainViewModel
 import com.leesfamily.chuno.R
-import com.leesfamily.chuno.network.ItemGetter
-import com.leesfamily.chuno.network.LoginGetter
+import com.leesfamily.chuno.network.data.User
+import com.leesfamily.chuno.network.item.ItemGetter
+import com.leesfamily.chuno.network.login.LoginGetter
 import com.leesfamily.chuno.util.NetworkManager
 import com.leesfamily.chuno.util.custom.MyCustomDialog
 import com.leesfamily.chuno.util.custom.MyCustomDialogInterface
+import com.leesfamily.chuno.util.login.LoginManager
 import com.leesfamily.chuno.util.login.LoginPrefManager
 import com.leesfamily.chuno.util.login.UserDB
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +27,7 @@ import kotlin.system.exitProcess
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,52 +35,37 @@ class SplashActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_splash)
 
+        mainViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[MainViewModel::class.java]
+
         lifecycleScope.launch(Dispatchers.IO) {
             val start = System.currentTimeMillis()
-//            viewModelInit()
 
-            if (isConnectNetwork())
-                LoginPrefManager.getLastLoginToken()?.let {
-                    LoginGetter().requestUser(it)?.let { user ->
-                        UserDB.setUser(user)
-                        UserDB.setToken(it)
+            if (NetworkManager.isConnectNetwork(this@SplashActivity)) {
+                LoginPrefManager.getLastLoginToken()?.let { lastToken ->
+                    LoginManager.confirmLogin(lastToken).let { isConfirm->
+                        UserDB.setIsConfirmToken(isConfirm)
                     }
                 }
-            ItemGetter().requestItem()?.let {
-                Log.d("추노 아이템", "onCreate: item $it")
-            }
 
-            val delay = System.currentTimeMillis() - start
+//                ItemGetter().requestItem()?.let {
+//                    Log.d("추노 아이템", "onCreate: item $it")
+//                }
 
-            val limitTime = 300
+                val delay = System.currentTimeMillis() - start
 
-            if (delay < limitTime)
-                delay(limitTime - delay)
+                val limitTime = 300
 
+                if (delay < limitTime)
+                    delay(limitTime - delay)
 
-            launch(Dispatchers.Main) {
-                startMainActivity()
+                launch(Dispatchers.Main) {
+                    startMainActivity()
+                }
             }
         }
-    }
-
-    private fun isConnectNetwork(): Boolean {
-        if (NetworkManager.isConnect())
-            return true
-
-        MyCustomDialog(applicationContext, object : MyCustomDialogInterface {
-            override fun onYesButtonClicked() {
-                exitProcess(0)
-            }
-
-            override fun onNoButtonClicked() {
-            }
-        }).apply {
-            message = getString(R.string.no_internet_connection)
-            yesMsg = getString(R.string.ok)
-            show()
-        }
-        return false
     }
 
     private fun startMainActivity() {

@@ -1,4 +1,4 @@
-package com.leesfamily.chuno.openvidu.openvidu;
+package com.leesfamily.chuno.openvidu.waiting;
 
 import android.util.Log;
 
@@ -11,25 +11,31 @@ import org.webrtc.VideoTrack;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Participant {
+public abstract class ParticipantWaiting {
 
     protected String connectionId;
     protected String participantName;
-    protected Session session;
+    protected String participantLevel;
+    protected Boolean participantReady;
+    protected SessionWaiting session;
     protected List<IceCandidate> iceCandidateList = new ArrayList<>();
     protected PeerConnection peerConnection;
     protected AudioTrack audioTrack;
     protected VideoTrack videoTrack;
     protected MediaStream mediaStream;
 
-    public Participant(String participantName, Session session) {
+    public ParticipantWaiting(String participantName, String participantLevel, Boolean participantReady, SessionWaiting session) {
         this.participantName = participantName;
+        this.participantLevel = participantLevel;
+        this.participantReady = participantReady;
         this.session = session;
     }
 
-    public Participant(String connectionId, String participantName, Session session) {
+    public ParticipantWaiting(String connectionId, String participantName, String participantLevel, Boolean participantReady, SessionWaiting session) {
         this.connectionId = connectionId;
         this.participantName = participantName;
+        this.participantLevel = participantLevel;
+        this.participantReady = participantReady;
         this.session = session;
     }
 
@@ -43,6 +49,14 @@ public abstract class Participant {
 
     public String getParticipantName() {
         return this.participantName;
+    }
+
+    public Boolean getParticipantReady() {
+        return this.participantReady;
+    }
+
+    public String getParticipantLevel() {
+        return this.participantLevel;
     }
 
     public List<IceCandidate> getIceCandidateList() {

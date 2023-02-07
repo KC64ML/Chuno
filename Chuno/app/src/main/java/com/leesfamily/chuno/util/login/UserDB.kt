@@ -5,28 +5,20 @@ import com.leesfamily.chuno.network.data.User
 
 object UserDB {
 
-    private var token: String? = null
-    private var user: User? = null
+    private var isConfirmToken: Boolean = false
+    private var email: String? = null
 
-    fun setEmail(email: String) {
-        this.user?.email = email
+    fun setEmail(token: String) {
+        this.email = token
     }
 
-    fun setUser(user: User?) {
-        this.user = user
+    fun getEmail() = email
+
+
+    fun setIsConfirmToken(isConfirmToken: Boolean) {
+        this.isConfirmToken = isConfirmToken
     }
 
-    fun getEmail(): String? {
-        return user?.email
-    }
+    fun getIsConfirmToken() = isConfirmToken
 
-    fun setToken(token: String) {
-        this.token = token
-    }
-
-    fun getToken() = token
-
-    fun isLogin(): Boolean {
-        return token != null
-    }
 }

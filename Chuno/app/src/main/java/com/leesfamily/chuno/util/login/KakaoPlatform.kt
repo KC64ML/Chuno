@@ -7,9 +7,6 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import com.leesfamily.chuno.App
-import com.leesfamily.chuno.network.ChunoServer
-import com.leesfamily.chuno.network.LoginGetter
 
 class KakaoPlatform {
     private lateinit var listener: LoginListener

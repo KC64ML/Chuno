@@ -1,4 +1,4 @@
-package com.leesfamily.chuno.room.wait.placeholder
+package com.leesfamily.chuno.game.wait.placeholder
 
 import java.util.ArrayList
 import java.util.HashMap

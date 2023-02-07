@@ -12,12 +12,13 @@ import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentRoomItemBinding
-import com.leesfamily.chuno.room.placeholder.PlaceholderContent.PlaceholderItem
+import com.leesfamily.chuno.network.data.Room
 import com.leesfamily.chuno.util.custom.*
 
+
 class RoomItemRecyclerViewAdapter(
-    private val values: List<PlaceholderItem>,
-    navigate: NavController
+    private val values: List<Room>,
+    navigate: NavController, viewModel: RoomItemViewModel
 ) : RecyclerView.Adapter<RoomItemRecyclerViewAdapter.ViewHolder>(), CreateRoomDialogInterface,
     MyCustomDialogInterface {
 
@@ -28,9 +29,11 @@ class RoomItemRecyclerViewAdapter(
     private lateinit var dialog2: CreateRoomDialog2
 
     private var navigate: NavController? = null
+    private var viewModel: RoomItemViewModel? = null
 
     init {
         this.navigate = navigate
+        this.viewModel = viewModel
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,14 +43,18 @@ class RoomItemRecyclerViewAdapter(
             parent,
             false
         )
+        val holder = ViewHolder(binding)
+
+        holder.itemView.setOnClickListener { view ->
+            Log.d(TAG, "onCreateViewHolder: ${values[holder.layoutPosition]}")
+
+            viewModel?.updateRoomData(values[holder.layoutPosition])
+            navigate?.navigate(R.id.waitingRoomFragment)
+        }
         binding.notifyButton.setOnClickListener {
             showCustomDialog(mContext)
         }
-        binding.roomInView.setOnClickListener {
-            navigate?.navigate(R.id.waitingRoomFragment)
-            Log.d(TAG, "onCreateViewHolder: 입장")
 
-        }
         binding.roomInfoButton.setOnClickListener {
             manager = (mContext as AppCompatActivity).supportFragmentManager
             Log.d(TAG, "onCreateViewHolder: $manager")
@@ -58,16 +65,16 @@ class RoomItemRecyclerViewAdapter(
             }
         }
 
-        return ViewHolder(
-            binding
-        )
 
+        return holder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.roomNameView.text = item.id
-        holder.reservationContent.text = item.content
+        val room = values[position]
+        holder.roomNameView.text = room.title
+        val dateTime = room.dateTime
+        holder.reservationContent.text =
+            "${dateTime.month}월 ${dateTime.day}일 ${dateTime.hour} : ${dateTime.minute}"
     }
 
     override fun getItemCount(): Int = values.size
@@ -76,8 +83,6 @@ class RoomItemRecyclerViewAdapter(
         RecyclerView.ViewHolder(binding.root) {
         val roomNameView: TextView = binding.roomName
         val reservationContent: TextView = binding.reservationContent
-//        val notifyButton: ImageButton = binding.notifyButton
-//        val roomInButton: ImageButton = binding.roomInfoButton
     }
 
     private fun showCustomDialog(context: Context) {

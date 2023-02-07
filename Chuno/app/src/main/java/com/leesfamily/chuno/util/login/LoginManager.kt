@@ -1,8 +1,7 @@
 package com.leesfamily.chuno.util.login
 
 import androidx.fragment.app.Fragment
-import com.leesfamily.chuno.network.ChunoServer
-import com.leesfamily.chuno.network.LoginGetter
+import com.leesfamily.chuno.network.login.LoginGetter
 
 object LoginManager {
     private lateinit var listener: LoginListener
@@ -21,7 +20,7 @@ object LoginManager {
         kakaoPlatform.login(fragment)
     }
 
-    fun confirmLogin(token:String): Boolean{
+    suspend fun confirmLogin(token:String): Boolean{
         return LoginGetter().requestTokenConfirm(token)
     }
 
@@ -33,13 +32,5 @@ object LoginManager {
     // 탈퇴
     fun unlink(fragment: Fragment) {
         kakaoPlatform.unlink(fragment)
-    }
-
-    fun getEmail():String?{
-        return UserDB.getEmail()
-    }
-
-    fun isLogin(): Boolean {
-        return UserDB.isLogin()
     }
 }

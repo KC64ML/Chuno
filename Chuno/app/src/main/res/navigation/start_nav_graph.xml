@@ -40,17 +40,18 @@
         <action
             android:id="@+id/action_homeFragment_to_waitingRoomFragment"
             app:destination="@id/waitingRoomFragment"
-            app:popUpTo="@id/homeFragment" />
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
         android:id="@+id/game_view"
-        android:name="com.leesfamily.chuno.game.GameViewFragment"
+        android:name="com.leesfamily.chuno.game.game.GameViewFragment"
         android:label="GameViewFragment"
         tools:layout="@layout/fragment_game_view" />
     <fragment
         android:id="@+id/waitingRoomFragment"
-        android:name="com.leesfamily.chuno.room.wait.WaitingRoomFragment"
+        android:name="com.leesfamily.chuno.game.wait.WaitingRoomFragment"
         android:label="fragment_waiting_room_list"
         tools:layout="@layout/fragment_waiting_room_list" >
         <action

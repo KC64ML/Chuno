@@ -7,27 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.leesfamily.chuno.MainViewModel
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentLoginBinding
-import com.leesfamily.chuno.network.LoginGetter
+import com.leesfamily.chuno.network.login.LoginGetter
 import com.leesfamily.chuno.util.login.LoginListener
 import com.leesfamily.chuno.util.login.LoginManager
-import com.leesfamily.chuno.util.login.LoginPrefManager
 import com.leesfamily.chuno.util.login.UserDB
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Request
-import okhttp3.Response
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
+    private val myViewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +33,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
-        if (UserDB.isLogin()) {
+        if (UserDB.getIsConfirmToken()) {
             findNavController().navigate(R.id.homeFragment)
         }
         // lastToken이 null이면 회원가입을 해야하는 유저
@@ -48,6 +43,13 @@ class LoginFragment : Fragment() {
             LoginManager.apply {
                 setListener(object : LoginListener {
                     override fun loginSuccess(token: String) {
+                        myViewModel.setToken(token)
+                        if (myViewModel.email.value != null) {
+                            findNavController().navigate(R.id.homeFragment)
+                        } else {
+                            findNavController().navigate(R.id.inputInfoFragment)
+                        }
+/*
                         lifecycleScope.launch(Dispatchers.IO) {
                             var result = LoginGetter().requestLogin(token)
                             Log.d(
@@ -69,7 +71,7 @@ class LoginFragment : Fragment() {
                                     }
                                 }
                             }
-                        }
+                        }*/
                     }
 
                     override fun loginFailed() {

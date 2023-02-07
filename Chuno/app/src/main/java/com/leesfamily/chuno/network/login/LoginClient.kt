@@ -1,4 +1,4 @@
-package com.leesfamily.chuno.network
+package com.leesfamily.chuno.network.login
 
 class LoginClient {
 

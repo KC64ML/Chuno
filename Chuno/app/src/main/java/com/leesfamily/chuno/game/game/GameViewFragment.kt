@@ -1,4 +1,5 @@
-package com.leesfamily.chuno.game
+/*
+package com.leesfamily.chuno.game.game
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -22,6 +23,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.gms.location.*
@@ -35,11 +37,8 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentGameViewBinding
-import com.leesfamily.chuno.openvidu.openvidu.LocalParticipant
-import com.leesfamily.chuno.openvidu.openvidu.RemoteParticipant
-import com.leesfamily.chuno.openvidu.openvidu.Session
-import com.leesfamily.chuno.openvidu.utils.CustomHttpClient
-import com.leesfamily.chuno.openvidu.websocket.CustomWebSocket
+import com.leesfamily.chuno.openvidu.openvidu.kotlin.*
+import com.leesfamily.chuno.room.roomlist.RoomItemViewModel
 import com.leesfamily.chuno.room.shop.ShopFragment
 import com.leesfamily.chuno.util.PermissionHelper
 import com.leesfamily.chuno.util.custom.MyCustomDialog
@@ -57,6 +56,9 @@ import java.util.*
 
 class GameViewFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentGameViewBinding
+
+    private val viewModel: RoomItemViewModel by activityViewModels()
+
     private var mMap: GoogleMap? = null
     private val mFusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireActivity())
@@ -278,8 +280,8 @@ class GameViewFragment : Fragment(), OnMapReadyCallback {
         mMap!!.moveCamera(cameraUpdate)
     }
 
-    override fun onMapReady(p0: GoogleMap) {
-        mMap = p0
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
 
         setDefaultLocation()
         mMap!!.apply {
@@ -288,21 +290,8 @@ class GameViewFragment : Fragment(), OnMapReadyCallback {
             uiSettings.setAllGesturesEnabled(false)
 
             mapType = GoogleMap.MAP_TYPE_NORMAL
-//            moveCamera(
-//                CameraUpdateFactory.newLatLngZoom(
-//                    if (lastKnownLocation == null) {
-//                        defaultLocation
-//                    } else {
-//                        LatLng(
-//                            lastKnownLocation!!.latitude,
-//                            lastKnownLocation!!.longitude
-//                        )
-//                    },
-//                    DEFAULT_ZOOM.toFloat()
-//                )
-//            )
-
         }
+
         if (PermissionHelper.hasLocationPermission(requireContext())) { // 1. 위치 퍼미션을 가지고 있는지 확인
             // 2. 이미 퍼미션을 가지고 있다면
             // ( 안드로이드 6.0 이하 버전은 런타임 퍼미션이 필요없기 때문에 이미 허용된 걸로 인식)
@@ -347,7 +336,6 @@ class GameViewFragment : Fragment(), OnMapReadyCallback {
     }
 
     fun setCurrentLocation(location: Location) {
-
         val currentLatLng = LatLng(location.latitude, location.longitude)
         val cameraUpdate = CameraUpdateFactory.newLatLng(currentLatLng)
         mMap!!.moveCamera(cameraUpdate)
@@ -361,6 +349,8 @@ class GameViewFragment : Fragment(), OnMapReadyCallback {
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
     }
 
+    // OpenVidu 토큰을 요청
+    // sessionId : 토큰을 원하는 OpenVidu 세션
     private fun getToken(sessionId: String) {
         try {
             // Session Request
@@ -392,7 +382,9 @@ class GameViewFragment : Fragment(), OnMapReadyCallback {
                                     } catch (e: IOException) {
                                         Log.e(TAG, "Error getting body", e)
                                     }
-                                    getTokenSuccess(responseString, sessionId)
+                                    if (responseString != null) {
+                                        getTokenSuccess(responseString, sessionId)
+                                    }
                                 }
 
                                 override fun onFailure(call: Call, e: IOException) {
@@ -418,14 +410,25 @@ class GameViewFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun getTokenSuccess(token: String?, sessionId: String) {
+    // 토큰을 얻으면 Session, LocalParticipant를 생성, 카메라를 캡쳐한다.
+    private fun getTokenSuccess(token: String, sessionId: String) {
         // Initialize our session
-        session = Session(sessionId, token, binding.pager, this)
+        session = Session(
+            sessionId,
+            token,
+            binding.pager,
+            this
+        )
 
         // Initialize our local participant and start local camera
         val participantName = binding.participantName.text.toString()
         val localParticipant =
-            LocalParticipant(participantName, session, context, binding.localGlSurfaceView)
+            LocalParticipant(
+                participantName,
+                session!!,
+                requireContext(),
+                binding.localGlSurfaceView
+            )
         localParticipant.startCamera()
 
         activity?.runOnUiThread {
@@ -440,9 +443,16 @@ class GameViewFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun startWebSocket() {
-        val webSocket = CustomWebSocket(session, this)
-        webSocket.execute()
-        session?.setWebSocket(webSocket)
+        session?.let {
+
+            CustomWebSocket(session!!, this@GameViewFragment).apply {
+                this.execute()
+                session?.setWebSocket(this)
+
+            }
+
+
+        }
     }
 
     private fun connectionError(url: String?) {
@@ -524,8 +534,8 @@ class GameViewFragment : Fragment(), OnMapReadyCallback {
             val textView = rowView.getChildAt(1)
             remoteParticipant.participantNameText = textView as TextView
             remoteParticipant.view = rowView
-            remoteParticipant.participantNameText.text = remoteParticipant.participantName
-            remoteParticipant.participantNameText.setPadding(20, 3, 20, 3)
+            remoteParticipant.participantNameText!!.text = remoteParticipant.participantName
+            remoteParticipant.participantNameText!!.setPadding(20, 3, 20, 3)
         }
         mainHandler.post(myRunnable)
     }
@@ -534,7 +544,7 @@ class GameViewFragment : Fragment(), OnMapReadyCallback {
         val videoTrack = stream.videoTracks[0]
         videoTrack.addSink(remoteParticipant.videoView)
         activity?.runOnUiThread {
-            remoteParticipant.videoView.visibility = View.VISIBLE
+            remoteParticipant.videoView?.visibility = View.VISIBLE
         }
     }
 
@@ -681,4 +691,4 @@ class GameViewFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-}
+}*/

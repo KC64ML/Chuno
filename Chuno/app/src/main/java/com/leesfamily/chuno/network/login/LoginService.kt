@@ -1,6 +1,5 @@
-package com.leesfamily.chuno.network
+package com.leesfamily.chuno.network.login
 
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Param
 import com.leesfamily.chuno.network.data.DataForm
 import com.leesfamily.chuno.network.data.LoginForm
 import com.leesfamily.chuno.network.data.NickForm

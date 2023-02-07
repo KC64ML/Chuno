@@ -1,4 +1,4 @@
-package com.leesfamily.chuno.room.wait
+package com.leesfamily.chuno.game.wait
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,7 +8,9 @@ import android.widget.TextView
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentUserItemBinding
 
-import com.leesfamily.chuno.room.wait.placeholder.PlaceholderContent.PlaceholderItem
+import com.leesfamily.chuno.game.wait.placeholder.PlaceholderContent.PlaceholderItem
+import com.leesfamily.chuno.network.data.Player
+import com.leesfamily.chuno.network.data.User
 
 
 /**
@@ -16,7 +18,7 @@ import com.leesfamily.chuno.room.wait.placeholder.PlaceholderContent.Placeholder
  * TODO: Replace the implementation with code for your data type.
  */
 class UserItemRecyclerViewAdapter(
-    private val values: List<PlaceholderItem>
+    private val values: ArrayList<Player>?,
 ) : RecyclerView.Adapter<UserItemRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,12 +34,14 @@ class UserItemRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
+        if (values != null) {
+            val item = values[position]
+            holder.idView.text = item.level.toString()
+            holder.contentView.text = item.nickname
+        }
     }
 
-    override fun getItemCount(): Int = values.size
+    override fun getItemCount(): Int = values?.size ?: 0
 
     inner class ViewHolder(binding: FragmentUserItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

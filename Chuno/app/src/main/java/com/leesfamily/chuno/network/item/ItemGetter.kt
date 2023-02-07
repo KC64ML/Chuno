@@ -1,6 +1,7 @@
-package com.leesfamily.chuno.network
+package com.leesfamily.chuno.network.item
 
 import android.util.Log
+import com.leesfamily.chuno.network.ChunoServer
 import com.leesfamily.chuno.network.data.Item
 import com.leesfamily.chuno.network.data.ItemForm
 import retrofit2.Response

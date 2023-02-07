@@ -1,10 +1,9 @@
-package com.leesfamily.chuno.openvidu.openvidu;
+/*
+package com.leesfamily.chuno.openvidu.game;
 
 import android.content.Context;
-import android.os.Build;
 
 import org.webrtc.AudioSource;
-import org.webrtc.Camera1Enumerator;
 import org.webrtc.Camera2Enumerator;
 import org.webrtc.CameraEnumerator;
 import org.webrtc.EglBase;
@@ -38,6 +37,7 @@ public class LocalParticipant extends Participant {
         session.setLocalParticipant(this);
     }
 
+    // 사진과 비디오 캡쳐 가능, video track에 저장
     public void startCamera() {
 
         final EglBase.Context eglBaseContext = EglBase.create().getEglBaseContext();
@@ -62,13 +62,10 @@ public class LocalParticipant extends Participant {
         this.videoTrack.addSink(localVideoView);
     }
 
+    // Camera2 Android API 사용
     private VideoCapturer createCameraCapturer() {
         CameraEnumerator enumerator;
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            enumerator = new Camera2Enumerator(this.context);
-        } else {
-            enumerator = new Camera1Enumerator(false);
-        }
+        enumerator = new Camera2Enumerator(this.context);
         final String[] deviceNames = enumerator.getDeviceNames();
 
         // Try to find front facing camera
@@ -122,3 +119,4 @@ public class LocalParticipant extends Participant {
         }
     }
 }
+*/

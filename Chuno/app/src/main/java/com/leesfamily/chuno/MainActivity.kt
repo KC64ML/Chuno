@@ -1,40 +1,39 @@
 package com.leesfamily.chuno
 
-import android.Manifest
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.leesfamily.chuno.databinding.ActivityMainBinding
+import com.leesfamily.chuno.network.data.Item
 import com.leesfamily.chuno.network.data.User
+import com.leesfamily.chuno.network.item.ItemGetter
+import com.leesfamily.chuno.network.login.LoginGetter
+import com.leesfamily.chuno.util.NetworkManager
 import com.leesfamily.chuno.util.PermissionHelper
-import com.leesfamily.chuno.util.custom.MyCustomDialog
-import com.leesfamily.chuno.util.custom.MyCustomDialogInterface
+import com.leesfamily.chuno.util.login.LoginPrefManager
 import com.leesfamily.chuno.util.login.UserDB
-import kotlin.properties.Delegates
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    lateinit var viewModel: MainViewModel
+    val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        if (NetworkManager.isConnectNetwork(this@MainActivity)) {
 
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.loadLoginInfo()
+            viewModel.setItemList()
+            viewModel.setUserInfo()
+        }
 
-//        viewModel.getUsers().observe(this, Observer<List<User>> { users ->
-//            // update UI
-//        })
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.start_nav_host_fragment) as NavHostFragment
@@ -51,12 +50,18 @@ class MainActivity : AppCompatActivity() {
             )) -> {
                 R.id.loginFragment
             }
-            UserDB.isLogin() -> R.id.homeFragment
+            UserDB.getIsConfirmToken() -> {
+                val lastToken =
+                    LoginPrefManager.getLastLoginToken()
+                viewModel.setLastToken(lastToken!!)
+                Log.d(TAG, "onCreate: mainactivity :viewModel.setToken(it) $lastToken")
+                R.id.homeFragment
+            }
             else -> R.id.permissionFragment
         }
 
         navGraph.setStartDestination(startDestination)
-        navController.setGraph(navGraph,null)
+        navController.setGraph(navGraph, null)
 
         setContentView(binding.root)
     }

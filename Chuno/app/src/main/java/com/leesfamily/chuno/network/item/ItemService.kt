@@ -1,4 +1,4 @@
-package com.leesfamily.chuno.network
+package com.leesfamily.chuno.network.item
 
 import com.leesfamily.chuno.network.data.ItemForm
 import retrofit2.Call

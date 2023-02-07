@@ -6,6 +6,7 @@ import com.leesfamily.chuno.App
 object LoginPrefManager {
 
     private const val LOGIN_KEY = "login_access_token"
+    private const val IS_CONFIRM_TOKEN = "is_confirm_token"
 
     fun setLastLoginToken(token: String) {
         App.context.getSharedPreferences(LOGIN_KEY, Context.MODE_PRIVATE)

@@ -12,6 +12,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <include
+        android:id="@+id/loading_bar"
+        layout="@layout/loading_layout"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout"
@@ -73,6 +81,7 @@
                     app:layoutManager="LinearLayoutManager"
                     tools:context=".room.roomlist.RoomItemFragment"
                     tools:listitem="@layout/fragment_room_item" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

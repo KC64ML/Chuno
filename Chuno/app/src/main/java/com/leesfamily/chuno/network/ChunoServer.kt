@@ -1,5 +1,8 @@
 package com.leesfamily.chuno.network
 
+import com.leesfamily.chuno.network.item.ItemService
+import com.leesfamily.chuno.network.login.LoginService
+import com.leesfamily.chuno.network.room.RoomService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -19,5 +22,9 @@ object ChunoServer {
 
     val itemServer: ItemService by lazy {
         retrofit.create(ItemService::class.java)
+    }
+
+    val roomServer: RoomService by lazy {
+        retrofit.create(RoomService::class.java)
     }
 }

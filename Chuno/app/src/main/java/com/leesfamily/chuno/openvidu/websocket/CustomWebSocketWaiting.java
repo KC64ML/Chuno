@@ -1,12 +1,19 @@
-/*
 package com.leesfamily.chuno.openvidu.websocket;
 
+import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Process;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
+
+import com.leesfamily.chuno.game.wait.WaitingRoomFragment;
 import com.leesfamily.chuno.openvidu.constants.JsonConstants;
 import com.leesfamily.chuno.openvidu.observers.CustomSdpObserver;
+import com.leesfamily.chuno.openvidu.waiting.LocalParticipantWaiting;
+import com.leesfamily.chuno.openvidu.waiting.ParticipantWaiting;
+import com.leesfamily.chuno.openvidu.waiting.RemoteParticipantWaiting;
+import com.leesfamily.chuno.openvidu.waiting.SessionWaiting;
 import com.neovisionaries.ws.client.ThreadType;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
@@ -14,6 +21,7 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import com.neovisionaries.ws.client.WebSocketListener;
 import com.neovisionaries.ws.client.WebSocketState;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +55,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 
-public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> implements WebSocketListener {
+public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void, Void> implements WebSocketListener {
 
     private final String TAG = "CustomWebSocketListener";
     private final int PING_MESSAGE_INTERVAL = 5;
@@ -75,13 +83,13 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
     private Map<Integer, Pair<String, String>> IDS_PREPARERECEIVEVIDEO = new ConcurrentHashMap<>();
     private Map<Integer, String> IDS_RECEIVEVIDEO = new ConcurrentHashMap<>();
     private Set<Integer> IDS_ONICECANDIDATE = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    private Session session;
+    private SessionWaiting session;
     private String mediaServer;
-    private GameViewFragment fragment;
+    private WaitingRoomFragment fragment;
     private WebSocket websocket;
     private boolean websocketCancelled = false;
 
-    public CustomWebSocket(Session session, GameViewFragment fragment) {
+    public CustomWebSocketWaiting(SessionWaiting session, WaitingRoomFragment fragment) {
         this.session = session;
         this.fragment = fragment;
     }
@@ -110,9 +118,9 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
 
         } else if (rpcId == this.ID_JOINROOM.get()) {
             // Response to joinRoom
-            fragment.viewToConnectedState();
+//            fragment.viewToConnectedState();
 
-            final LocalParticipant localParticipant = this.session.getLocalParticipant();
+            final LocalParticipantWaiting localParticipant = this.session.getLocalParticipant();
             final String localConnectionId = result.getString(JsonConstants.ID);
             localParticipant.setConnectionId(localConnectionId);
 
@@ -174,13 +182,13 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
             }
         } else if (rpcId == this.ID_PUBLISHVIDEO.get()) {
             // Response to publishVideo
-            LocalParticipant localParticipant = this.session.getLocalParticipant();
+            LocalParticipantWaiting localParticipant = this.session.getLocalParticipant();
             SessionDescription remoteSdpAnswer = new SessionDescription(SessionDescription.Type.ANSWER, result.getString("sdpAnswer"));
             localParticipant.getPeerConnection().setRemoteDescription(new CustomSdpObserver("publishVideo_setRemoteDescription"), remoteSdpAnswer);
         } else if (this.IDS_PREPARERECEIVEVIDEO.containsKey(rpcId)) {
             // Response to prepareReceiveVideoFrom
             Pair<String, String> participantAndStream = IDS_PREPARERECEIVEVIDEO.remove(rpcId);
-            RemoteParticipant remoteParticipant = session.getRemoteParticipant(participantAndStream.first);
+            RemoteParticipantWaiting remoteParticipant = session.getRemoteParticipant(participantAndStream.first);
             String streamId = participantAndStream.second;
             SessionDescription remoteSdpOffer = new SessionDescription(SessionDescription.Type.OFFER, result.getString("sdpOffer"));
             remoteParticipant.getPeerConnection().setRemoteDescription(new CustomSdpObserver("prepareReceiveVideoFrom_setRemoteDescription") {
@@ -222,15 +230,19 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
     // 또한 로컬 PeerConnection 및 MediaStream을 초기화하고 publishVideo RPC 메서드를 호출하여 자체 카메라를 게시해야 합니다(다음 지점 참조).
 
     public void joinRoom() {
+        Log.d(TAG, "joinRoom: ");
         Map<String, String> joinRoomParams = new HashMap<>();
-        joinRoomParams.put(JsonConstants.METADATA, "{\"clientData\": \"" + this.session.getLocalParticipant().getParticipantName() + "\"}");
+        joinRoomParams.put(JsonConstants.METADATA, "{\"clientData\": \"" + this.session.getLocalParticipant().getParticipantName() + "\", \"clientLevel\": \"" + this.session.getLocalParticipant().getParticipantLevel() + "\"," +
+                "\"clientReady\": " + this.session.getLocalParticipant().getParticipantReady() + "}");
         joinRoomParams.put("secret", "");
         joinRoomParams.put("session", this.session.getId());
         joinRoomParams.put("platform", "Android " + android.os.Build.VERSION.SDK_INT);
         joinRoomParams.put("token", this.session.getToken());
         joinRoomParams.put("sdkVersion", "2.22.0");
         this.ID_JOINROOM.set(this.sendJson(JsonConstants.JOINROOM_METHOD, joinRoomParams));
+        Log.d(TAG, "joinRoom: " + this.session.getLocalParticipant().getParticipantName());
     }
+
     // leaveRoom방법 으로 세션 나가기
     // WebSocket을 통해 JSON-RPC를 보내야 합니다(이 경우 빈 매개변수).
     public void leaveRoom() {
@@ -253,7 +265,7 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
         this.ID_PUBLISHVIDEO.set(this.sendJson(JsonConstants.PUBLISHVIDEO_METHOD, publishVideoParams));
     }
 
-    public void prepareReceiveVideoFrom(RemoteParticipant remoteParticipant, String streamId) {
+    public void prepareReceiveVideoFrom(RemoteParticipantWaiting remoteParticipant, String streamId) {
         Map<String, String> prepareReceiveVideoFromParams = new HashMap<>();
         prepareReceiveVideoFromParams.put("sender", streamId);
         prepareReceiveVideoFromParams.put("reconnect", "false");
@@ -262,7 +274,7 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
 
     // receiveVideo방법 으로 원격 비디오 구독하기
     // 아래와 같이 필수 매개변수와 함께 WebSocket을 통해 JSON-RPC를 보내야 합니다.
-    public void receiveVideoFrom(SessionDescription sessionDescription, RemoteParticipant remoteParticipant, String streamId) {
+    public void receiveVideoFrom(SessionDescription sessionDescription, RemoteParticipantWaiting remoteParticipant, String streamId) {
         Map<String, String> receiveVideoFromParams = new HashMap<>();
         receiveVideoFromParams.put("sender", streamId);
         if ("kurento".equals(this.mediaServer)) {
@@ -284,26 +296,24 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
         this.IDS_ONICECANDIDATE.add(this.sendJson(JsonConstants.ONICECANDIDATE_METHOD, onIceCandidateParams));
     }
 
-    */
-/**
+    /**
      * OpenVidu에서 받은 이벤트 메시지를 처리하는 방법 구현
      * ice candidates가 언제 도착하는지, 새 사용자가 세션에 참여했는지, 사용자가 세션에 비디오를 게시했는지
      * 또는 일부 참가자가 세션을 나갔는지 알기위해 필수적
-     *
+     * <p>
      * iceCandidate: 이 이벤트는 OpenVidu에서 생성된 새로운 iceCandidate를 가져옵니다.
-     *              적절한 PeerConnection 개체에 포함해야 합니다(로컬 PeerConnection 및 각 원격 PeerConnection에 대한 ICE 후보를 받습니다).
-     *              타이밍 문제를 피하기 위해 응용 프로그램은 해당 PeerConnection 상태가 될 때까지 수신된 ICE 후보를 저장합니다 STABLE.
-     *              도달할 때마다 한 번에 모두 처리합니다.
+     * 적절한 PeerConnection 개체에 포함해야 합니다(로컬 PeerConnection 및 각 원격 PeerConnection에 대한 ICE 후보를 받습니다).
+     * 타이밍 문제를 피하기 위해 응용 프로그램은 해당 PeerConnection 상태가 될 때까지 수신된 ICE 후보를 저장합니다 STABLE.
+     * 도달할 때마다 한 번에 모두 처리합니다.
      * participantJoined: 이 이벤트는 새로운 참가자가 세션에 참여했음을 알려줍니다.
-     *              새 PeerConnection 개체(새 사용자의 카메라 스트림을 수신할 수 있도록)와 UI의 새 비디오 요소를 초기화합니다.
+     * 새 PeerConnection 개체(새 사용자의 카메라 스트림을 수신할 수 있도록)와 UI의 새 비디오 요소를 초기화합니다.
      * participantPublished: 이 이벤트는 사용자가 세션에 비디오를 보내기 시작했음을 알려줍니다.
-     *              적절하고 이미 초기화된 PeerConnection 개체를 통해 새 비디오 스트림을 수신하기 위해 ICE 협상을 시작해야 합니다.
-     *              우리는 단순히 WebRTC 프로토콜을 따라 그렇게 합니다: 로컬 SDP 제공을 생성 및 설정하고,
-     *              RPC 방법으로 OpenVidu로 전송하고, receiveVideoFrom이 PeerConnection의 원격 SDP 설명으로 수신된 응답을 설정합니다.
+     * 적절하고 이미 초기화된 PeerConnection 개체를 통해 새 비디오 스트림을 수신하기 위해 ICE 협상을 시작해야 합니다.
+     * 우리는 단순히 WebRTC 프로토콜을 따라 그렇게 합니다: 로컬 SDP 제공을 생성 및 설정하고,
+     * RPC 방법으로 OpenVidu로 전송하고, receiveVideoFrom이 PeerConnection의 원격 SDP 설명으로 수신된 응답을 설정합니다.
      * participantLeftEvent: 일부 사용자가 세션을 나갔을 때 전달됩니다.
-     *              적절한 PeerConnection을 폐기하고 뷰를 업데이트하기만 하면 됩니다.
-     *//*
-
+     * 적절한 PeerConnection을 폐기하고 뷰를 업데이트하기만 하면 됩니다.
+     */
 
 
     private void handleServerEvent(JSONObject json) throws JSONException {
@@ -368,7 +378,7 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
             JSONException {
         for (int i = 0; i < result.getJSONArray(JsonConstants.VALUE).length(); i++) {
             JSONObject participantJson = result.getJSONArray(JsonConstants.VALUE).getJSONObject(i);
-            RemoteParticipant remoteParticipant = this.newRemoteParticipantAux(participantJson);
+            RemoteParticipantWaiting remoteParticipant = this.newRemoteParticipantAux(participantJson);
             try {
                 JSONArray streams = participantJson.getJSONArray("streams");
                 for (int j = 0; j < streams.length(); j++) {
@@ -388,7 +398,7 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
         IceCandidate iceCandidate = new IceCandidate(params.getString("sdpMid"), params.getInt("sdpMLineIndex"), params.getString("candidate"));
         final String connectionId = params.getString("senderConnectionId");
         boolean isRemote = !session.getLocalParticipant().getConnectionId().equals(connectionId);
-        final Participant participant = isRemote ? session.getRemoteParticipant(connectionId) : session.getLocalParticipant();
+        final ParticipantWaiting participant = isRemote ? session.getRemoteParticipant(connectionId) : session.getLocalParticipant();
         final PeerConnection pc = participant.getPeerConnection();
 
         switch (pc.signalingState()) {
@@ -414,41 +424,45 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
     private void participantPublishedEvent(JSONObject params) throws
             JSONException {
         String remoteParticipantId = params.getString(JsonConstants.ID);
-        final RemoteParticipant remoteParticipant = this.session.getRemoteParticipant(remoteParticipantId);
+        final RemoteParticipantWaiting remoteParticipant = this.session.getRemoteParticipant(remoteParticipantId);
         final String streamId = params.getJSONArray("streams").getJSONObject(0).getString("id");
         this.subscribe(remoteParticipant, streamId);
     }
 
     private void participantLeftEvent(JSONObject params) throws JSONException {
-        final RemoteParticipant remoteParticipant = this.session.removeRemoteParticipant(params.getString("connectionId"));
+        final RemoteParticipantWaiting remoteParticipant = this.session.removeRemoteParticipant(params.getString("connectionId"));
         remoteParticipant.dispose();
         Handler mainHandler = new Handler(fragment.requireContext().getMainLooper());
         Runnable myRunnable = () -> session.removeView(remoteParticipant.getView());
         mainHandler.post(myRunnable);
     }
 
-    private RemoteParticipant newRemoteParticipantAux(JSONObject participantJson) throws JSONException {
+    private RemoteParticipantWaiting newRemoteParticipantAux(JSONObject participantJson) throws JSONException {
         final String connectionId = participantJson.getString(JsonConstants.ID);
         String participantName = "";
-        if (participantJson.getString(JsonConstants.METADATA) != null) {
-            String jsonStringified = participantJson.getString(JsonConstants.METADATA);
-            try {
-                JSONObject json = new JSONObject(jsonStringified);
-                String clientData = json.getString("clientData");
-                if (clientData != null) {
-                    participantName = clientData;
-                }
-            } catch(JSONException e) {
-                participantName = jsonStringified;
-            }
+        participantJson.getString(JsonConstants.METADATA);
+        String participantLevel = "";
+        Boolean participantReady = false;
+        String jsonStringified = participantJson.getString(JsonConstants.METADATA);
+        try {
+            JSONObject json = new JSONObject(jsonStringified);
+            String clientData = json.getString("clientData");
+            String clientLevel = json.getString("clientLevel");
+            String clientReady = json.getString("clientReady");
+            participantName = clientData;
+            participantLevel = clientLevel;
+            participantReady = Boolean.valueOf(clientReady);
+
+        } catch (JSONException e) {
+            participantName = jsonStringified;
         }
-        final RemoteParticipant remoteParticipant = new RemoteParticipant(connectionId, participantName, this.session);
+        final RemoteParticipantWaiting remoteParticipant = new RemoteParticipantWaiting(connectionId, participantName, participantLevel, participantReady, this.session);
         fragment.createRemoteParticipantVideo(remoteParticipant);
         this.session.createRemotePeerConnection(remoteParticipant.getConnectionId());
         return remoteParticipant;
     }
 
-    private void subscribe(RemoteParticipant remoteParticipant, String streamId) {
+    private void subscribe(RemoteParticipantWaiting remoteParticipant, String streamId) {
         if ("kurento".equals(this.mediaServer)) {
             this.subscriptionInitiatedFromClient(remoteParticipant, streamId);
         } else {
@@ -456,7 +470,7 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
         }
     }
 
-    private void subscriptionInitiatedFromClient(RemoteParticipant remoteParticipant, String streamId) {
+    private void subscriptionInitiatedFromClient(RemoteParticipantWaiting remoteParticipant, String streamId) {
         MediaConstraints sdpConstraints = new MediaConstraints();
         sdpConstraints.mandatory.add(new MediaConstraints.KeyValuePair("offerToReceiveAudio", "true"));
         sdpConstraints.mandatory.add(new MediaConstraints.KeyValuePair("offerToReceiveVideo", "true"));
@@ -476,7 +490,7 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
         }, sdpConstraints);
     }
 
-    private void subscriptionInitiatedFromServer(RemoteParticipant remoteParticipant, String streamId) {
+    private void subscriptionInitiatedFromServer(RemoteParticipantWaiting remoteParticipant, String streamId) {
         MediaConstraints sdpConstraints = new MediaConstraints();
         sdpConstraints.mandatory.add(new MediaConstraints.KeyValuePair("offerToReceiveAudio", "true"));
         sdpConstraints.mandatory.add(new MediaConstraints.KeyValuePair("offerToReceiveVideo", "true"));
@@ -680,7 +694,7 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
     // 세션과 상호 작용할 수 있음
     // 비동기 작업으로 백그라운드에서 수행
     @Override
-    protected Void doInBackground(RankFragment... rankFragments) {
+    protected Void doInBackground(WaitingRoomFragment... waitingRoomFragments) {
         try {
             WebSocketFactory factory = new WebSocketFactory();
 
@@ -696,6 +710,7 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
             websocket = factory.createSocket(getWebSocketAddress());
             websocket.addListener(this);
             websocket.connect();
+            Log.d(TAG, "doInBackground: ");
         } catch (KeyManagementException | NoSuchAlgorithmException | IOException | WebSocketException e) {
             Log.e("WebSocket error", e.getMessage());
             Handler mainHandler = new Handler(fragment.requireContext().getMainLooper());
@@ -716,4 +731,3 @@ public class CustomWebSocket extends AsyncTask<RankFragment, Void, Void> impleme
     }
 
 }
-*/

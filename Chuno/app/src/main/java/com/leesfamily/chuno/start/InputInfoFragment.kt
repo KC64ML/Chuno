@@ -29,10 +29,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentInputInfoBinding
-import com.leesfamily.chuno.network.LoginGetter
+import com.leesfamily.chuno.network.login.LoginGetter
 import com.leesfamily.chuno.util.custom.MyCustomDialog
 import com.leesfamily.chuno.util.custom.MyCustomDialogInterface
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

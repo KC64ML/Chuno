@@ -1,4 +1,5 @@
-package com.leesfamily.chuno.openvidu.openvidu;
+/*
+package com.leesfamily.chuno.openvidu.game;
 
 import android.view.View;
 import android.widget.TextView;
@@ -45,3 +46,4 @@ public class RemoteParticipant extends Participant {
         super.dispose();
     }
 }
+*/

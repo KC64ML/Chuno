@@ -1,13 +1,11 @@
-package com.leesfamily.chuno.openvidu.openvidu;
+/*
+package com.leesfamily.chuno.openvidu.game;
 
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
-import com.leesfamily.chuno.game.GameViewFragment;
+import androidx.viewpager2.widget.ViewPager2;
 import com.leesfamily.chuno.openvidu.observers.CustomPeerConnectionObserver;
 import com.leesfamily.chuno.openvidu.observers.CustomSdpObserver;
 import com.leesfamily.chuno.openvidu.websocket.CustomWebSocket;
@@ -48,12 +46,12 @@ public class Session {
     private CustomWebSocket websocket;
     private GameViewFragment fragment;
 
-    public Session(String id, String token, ViewPager2 views_container, GameViewFragment fragment) {
+    public Session(String id, String token) {
         this.id = id;
         this.token = token;
-        this.views_container = views_container;
-        this.fragment = fragment;
 
+        // 세션 구성을 위해 PeerConnectionFactory를 초기화하고 빌드한다.
+        // 이것은 Google WebRTC 라이브러리와 WebRTCPeer연결을 초기화하는 방법이다.
         // Creating a new PeerConnectionFactory instance
         PeerConnectionFactory.InitializationOptions.Builder optionsBuilder = PeerConnectionFactory.InitializationOptions.builder(fragment.getContext());
         optionsBuilder.setEnableInternalTracer(true);
@@ -72,6 +70,13 @@ public class Session {
                 .setVideoDecoderFactory(decoderFactory)
                 .setOptions(options)
                 .createPeerConnectionFactory();
+    }
+
+    public Session(String id, String token, ViewPager2 views_container, GameViewFragment fragment) {
+        this(id,token);
+        this.views_container = views_container;
+        this.fragment = fragment;
+
     }
 
     public void setWebSocket(CustomWebSocket websocket) {
@@ -273,3 +278,4 @@ public class Session {
     }
 
 }
+*/

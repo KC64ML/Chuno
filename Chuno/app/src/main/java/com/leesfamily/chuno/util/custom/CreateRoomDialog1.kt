@@ -199,6 +199,13 @@ class CreateRoomDialog1(
             binding.titleView.text = getString(R.string.room_info_text)
             binding.roomTitleEdit.isEnabled = !isReadOnly
             binding.passwordEdit.isEnabled = !isReadOnly
+            binding.reservationDate.text = reservationDate
+            binding.reservationHour.text = reservationHour
+            binding.reservationMin.text = reservationMin
+            binding.reservationDate.text = reservationDate
+            binding.passwordEdit.visibility = View.GONE
+            binding.passwordText.visibility = View.GONE
+            binding.number.text = curValue.toString()
         }
     }
 

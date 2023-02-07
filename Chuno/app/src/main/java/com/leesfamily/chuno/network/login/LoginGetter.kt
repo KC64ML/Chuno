@@ -1,7 +1,10 @@
-package com.leesfamily.chuno.network
+package com.leesfamily.chuno.network.login
 
 import android.util.Log
+import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
+import com.leesfamily.chuno.MainViewModel
+import com.leesfamily.chuno.network.ChunoServer
 import com.leesfamily.chuno.network.data.DataForm
 import com.leesfamily.chuno.network.data.LoginForm
 import com.leesfamily.chuno.network.data.NickForm
@@ -17,16 +20,17 @@ class LoginGetter {
     private var loginData: LoginForm? = null
     private var userData: DataForm? = null
 
+    // JWT를 주고 User 정보를 받아오는 method
     fun requestUser(token: String): User? {
 
         val userResponse: Response<DataForm> = ChunoServer.loginServer.getUserData(token).execute()
 
         val networkResponse = userResponse.raw().networkResponse?.code
         val requestCode = userResponse.code()
-        Log.d(TAG, "requestLogin: loginResponse\n $userResponse")
-        Log.d(TAG, "requestLogin: requestCode\n $requestCode")
-        Log.d(TAG, "requestLogin: networkResponse\n $networkResponse")
-        Log.d(TAG, "requestLogin: token\n $token")
+        Log.d(TAG, "requestUser: loginResponse\n $userResponse")
+        Log.d(TAG, "requestUser: requestCode\n $requestCode")
+        Log.d(TAG, "requestUser: networkResponse\n $networkResponse")
+        Log.d(TAG, "requestUser: token\n $token")
         if (requestCode == 200) {
             userData = userResponse.body()
             val user: User? = userData?.result
@@ -37,16 +41,12 @@ class LoginGetter {
         return null
     }
 
-    //array 를 json String 으로 변환
-    fun <T> arrayToString(list: ArrayList<T>?): String? {
-        val g = Gson()
-        return g.toJson(list)
-    }
-
-    fun requestLogin(token: String): String? {
+    // kakao 토큰을 주고 JWT를 받아오는 method
+    // member일 경우 code = "memeber", result = token
+    // no_email일 경우 code = "no_email", result = email
+    fun requestLogin(token: String): LoginForm? {
 
         val loginResponse: Response<LoginForm> = ChunoServer.loginServer.login(token).execute()
-
         val networkResponse = loginResponse.raw().networkResponse?.code
         val requestCode = loginResponse.code()
         Log.d(TAG, "requestLogin: loginResponse\n $loginResponse")
@@ -54,21 +54,12 @@ class LoginGetter {
         Log.d(TAG, "requestLogin: networkResponse\n $networkResponse")
         if (requestCode == 200) {
             loginData = loginResponse.body()
-
-            when (loginData?.code) {
-                "member" -> {
-                    UserDB.setToken(loginData!!.result)
-                    LoginPrefManager.setLastLoginToken(loginData!!.result)
-                }
-                "no_email" -> {
-                    UserDB.setEmail(loginData!!.result)
-                }
-            }
-            Log.d(TAG, "requestLogin: request success, $loginData")
         }
-        return loginData?.code.toString()
+        return loginData
     }
 
+    // JWT의 유효성 검사하는 method
+    // return : Int, 0일 경우 유효하지 않음, 1일 경우 유효함
     fun requestTokenConfirm(token: String): Boolean {
 
         Log.d(TAG, "requestTokenConfirm: token $token")
@@ -79,9 +70,9 @@ class LoginGetter {
 
         val networkResponse = loginResponse.raw().networkResponse?.code
         val requestCode = loginResponse.code()
-        Log.d(TAG, "requestLogin: loginResponse\n $loginResponse")
-        Log.d(TAG, "requestLogin: requestCode\n $requestCode")
-        Log.d(TAG, "requestLogin: networkResponse\n $networkResponse")
+        Log.d(TAG, "requestTokenConfirm: loginResponse\n $loginResponse")
+        Log.d(TAG, "requestTokenConfirm: requestCode\n $requestCode")
+        Log.d(TAG, "requestTokenConfirm: networkResponse\n $networkResponse")
         if (requestCode == 200) {
             Log.d(TAG, "requestTokenConfirm: loginResponse.body() : ${loginResponse.body()}")
             when (loginResponse.body()) {
@@ -98,6 +89,7 @@ class LoginGetter {
         return false
     }
 
+    // 닉네임 중복확인 method
     fun requestNickDuplic(nick: String): Boolean {
 
         val loginResponse: Response<NickForm> =
@@ -105,9 +97,9 @@ class LoginGetter {
 
         val networkResponse = loginResponse.raw().networkResponse?.code
         val requestCode = loginResponse.code()
-        Log.d(TAG, "requestLogin: loginResponse\n $loginResponse")
-        Log.d(TAG, "requestLogin: requestCode\n $requestCode")
-        Log.d(TAG, "requestLogin: networkResponse\n $networkResponse")
+        Log.d(TAG, "requestNickDuplic: loginResponse\n $loginResponse")
+        Log.d(TAG, "requestNickDuplic: requestCode\n $requestCode")
+        Log.d(TAG, "requestNickDuplic: networkResponse\n $networkResponse")
         if (requestCode == 200) {
             Log.d(TAG, "requestTokenConfirm: loginResponse.body() : ${loginResponse.body()}")
             val check = loginResponse.body()?.code

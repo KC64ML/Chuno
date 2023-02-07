@@ -69,7 +69,7 @@
     <string name="location_permission_message">게임 내의 위치공유를 위해\n권한이 필요합니다.</string>
 
 
-    <string name="application_server_url">https://demos.openvidu.io/</string>
+    <string name="application_server_url">https://i8d208.p.ssafy.io/api/</string>
     <string name="start_button">Join</string>
     <string name="session_name">Session Name</string>
     <string name="default_session_name">SessionA</string>
