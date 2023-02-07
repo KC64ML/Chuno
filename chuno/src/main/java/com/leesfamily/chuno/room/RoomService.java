@@ -183,11 +183,10 @@ public class RoomService {
         );
 
         // (3) 노비, 추노꾼 랜덤
-//        randomUserCS();
+        randomUserCS();
 
 
 
-//        roomStartRequestDto.getUserIdList().get()
 
 
         return null;
@@ -203,7 +202,10 @@ public class RoomService {
 
         while(true){
             int randomIndex = (int)(Math.random() * userCount) + 1;
-//            if(addUserCnt == )
+            if(!visited[randomIndex]){
+                visited[randomIndex] = true;
+
+            }
         }
     }
 
