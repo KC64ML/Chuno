@@ -102,7 +102,8 @@ public class UserController {
             @RequestPart(value = "nickname") String nickname,
             @RequestHeader HttpHeaders requestHeader) {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
-        UserEntity result = userService.putMyProfileImg(userId, file, nickname);
+        userService.putMyProfileImg(userId, file, nickname);
+        UserInventoryResponse result = userService.getProfile(userId);
         Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByObject(result);
         return ResponseEntity.ok().body(resMap);
     }
@@ -154,8 +155,8 @@ public class UserController {
             @RequestHeader HttpHeaders requestHeader) {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
         int result = userService.buyItem(userId, itemId);
-
-        return null;
+        Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByNumber(result);
+        return new ResponseEntity<>(resMap, HttpStatus.OK);
     }
 
     // getHighPriorityList
@@ -180,12 +181,6 @@ public class UserController {
     ) {
         userService.deleteUserByNickname(nickname);
         return null;
-    }
-
-    // 이미지 저장
-    @PostMapping("/saveUserProfile")
-    public void  saveUserProfile(){
-
     }
 
 }

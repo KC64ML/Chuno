@@ -3,7 +3,6 @@ INSERT INTO users
 VALUES
     ('ljc9393@nate.com', '큰개님', NOW(), 7, 4, 8, 3),
     ('chaen511@naver.com', '성곡초짱이채은', NOW(), 10, 3, 9, 2),
-    ('souk0712@naver.com', '아름병아리', NOW(), 100, 43, 80, 32),
     ('ljc1025@nate.com', '노예킹', NOW(), 20, 10, 4, 1),
     ('lkc263@naver.com', '아리따움', NOW(), 40, 30, 20, 15),
     ('siganshoyou@google.com', '추노장인', NOW(), 30, 15, 10, 6);
