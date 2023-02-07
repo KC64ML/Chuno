@@ -74,20 +74,20 @@ public class UserController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @Operation(summary = "내 프로필 수정하기(닉네임)", description = "")
-    @Parameters({
-            @Parameter(name = "nickname", description = "닉네임", example = "내가전설이다"),
-    })
-    @PutMapping("/nickname")
-    public ResponseEntity<Map<String, Object>> putMyNickname(
-            @RequestBody UserEntity user,
-            @RequestHeader HttpHeaders requestHeader) {
-        user.setId(tokenUtils.getUserIdFromHeader(requestHeader));
-        UserEntity updatedUser = userService.putMyProfile(user);
-
-        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByObject(updatedUser);
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
+//    @Operation(summary = "내 프로필 수정하기(닉네임)", description = "")
+//    @Parameters({
+//            @Parameter(name = "nickname", description = "닉네임", example = "내가전설이다"),
+//    })
+//    @PutMapping("/nickname")
+//    public ResponseEntity<Map<String, Object>> putMyNickname(
+//            @RequestBody UserEntity user,
+//            @RequestHeader HttpHeaders requestHeader) {
+//        user.setId(tokenUtils.getUserIdFromHeader(requestHeader));
+//        UserEntity updatedUser = userService.putMyProfile(user);
+//
+//        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByObject(updatedUser);
+//        return new ResponseEntity<>(res, HttpStatus.OK);
+//    }
 
     @Operation(summary = "내 프로필 수정하기(프로필사진)", description = "")
     @Parameters( {
@@ -111,6 +111,17 @@ public class UserController {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
         List<UserEntity> myFriends = userService.getMyFriends(userId);
         Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByList(myFriends);
+        return new ResponseEntity<>(resMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/friend/{userId}")
+    public ResponseEntity<Map<String, Object>> isMyFriend(
+            @RequestHeader HttpHeaders requestHeader,
+            @PathVariable("userId") Long userId
+    ) {
+        Long myId = tokenUtils.getUserIdFromHeader(requestHeader);
+        int isMyFriend = userService.isMyFriend(myId, userId);
+        Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByNumber(isMyFriend);
         return new ResponseEntity<>(resMap, HttpStatus.OK);
     }
 
