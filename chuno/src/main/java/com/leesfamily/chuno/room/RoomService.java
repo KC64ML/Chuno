@@ -3,9 +3,7 @@ package com.leesfamily.chuno.room;
 import com.leesfamily.chuno.common.model.Direction;
 import com.leesfamily.chuno.common.model.Location;
 import com.leesfamily.chuno.common.util.GeometryUtils;
-import com.leesfamily.chuno.room.model.RoomResponse;
-import com.leesfamily.chuno.room.model.RoomEntity;
-import com.leesfamily.chuno.room.model.RoomRequest;
+import com.leesfamily.chuno.room.model.*;
 import com.leesfamily.chuno.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,10 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,7 +52,19 @@ public class RoomService {
         return roomRes;
     }
 
+    public RoomResponse getRoomById(Long roomId) {
+        return new RoomResponse(roomRepository.findById(roomId).get());
+    }
+
     public RoomEntity insRoom(RoomRequest room, Long host_id) {
+        DateTime dt = new DateTime();
+        dt.setHour(room.getHour());
+        dt.setMinute(room.getMinute());
+        LocalDate now = LocalDate.now();
+        dt.setYear(now.getYear());
+        dt.setMonth(now.getMonthValue());
+        dt.setDay(now.getDayOfMonth());
+
         RoomEntity roomEntity = RoomEntity.builder()
                 .lng(room.getLng())
                 .lat(room.getLat())
@@ -64,6 +72,7 @@ public class RoomService {
                 .isPublic(room.isPublic())
                 .radius(room.getRadius())
                 .password(room.getPassword())
+                .dateTime(dt)
                 .host(userRepository.getOne(host_id))
                 .build();
         RoomEntity res = roomRepository.save(roomEntity);
@@ -98,7 +107,12 @@ public class RoomService {
         return null;
     }
 
-    public Map<String, Object> pushRoom(long roomId, Long userId) {
-        return null;
+    public PushEntity pushRoom(long roomId, Long userId) {
+        PushEntity pushEntity = PushEntity.builder()
+                .room(roomRepository.findById(roomId).get())
+                .user(userRepository.findById(userId).get())
+                .build();
+        PushEntity res = pushRepository.saveAndFlush(pushEntity);
+        return res;
     }
 }
