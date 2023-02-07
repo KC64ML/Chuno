@@ -35,9 +35,11 @@ export default {
   },
   methods:{
     getRank(){
-      const token = sessionStorage.token
-      this.axios.get(process.env.VUE_APP_SPRING + 'user/priority', { headers: { Authorization: token } })
+      // const token = sessionStorage.token
+      console.log('getRank 실행됨')
+      this.axios.get(process.env.VUE_APP_SPRING + 'user/priority',)
       .then((res) => {
+        console.log(res)
         this.users = res.data.result
       })
       .catch(() => {
@@ -50,6 +52,7 @@ export default {
   },
   created() {
     this.getRank()
+    console.log(this.users)
   }
 }
 </script>
