@@ -216,6 +216,7 @@ export default {
                 hour:  (this.hour + (this.is_am ? 0 : 12)) % 24,
                 minute:  this.minute,
             }).then(res => res.data.result)
+            console.log(data);
             this.$router.push({ path: "/game/" + data })
         }
     },
