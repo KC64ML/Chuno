@@ -24,33 +24,32 @@
 </template>
 
 <script>
-    export default {
-      data(){
-        return {
-          userInfo: [],
-        }
-      },
-      methods: {
-        getUser() {
-          console.log('footer created에서 getuser')
-          const token = sessionStorage.token
-          this.axios.post(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
-            .then((res) => {
-
-              const code = res.data.result
-              if(code) {
-                this.userInfo = res.data.result
-                console.log(res.data)
-              } else {
-                console.log('code err')
-              }
-            })
-        }
-      },
-      created() {
-        this.getUser()
+  export default {
+    data(){
+      return {
+        userInfo: [],
       }
+    },
+    methods: {
+      getUser() {
+        console.log('footer created에서 getuser')
+        const token = sessionStorage.token
+        this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
+          .then((res) => {
+            const code = res.data.result
+            if(code) {
+              this.userInfo = res.data.result
+              console.log(res.data)
+            } else {
+              console.log('code err')
+            }
+          })
+      }
+    },
+    created() {
+      this.getUser()
     }
+  }
 </script>
 
 <style lang="scss" scoped>
