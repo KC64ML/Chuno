@@ -127,7 +127,7 @@ export default {
   margin: 3%;
   padding: 3% 5%;
 }
-#uploadedImg{
+.uploadedImg{
   width: 70px;
   height: 70px;
   border-radius: 50%;

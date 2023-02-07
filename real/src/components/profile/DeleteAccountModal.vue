@@ -18,12 +18,11 @@ export default {
   methods: {
     async del() {
       alert("탈퇴?");
-      // var del_user_email = document.getElementById("del_user").value;
       const token = sessionStorage.token
       await this.axios.delete(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
       console.log("탈퇴완료");
       this.$emit('on-delete')
-      // this.logout();
+      sessionStorage.setItem("token", null)
       this.$router.push({ name: 'start'})
     },
   }
