@@ -54,14 +54,7 @@ export default {
     },
     // 아이템 사용
     useItem(item) {
-      console.log('아이템 썻다')
-      console.log(this.item)
-      this.$store.state.item = item
-      console.log(this.$store.state.item)
-      // this.$store.dispatch('useItem')
-      this.$store.state.menu = false
-      this.$store.state.itemModal = true
-
+     this.$emit('use-item', item)
     }
   },
   created(){

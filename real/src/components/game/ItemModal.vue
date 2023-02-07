@@ -1,7 +1,7 @@
 <template>
   <!-- 아이템을 사용했을 때 뜨는 Cofirm용 모달 -->
   <div class="modal">
-    <p>{{ item.name }}을(를) 사용하시겠습니까?</p>
+    <p>{{ usedItem.name }}을(를) 사용하시겠습니까?</p>
     <div class="container-row">
       <div class="art-button" @click="itemNo">
         <div>아니오</div>
@@ -19,21 +19,17 @@
 
 export default {
   name: 'LogoutModal',
-  data() {
-    return {
-      item: []
-    }
+  props: {
+    usedItem: Object,
   },
   methods: {
     itemYes() {
       console.log('아이템 사용')
-      this.$store.state.itemModal = false
-      // 아이템 사용 코드 추가
+      this.$emit('item-yes')
     },
     itemNo() {
       console.log('아이템 미사용')
-      console.log(this.$store.state.itemModal)
-      this.$store.state.itemModal = false
+      this.$emit('item-no')
     },
   },
   mounted(){

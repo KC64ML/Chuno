@@ -10,7 +10,6 @@ export default createStore({
     menuModal: false,
     itemModal: false,
     // Game
-    menu: false,
     item : [],
   },
   getters: {
