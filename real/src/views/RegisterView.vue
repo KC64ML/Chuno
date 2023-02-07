@@ -82,8 +82,8 @@ export default {
       sessionStorage.setItem("token", token.data);
       if (this.one_file) {
         const formData = new FormData();
-        formData.append("file", this.oneFile);
         formData.append("nickname", this.email);
+        formData.append("file", this.one_file);
         await this.axios.put(process.env.VUE_APP_SPRING + "user/profile", formData, { headers: { 'Content-Type': 'multipart/form-data', Authorization: token } })
       }
       alert("등록완료");
