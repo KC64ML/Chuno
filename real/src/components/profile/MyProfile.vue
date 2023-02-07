@@ -1,11 +1,11 @@
 <template>
-  <EditProfileModal v-if="modal"/>
+  <!-- <EditProfileModal v-if="modal"/> -->
 
   <!-- <div>   -->
     <div class="container-col" id="myProfile">
       <div class="container-row">
         <!-- <img src="@/assets/profile_default.svg" alt="profile pic" class="uploadedImg"> -->
-        <img :src=" userInfo.profile? URL + 'resources/images?path=' + userInfo.profile :  defaultProfile" alt="profile pic" class="uploadedImg">
+        <img :src=" userInfo.profile? URL + 'resources/images?path=' + userInfo.profile.path :  defaultProfile" alt="profile pic" class="uploadedImg">
         <div>
           <p style="font-size: 20pt;">{{ userInfo.nickname }}</p>
           <p>Lv. {{ userInfo.level }} | {{ userInfo.money }} 냥</p>
@@ -35,12 +35,12 @@
 </template>
 <script>
 import defaultProfile from '@/assets/profile_default.svg'
-import EditProfileModal from '@/components/profile/EditProfileModal.vue'
+// import EditProfileModal from '@/components/profile/EditProfileModal.vue'
 
 export default {
   name: 'MyProfile',
   components: {
-    EditProfileModal,
+    // EditProfileModal,
   },
   props: {
     me: Boolean,
