@@ -38,4 +38,6 @@ public class ItemEntity {
 
     @Column(nullable = false)
     private int forRunner;
+
+
 }

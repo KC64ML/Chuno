@@ -183,7 +183,9 @@ public class RoomService {
         );
 
         // (3) 노비, 추노꾼 랜덤
-        randomUserCS();
+        // 사용자 정보를 조회한 후, 거기서 아이템을 조회해햐아 한다.
+        // user 기반 item 조회
+//        randomUserCS();
 
 
 
@@ -204,7 +206,7 @@ public class RoomService {
             int randomIndex = (int)(Math.random() * userCount) + 1;
             if(!visited[randomIndex]){
                 visited[randomIndex] = true;
-
+ 
             }
         }
     }
