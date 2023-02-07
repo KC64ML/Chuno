@@ -50,7 +50,7 @@ export default {
         },
         fff() {
             alert('fffff');
-        }
+        },
     }
 }
 </script>

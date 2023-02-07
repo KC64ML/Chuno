@@ -3,7 +3,7 @@
         <router-view></router-view>
     </div>
     <FooterVue class="footer_fix"
-        v-if="this.$route.name != 'game' && this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth' && this.$route.path != '/register'">
+        v-if="this.$route.name != 'game' && this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth' && this.$route.name != 'Register'">
     </FooterVue>
     <button @click="retreat">탈퇴</button>
 </template>
