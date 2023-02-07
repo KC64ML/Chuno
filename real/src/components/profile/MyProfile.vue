@@ -5,7 +5,7 @@
     <div class="container-col" id="myProfile">
       <div class="container-row">
         <!-- <img src="@/assets/profile_default.svg" alt="profile pic" class="uploadedImg"> -->
-        <img :src=" userInfo.profile == null ? defaultProfile : URL + 'resources/images?path=' + userInfo.profile" alt="profile pic" class="uploadedImg">
+        <img :src=" userInfo.profile? URL + 'resources/images?path=' + userInfo.profile :  defaultProfile" alt="profile pic" class="uploadedImg">
         <div>
           <p style="font-size: 20pt;">{{ userInfo.nickname }}</p>
           <p>Lv. {{ userInfo.level }} | {{ userInfo.money }} 냥</p>
