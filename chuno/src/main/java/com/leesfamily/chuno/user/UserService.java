@@ -134,7 +134,6 @@ public class UserService {
     public int buyItem(Long userId, Long itemId) {
         UserEntity user = userRepository.findById(itemId).get();
         ItemEntity item = itemRepository.findById(itemId).get();
-        user.getInventory().add(item);
         UserEntity result = userRepository.saveAndFlush(user);
         return 1;
     }
