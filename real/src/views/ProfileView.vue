@@ -68,6 +68,7 @@ export default {
       deleteAccountModal: false,
       editProfileModal: false,
       me: true,
+      friend: false,
       userInfo: []
     }
   },
@@ -92,6 +93,11 @@ export default {
               .then((res) => {
                   this.userInfo = res.data.result
                   this.me = false
+                })
+              // 친구인지 확인
+              this.axios.get(process.env.VUE_APP_SPRING + 'user/friend/' + uid, { headers: { Authrization: token } })
+              .then((res) => {
+                  this.friend = res.data.result
                 })
             }
           } else {
