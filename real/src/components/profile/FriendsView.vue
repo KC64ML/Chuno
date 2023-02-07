@@ -49,24 +49,6 @@ export default {
             console.log('실패')
           }
         })
-      this.friends = [
-        {
-          friendId: 1,
-          nickname: 'gㅎ하ㅣ힣',
-        },
-        {
-          friendId: 2,
-          nickname: '이채은',
-        },
-        {
-          friendId: 3,
-          nickname: '싸피싸피싸피',
-        },
-        {
-          friendId: 4,
-          nickname: 'ㄹㄴㅇ',
-        },
-      ]
     },
     onEdit() {
       this.edit = !this.edit

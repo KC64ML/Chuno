@@ -15,7 +15,7 @@
         <div class="button" @click="onModal">
           <p>프로필 편집</p>
         </div>
-        <div class="button" @click="this.$router.push({name: 'friends', params: {uid: 1}})">
+        <div class="button" @click="this.$router.push({ name: 'friends', params: {uid: userInfo.id } })">
           <p>친구 관리</p>
         </div>
       </div>
