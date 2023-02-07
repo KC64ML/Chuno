@@ -1,6 +1,6 @@
 <template>
   <div class="container-row">
-    <img :src="URL + 'images/' + item.imgPath" alt="item" style="height:50px;">
+    <img :src="URL + 'resources/images/' + item.imgPath" alt="item" style="height:50px;">
     <div>{{ item.name }}</div>
   </div>
 </template>
