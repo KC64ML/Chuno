@@ -17,7 +17,7 @@ export default {
       // 아이피 주소 고쳐주세요
       var { data } = await this.axios.post(
         // process.env.VUE_APP_SPRING + "kakao/login",
-        process.env.VUE_APP_SPRING + "/kakao/login",
+        process.env.VUE_APP_SPRING + "kakao/login",
         code,
         { headers: { "Content-Type": "text/plain" } }
       );

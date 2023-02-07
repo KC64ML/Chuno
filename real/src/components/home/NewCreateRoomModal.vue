@@ -202,10 +202,10 @@ export default {
             this.page2 = false;
         },
         async modalConfirm() {
-            alert('게임방을 만들어요')
-            
+            alert('게임방을 만들어요!!!')
+            console.log(process.env.VUE_APP_SPRING + "room")
             // 방을 데이터 베이스에 등록해요
-            var data = await this.axios.post(process.env.VUE_APP_SPRING + "/room", {
+            var data = await this.axios.post(process.env.VUE_APP_SPRING + "room", {
                 lat: this.player.lat,
                 lng: this.player.lng,
                 title: this.title,

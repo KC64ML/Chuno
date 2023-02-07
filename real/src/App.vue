@@ -27,17 +27,6 @@ export default {
     },
     created() {
         console.log("앱시작")
-        var doc = document.documentElement;
-        console.log(doc.webkitRequestFullscreen);
-        doc.webkitRequestFullscreen();
-        // if (doc.requestFullscreen)
-        //     doc.requestFullscreen();
-        // else if (doc.webkitRequestFullscreen)
-        //     doc.webkitRequestFullscreen();
-        // else if (doc.mozReuqestFullscreen)
-        //     doc.mozReuqestFullscreen();
-        // else if (doc.msReqeustFullscreen)
-        //     doc.msReqeustFullscreen();
     }
 }
 </script>
