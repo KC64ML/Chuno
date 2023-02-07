@@ -8,7 +8,7 @@
             <img class="menu" src="@/assets/Search.svg">
             <div style="color: white">방검색</div>
         </div>
-        <div class="menu_box" @click="this.$router.push({ name: Profile, params: { uid: userInfo.id } })">
+        <div class="menu_box" @click="this.$router.push(`profile/${userInfo.id}`)">
             <img class="menu" src="@/assets/Profile_footer.svg">
             <div style="color: white">내프로필</div>
         </div>
@@ -32,6 +32,7 @@
       },
       methods: {
         getUser() {
+          console.log('footer created에서 getuser')
           const token = sessionStorage.token
           this.axios.post(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
             .then((res) => {
