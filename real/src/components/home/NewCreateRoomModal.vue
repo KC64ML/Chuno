@@ -181,7 +181,9 @@ export default {
             this.page2 = false;
         },
         modalConfirm() {
-            alert('확인')
+            alert('게임방을 만들어요')
+            // 방을 데이터 베이스에 등록해요
+            this.axios.post(process.env.VUE_APP_SPRING + "/")
         }
     },
 }
