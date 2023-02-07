@@ -6,10 +6,14 @@ import com.leesfamily.chuno.common.util.TokenUtils;
 import com.leesfamily.chuno.room.model.RoomResponse;
 import com.leesfamily.chuno.room.model.RoomEntity;
 import com.leesfamily.chuno.room.model.RoomRequest;
+import com.leesfamily.chuno.room.model.dto.RoomGameStartRequestDto;
+import com.leesfamily.chuno.room.model.dto.RoomGameStartResponseDto;
 import com.leesfamily.chuno.room.model.dto.RoomListByConditionsDto;
+import com.leesfamily.chuno.room.model.dto.RoomStartDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -120,10 +124,17 @@ public class RoomController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-//    @PostMapping("/gamestart")
-//    public ResponseEntity<> gameStart(
-//            @PathVariable("roomId") long roomId
-//    ){
-//
-//    }
+    @Operation(summary = "게임 시작 - 추노 노비 정함, 노비 문서 위치, 방 정보 전달")
+    @ApiResponse(
+            content = {
+                    @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = RoomStartDto.class))
+                    )
+            }
+    )
+    @PostMapping("/startRoom")
+    public ResponseEntity<RoomGameStartResponseDto> startRoom(@RequestBody RoomGameStartRequestDto roomStartRequestDto){
+        return ResponseEntity.ok(roomService.startRoom(roomStartRequestDto));
+    }
 }
