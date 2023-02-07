@@ -55,29 +55,37 @@ export default {
       this.modal = true
       console.log(this.modal)
     },
+    // 친구 추가
     addFriend(yourUid) {
       const token = sessionStorage.token
+      // 내 정보 가져오기
       let myUid
       this.axios.post(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
         .then((res) => {
           myUid = res.data.result.userId
         })
+        .catch((e) => {
+          console.log(e)
+        })
       
-      const data = { toUserId: myUid, fromUserId: yourUid }
-      this.axios.get()
-      // 친구가 아닐 경우
-      if (!this.friend) {
-        this.axios.post(process.env.VUE_APP_SPRING + 'user/friend', data, { headers: { Authorization: token } })
-          .then((res) => {
-            const code = res.data.code
-            if(code) {
-              this.friend = !this.friend
-            } else {
-              console.log('code error')
-            }
-          })
-        }
-      },
+      // 넘길 데이터 만들기
+      const data = { toUserId: yourUid, fromUserId: myUid }
+
+      // 친구 추가
+      this.axios.post(process.env.VUE_APP_SPRING + 'user/friend', data, { headers: { Authorization: token } })
+        .then((res) => {
+          const code = res.data.code
+          if(code) {
+            this.friend = !this.friend
+          } else {
+            console.log('code error')
+          }
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+    },
+
     deleteFriend(yourUid) {
       const token = sessionStorage.token
       this.axios.delete(process.env.VUE_APP_SPRING +'user/friend/' + yourUid, { headers: { Authorization: token } })
@@ -88,9 +96,11 @@ export default {
         } else {
           console.log('code error')
         }
-        })
+      })
+      .catch((e) => {
+        console.log(e)
+      })
     },
-
   },
 }
 </script>

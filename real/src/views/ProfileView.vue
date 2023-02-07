@@ -10,7 +10,7 @@
   ></HeaderVue>
   <HeaderVue
     v-if="!me"
-    :title= "userInfo.nickname"
+    :title= "userInfo.nickname + '님의 프로필'"
   ></HeaderVue>
 
   <div style="height: 75%; width:300px;">
@@ -18,7 +18,7 @@
       @on-edit="onEdit"
       :me="me"
       :userInfo="userInfo"
-      />
+    />
     <div class="container">
       <PlayTimeView
         :userInfo="userInfo"
@@ -77,17 +77,19 @@ export default {
     getUser(){
       console.log('getuser')
       const token = sessionStorage.token
+      // 프로필 주인 아이디
       const uid = this.$route.params.uid
+      // 내 정보 불러와서
       this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authrization: token } })
         .then((res) => {
           console.log(res)
           const code = res.data.code
           if (code) {
-            if(res.data.result.userId == uid){
+            if(res.data.result.userId == uid){ // 내 프로필이면 
               this.userInfo = res.data.result
               this.me = true
-            } else{
-              this.axios.get(process.env.VUE_APP_SPRING + 'user' + uid, { headers: { Authrization: token } })
+            } else{ // 다른 사람 프로필이면
+              this.axios.get(process.env.VUE_APP_SPRING + 'user/' + uid, { headers: { Authrization: token } })
               .then((res) => {
                   this.userInfo = res.data.result
                   this.me = false
