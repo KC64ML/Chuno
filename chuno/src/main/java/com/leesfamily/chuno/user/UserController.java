@@ -95,10 +95,10 @@ public class UserController {
             @Parameter(name = "nickname", description = "닉네임")
     })
     @PutMapping(value = "/profile",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> putMyProfileImg(
-            @RequestPart MultipartFile file,
-            @RequestParam String nickname,
+            @RequestPart(value = "file") MultipartFile file,
+            @RequestPart(value = "nickname") String nickname,
             @RequestHeader HttpHeaders requestHeader) {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
         UserEntity result = userService.putMyProfileImg(userId, file, nickname);

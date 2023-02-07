@@ -4,10 +4,7 @@ import com.leesfamily.chuno.common.util.MyFileUtils;
 import com.leesfamily.chuno.common.util.TokenUtils;
 import com.leesfamily.chuno.item.ItemRepository;
 import com.leesfamily.chuno.item.model.ItemEntity;
-import com.leesfamily.chuno.user.model.FriendDTO;
-import com.leesfamily.chuno.user.model.FriendEntity;
-import com.leesfamily.chuno.user.model.UserEntity;
-import com.leesfamily.chuno.user.model.UserProfile;
+import com.leesfamily.chuno.user.model.*;
 import com.leesfamily.chuno.user.model.dto.UserRankingListDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -15,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +33,7 @@ public class UserService {
     final private EntityManagerFactory emFactory;
     final private MyFileUtils myFileUtils;
     final private TokenUtils tokenUtils;
+    private final InventoryEntityRepository inventoryEntityRepository;
 
 
     public UserEntity getProfile(Long id) {
@@ -56,6 +55,7 @@ public class UserService {
     }
 
     public Long register(UserEntity user) {
+        user.setLevel(1);
         UserEntity userEntity = userRepository.saveAndFlush(user);
         return userEntity.getId();
     }
@@ -134,7 +134,16 @@ public class UserService {
     public int buyItem(Long userId, Long itemId) {
         UserEntity user = userRepository.findById(itemId).get();
         ItemEntity item = itemRepository.findById(itemId).get();
-        UserEntity result = userRepository.saveAndFlush(user);
+        int curMoney = user.getMoney();
+        if(curMoney - item.getPrice() < 0) {
+            return 0;
+        }
+        user.setMoney(curMoney - item.getPrice());
+        userRepository.saveAndFlush(user);
+        InventoryEntity inven = new InventoryEntity();
+        inven.setItem(item);
+        inven.setUser(user);
+        inventoryEntityRepository.saveAndFlush(inven);
         return 1;
     }
 
