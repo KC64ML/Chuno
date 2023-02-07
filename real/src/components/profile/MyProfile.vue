@@ -58,15 +58,16 @@ export default {
     addFriend(yourUid) {
       const token = sessionStorage.token
       let myUid
-      this.axios.post(process.env + 'user', { headers: { Authorization: token } })
+      this.axios.post(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
         .then((res) => {
           myUid = res.data.result.userId
         })
       
       const data = { toUserId: myUid, fromUserId: yourUid }
       this.axios.get()
+      // 친구가 아닐 경우
       if (!this.friend) {
-        this.axios.post(process.env + 'user/friend', data, { headers: { Authorization: token } })
+        this.axios.post(process.env.VUE_APP_SPRING + 'user/friend', data, { headers: { Authorization: token } })
           .then((res) => {
             const code = res.data.code
             if(code) {
@@ -79,7 +80,7 @@ export default {
       },
     deleteFriend(yourUid) {
       const token = sessionStorage.token
-      this.axios.delete(process.env +'user/friend/' + yourUid, { headers: { Authorization: token } })
+      this.axios.delete(process.env.VUE_APP_SPRING +'user/friend/' + yourUid, { headers: { Authorization: token } })
       .then((res) => {
         const code = res.data.code
         if(code) {
