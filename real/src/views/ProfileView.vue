@@ -75,6 +75,7 @@ export default {
       // 내 정보 불러와서
       this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authrization: token } })
         .then((res) => {
+          console.log('-----------내 정보 불러오기----------')
           console.log(res)
           const code = res.data.code
           if (code) {

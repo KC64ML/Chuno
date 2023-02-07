@@ -1,6 +1,6 @@
 <template>
   <div class="container-row">
-    <img :src="item.img_path" alt="item" style="height:50px;">
+    <img :src="URL + 'images/' + item.imgPath" alt="item" style="height:50px;">
     <div>{{ item.name }}</div>
   </div>
 </template>
@@ -10,7 +10,12 @@ export default {
   name: 'ChaserItemView',
   props: {
     item: Object,
-  }
+  },
+  data(){
+    return {
+      URL: process.env.VUE_APP_SPRING,
+    }
+  },
 }
 </script>
 
