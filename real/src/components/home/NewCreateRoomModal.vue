@@ -11,7 +11,7 @@
                     <tr>
                         <td>방 제목</td>
                         <td>
-                            <input>
+                            <input v-model="title" style="padding: 0 20px">
                         </td>
                     </tr>
                     <tr>
@@ -39,6 +39,10 @@
                             </div>
                         </td>
                     </tr>
+                    <tr v-if="!is_public">
+                        <td>비밀번호</td>
+                        <td><input v-model="password"></td>
+                    </tr>
                     <tr>
                         <td>예약</td>
                         <td>
@@ -58,12 +62,18 @@
                         <td></td>
                         <td>
                             <div>
-                                <div style="display: flex; align-items: center;">
-                                    <input class="time_input">
-                                    <div style="margin-right: 15px">시</div>
+                                <div class="hour_type" v-if="is_am" @click="amChange">
+                                    오전
+                                </div>
+                                <div class="hour_type" v-else @click="amChange">
+                                    오후
                                 </div>
                                 <div style="display: flex; align-items: center;">
-                                    <input class="time_input">
+                                    <input class="time_input" v-model="hour" type="number">
+                                    <div style="margin-right: 15px">시</div>
+                                </div>
+                                <div style="display: flex; align-items: center;" type="number">
+                                    <input class="time_input" v-model="minute">
                                     <div>분</div>
                                 </div>
                             </div>
@@ -133,9 +143,10 @@ export default {
             title: "",
             max_player: 2,
             is_public: true,
+            password: "",
             is_today: true,
-            hour: 0,
-            minute: 0,
+            hour: null,
+            minute: null,
             page1: true,
             page2: false,
             circleOptions: {
@@ -145,6 +156,7 @@ export default {
                 fillColor: "#0000FF",
                 fillOpacity: 0.15,
             },
+            is_am: true,
             radius: 750
         }
     },
@@ -153,6 +165,11 @@ export default {
             this.$emit("modal_off")
         },
         nextButton1() {
+            console.log(this.hour + (this.is_am ? 0 : 12), this.minute)
+            if (this.hour > 12 || this.hour <= 0 || this.minute < 0 || this.minute >= 60) {
+                alert("시간을 확인해 주세요");
+                return;
+            }
             this.page1 = false;
             this.page2 = true;
         },
@@ -173,6 +190,9 @@ export default {
         today() {
             this.is_today = true;
         },
+        amChange() {
+            this.is_am = !this.is_am;
+        },
         tomorrow() {
             this.is_today = false;
         },
@@ -182,8 +202,28 @@ export default {
         },
         modalConfirm() {
             alert('게임방을 만들어요')
+            
             // 방을 데이터 베이스에 등록해요
-            this.axios.post(process.env.VUE_APP_SPRING + "/")
+            // this.axios.post(process.env.VUE_APP_SPRING + "/room", {
+            //     lat: this.player.lat,
+            //     lng: this.player.lng,
+            //     title: this.title,
+            //     isPublic: this.is_public,
+            //     password: this.is_public ? null : this.password,
+            //     radius: this.radius,
+            // }) 방번호 리스폰스
+            console.log(`
+                lat:${this.player.lat},
+                lng:${this.player.lng},
+                title:${this.title},
+                isPublic:${this.is_public},
+                password:${this.is_public ? null : this.password},
+                radius:${this.radius},
+                isToday:${this.is_today},
+                hour: ${this.hour + this.is_am ? 0 : 12},
+                minute: ${this.minute},`);
+            var data = 7;
+            this.$router.push({ path: "/game/" + data })
         }
     },
 }
@@ -244,9 +284,19 @@ td:nth-child(2)>div {
     display: flex;
     align-items: center;
 }
-
+.hour_type {
+    background-color: #141414;
+    color: #f2f2f2;
+    height: $plma_size;
+    line-height: $plma_size;
+    text-align: center;
+    width: 40px;
+    border-radius: $plma_size / 4;
+    margin-right: 8px;
+}
 .time_input {
-    width: 45px;
+    width: 40px;
+    text-align: center;
 }
 
 .plma_button {

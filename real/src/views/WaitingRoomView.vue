@@ -169,7 +169,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                         videoSource: undefined, // The source of video. If undefined default webcam
                         publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
                         publishVideo: false, // Whether you want to start publishing with your video enabled or not
-                        resolution: "80x60", // The resolution of your video
+                        resolution: "1x1", // The resolution of your video
                         frameRate: 5, // The frame rate of your video
                         insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                         mirror: false, // Whether to mirror your local video or not
