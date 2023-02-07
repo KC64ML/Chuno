@@ -59,7 +59,7 @@
     #container {
         background-color: black;
         height: $footer_height;
-        width: 1
+        width: 1;
         justify-content: space-around;
         align-items: center;
     }
