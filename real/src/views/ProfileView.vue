@@ -69,7 +69,6 @@ export default {
   },
   methods: {
     getUser(){
-      console.log('getuser')
       const token = sessionStorage.token
       // 프로필 주인 아이디
       const uid = this.$route.params.uid
@@ -79,7 +78,7 @@ export default {
           console.log(res)
           const code = res.data.code
           if (code) {
-            if(res.data.result.userId == uid){ // 내 프로필이면 
+            if(res.data.result.id == uid){ // 내 프로필이면 
               this.userInfo = res.data.result
               this.me = true
             } else{ // 다른 사람 프로필이면
@@ -109,7 +108,9 @@ export default {
     },
   },
   created(){
+    console.log('getUser 실행?')
     this.getUser()
+    console.log('getUser 실행!')
   }
 }
 </script>

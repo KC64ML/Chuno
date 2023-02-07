@@ -57,6 +57,7 @@ export default {
     },
     // 친구 추가
     addFriend(yourUid) {
+      console.log(this.$route.params.uid)
       const token = sessionStorage.token
       // 내 정보 가져오기
       let myUid
