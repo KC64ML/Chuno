@@ -70,6 +70,9 @@ import randomLocation from 'random-location'
 
 export default {
   name: 'MapView',
+  props:{
+    // papers: Object, // 노비 문서 정보
+  },
   data() {
     return {
       // 나랑 관련된 정보
@@ -86,7 +89,7 @@ export default {
         fillOpacity: 0.15,
       },
       // 노비 문서 관련 정보
-      papers: [],
+      papers: [], // props로
       paperMarkerImg: {
         url: truePaper,
         scaledSize: { width: 40, height: 40 }
