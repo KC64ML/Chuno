@@ -39,16 +39,7 @@ public class RoomResponse {
             this.dateTime = entity.getDateTime();
         }
         public RoomResponse(RoomEntity entity, Location loc) {
-            this.id = entity.getId();
-            this.title = entity.getTitle();
-            this.password = entity.getPassword();
-            this.lat = entity.getLat();
-            this.lng = entity.getLng();
-            this.currentPlayers = entity.getCurrentPlayers();
-            this.maxPlayers = entity.getMaxPlayers();
-            this.radius = entity.getRadius();
-            this.host = entity.getHost();
-            this.isPushed = entity.isPushed();
+            this(entity);
             double lat = loc.getLat();
             double lng = loc.getLat();
             double elat = entity.getLat();
@@ -56,7 +47,6 @@ public class RoomResponse {
             this.distance = (6371*Math.acos(Math.cos(Math.toRadians(lat))
                     * Math.cos(Math.toRadians(elat)) * Math.cos(Math.toRadians(elng) - Math.toRadians(lng))
                     + Math.sin(Math.toRadians(lat)) * Math.sin(Math.toRadians(elat))));
-            this.dateTime = entity.getDateTime();
         }
 
 
