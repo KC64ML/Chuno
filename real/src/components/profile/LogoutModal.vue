@@ -20,9 +20,10 @@ export default {
     logout() {
       alert("로그아웃");
       sessionStorage.setItem("token", null)
+      this.$emit('on-logout')
       //예제 파일은 html파일이라 새로고침을 하지만 vue는 data가 바인딩 되어있으므로 이 명령은 필요 없을거에요
       // location.reload();
-      this.$router.push({ name: 'Start'})
+      this.$router.push({ name: 'start'})
     },
   }
 }
