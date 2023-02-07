@@ -1,7 +1,7 @@
 # open jdk java11 버전 환경
 FROM openjdk:11-jdk
 
-VOLUME /tmp
+VOLUME d208-backend:/var/jenkins_home/
 
 # 생성된 이미지에서 열어줄 
 EXPOSE 8000
