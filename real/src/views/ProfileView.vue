@@ -18,7 +18,6 @@
   ></HeaderVue>
 
   <div style="height: 75%; width:300px;">
-
     <MyProfileView 
       @on-edit="onEdit"
       :me="me"
