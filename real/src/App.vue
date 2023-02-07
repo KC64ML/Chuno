@@ -84,7 +84,8 @@ export default {
       background-color: #F5F5F5;
       border-radius: 10%;
       width: 70vw;
-      // height: 80%;
+      padding: 5%;
+      margin: 5%;
     }
 
 @font-face {
@@ -146,7 +147,20 @@ textarea:focus,
 input:focus {
     outline: none;
 }
-
+// leechaeeun
+.art-button{
+  position: relative;
+}
+.art-button img{
+  width: 90%;
+}
+.art-button div {
+  color: #F5F5F5;
+  position: absolute;
+  top: 30%;
+  left: 20%;
+  font-size: 20pt;
+}
 </style>
 
 <style lang="scss" scoped>

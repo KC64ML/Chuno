@@ -3,8 +3,12 @@
     :title="'랭킹'"
   ></HeaderVue>
   <div>
-    <RankTop3View/>
-    <RankListView/>
+    <RankTop3View
+      :users="users"
+    />
+    <RankListView
+      :users="users"
+    />
     <hr>
     <p @click="onGame">
       game router test
@@ -24,11 +28,29 @@ export default {
     RankTop3View,
     RankListView,
   },
+  data() {
+    return {
+      users: []
+    }
+  },
   methods:{
+    getRank(){
+      const token = sessionStorage.token
+      this.axios.get(process.env.VUE_APP_SPRING + 'user/priority', { headers: { Authorization: token } })
+      .then((res) => {
+        this.users = res.data.result
+      })
+      .catch(() => {
+        console.log('error')
+      })
+    },
     onGame() {
       this.$router.push({name: 'game', params: { roomId: 1 }})
     }
   },
+  created() {
+    this.getRank()
+  }
 }
 </script>
 

@@ -50,6 +50,7 @@ export default {
     }
   },
   methods: {
+
     async check() {
       console.log(this.nickname);
       this.can_use = await this.axios.get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname);

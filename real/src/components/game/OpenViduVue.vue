@@ -125,7 +125,6 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 return await this.createToken(sessionId);
             },
             async createSession(sessionId) {
-                console.log("createSeesion 시작", APPLICATION_SERVER_URL)
                 const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions', { customSessionId: sessionId }, {
                     headers: { 'Content-Type': 'application/json', },
                 });

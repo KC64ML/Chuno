@@ -39,24 +39,16 @@ export default {
   },
   methods: {
     getFriends(){
-      this.friends = [
-        {
-          friendId: 1,
-          nickname: 'gㅎ하ㅣ힣',
-        },
-        {
-          friendId: 2,
-          nickname: '이채은',
-        },
-        {
-          friendId: 3,
-          nickname: '싸피싸피싸피',
-        },
-        {
-          friendId: 4,
-          nickname: 'ㄹㄴㅇ',
-        },
-      ]
+      const token = sessionStorage.token
+      this.axios.get(process.env.VUE_APP_SPRING + 'user/friend', { headers: { Authorization: token } })
+        .catch((res) => {
+          const code = res.data.code
+          if(code) {
+            this.friends = res.data.result
+          } else {
+            console.log('실패')
+          }
+        })
     },
     onEdit() {
       this.edit = !this.edit
@@ -86,7 +78,7 @@ export default {
     margin: 0 20%;
     justify-content: center;
   }
-  input{
+  #room_search{
     border: none;
     background-color: #F5F5F5;
     padding-left: 7%;

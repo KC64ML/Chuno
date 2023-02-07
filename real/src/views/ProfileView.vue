@@ -5,14 +5,27 @@
   <EditProfileModal v-if="editProfileModal"/>
   
   <HeaderVue
-    :title="'내 프로필'"
+    v-if="me"
+    :title="'프로필'"
+  ></HeaderVue>
+  <HeaderVue
+    v-if="!me"
+    :title= "userInfo.nickname + '님의 프로필'"
   ></HeaderVue>
 
   <div style="height: 75%; width:300px;">
-    <MyProfileView @on-edit="onEdit"/>
+    <MyProfileView 
+      @on-edit="onEdit"
+      :me="me"
+      :userInfo="userInfo"
+    />
     <div class="container">
-      <PlayTimeView/>
-      <RecordView/>
+      <PlayTimeView
+        :userInfo="userInfo"
+      />
+      <RecordView
+        :userInfo="userInfo"
+      />
     </div>
     <div id="checkout">
       <span @click="onDelete">회원탈퇴</span> |
@@ -25,7 +38,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import HeaderVue from '@/components/HeaderVue.vue'
 import MyProfileView from '../components/profile/MyProfile.vue'
 import PlayTimeView from '@/components/profile/PlayTimeView.vue'
@@ -51,9 +63,40 @@ export default {
       logoutModal: false,
       deleteAccountModal: false,
       editProfileModal: false,
+      me: true,
+      userInfo: []
     }
   },
   methods: {
+    getUser(){
+      console.log('getuser')
+      const token = sessionStorage.token
+      // 프로필 주인 아이디
+      const uid = this.$route.params.uid
+      // 내 정보 불러와서
+      this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authrization: token } })
+        .then((res) => {
+          console.log(res)
+          const code = res.data.code
+          if (code) {
+            if(res.data.result.userId == uid){ // 내 프로필이면 
+              this.userInfo = res.data.result
+              this.me = true
+            } else{ // 다른 사람 프로필이면
+              this.axios.get(process.env.VUE_APP_SPRING + 'user/' + uid, { headers: { Authrization: token } })
+              .then((res) => {
+                  this.userInfo = res.data.result
+                  this.me = false
+                })
+            }
+          } else {
+            console.log('code err')
+          }
+        })
+        .catch((e)=>{
+          console.log(e)
+        })
+    },
     onLogout() {
       this.logoutModal = !this.logoutModal
     },
@@ -64,6 +107,9 @@ export default {
       this.editProfileModal != this.editProfileModal
       console.log(this.editProfileModal)
     },
+  },
+  created(){
+    this.getUser()
   }
 }
 </script>
@@ -77,4 +123,5 @@ export default {
 #checkout{
   text-align: center;
 }
+
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div id="modal">
     <p>탈퇴하시겠습니까?</p>
-    <span class="container" @click="$emit('onDelete')">
+    <span class="container" @click="$emit('on-delete')">
       <img src="@/assets/main_button1.png" alt="button">
       <p>아니오</p>
     </span>
@@ -13,17 +13,19 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   name: 'DeleteAccountModal',
   methods: {
     async del() {
-      alert("탈퇴");
-      var del_user_email = document.getElementById("del_user").value;
-      await axios.post("http://3.34.138.191:9997/kakao/delUser", del_user_email, {headers: {'Content-Type': 'text/plain'}});
+      alert("탈퇴?");
+      // var del_user_email = document.getElementById("del_user").value;
+      const token = sessionStorage.token
+      await this.axios.post(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
+
       console.log("탈퇴완료");
-      this.logout();
-      this.$router.push({ name: 'Start'})
+      this.$emit('on-delete')
+      // this.logout();
+      this.$router.push({ name: 'start'})
     },
   }
 }
@@ -40,9 +42,9 @@ img {
 }
 
 .container p {
-  position: absolute;
-  top: 0;
-  left: 50%;
+  /* position: absolute; */
+  /* top: 0; */
+  /* left: 50%; */
   /* transform: translate(-50%, -50%); */
   color: #F5F5F5;
   font-size: 18pt;
