@@ -86,7 +86,7 @@ export default {
         formData.append("nickname", new Blob([JSON.stringify(this.nickname)], { type: "application/json" }));
         formData.append("file", this.one_file);
         await this.axios.put(process.env.VUE_APP_SPRING + "user/profile", formData, { 
-          headers: { 'Content-Type': 'multipart/form-data', Authorization: token } })
+          headers: { 'Content-Type': 'multipart/form-data', Authorization: token.data } })
       }
       alert("등록완료");
       this.$router.push({ name: "home" });
