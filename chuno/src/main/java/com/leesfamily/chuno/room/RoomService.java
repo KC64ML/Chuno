@@ -8,6 +8,7 @@ import com.leesfamily.chuno.room.model.dto.RoomGameStartRequestDto;
 import com.leesfamily.chuno.room.model.dto.RoomGameStartResponseDto;
 import com.leesfamily.chuno.room.model.dto.RoomListByConditionsDto;
 import com.leesfamily.chuno.room.model.dto.RoomStartDto;
+import com.leesfamily.chuno.room.model.*;
 import com.leesfamily.chuno.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.time.LocalDate;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,7 +60,19 @@ public class RoomService {
         return roomRes;
     }
 
+    public RoomResponse getRoomById(Long roomId) {
+        return new RoomResponse(roomRepository.findById(roomId).get());
+    }
+
     public RoomEntity insRoom(RoomRequest room, Long host_id) {
+        DateTime dt = new DateTime();
+        dt.setHour(room.getHour());
+        dt.setMinute(room.getMinute());
+        LocalDate now = LocalDate.now();
+        dt.setYear(now.getYear());
+        dt.setMonth(now.getMonthValue());
+        dt.setDay(now.getDayOfMonth());
+
         RoomEntity roomEntity = RoomEntity.builder()
                 .lng(room.getLng())
                 .lat(room.getLat())
@@ -65,6 +80,7 @@ public class RoomService {
                 .isPublic(room.isPublic())
                 .radius(room.getRadius())
                 .password(room.getPassword())
+                .dateTime(dt)
                 .host(userRepository.getOne(host_id))
                 .build();
         RoomEntity res = roomRepository.save(roomEntity);
@@ -125,8 +141,13 @@ public class RoomService {
         return roomRes;
     }
 
-    public Map<String, Object> pushRoom(long roomId, Long userId) {
-        return null;
+    public PushEntity pushRoom(long roomId, Long userId) {
+        PushEntity pushEntity = PushEntity.builder()
+                .room(roomRepository.findById(roomId).get())
+                .user(userRepository.findById(userId).get())
+                .build();
+        PushEntity res = pushRepository.saveAndFlush(pushEntity);
+        return res;
     }
 
 
@@ -162,11 +183,11 @@ public class RoomService {
         );
 
         // (3) 노비, 추노꾼 랜덤
-        randomUserCS();
+//        randomUserCS();
 
 
 
-        roomStartRequestDto.getUserIdList().get()
+//        roomStartRequestDto.getUserIdList().get()
 
 
         return null;
@@ -182,7 +203,7 @@ public class RoomService {
 
         while(true){
             int randomIndex = (int)(Math.random() * userCount) + 1;
-            if(addUserCnt == )
+//            if(addUserCnt == )
         }
     }
 

@@ -3,6 +3,7 @@ package com.leesfamily.chuno.room;
 import com.leesfamily.chuno.common.model.Location;
 import com.leesfamily.chuno.common.util.StatusCodeGeneratorUtils;
 import com.leesfamily.chuno.common.util.TokenUtils;
+import com.leesfamily.chuno.room.model.PushEntity;
 import com.leesfamily.chuno.room.model.RoomResponse;
 import com.leesfamily.chuno.room.model.RoomEntity;
 import com.leesfamily.chuno.room.model.RoomRequest;
@@ -81,6 +82,15 @@ public class RoomController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/{roomId}")
+    public ResponseEntity<Map<String, Object>> getRoomById(
+            @PathVariable("roomId") Long roomId
+    ) {
+        RoomResponse roomResponse = roomService.getRoomById(roomId);
+        Map<String, Object> res = statusCodeGeneratorUtils.checkResultByObject(roomResponse);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @Operation(summary = "방 생성하기", description = "필요한 정보들로 방 정보를 생성한다.")
     @Parameters({
             @Parameter(name = "lat", description = "위도", example = "36.10734231483315"),
@@ -89,20 +99,24 @@ public class RoomController {
             @Parameter(name = "isPublic", description = "공개방 여부", example = "true"),
             @Parameter(name = "radius", description = "반경", example = "3"),
             @Parameter(name = "password", description = "비밀번호", example = ""),
-            @Parameter(name = "hostId", description = "방장 PK(추후 토큰으로 대체 예정)", example = "1"),
+            @Parameter(name = "isToday", description = "오늘인지 내일인지", example = "true"),
+            @Parameter(name = "hour", description = "시간", example = "21"),
+            @Parameter(name = "minute", description = "분", example = "54"),
     })
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createRoom(@RequestBody RoomRequest room) throws ParseException {
+    public ResponseEntity<Map<String, Object>> createRoom(
+            @RequestBody RoomRequest room,
+            @RequestHeader HttpHeaders requestHeader
+    ) throws ParseException {
 //        Claims claim = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
 //        Long user_id = (Long) claim.get("user_id");
-        String pointWKT = String.format("POINT(%s %s)", room.getLng(), room.getLat());
+        Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
+        room.setHostId(userId);
         log.info(String.valueOf(room.getHostId()));
-        log.info(pointWKT);
-        Point point = (Point) new WKTReader().read(pointWKT);
-        log.info(String.valueOf(point));
         RoomEntity res = roomService.insRoom(room, room.getHostId());
         RoomResponse dto = new RoomResponse(res);
-        Map<String, Object> response = statusCodeGeneratorUtils.checkResultByObject(dto);
+        Long roomId = dto.getId();
+        Map<String, Object> response = statusCodeGeneratorUtils.checkResultByNumber(roomId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -120,8 +134,9 @@ public class RoomController {
             @PathVariable("roomId") long roomId,
             @RequestHeader HttpHeaders requestHeader) {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
-        Map<String, Object> res = roomService.pushRoom(roomId, userId);
-        return new ResponseEntity<>(res, HttpStatus.OK);
+        PushEntity res = roomService.pushRoom(roomId, userId);
+        Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByObject(res);
+        return new ResponseEntity<>(resMap, HttpStatus.OK);
     }
 
     @Operation(summary = "게임 시작 - 추노 노비 정함, 노비 문서 위치, 방 정보 전달")
