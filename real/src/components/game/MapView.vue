@@ -72,6 +72,7 @@ export default {
   name: 'MapView',
   props:{
     // papers: Object, // 노비 문서 정보
+    // others: Object, // 다른 플레이어 위치 정보
   },
   data() {
     return {
@@ -95,7 +96,7 @@ export default {
         scaledSize: { width: 40, height: 40 }
       },
       // 다른 플레이어 관련 정보
-      others: [],
+      others: [], //props로
       othersMarkerImg: {
         url: othersMarker,
         scaledSize: { width: 40, height: 40 }

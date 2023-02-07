@@ -6,7 +6,7 @@
         </div>
         <img class="camera_arrow left_arrow" src="@/assets/camera_left.svg" alt="">
         <img class="camera_arrow right_arrow" src="@/assets/camera_right.svg" alt="">
-        <div class="arrow_box right_box" @click="rightArrow"></div>
+        <div class="arrow_box right_box" @click="rightArrow"></div>  
         <div class="arrow_box left_box" @click="leftArrow"></div>
     </div>
     <div class="my_video_box" :class="{hidden_modal:!my_cam_modal}">
