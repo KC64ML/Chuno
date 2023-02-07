@@ -23,7 +23,7 @@ public class StatusCodeGeneratorUtils {
     public Map<String, Object> checkResultByNumber(Long result) {
         Map<String, Object> res = new HashMap<>();
         res.put("result", result);
-        if(result == 0) {
+        if(result <= 0) {
             res.put("code", 0);
         }else {
             res.put("code", 1);
