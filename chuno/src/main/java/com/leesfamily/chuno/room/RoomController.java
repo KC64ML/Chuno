@@ -166,4 +166,13 @@ public class RoomController {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
         return ResponseEntity.ok(roomService.endRoom(roomGameEndRequestDto, userId));
     }
+
+    // 노비 문서 위치를 프론트로 받았을 경우, 백엔드에서 노비 문서 위치를 다시 재배치한다.
+    @Operation(summary = "노비 문서 위치 재배치")
+    @PostMapping("/resladoc")
+    public ResponseEntity<List<RoomGameStartSlaveDocumentDto>> relocationSlaveDocument(
+            @RequestBody RoomGameRelocationSlaveDocumentRequestDto requestDto
+    ){
+        return ResponseEntity.ok(roomService.relocationSlaveDocument(requestDto));
+    }
 }
