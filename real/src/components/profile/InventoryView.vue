@@ -31,6 +31,6 @@ export default {
 #inventory{
   background-color: #1D182C;
   border-radius: 10%;
-  color: ;
+  color: #F5F5F5;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <GMapMap
-      :center="{lat: 35.5534, lng: 37.14123}"
+      :center="me"
       :zoom="18"
       :options="{
         zoomControl: true,
@@ -14,11 +14,22 @@
     >
       <!-- 플레이 영역 표시 -->
       <GMapCircle
-        :radius="4000"
-        :center="{lat: 35.5534, lng: 37.14123}"
+        :radius="roomInfo.radius"
+        :center="{lat: roomInfo.lat, lng: roomInfo.lng}"
         :options="playgroundOptions"
       />
-  
+      <!-- 내 위치 -->
+      <div v-if="myMarker">
+        <GMapMarker
+          :animation=4
+          :position=this.me
+        />
+        <GMapCircle
+          :radius="catchRadius"
+          :center="me"
+          :options="circleOptions"
+        />
+      </div>
       <!-- 노비문서 위치 -->
       <div
         v-for="m in papers"
@@ -33,76 +44,64 @@
           :clickable="true"
         />
       </div>
+      <!-- 다른 플레이어 위치 -->
+      <div
+        v-for="m in others"
+        :key="m.id"
+        @click="ripPaper(m)"
+      >
+        <GMapMarker
+          v-if="!m.ripped"
+          :icon=othersMarkerImg
+          :position="m.position"
+          :clickable="true"
+        />
+      </div>
     </GMapMap>
 </template>
 
 <script>
+// import { OpenVidu } from "openvidu-browser";
+// const APPLICATION_SERVER_URL = process.env.RTC;
+
 import truePaper from '@/assets/TruePaper.png'
+import othersMarker from '@/assets/runner.png'
 import randomLocation from 'random-location'
 
 export default {
   name: 'MapView',
+  props:{
+    // papers: Object, // 노비 문서 정보
+    // others: Object, // 다른 플레이어 위치 정보
+  },
   data() {
     return {
+      // 나랑 관련된 정보
+      myMarker: true,
+      me: {
+        lat: null,
+        lng: null,
+      },
+      circleOptions: {
+        strokeColor: "#0000FF",
+        strokeOpacity: 0.3,
+        strokeWeight: 2,
+        fillColor: "#0000FF",
+        fillOpacity: 0.15,
+      },
       // 노비 문서 관련 정보
-      papers: [
-        { 
-          id: 1,
-          position: { lat: 35.55708556600075, lng: 37.14307319218229 } ,
-          ripped: false,
-        },
-        { 
-          id: 2,
-          position: { lat: 35.54322663205374, lng: 37.15882424264858 } ,
-          ripped: false,
-        },
-        { 
-          id: 3,
-          position: { lat: 35.53823070690027, lng: 37.17561831119416 } ,
-          ripped: false,
-        },
-        { 
-          id: 4,
-          position: { lat: 35.56814603841123, lng: 37.13397761014849 } ,
-          ripped: false,
-        },
-        { 
-          id: 5,
-          position: { lat: 35.56886655009729, lng: 37.18772509646735 } ,
-          ripped: false,
-        },
-        { 
-          id: 6,
-          position: { lat: 35.53356341685, lng: 37.15762313024916 } ,
-          ripped: false,
-        },
-        { 
-          id: 7,
-          position: { lat: 35.567648390271586, lng: 37.15837825377877 } ,
-          ripped: false,
-        },
-        { 
-          id: 8,
-          position: { lat: 35.56593237486119, lng: 37.192226080230256 } ,
-          ripped: false,
-        },
-        { 
-          id: 9,
-          position: { lat: 35.54930608022105, lng: 37.19896411296204 } ,
-          ripped: false,
-        },
-        { 
-          id: 10,
-          position: { lat: 35.57159271955402, lng: 37.14859079725307 } ,
-          ripped: false,
-        },
-      
-      ], // props로
+      papers: [], // props로
       paperMarkerImg: {
         url: truePaper,
         scaledSize: { width: 40, height: 40 }
       },
-      
+      // 다른 플레이어 관련 정보
+      others: [], //props로
+      othersMarkerImg: {
+        url: othersMarker,
+        scaledSize: { width: 40, height: 40 }
+      },
+
       // 게임 반경 표시
       playgroundOptions: {
         strokeColor: "#FF0000",
@@ -111,15 +110,25 @@ export default {
         fillColor: "#FFFFFF",
         fillOpacity: 0,
       },
-      
+      // roomInfo: {
+      //   room_id: 1,
+      //   title: "방이름1",
+      //   is_public: true,
+      //   password: null,
+      //   lat: 36.119485,
+      //   lng: 128.3445734,
+      //   radius: 1000,
+      //   host_id: "gogo",
+      //   room_start_time: new Date(2023, 1, 1, 13, 20, 0)
+      //   },
       roomInfo: {
         room_id: 1,
         title: "방이름1",
         is_public: true,
         password: null,
-        lat: 35.5534,
-        lng: 37.14123,
-        radius: 4000,
+        lat: 36.103879,
+        lng: 128.4187361,
+        radius: 1000,
         host_id: "gogo",
         room_start_time: new Date(2023, 1, 1, 13, 20, 0)
       },
@@ -259,8 +268,8 @@ export default {
     // 내 위치
     this.myLocation()
     // setInterval(this.myLocation(),1000)
-    // this.generatePapers()
-    // this.generatePlayer()
+    this.generatePapers()
+    this.generatePlayer()
   },
   mounted() {
     this.ripPaper()
@@ -273,6 +282,22 @@ export default {
       return this.roomInfo.radius * 0.1
     }
   },
+  // watch: {
+  //   player(){
+  //     // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
+  //     this.catch()
+  //     this.ripPaper()
+  //     const roomCenter = { position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} }
+  //     console.log(roomCenter)
+  //     this.outOfPlayground(roomCenter)
+  //     // 위치 공유
+  //     this.session.on("streamCreated", function (event) {
+  //       this.session.subscribe(event.stream, "subscriber");
+  //       // const USER_DATA = {}
+  //       console.log("USER DATA: " + event.stream.connection.data);
+  //     });
+  //   }
+  // },
 };
 </script>
 

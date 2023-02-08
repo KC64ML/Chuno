@@ -23,12 +23,14 @@
       :me="me"
       :userInfo="userInfo"
     />
-    <InventoryView
-      :userInfo="userInfo"
-      v-for="item in items"
-      :key="item.id"
-      :item="item"
-    />
+    <div id="inventory">
+      <InventoryView
+        :userInfo="userInfo"
+        v-for="item in items"
+        :key="item.id"
+        :item="item"
+      />
+    </div>
     <div class="container">
       <PlayTimeView
         :userInfo="userInfo"
@@ -149,7 +151,7 @@ export default {
   },
   created(){
     console.log('getUser 실행?')
-    this.getUser()
+    // this.getUser()
     console.log('getUser 실행!')
     this.getItems()
   }
@@ -164,6 +166,10 @@ export default {
 }
 #checkout{
   text-align: center;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+#inventory{
+  display: gird;
 }
 
 </style>
