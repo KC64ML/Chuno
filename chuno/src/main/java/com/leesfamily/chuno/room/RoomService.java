@@ -178,12 +178,12 @@ public class RoomService {
         // - 현재 반지름 기준 random
 
         // 좌표 인원 수 x 2개 위치 구하는 함수
-        List<Pair<Double,Double>> randomLatLng = randomLatLngCoordinate(roomStartDto);
+        List<RoomGameStartSlaveDocumentDto> randomLatLng = randomLatLngCoordinate(roomStartDto);
         log.info("현재 좌표 : " + roomStartDto.getLat() + " " + roomStartDto.getLng());
         log.info("반지름 : " + roomStartDto.getRadius());
-        log.info("좌표 : " + randomLatLng.get(0).getLeft() + " " + randomLatLng.get(0).getRight()
-                + " " + randomLatLng.get(1).getLeft() + " " + randomLatLng.get(1).getRight()
-                + " " + randomLatLng.get(2).getLeft() + " " + randomLatLng.get(2).getRight()
+        log.info("좌표 : " + randomLatLng.get(0).getLat() + " " + randomLatLng.get(0).getLng()
+                + " " + randomLatLng.get(1).getLat() + " " + randomLatLng.get(1).getLng()
+                + " " + randomLatLng.get(2).getLat() + " " + randomLatLng.get(2).getLng()
         );
 
         // (3) 노비, 추노꾼 랜덤
@@ -259,9 +259,9 @@ public class RoomService {
         return roomGameUserChaserOrRunnerItemCntDtoList;
     }
 
-    private List<Pair<Double,Double>> randomLatLngCoordinate(RoomStartDto roomStartDto) {
+    private List<RoomGameStartSlaveDocumentDto> randomLatLngCoordinate(RoomStartDto roomStartDto) {
         // random 좌표를 구한다.
-        List<Pair<Double,Double>> resList = new ArrayList<>();
+        List<RoomGameStartSlaveDocumentDto> resList = new ArrayList<>();
         // n 번 돌린다.
 //        Random random = new Random();
         double lat = roomStartDto.getLat();
@@ -284,7 +284,8 @@ public class RoomService {
 //            double distance = (6371 * Math.acos(Math.cos(Math.toRadians(lat))
 //                    * Math.cos(Math.toRadians(new_x + lng)) * Math.cos(Math.toRadians(y + lat) - Math.toRadians(lng))
 //                    + Math.sin(Math.toRadians(lat)) * Math.sin(Math.toRadians(new_x + lng))));
-            resList.add(Pair.of(y + lat, new_x + lng));
+
+            resList.add(new RoomGameStartSlaveDocumentDto(y + lat, new_x + lng));
             idx += 1;
 //            System.out.println("idx : " + idx + "distance : " + distance + " radius" + radius + " new_x : " + new_x);
         }
