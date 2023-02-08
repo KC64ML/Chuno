@@ -160,10 +160,10 @@ export default {
     },
   },
   created(){
+    this.getItems()
     console.log('getUser 실행?')
     this.getUser()
     console.log('getUser 실행!')
-    this.getItems()
   }
 }
 </script>

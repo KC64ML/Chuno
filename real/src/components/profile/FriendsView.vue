@@ -46,6 +46,8 @@ export default {
           if(code) {
             console.log('친구 겟또')
             this.friends = res.data.result
+            console.log(this.friends)
+
           } else {
             console.log('실패')
           }
