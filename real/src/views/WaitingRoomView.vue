@@ -28,13 +28,27 @@
             <NicknameCardVue :sub="sub"></NicknameCardVue>
         </div>
     </div>
-    {{ publisher_show }}
     {{ subscribers.length }}
-    <div v-if="is_host" id="start_button" class="ready_start" @click="start_button">
-        게임 시작하기!
+    <div id="chat_log">
+        <div v-for="(c, idx) in chat_log" :key="idx">
+            {{ c.nickname }} : {{ c.msg }}
+        </div>
     </div>
-    <div v-else id="ready_button" class="ready_start" @click="ready_button">
-        준비하고 시작하기
+    <div id="waiting_room_footer">
+        <div id="waiting_inner_footer">
+            <div class="waiting_footer_input" style="height: 90%; flex: 1">
+                <input id="input_el" v-model="chat_data">
+            </div>
+            <div style="display: flex; align-items: center" @click="transform_chat">
+                <img src="@/assets/paper_plane.svg" alt="">
+            </div>
+            <div v-if="is_host" id="start_button" class="ready_start" @click="start_button">
+                시작!
+            </div>
+            <div v-else id="ready_button" class="ready_start" @click="ready_button">
+                준비!
+            </div>
+        </div>
     </div>
 </template>
 
@@ -56,10 +70,11 @@ export default {
     },
     data() {
         return {
+            menu_modal: false,
             token: sessionStorage.getItem("token"),
             user: undefined,
             room_id: this.$route.params.roomId,
-            room_info: {title: ""},
+            room_info: { title: "" },
             is_host: undefined,
 
             OV: undefined,
@@ -73,10 +88,11 @@ export default {
             },
             subscribers_show: [],
 
-            menu_modal: false,
-            hostNickName: undefined,
             is_notified: undefined,
             is_ready: false,
+
+            chat_data: "",
+            chat_log: [],
         }
     },
     async created() {
@@ -123,16 +139,23 @@ export default {
             console.warn("오류ㅠㅠ" + exception);
         });
 
-        //         this.session.on("signal:ready_button", (e) => {
-        //             console.log(e.from.connectionId);
-        //             var index;
-        //             for (var i = 0; i < this.subscribers.length; i++) {
-        //                 if (e.from.connectionId == this.subscribers[i].stream.connection.connectionId) {
-        //                     index = i;
-        //                 }
-        //             }
-        //             console.log(index)
-        //         })
+        this.session.on("signal:ready_button", (e) => {
+            console.log(e.from.connectionId);
+            alert("gggg")
+            var index;
+            for (var i = 0; i < this.subscribers.length; i++) {
+                if (e.from.connectionId == this.subscribers[i].stream.connection.connectionId) {
+                    index = i;
+                }
+            }
+            console.log(index)
+        })
+        this.session.on("signal:transform_chat", (event) => {
+            const fromdata = JSON.parse(event.data);
+            console.log(fromdata)
+            this.chat_log.push(fromdata);
+            this.chat_data = "";
+        })
 
         await this.getToken(this.$route.params.roomId).then(async (token) => {
             await this.session.connect(token, { clientData: this.user.nickname, clientLevel: this.user.level, clientReady: this.is_ready }).then(() => {
@@ -234,6 +257,15 @@ export default {
             });
             return response.data; // The token
         },
+        transform_chat() {
+            this.session.signal({
+                data: JSON.stringify({
+                    "nickname": this.user.nickname,
+                    "msg": this.chat_data
+                }),
+                type: "transform_chat"
+            })
+        }
     }
 }
 </script>
@@ -297,14 +329,50 @@ $ready_button_height: 50px;
     background-color: #888888;
 }
 
-.ready_start {
-    background-color: #f2f2f2;
-    box-shadow: 0 10px 10px $shadow_color;
-    height: $ready_button_height;
-    line-height: $ready_button_height;
-    padding: 0 30px;
-    border-radius: $ready_button_height / 2;
+#waiting_room_footer {
     position: absolute;
-    bottom: $footer_height + 20px;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: $footer_height;
+    background-color: black;
+}
+
+#waiting_inner_footer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100vw - 20px);
+    height: 80%;
+    display: flex;
+    align-items: center;
+}
+
+#waiting_inner_footer>div {
+    margin: 0 5px
+}
+
+.ready_start {
+    font-size: 25px;
+    color: white;
+}
+
+#input_el {
+    height: 100%;
+    width: 100%;
+    background-color: #848483;
+    border-radius: $footer_height * 0.9 / 4;
+    color: white;
+    font-size: 20px;
+    padding: 0 15px;
+}
+#chat_log {
+    width: 100vw;
+    background-color: red;
+    position: absolute;
+    bottom: $footer_height;
+    left: 0;
+    max-height: 50%;
 }
 </style>

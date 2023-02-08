@@ -3,9 +3,8 @@
         <router-view></router-view>
     </div>
     <FooterVue class="footer_fix"
-        v-if="this.$route.name != 'game' && this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth' && this.$route.name != 'Register'">
+        v-if="this.$route.name != 'waitingRoom' && this.$route.name != 'game' && this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth' && this.$route.name != 'Register'">
     </FooterVue>
-    <button @click="retreat">탈퇴</button>
 </template>
 
 <script>
@@ -16,14 +15,6 @@ export default {
       FooterVue,
     },
     methods: {
-        async retreat() {
-            alert('탈퇴');
-            console.log(sessionStorage.getItem("token"));
-            this.axios.delete(process.env.VUE_APP_SPRING + "user", '', {headers: {Authentication: sessionStorage.getItem("token")}})
-        },
-        test() {
-            this.$router.push({name: "Test", params: {namee: "eeeee"}});
-        }
     },
     created() {
         console.log("앱시작")
