@@ -2,7 +2,8 @@
   <div>
     <div class="container-row">
       <div class="container-row">
-        <img src="@/assets/profile_default.svg" alt="profile" style="width:50px;">
+        <img :src=" friend.profile? URL + 'resources/images?path=' + friend.profile.path :  defaultProfile" alt="profile" style="width:50px;">
+
         <span id="nickname">{{ friend.nickname }}</span>
       </div>
       <img src="@/assets/deleteFriend.svg" alt="delete" 
@@ -15,11 +16,19 @@
 </template>
 
 <script>
+import defaultProfile from '@/assets/profile_default.svg'
+
 export default {
   name: 'FriendsItemView',
   props: {
     friend: Object,
     edit: Boolean,
+  },
+  data(){
+    return {
+      defaultProfile: defaultProfile,
+      URL: process.env.VUE_APP_SPRING,
+    }
   },
   methods:{
     deleteFriend(){
