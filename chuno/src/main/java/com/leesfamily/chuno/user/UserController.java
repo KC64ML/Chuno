@@ -165,8 +165,8 @@ public class UserController {
             @RequestHeader HttpHeaders requestHeader
     ) {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
-        ItemEntity itemEntity = userService.useItem(userId, itemId);
-        Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByObject(itemEntity);
+        UserInventoryResponse userEntity = userService.useItem(userId, itemId);
+        Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByObject(userEntity);
         return new ResponseEntity<>(resMap, HttpStatus.OK);
     }
 

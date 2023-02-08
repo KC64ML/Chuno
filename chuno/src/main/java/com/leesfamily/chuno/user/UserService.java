@@ -61,8 +61,11 @@ public class UserService {
     public Long register(UserEntity user, MultipartFile file) {
         Optional<UserEntity> option = userRepository.findByEmail(user.getEmail());
         if(option.isPresent()) {
+            String userNickname = option.get().getNickname();
             user = option.get();
             user.setDeleted(false);
+            user.setMoney(0);
+            user.setNickname(userNickname);
         }
         user.setLevel(1);
         UserEntity userEntity = userRepository.saveAndFlush(user);
@@ -199,13 +202,13 @@ public class UserService {
     }
 
 
-    public ItemEntity useItem(Long userId, Long itemId) {
+    public UserInventoryResponse useItem(Long userId, Long itemId) {
         UserEntity user = userRepository.findById(userId).get();
         ItemEntity item = itemRepository.findById(itemId).get();
         Optional<InventoryEntity> inven = inventoryEntityRepository.findByUserAndItem(user, item);
         if(inven.isPresent()) {
             inventoryEntityRepository.delete(inven.get());
-            return item;
+            return getProfile(user.getId());
         }else {
             return null;
         }
