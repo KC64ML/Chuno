@@ -77,6 +77,7 @@
             const code = res.data.code
             if(code) {
               this.userInfo = res.data.result
+              console.log(this.userInfo)
             } else {
               console.log('code err')
             }

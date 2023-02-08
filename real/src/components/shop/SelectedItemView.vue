@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     buy(){
+      console.log('구매 버튼')
       const token = sessionStorage.token
       this.axios.post(process.env.VUE_APP_SPRING + 'user/shop/' + this.item.id, { headers: { Authorization:token } })
         .then((res) => {

@@ -1,7 +1,8 @@
 <template>
   <div class="container-row">
     <img :src="URL + 'resources/images?path=' + item.imgPath" alt="item" style="height:50px;">
-
+    <div v-if="item.id < 5">{{ runnerItemCnt[item.id - 1] }}</div>
+    <div v-else>{{ chaserItemCnt[item.id - 1] }}</div>
     <div>{{ item.name }}</div>
   </div>
 </template>
