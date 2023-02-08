@@ -182,6 +182,18 @@
               // Set the main video in the page to display our webcam and store our Publisher
               this.mainStreamManager = publisher;
               this.publisher = publisher;
+              this.publisher.stream.applyFilter("FaceOverlayFilter")
+                .then(filter => {
+                    filter.execMethod(
+                        "setOverlayedImage",
+                        {
+                            "uri":"https://cdn.pixabay.com/photo/2013/07/12/14/14/derby-148046_960_720.png",
+                            "offsetXPercent":"-0.2F",
+                            "offsetYPercent":"-0.8F",
+                            "widthPercent":"1.3F",
+                            "heightPercent":"1.0F"
+                        });
+                });
   
               // --- 6) Publish your stream ---
   
