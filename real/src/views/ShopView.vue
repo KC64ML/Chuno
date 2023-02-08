@@ -1,18 +1,20 @@
 <template>
+  <!-- <div> -->
   <HeaderVue
     :title="'상점'"
   ></HeaderVue>
   <div class="container-col" style="height:75%">
     <div class="container" id="money">
       <img src="@/assets/nyang.svg" alt="nyang">
-      {{ money }}
+      {{ userInfo.money }}
     </div>
     <SelectedItemView
       :item="selected"
       :money="money"
+      @get-user="getUser"
     />
-    <div class="container-row">
-      <div class="box" style="margin-right: 3%">
+    <div class="container-row ">
+      <div class="box item" style="margin-right: 3%">
         <div id="item-title">
           <p>노비용</p>
         </div>
@@ -21,9 +23,11 @@
           v-for="item in items.filter((i) => i.forRunner == 1)"
           :key="item.id"
           :item="item"
+         
+          :itemCnt="runnerItemCnt"
         />
       </div>
-      <div class="box" style="margin-left: 3%">
+      <div class="box item" style="margin-left: 3%">
         <div id="item-title">
           <p>추노꾼용</p>
         </div>
@@ -32,10 +36,13 @@
           v-for="item in items.filter((i) => i.forRunner == 0)"
           :key="item.id"
           :item="item"
+          :itemCnt="chaserItemCnt"
+
         />
       </div>
     </div>
   </div>
+<!-- </div> -->
 </template>
 
 <script>
@@ -60,10 +67,23 @@
           forRunner: ' ',
         },
         items:[],
-        money: 0,
+        userInfo: [],
       }
     },
     methods: {
+      getUser(){
+        const token = sessionStorage.token
+        this.axios.get(process.env.VUE_APP_SPRING +'user', { headers: { Authorization: token } })
+          .then((res) => {
+            const code = res.data.code
+            if(code) {
+              this.userInfo = res.data.result
+              console.log(this.userInfo)
+            } else {
+              console.log('code err')
+            }
+          })
+      },
       onSelect(res) {
         this.selected = res
         console.log(this.selected)
@@ -77,7 +97,7 @@
             const code = res.data.code
             if (code) {
               this.items = items
-              console.log("여기 아이템");
+              console.log("아이템 가져오기");
               console.log(this.items)
             } else {
               console.log('error')
@@ -87,29 +107,35 @@
             console.log(e)
           })
       },
-      getUser(){
-        const token = sessionStorage.token
-        this.axios.get(
-          process.env.VUE_APP_SPRING + "item", { headers: { Authorization: token } }
-          )
-          .then((res) => {
-            const user = res.data.result
-            const code = res.data.code
-            if (code) {
-              this.money = user.money
-              console.log(this.money)
-            } else {
-              console.log('code error')
-            }
-          })
-          .catch((e)=>{
-            console.log(e)
-          })
-      }
     },
     created() {
       this.getItems()
-    }
+      this.getUser()
+    },
+    computed: {
+      runnerItemCnt(){
+        let res = []
+        const items = this.userInfo.items
+      
+        for (const i in items) {
+          if(i < 4){
+            res.append(items[i])
+          }
+        }
+        return res
+      },
+      chaserItemCnt(){
+        let res = []
+        const items = this.userInfo.items
+      
+        for (const i in items) {
+          if(i > 3){
+            res.append(items[i])
+          }
+        }
+        return res
+      },
+    },
   }
 </script>
 
@@ -128,5 +154,7 @@
   background-color: #F5F5F5;
   padding: 0 5%;
 }
-
+.item{
+  width: 50%;
+}
 </style>
