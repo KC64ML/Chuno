@@ -1,14 +1,23 @@
 package com.leesfamily.chuno.configure;
 
 import com.leesfamily.chuno.common.util.SMSUtils;
+import com.leesfamily.chuno.room.PushRepository;
 import com.leesfamily.chuno.room.RoomService;
+import com.leesfamily.chuno.room.model.DateTime;
+import com.leesfamily.chuno.room.model.PushEntity;
+import com.leesfamily.chuno.room.model.RoomEntity;
 import com.leesfamily.chuno.user.UserRepository;
 import com.leesfamily.chuno.user.UserService;
+import com.leesfamily.chuno.user.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -16,13 +25,35 @@ import org.springframework.stereotype.Component;
 public class Scheduler {
 
     final private UserService userService;
-    final private RoomService service;
+    final private RoomService roomService;
+    final private PushRepository pushRepository;
     final private SMSUtils smsUtils;
 
 
     @Async // 병렬로 Scheduler 를 사용할 경우 @Async 추가
     @Scheduled(fixedRate = 60000)
     public void scheduleFixedRateTask() throws InterruptedException {
-        
+        LocalDateTime now = LocalDateTime.now();
+        now.plusMinutes(10l);
+        List<PushEntity> pushList = pushRepository.findAll();
+        pushList.forEach((push) -> {
+            DateTime roomDt = push.getRoom().getDateTime();
+            int roomYear = roomDt.getYear();
+            int roomMonth = roomDt.getMonth();
+            int roomDay = roomDt.getDay();
+            int roomHour = roomDt.getHour();
+            int roomMinute = roomDt.getMinute();
+            int nowYear = now.getYear();
+            int nowMonth = now.getMonthValue();
+            int nowDay = now.getDayOfMonth();
+            int nowHour = now.getHour();
+            int nowMinute = now.getMinute();
+            if(nowMinute == roomMinute && nowHour == roomHour
+                    && nowDay == roomDay && nowMonth == roomMonth && nowYear == roomYear) {
+                UserEntity user = push.getUser();
+                RoomEntity room = push.getRoom();
+                smsUtils.sendOne(user.getPhone(), room.getTitle());
+            }
+        });
     }
 }

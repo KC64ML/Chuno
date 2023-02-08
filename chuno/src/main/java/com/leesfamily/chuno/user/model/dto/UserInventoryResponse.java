@@ -22,6 +22,7 @@ public class UserInventoryResponse {
     private String nickname;
     private int level;
     private int paperCount;
+    private int catchCount;
     private int runnerPlayCount;
     private int runnerWinCount;
     private int chaserPlayCount;
@@ -38,6 +39,7 @@ public class UserInventoryResponse {
                 .nickname(user.getNickname())
                 .level(user.getLevel())
                 .paperCount(user.getPaperCount())
+                .catchCount(user.getCatchCount())
                 .runnerPlayCount(user.getRunnerPlayCount())
                 .runnerWinCount(user.getRunnerWinCount())
                 .chaserPlayCount(user.getChaserPlayCount())

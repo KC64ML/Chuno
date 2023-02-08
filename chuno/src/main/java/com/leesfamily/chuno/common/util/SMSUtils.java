@@ -98,12 +98,12 @@ public class SMSUtils {
      * 단일 메시지 발송 예제
      */
 //    @GetMapping("/send-one")
-    public SingleMessageSentResponse sendOne(String phone) {
+    public SingleMessageSentResponse sendOne(String phone, String roomTitle) {
         Message message = new Message();
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
         message.setFrom("01051411025");
         message.setTo(phone);
-        message.setText("1분마다 가는 메세지");
+        message.setText(roomTitle + " 방의 추노 게임이 곧 시작됩니다!");
 
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
         System.out.println(response);
