@@ -28,6 +28,7 @@ export default {
         .then((res) => {
           const code = res.data.result
           if(code) {
+            this.$emit('get-friends')
           } else {
             console.log('code err')
           }
