@@ -201,7 +201,7 @@ public class RoomService {
 
         // 노비 선정
         while (true) {
-            int randomIndex = (int) (Math.random() * userCount) - 1;
+            int randomIndex = (int) (Math.random() * userCount);
             if (!visited[randomIndex]) {
                 visited[randomIndex] = true;
                 // 인벤토리를 가져온다.
