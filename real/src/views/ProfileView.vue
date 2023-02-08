@@ -22,6 +22,8 @@
       @on-edit="onEdit"
       :me="me"
       :userInfo="userInfo"
+      :friend="friend"
+      @get-user="getUser"
     />
     <p>노비용</p>
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; background-color: #1D182C; border-radius: 10%; justify-items: center;">
