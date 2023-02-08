@@ -204,7 +204,9 @@ export default {
         async modalConfirm() {
             alert('게임방을 만들어요!!!')
             console.log(process.env.VUE_APP_SPRING + "room")
+            console.log(sessionStorage.getItem("token"));
             // 방을 데이터 베이스에 등록해요
+            console.log(process.env.VUE_APP_SPRING + "room");
             var data = await this.axios.post(process.env.VUE_APP_SPRING + "room", {
                 lat: this.player.lat,
                 lng: this.player.lng,
@@ -212,12 +214,14 @@ export default {
                 isPublic: this.is_public,
                 password: this.is_public ? null : this.password,
                 radius: this.radius,
-                isToday: this.is_today,
+                isToday: this.is_today, 
                 hour:  (this.hour + (this.is_am ? 0 : 12)) % 24,
                 minute:  this.minute,
+            }, {
+                headers: { Authorization: sessionStorage.getItem("token") }
             }).then(res => res.data.result)
             console.log(data);
-            this.$router.push({ path: "/game/" + data })
+            this.$router.push({ path: "/waitingRoom/" + data })
         }
     },
 }

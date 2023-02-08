@@ -23,7 +23,7 @@ export default {
     },
     data() {
         return {
-            modal_show: true,
+            modal_show: false,
             lat: 0,
             lng: 0,
             room_title: "",
