@@ -6,25 +6,23 @@
   <div class="container-col" style="height:75%">
     <div class="container" id="money">
       <img src="@/assets/nyang.svg" alt="nyang">
-      {{ userInfo.money }}
+      <!-- {{ userInfo.money }} -->
     </div>
     <SelectedItemView
       :item="selected"
-      :money="money"
-      @get-user="getUser"
-    />
+      />
+      <!-- @get-user="getUser" -->
     <div class="container-row ">
       <div class="box item" style="margin-right: 3%">
         <div id="item-title">
           <p>노비용</p>
         </div>
         <ItemView
+          :userInfo="userInfo"
           @click="onSelect(item)"
           v-for="item in items.filter((i) => i.forRunner == 1)"
           :key="item.id"
           :item="item"
-         
-          :itemCnt="runnerItemCnt"
         />
       </div>
       <div class="box item" style="margin-left: 3%">
@@ -32,12 +30,11 @@
           <p>추노꾼용</p>
         </div>
         <ItemView
+          :userInfo="userInfo"
           @click="onSelect(item)"
           v-for="item in items.filter((i) => i.forRunner == 0)"
           :key="item.id"
           :item="item"
-          :itemCnt="chaserItemCnt"
-
         />
       </div>
     </div>
@@ -67,23 +64,47 @@
           forRunner: ' ',
         },
         items:[],
-        userInfo: [],
+        userInfo: {
+          "id": 7,
+          "email": "lce511@naver.com",
+          "nickname": "채은짱님",
+          "level": 1,
+          "paperCount": 0,
+          "runnerPlayCount": 30,
+          "runnerWinCount": 15,
+          "chaserPlayCount": 11,
+          "chaserWinCount": 7,
+          "exp": 0,
+          "money": 85900,
+          "profile": null,
+          "items": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "manager": false
+        },
       }
     },
     methods: {
-      getUser(){
-        const token = sessionStorage.token
-        this.axios.get(process.env.VUE_APP_SPRING +'user', { headers: { Authorization: token } })
-          .then((res) => {
-            const code = res.data.code
-            if(code) {
-              this.userInfo = res.data.result
-              console.log(this.userInfo)
-            } else {
-              console.log('code err')
-            }
-          })
-      },
+      // getUser(){
+      //   const token = sessionStorage.token
+      //   this.axios.get(process.env.VUE_APP_SPRING +'user', { headers: { Authorization: token } })
+      //     .then((res) => {
+      //       const code = res.data.code
+      //       if(code) {
+      //         this.userInfo = res.data.result
+      //         console.log(this.userInfo)
+      //       } else {
+      //         console.log('code err')
+      //       }
+      //     })
+      // },
       onSelect(res) {
         this.selected = res
         console.log(this.selected)
@@ -110,32 +131,38 @@
     },
     created() {
       this.getItems()
-      this.getUser()
+      // this.getUser()
+      console.log('-------------------------')
     },
-    computed: {
-      runnerItemCnt(){
-        let res = []
-        const items = this.userInfo.items
+    // computed: {
+    //   runnerItemCnt(){
+    //     // let res = []
+    //     // const items = this.userInfo.items
       
-        for (const i in items) {
-          if(i < 4){
-            res.append(items[i])
-          }
-        }
-        return res
-      },
-      chaserItemCnt(){
-        let res = []
-        const items = this.userInfo.items
+    //     // for (const i in items) {
+    //     //   if(i < 4){
+    //     //     res.append(items[i])
+    //     //   }
+    //     // }
+    //     // return res
+    //     return [0, 1, 2, 3]
+    //   },
+    //   chaserItemCnt(){
+    //     // let res = []
+    //     // const items = this.userInfo.items
       
-        for (const i in items) {
-          if(i > 3){
-            res.append(items[i])
-          }
-        }
-        return res
-      },
-    },
+    //     // for (const i in items) {
+    //     //   if(i > 3){
+    //     //     res.append(items[i])
+    //     //   }
+    //     // }
+    //     // return res
+    //     return [4, 5, 6, 7]
+    //   },
+    // },
+    mounted(){
+      
+    }
   }
 </script>
 

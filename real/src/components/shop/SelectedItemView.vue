@@ -35,8 +35,8 @@ export default {
           const code = res.data.code
           if(code) {
             console.log('샀다')
-            this.$emit('get-user')
-            console.log(res.data.result)
+            // this.$emit('get-user')
+            console.log(res.data)
           }
         })
         .catch((e) => {

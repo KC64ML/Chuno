@@ -1,8 +1,6 @@
 <template>
-  <div class="container-row">
+  <div class="container-row" id="inventory">
     <img :src="URL + 'resources/images?path=' + item.imgPath" alt="item" style="height:50px;">
-    <!-- <div v-if="item.id < 5">{{ runnerItemCnt }}</div> -->
-    <!-- <div v-else>{{ chaserItemCnt }}</div> -->
     <div v-for="i in 8"
       :key="i"  
     >
@@ -16,24 +14,23 @@
 
 <script>
 export default {
-  name: 'ChaserItemView',
+  name: 'InventoryView',
   props: {
     item: Object,
     userInfo: Object
-    // runnerItemCnt: Array,
-    // chaserItemCnt: Array,
   },
   data(){
     return {
       URL: process.env.VUE_APP_SPRING,
     }
   },
-  created(){
-    // console.log(this.runnerItemCnt)
-    // console.log(this.chaserItemCnt)
-  }
 }
 </script>
 
 <style scoped>
+#inventory{
+  background-color: #1D182C;
+  border-radius: 10%;
+  color: #F5F5F5;
+}
 </style>

@@ -23,6 +23,14 @@
       :me="me"
       :userInfo="userInfo"
     />
+    <div id="inventory">
+      <InventoryView
+        :userInfo="userInfo"
+        v-for="item in items"
+        :key="item.id"
+        :item="item"
+      />
+    </div>
     <div class="container">
       <PlayTimeView
         :userInfo="userInfo"
@@ -46,6 +54,7 @@ import HeaderVue from '@/components/HeaderVue.vue'
 import MyProfileView from '../components/profile/MyProfile.vue'
 import PlayTimeView from '@/components/profile/PlayTimeView.vue'
 import RecordView from '@/components/profile/RecordView.vue'
+import InventoryView from '@/components/profile/InventoryView.vue'
 
 import LogoutModal from '@/components/profile/LogoutModal.vue'
 import DeleteAccountModal from '@/components/profile/DeleteAccountModal.vue'
@@ -56,6 +65,7 @@ export default {
   components: {
     HeaderVue,
     MyProfileView,
+    InventoryView,
     PlayTimeView,
     RecordView,
     LogoutModal,
@@ -69,7 +79,8 @@ export default {
       editProfileModal: false,
       me: true,
       friend: false,
-      userInfo: []
+      userInfo: [],
+      items: [],
     }
   },
   methods: {
@@ -108,6 +119,25 @@ export default {
           console.log(e)
         })
     },
+    getItems(){
+      this.axios.get(
+        process.env.VUE_APP_SPRING + "item",
+      )
+        .then((res) => {
+          const items = res.data.result
+          const code = res.data.code
+          if (code) {
+            this.items = items
+            console.log("프로필에서 아이템 가져오기");
+            console.log(this.items)
+          } else {
+            console.log('error')
+          }
+        })
+        .catch((e)=>{
+          console.log(e)
+        })
+    },
     onLogout() {
       this.logoutModal = !this.logoutModal
     },
@@ -121,8 +151,9 @@ export default {
   },
   created(){
     console.log('getUser 실행?')
-    this.getUser()
+    // this.getUser()
     console.log('getUser 실행!')
+    this.getItems()
   }
 }
 </script>
@@ -135,6 +166,10 @@ export default {
 }
 #checkout{
   text-align: center;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+#inventory{
+  display: gird;
 }
 
 </style>
