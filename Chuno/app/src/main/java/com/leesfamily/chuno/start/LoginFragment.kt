@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
-    private val myViewModel: MainViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,12 +43,16 @@ class LoginFragment : Fragment() {
             LoginManager.apply {
                 setListener(object : LoginListener {
                     override fun loginSuccess(token: String) {
-                        myViewModel.setToken(token)
-                        if (myViewModel.email.value != null) {
-                            findNavController().navigate(R.id.homeFragment)
-                        } else {
-                            findNavController().navigate(R.id.inputInfoFragment)
+                        mainViewModel.setToken(token)
+                        mainViewModel.isNew.observe(viewLifecycleOwner) {
+                            Log.d(TAG, "loginSuccess: mainViewModel Token $it")
+                            if (it) {
+                                findNavController().navigate(R.id.inputInfoFragment)
+                            } else {
+                                findNavController().navigate(R.id.homeFragment)
+                            }
                         }
+
 /*
                         lifecycleScope.launch(Dispatchers.IO) {
                             var result = LoginGetter().requestLogin(token)
@@ -72,6 +76,7 @@ class LoginFragment : Fragment() {
                                 }
                             }
                         }*/
+
                     }
 
                     override fun loginFailed() {

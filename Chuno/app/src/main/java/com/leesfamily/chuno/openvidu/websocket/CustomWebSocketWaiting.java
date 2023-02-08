@@ -109,6 +109,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
 
     private void handleServerResponse(JSONObject json) throws
             JSONException {
+        Log.d(TAG, "handleServerResponse: ");
         final int rpcId = json.getInt(JsonConstants.ID);
         JSONObject result = new JSONObject(json.getString(JsonConstants.RESULT));
 
@@ -172,6 +173,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
 
             if (result.getJSONArray(JsonConstants.VALUE).length() > 0) {
                 // There were users already connected to the session
+                Log.d(TAG, "handleServerResponse: addRemoteParticipantsAlreadyInRoom");
                 addRemoteParticipantsAlreadyInRoom(result);
             }
 
@@ -275,6 +277,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     // receiveVideo방법 으로 원격 비디오 구독하기
     // 아래와 같이 필수 매개변수와 함께 WebSocket을 통해 JSON-RPC를 보내야 합니다.
     public void receiveVideoFrom(SessionDescription sessionDescription, RemoteParticipantWaiting remoteParticipant, String streamId) {
+        Log.d(TAG, "receiveVideoFrom: ");
         Map<String, String> receiveVideoFromParams = new HashMap<>();
         receiveVideoFromParams.put("sender", streamId);
         if ("kurento".equals(this.mediaServer)) {
@@ -286,6 +289,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     }
 
     public void onIceCandidate(IceCandidate iceCandidate, String endpointName) {
+        Log.d(TAG, "onIceCandidate: ");
         Map<String, String> onIceCandidateParams = new HashMap<>();
         if (endpointName != null) {
             onIceCandidateParams.put("endpointName", endpointName);
@@ -317,6 +321,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
 
 
     private void handleServerEvent(JSONObject json) throws JSONException {
+        Log.d(TAG, "handleServerEvent: ");
         if (!json.has(JsonConstants.METHOD)) {
             Log.e(TAG, "Server event lacks a field '" + JsonConstants.METHOD + "'; JSON: "
                     + json.toString());
@@ -354,6 +359,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     }
 
     public synchronized int sendJson(String method, Map<String, String> params) {
+        Log.d(TAG, "sendJson: ");
         final int id = RPC_ID.get();
         JSONObject jsonObject = new JSONObject();
         try {
@@ -380,6 +386,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
             JSONObject participantJson = result.getJSONArray(JsonConstants.VALUE).getJSONObject(i);
             RemoteParticipantWaiting remoteParticipant = this.newRemoteParticipantAux(participantJson);
             try {
+                Log.d(TAG, "addRemoteParticipantsAlreadyInRoom: in");
                 JSONArray streams = participantJson.getJSONArray("streams");
                 for (int j = 0; j < streams.length(); j++) {
                     JSONObject stream = streams.getJSONObject(0);
@@ -395,6 +402,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     }
 
     private void iceCandidateEvent(JSONObject params) throws JSONException {
+        Log.d(TAG, "iceCandidateEvent: ");
         IceCandidate iceCandidate = new IceCandidate(params.getString("sdpMid"), params.getInt("sdpMLineIndex"), params.getString("candidate"));
         final String connectionId = params.getString("senderConnectionId");
         boolean isRemote = !session.getLocalParticipant().getConnectionId().equals(connectionId);
@@ -438,6 +446,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     }
 
     private RemoteParticipantWaiting newRemoteParticipantAux(JSONObject participantJson) throws JSONException {
+        Log.d(TAG, "newRemoteParticipantAux: ");
         final String connectionId = participantJson.getString(JsonConstants.ID);
         String participantName = "";
         participantJson.getString(JsonConstants.METADATA);

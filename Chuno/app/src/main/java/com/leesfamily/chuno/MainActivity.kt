@@ -1,12 +1,18 @@
 package com.leesfamily.chuno
 
+import android.app.Fragment
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentOnAttachListener
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.leesfamily.chuno.databinding.ActivityMainBinding
 import com.leesfamily.chuno.network.data.Item
 import com.leesfamily.chuno.network.data.User
@@ -22,6 +28,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     val viewModel: MainViewModel by viewModels()
+    private lateinit var navHostFragment: NavHostFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +36,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         if (NetworkManager.isConnectNetwork(this@MainActivity)) {
-
             viewModel.setItemList()
             viewModel.setUserInfo()
         }
+        supportFragmentManager.addFragmentOnAttachListener { fragmentManager, fragment ->
+            Log.d(TAG, "addFragmentOnAttachListener: ")
+            if (UserDB.getIsConfirmToken())
+                LoginPrefManager.getLastLoginToken()?.let {
+                    viewModel.setLastToken(it)
+                }
+            else {
+                navigate()
+            }
+        }
 
-
-        val navHostFragment =
+        navHostFragment =
             supportFragmentManager.findFragmentById(R.id.start_nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
         val graphInflater = navHostFragment.navController.navInflater
@@ -54,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                 val lastToken =
                     LoginPrefManager.getLastLoginToken()
                 viewModel.setLastToken(lastToken!!)
-                Log.d(TAG, "onCreate: mainactivity :viewModel.setToken(it) $lastToken")
+                Log.d(TAG, "onCreate: mainActivity :viewModel.setToken(it) $lastToken")
                 R.id.homeFragment
             }
             else -> R.id.permissionFragment
@@ -66,6 +81,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+    }
 
     override fun onStart() {
         super.onStart()
@@ -79,6 +97,9 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    fun navigate() {
+        navHostFragment.findNavController().navigate(R.id.loginFragment)
+    }
 
     companion object {
         private const val TAG = "추노_Main"

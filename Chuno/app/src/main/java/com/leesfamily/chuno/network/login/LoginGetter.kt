@@ -3,17 +3,17 @@ package com.leesfamily.chuno.network.login
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.leesfamily.chuno.MainViewModel
 import com.leesfamily.chuno.network.ChunoServer
-import com.leesfamily.chuno.network.data.DataForm
-import com.leesfamily.chuno.network.data.LoginForm
-import com.leesfamily.chuno.network.data.NickForm
-import com.leesfamily.chuno.network.data.User
+import com.leesfamily.chuno.network.data.*
+import com.leesfamily.chuno.util.FormDataUtil
 import com.leesfamily.chuno.util.login.LoginPrefManager
 import com.leesfamily.chuno.util.login.UserDB
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import retrofit2.Response
+import java.io.File
 
 
 class LoginGetter {
@@ -54,6 +54,7 @@ class LoginGetter {
         Log.d(TAG, "requestLogin: networkResponse\n $networkResponse")
         if (requestCode == 200) {
             loginData = loginResponse.body()
+            Log.d(TAG, "requestLogin: loginData $loginData")
         }
         return loginData
     }
@@ -115,6 +116,83 @@ class LoginGetter {
             }
         }
         return false
+    }
+
+
+    fun requestRegisterUser(nickname: String, email: String, image: File?): String? {
+
+        val formNickName = FormDataUtil.getBody("nickname", nickname)
+        val formEmail = FormDataUtil.getBody("email", email)
+        val formFile = image?.let { FormDataUtil.getImageBody("file", it) }
+
+        val loginResponse: Response<String> =
+            ChunoServer.loginServer.registerUser(formNickName, formEmail, formFile).execute()
+
+        val networkResponse = loginResponse.raw().networkResponse?.code
+        val requestCode = loginResponse.code()
+        Log.d(TAG, "requestRegisterUser: loginResponse\n $loginResponse")
+        Log.d(TAG, "requestRegisterUser: requestCode\n $requestCode")
+        Log.d(TAG, "requestRegisterUser: networkResponse\n $networkResponse")
+        if (requestCode == 200) {
+            val token = loginResponse.body()
+            Log.d(TAG, "requestRegisterUser: token $token")
+            return token
+        }
+        return null
+    }
+
+    fun requestRegisterImage(token: String, nickname: String, image: File): Boolean? {
+
+        val formNickName = FormDataUtil.getBody("nickname", nickname)
+        val formFile = FormDataUtil.getImageBody("file", image)
+
+        val loginResponse: Response<DataForm> =
+            ChunoServer.loginServer.profileImage(token, formNickName, formFile).execute()
+
+        val networkResponse = loginResponse.raw().networkResponse?.code
+        val requestCode = loginResponse.code()
+        Log.d(TAG, "requestRegisterImage: loginResponse\n $loginResponse")
+        Log.d(TAG, "requestRegisterImage: requestCode\n $requestCode")
+        Log.d(TAG, "requestRegisterImage: networkResponse\n $networkResponse")
+        if (requestCode == 200) {
+            val result = loginResponse.body()
+            when (result?.code) {
+                0 -> {
+                    return false
+                }
+                1 -> {
+                    return true
+                }
+            }
+            Log.d(TAG, "requestRegisterImage: token $result")
+        }
+        return null
+    }
+
+    fun requestDeleteUser(token: String): Boolean? {
+
+        val userResponse: Response<DataForm> = ChunoServer.loginServer.deleteUser(token).execute()
+
+        val networkResponse = userResponse.raw().networkResponse?.code
+        val requestCode = userResponse.code()
+        Log.d(TAG, "requestDeleteUser: loginResponse\n $userResponse")
+        Log.d(TAG, "requestDeleteUser: requestCode\n $requestCode")
+        Log.d(TAG, "requestDeleteUser: networkResponse\n $networkResponse")
+        Log.d(TAG, "requestDeleteUser: token\n $token")
+        if (requestCode == 200) {
+            val code = userResponse.body()?.code
+            Log.d(TAG, "requestDeleteUser: code $code")
+            when (userResponse.body()?.code) {
+                0 -> {
+                    return false
+                }
+                1 -> {
+                    return true
+                }
+            }
+            Log.d(TAG, "requestDeleteUser: request success, ${code}")
+        }
+        return null
     }
 
     companion object {

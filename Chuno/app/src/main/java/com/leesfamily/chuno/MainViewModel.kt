@@ -43,6 +43,10 @@ class MainViewModel : ViewModel() {
     val email: LiveData<String>
         get() = _email
 
+    private var _isNew: MutableLiveData<Boolean> = MutableLiveData()
+    val isNew: LiveData<Boolean>
+        get() = _isNew
+
 
     fun setUserInfo() {
         LoginPrefManager.getLastLoginToken()?.let { token ->
@@ -56,28 +60,41 @@ class MainViewModel : ViewModel() {
 
     fun setToken(token: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = LoginGetter().requestLogin(token)
-
-            when (result?.code) {
-                "member" -> {
-                    LoginPrefManager.setLastLoginToken(result.result)
-                    Log.d("추노", "setToken:${LoginPrefManager.getLastLoginToken()} ")
-                    _token.postValue(result.result)
-                }
-                "no_email" -> {
-                    _email.postValue(result.result)
+            LoginGetter().requestLogin(token).run {
+                Log.d("추노", "setToken: this.code ${this?.code}")
+                when (this?.code) {
+                    "member" -> {
+                        LoginPrefManager.setLastLoginToken(this.result)
+                        Log.d("추노", "setToken:${LoginPrefManager.getLastLoginToken()} ")
+                        _token.postValue(this.result)
+                        _isNew.postValue(false)
+                    }
+                    "no_email" -> {
+                        _email.postValue(this.result)
+                        Log.d("추노_MainViewModel", "setToken: _email : $_email")
+                        _isNew.postValue(true)
+                    }
                 }
             }
-
         }
     }
 
-    fun setLastToken(token: String){
+    fun setLastToken(token: String) {
+        Log.d("추노_MainViewModel", "setLastToken: ")
         _token.value = token
     }
 
     fun isLogin(): Boolean {
         return _token.value != null
+    }
+
+    fun removeAllData() {
+        _user = MutableLiveData()
+        _token = MutableLiveData()
+        _email = MutableLiveData()
+        Log.d("추노", "removeAllData:$_user")
+        Log.d("추노", "removeAllData: $_token")
+        Log.d("추노", "removeAllData: $_email")
     }
 
     fun setItemList() {

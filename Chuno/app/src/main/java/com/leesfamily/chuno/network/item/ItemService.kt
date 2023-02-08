@@ -8,4 +8,5 @@ interface ItemService {
 
     @GET("item")
     fun getItemData(): Call<ItemForm>
+    // https://i8d208.p.ssafy.io/api/resources/images?path=item/item2.png
 }

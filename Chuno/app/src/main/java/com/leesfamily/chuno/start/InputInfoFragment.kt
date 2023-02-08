@@ -25,13 +25,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.leesfamily.chuno.MainViewModel
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentInputInfoBinding
 import com.leesfamily.chuno.network.login.LoginGetter
 import com.leesfamily.chuno.util.custom.MyCustomDialog
 import com.leesfamily.chuno.util.custom.MyCustomDialogInterface
+import com.leesfamily.chuno.util.login.LoginPrefManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -40,6 +44,8 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
     private lateinit var binding: FragmentInputInfoBinding
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var photoResultLauncher: ActivityResultLauncher<Intent>
+    private val inputInfoViewModel: InputInfoViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private var flag = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,13 +65,26 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbarInclude.toolbarTitle.text = getString(R.string.profile_text)
 
+        mainViewModel.email.observe(viewLifecycleOwner) { email ->
+            inputInfoViewModel.setEmail(email)
+            Log.d(TAG, "onViewCreated: email $email")
+        }
         binding.profile.setOnClickListener {
             startDialog()
         }
         binding.saveButton.setOnClickListener {
             when (flag) {
                 2 -> {  // 가능
-                    findNavController().navigate(R.id.homeFragment)
+                    inputInfoViewModel.setNickName(binding.editNick.text.toString())
+                    inputInfoViewModel.register { findNavController().navigate(R.id.homeFragment) }
+                    inputInfoViewModel.registerSuccess.observe(viewLifecycleOwner) {
+                        if (it) {
+                            Toast.makeText(context, "환영합니다!", Toast.LENGTH_SHORT).show()
+
+                        } else {
+                            Toast.makeText(context, "회원 가입 실패", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
                 else -> {
                     showCustomDialog()
@@ -86,16 +105,14 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
                         start: Int,
                         before: Int,
                         count: Int
-                    ) {
-                    }
+                    ) {}
 
                     override fun beforeTextChanged(
                         s: CharSequence,
                         start: Int,
                         count: Int,
                         after: Int
-                    ) {
-                    }
+                    ) {}
 
                     override fun afterTextChanged(arg0: Editable) {
                         // 입력이 끝났을 때 조치
@@ -167,12 +184,15 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
                     val extras = it.data?.extras
                     val bitmap = extras?.get("data") as Bitmap?
                     binding.profile.setImageBitmap(bitmap)
+                    if (bitmap != null) {
+                        inputInfoViewModel.setImage(bitmap, context?.cacheDir.toString())
+                    }
                 }
             }
     }
 
     private fun setLimitText(flag: Int) {
-        lifecycleScope.launch (Dispatchers.Main){
+        lifecycleScope.launch(Dispatchers.Main) {
             binding.limitText.apply {
                 when (flag) {
                     1 -> {
@@ -228,6 +248,7 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
                     ImageDecoder.createSource(requireContext().contentResolver, imgUri)
                 bitmap = ImageDecoder.decodeBitmap(source)
                 binding.profile.setImageBitmap(bitmap)
+                inputInfoViewModel.setImage(bitmap, context?.cacheDir.toString())
             }
         }
     }

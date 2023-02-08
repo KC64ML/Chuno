@@ -27,18 +27,12 @@ import kotlin.system.exitProcess
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
-    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE) // 액션바 숨기기
 
         setContentView(R.layout.activity_splash)
-
-        mainViewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[MainViewModel::class.java]
 
         lifecycleScope.launch(Dispatchers.IO) {
             val start = System.currentTimeMillis()
@@ -49,10 +43,6 @@ class SplashActivity : AppCompatActivity() {
                         UserDB.setIsConfirmToken(isConfirm)
                     }
                 }
-
-//                ItemGetter().requestItem()?.let {
-//                    Log.d("추노 아이템", "onCreate: item $it")
-//                }
 
                 val delay = System.currentTimeMillis() - start
 

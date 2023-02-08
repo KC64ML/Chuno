@@ -19,6 +19,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
+import com.leesfamily.chuno.MainViewModel
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentRoomListBinding
 import com.leesfamily.chuno.network.room.RoomGetter
@@ -26,6 +27,8 @@ import com.leesfamily.chuno.util.PermissionHelper
 import com.leesfamily.chuno.util.custom.CreateRoomDialog1
 import com.leesfamily.chuno.util.custom.CreateRoomDialog2
 import com.leesfamily.chuno.util.custom.CreateRoomDialogInterface
+import com.leesfamily.chuno.util.login.LoginPrefManager
+import com.leesfamily.chuno.util.login.UserDB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -41,7 +44,8 @@ class RoomListFragment : Fragment(), CreateRoomDialogInterface {
     private var param2: String? = null
     private var columnCount = 1
 
-    private val viewModel:RoomItemViewModel by activityViewModels()
+    private val viewModel: RoomItemViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireActivity())
@@ -67,6 +71,16 @@ class RoomListFragment : Fragment(), CreateRoomDialogInterface {
     ): View? {
         binding = FragmentRoomListBinding.inflate(inflater, container, false)
         binding.toolbarInclude.toolbarTitle.text = getString(R.string.room_list_title)
+        if (mainViewModel.user.value == null) {
+            mainViewModel.setUserInfo()
+        }
+        if (mainViewModel.token.value == null) {
+            LoginPrefManager.getLastLoginToken()?.let {
+                mainViewModel.setLastToken(it)
+                UserDB.setIsConfirmToken(true)
+            }
+        }
+
         if (PermissionHelper.hasLocationPermission(requireContext())) {
             getRoomList()
             binding.refreshLayout.apply {

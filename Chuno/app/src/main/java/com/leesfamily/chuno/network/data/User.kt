@@ -28,5 +28,14 @@ data class User(
 
     val profile: UserProfile,
 
-    val inventory: List<Inventory>
+//    val inventory: List<Inventory>,
+
+    var isDeleted: Boolean,
+
+    var items: List<Int>
+)
+
+data class RegisterUser(
+    var nickname: String,
+    var email: String
 )

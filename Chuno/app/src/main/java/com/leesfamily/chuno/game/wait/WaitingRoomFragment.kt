@@ -238,7 +238,7 @@ class WaitingRoomFragment : Fragment() {
                     remoteParticipant.participantLevel.toInt(), false
                 )
             )
-            Log.d(TAG, "createRemoteParticipantVideo: ")
+            Log.d(TAG, "createRemoteParticipantVideo: players : ${viewModel.players} ")
         }
         mainHandler.post(myRunnable)
     }
@@ -251,7 +251,9 @@ class WaitingRoomFragment : Fragment() {
 
     private fun startWebSocket() {
         val webSocket = CustomWebSocketWaiting(session, this)
+        Log.d(TAG, "startWebSocket: $webSocket 시작")
         webSocket.execute()
+        Log.d(TAG, "startWebSocket: $webSocket 끝")
         session.setWebSocket(webSocket)
     }
 
@@ -340,6 +342,7 @@ class WaitingRoomFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        Log.d(TAG, "onAttach: ")
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 leaveSession()
@@ -352,6 +355,7 @@ class WaitingRoomFragment : Fragment() {
     }
 
     override fun onDetach() {
+        Log.d(TAG, "onDetach: ")
         super.onDetach()
         callback.remove()
     }
