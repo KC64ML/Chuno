@@ -305,11 +305,13 @@ public class KakaoLoginController {
     String register(
             @RequestPart(value = "file", required = false) MultipartFile file,
             @RequestPart(value = "nickname") String nickname,
-            @RequestPart(value = "email") String email
+            @RequestPart(value = "email") String email,
+            @RequestPart(value = "phone") String phone
     ) {
         UserEntity user = UserEntity.builder()
                 .nickname(nickname)
                 .email(email)
+                .phone(phone)
                 .build();
         Long userId = userService.register(user, file);
         return makeToken(userId);

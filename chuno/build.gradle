@@ -77,6 +77,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/io.openvidu/openvidu-java-client
 	implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.25.0'
 
+	// 알림톡 위한 의존성
+	// https://mvnrepository.com/artifact/net.nurigo/sdk
+	implementation group: 'net.nurigo', name: 'sdk', version: '4.2.9'
+
 
 	//querydsl 추가
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
@@ -86,9 +90,6 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
-	// 알림톡 위한 의존성
-	// https://mvnrepository.com/artifact/net.nurigo/sdk
-	implementation group: 'net.nurigo', name: 'sdk', version: '4.2.9'
 
 
 	annotationProcessor 'org.projectlombok:lombok'

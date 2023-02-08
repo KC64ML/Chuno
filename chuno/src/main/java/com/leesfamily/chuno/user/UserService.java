@@ -69,7 +69,7 @@ public class UserService {
         }
         user.setLevel(1);
         UserEntity userEntity = userRepository.saveAndFlush(user);
-        putMyProfileImg(userEntity.getId(), file, user.getNickname());
+        putMyProfileImg(userEntity.getId(), file, user.getNickname(), user.getPhone());
         return userEntity.getId();
     }
 
@@ -122,12 +122,13 @@ public class UserService {
         }
     }
 
-    public UserEntity putMyProfileImg( Long userId, MultipartFile img, String nickname) {
+    public UserEntity putMyProfileImg( Long userId, MultipartFile img, String nickname, String phone) {
         Optional<UserEntity> option = userRepository.findById(userId);
         UserEntity userEntity = option.get();
         if(userEntity.getProfile() == null) {
             userEntity.setProfile(new UserProfile());
         }
+        userEntity.setPhone(phone);
         userEntity.setNickname(nickname);
         if(img != null) {
             String target = "profile/"+userId;
