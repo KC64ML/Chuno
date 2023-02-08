@@ -118,7 +118,15 @@ export default {
               // 친구인지 확인
               this.axios.get(process.env.VUE_APP_SPRING + 'user/friend/' + uid, { headers: { Authorization: token } })
               .then((res) => {
-                  this.friend = res.data.result
+                  console.log(res.data)
+                  const code = res.data.code
+                  if(code) {
+                    console.log('친구임')
+                    this.friend = true
+                  } else{
+                    console.log('친구 아님')
+                    this.friend = false
+                  }
                 })
             }
           } else {
