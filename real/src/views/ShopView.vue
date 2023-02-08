@@ -11,6 +11,7 @@
     <SelectedItemView
       :item="selected"
       :money="money"
+      @get-user="getUser"
     />
     <div class="container-row ">
       <div class="box item" style="margin-right: 3%">
