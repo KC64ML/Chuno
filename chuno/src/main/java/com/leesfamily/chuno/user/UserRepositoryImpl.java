@@ -32,6 +32,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                                 userEntity.chaserPlayCount.add(userEntity.runnerPlayCount)
                         ).multiply(100))
                 ).from(userEntity)
+                .where(userEntity.isDeleted.eq(false))
                 .orderBy(userEntity.chaserWinCount.add(userEntity.runnerWinCount).divide(
                         userEntity.chaserPlayCount.add(userEntity.runnerPlayCount)).multiply(100).desc())
                 .fetch();
