@@ -3,6 +3,7 @@ package com.leesfamily.chuno.user;
 import com.leesfamily.chuno.common.util.StatusCodeGeneratorUtils;
 import com.leesfamily.chuno.common.util.TokenUtils;
 import com.leesfamily.chuno.item.ItemService;
+import com.leesfamily.chuno.item.model.ItemEntity;
 import com.leesfamily.chuno.user.model.FriendDTO;
 import com.leesfamily.chuno.user.model.FriendEntity;
 import com.leesfamily.chuno.user.model.UserEntity;
@@ -158,6 +159,16 @@ public class UserController {
         Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByNumber(result);
         return new ResponseEntity<>(resMap, HttpStatus.OK);
     }
+    @PutMapping("/use/{itemId}")
+    public ResponseEntity<Map<String, Object>> useItem(
+            @PathVariable("itemId") Long itemId,
+            @RequestHeader HttpHeaders requestHeader
+    ) {
+        Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
+        UserInventoryResponse userEntity = userService.useItem(userId, itemId);
+        Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByObject(userEntity);
+        return new ResponseEntity<>(resMap, HttpStatus.OK);
+    }
 
     // getHighPriorityList
     @Operation(summary = "User Rank 조회", description = "")
@@ -165,6 +176,7 @@ public class UserController {
     public ResponseEntity<List> getRankingList(){
         return ResponseEntity.ok(userService.getRankingList());
     }
+
     @DeleteMapping
     public ResponseEntity<Map<String, Object>> deleteUser(
             @RequestHeader HttpHeaders requestHeader

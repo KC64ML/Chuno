@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -300,11 +301,17 @@ public class KakaoLoginController {
     }
 
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     String register(
-            @RequestBody UserEntity user
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @RequestPart(value = "nickname") String nickname,
+            @RequestPart(value = "email") String email
     ) {
-        Long userId = userService.register(user);
+        UserEntity user = UserEntity.builder()
+                .nickname(nickname)
+                .email(email)
+                .build();
+        Long userId = userService.register(user, file);
         return makeToken(userId);
     }
 
