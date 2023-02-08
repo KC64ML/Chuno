@@ -11,14 +11,17 @@ import com.leesfamily.chuno.user.UserService;
 import com.leesfamily.chuno.user.model.dto.UserInventoryResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.awt.*;
 import java.time.LocalDate;
 
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -170,17 +173,18 @@ public class RoomService {
         roomStartDto.setCurrentPlayers(roomStartRequestDto.getUserIdList().size());
 
         // (2) 노비문서 위도, 경도 회원 x 2
+        // 참고 : https://gist.github.com/fuxingloh/5f53a618ce3c80b0abaf
         // - 방 정보에서 반지름과 중심 좌표를 받는다. (위도 : lat, 경도 : lng, 반지름 : radius)
-        // 현재 반지름 기준 random
+        // - 현재 반지름 기준 random
 
         // 좌표 인원 수 x 2개 위치 구하는 함수
-//        List<Location> randomLatLng = randomLatLngCoordinate(roomStartDto);
-//        log.info("현재 좌표 : " + roomStartDto.getLat() + " " + roomStartDto.getLng());
-//        log.info("반지름 : " + roomStartDto.getRadius());
-//        log.info("좌표 : " + randomLatLng.get(0).getLat() + " " + randomLatLng.get(0).getLng()
-//                + " " + randomLatLng.get(1).getLat() + " " + randomLatLng.get(1).getLng()
-//                + " " + randomLatLng.get(2).getLat() + " " + randomLatLng.get(2).getLng()
-//        );
+        List<Pair<Double,Double>> randomLatLng = randomLatLngCoordinate(roomStartDto);
+        log.info("현재 좌표 : " + roomStartDto.getLat() + " " + roomStartDto.getLng());
+        log.info("반지름 : " + roomStartDto.getRadius());
+        log.info("좌표 : " + randomLatLng.get(0).getLeft() + " " + randomLatLng.get(0).getRight()
+                + " " + randomLatLng.get(1).getLeft() + " " + randomLatLng.get(1).getRight()
+                + " " + randomLatLng.get(2).getLeft() + " " + randomLatLng.get(2).getRight()
+        );
 
         // (3) 노비, 추노꾼 랜덤
         // 사용자 정보를 조회한 후, 거기서 아이템을 조회해햐아 한다.
@@ -188,7 +192,7 @@ public class RoomService {
         // chaser, runner
         List<RoomGameStartDecideChaserRunnerDto> roomGameUserChaserOrRunnerItemCntResultList = randomUserChaserRunner(roomStartRequestDto);
 
-        return RoomGameStartResponseDto.of(roomStartDto, roomGameUserChaserOrRunnerItemCntResultList);
+        return RoomGameStartResponseDto.of(roomStartDto, randomLatLng, roomGameUserChaserOrRunnerItemCntResultList);
 
     }
 
@@ -220,8 +224,8 @@ public class RoomService {
                 log.info("items : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems()[0]);
                 log.info("items : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems()[1]);
                 log.info("items : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems()[2]);
-                int[] items = userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems();
-
+                int[] beItems = userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems();
+                int[] items = Arrays.copyOfRange(beItems, 0, 4);
 
                 Long userId = roomStartRequestDto.getUserIdList().get(randomIndex); // userId
                 List<Integer> list = Arrays.stream(items).boxed().collect(Collectors.toList()); // int형 -> list형으로
@@ -244,7 +248,8 @@ public class RoomService {
                 log.info("index : " + userIdx);
                 log.info("for문 index : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(userIdx)).getNickname());
 
-                int[] items = userService.getProfile(roomStartRequestDto.getUserIdList().get(userIdx)).getItems();
+                int[] beItems = userService.getProfile(roomStartRequestDto.getUserIdList().get(userIdx)).getItems();
+                int[] items = Arrays.copyOfRange(beItems, 4, 8);
                 Long userId = roomStartRequestDto.getUserIdList().get(userIdx); // userId
                 List<Integer> list = Arrays.stream(items).boxed().collect(Collectors.toList()); // int형 -> list형으로
                 roomGameUserChaserOrRunnerItemCntDtoList.add(new RoomGameStartDecideChaserRunnerDto(userId, list));
@@ -254,39 +259,39 @@ public class RoomService {
         return roomGameUserChaserOrRunnerItemCntDtoList;
     }
 
-    private List<Location> randomLatLngCoordinate(RoomStartDto roomStartDto) {
+    private List<Pair<Double,Double>> randomLatLngCoordinate(RoomStartDto roomStartDto) {
         // random 좌표를 구한다.
-        // random x, y의 범위는 +-(반지름 x 0.9) 범위 지정
-        // x : (random x 곱하기 2 - radius) * 0.9
-        // y : (random y 곱하기 2 - radius) * 0.9
+        List<Pair<Double,Double>> resList = new ArrayList<>();
+        // n 번 돌린다.
+//        Random random = new Random();
+        double lat = roomStartDto.getLat();
+        double lng = roomStartDto.getLng();
+        double radius = roomStartDto.getRadius() * 0.7;
+        double radiusInDegrees = radius / 111000f;
+        int idx = 0;
+        while(idx < roomStartDto.getCurrentPlayers() * 2) {
+            double u = Math.random();
+            double v = Math.random();
+            double w = radiusInDegrees * Math.sqrt(u);
+            double t = 2 * Math.PI * v;
+            double x = w * Math.cos(t);
+            double y = w * Math.sin(t);
 
-        int radius = roomStartDto.getRadius();
-        double centerLat = roomStartDto.getLat();
-        double centerLng = roomStartDto.getLng();
-
-        List<Location> locStoreLatLng = new ArrayList<>();
-
-        while (true) {
-            double randomLat = (Math.random() * (radius * 2) - radius) * 0.9 + centerLat;
-            double randomLng = (Math.random() * (radius * 2) - radius) * 0.9 + centerLng;
+            // Adjust the x-coordinate for the shrinking of the east-west distances
+            double new_x = x / Math.cos(lat);
 
             // 거리를 계산
-            double distance = (6371 * Math.acos(Math.cos(Math.toRadians(centerLat))
-                    * Math.cos(Math.toRadians(randomLat)) * Math.cos(Math.toRadians(randomLng) - Math.toRadians(centerLng))
-                    + Math.sin(Math.toRadians(centerLat)) * Math.sin(Math.toRadians(randomLat))));
-
-            // 거리가 반지름보다 작다면 추가
-            if (distance < radius) {
-                locStoreLatLng.add(new Location(randomLat, randomLng));
-            }
-
-            // 현재 참여한 인원수 x 2일 경우 종료한다.
-            if (locStoreLatLng.size() == roomStartDto.getCurrentPlayers() * 2) break;
+//            double distance = (6371 * Math.acos(Math.cos(Math.toRadians(lat))
+//                    * Math.cos(Math.toRadians(new_x + lng)) * Math.cos(Math.toRadians(y + lat) - Math.toRadians(lng))
+//                    + Math.sin(Math.toRadians(lat)) * Math.sin(Math.toRadians(new_x + lng))));
+            resList.add(Pair.of(y + lat, new_x + lng));
+            idx += 1;
+//            System.out.println("idx : " + idx + "distance : " + distance + " radius" + radius + " new_x : " + new_x);
         }
+        // Convert radius from meters to degrees
 
-        return locStoreLatLng;
+        return resList;
     }
-
 
     public RoomGameEndResponseDto endRoom(RoomGameEndRequestDto roomGameEndRequestDto, Long userId) {
         return roomRepository.endRoom(roomGameEndRequestDto, userId);

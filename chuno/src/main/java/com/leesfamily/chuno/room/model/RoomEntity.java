@@ -54,7 +54,7 @@ public class RoomEntity {
 //    private Point location;
 
     @Column(nullable = false)
-    private int radius;
+    private double radius;
 
     @Embedded
     private DateTime dateTime;
