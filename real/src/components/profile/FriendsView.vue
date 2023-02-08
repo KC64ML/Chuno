@@ -41,7 +41,7 @@ export default {
     getFriends(){
       const token = sessionStorage.token
       this.axios.get(process.env.VUE_APP_SPRING + 'user/friend', { headers: { Authorization: token } })
-        .catch((res) => {
+        .then((res) => {
           const code = res.data.code
           if(code) {
             console.log('친구 겟또')
