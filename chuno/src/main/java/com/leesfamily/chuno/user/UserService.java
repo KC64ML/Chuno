@@ -59,6 +59,9 @@ public class UserService {
     }
 
     public Long register(UserEntity user, MultipartFile file) {
+        String originPhone = user.getPhone();
+
+        user.setPhone(phoneCheck(originPhone));
         Optional<UserEntity> option = userRepository.findByEmail(user.getEmail());
         if(option.isPresent()) {
             String userNickname = user.getNickname();
@@ -128,7 +131,7 @@ public class UserService {
         if(userEntity.getProfile() == null) {
             userEntity.setProfile(new UserProfile());
         }
-        userEntity.setPhone(phone);
+        userEntity.setPhone(phoneCheck(phone));
         userEntity.setNickname(nickname);
         if(img != null) {
             String target = "profile/"+userId;
@@ -213,5 +216,17 @@ public class UserService {
         }else {
             return null;
         }
+    }
+
+
+
+    private String phoneCheck(String phone) {
+        for(int i = 0; i < phone.length(); i++) {
+            char curNum = phone.charAt(i);
+            if(curNum < '0' || curNum > '9') {
+                phone.replace(curNum, '\0');
+            }
+        }
+        return phone;
     }
 }

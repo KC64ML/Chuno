@@ -20,6 +20,7 @@ public class UserInventoryResponse {
     private Long id;
     private String email;
     private String nickname;
+    private String phone;
     private int level;
     private int paperCount;
     private int catchCount;
@@ -38,6 +39,7 @@ public class UserInventoryResponse {
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .level(user.getLevel())
+                .phone(user.getPhone())
                 .paperCount(user.getPaperCount())
                 .catchCount(user.getCatchCount())
                 .runnerPlayCount(user.getRunnerPlayCount())
