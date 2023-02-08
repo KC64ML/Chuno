@@ -196,7 +196,7 @@
               //               "heightPercent":"1.0F"
               //           });
               //   });
-              publisher.stream.applyFilter("GStreamerFilter", { command: "videoflip method=vertical-flip" })
+              this.publisher.stream.applyFilter("GStreamerFilter", { command: "videoflip method=vertical-flip" })
                 .then(() => {
                     console.log("Video rotated!");
                 })

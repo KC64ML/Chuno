@@ -1,6 +1,6 @@
 <template>
     <div class="main_back flex_center">
-        <router-view></router-view>
+        <router-view :key="$route.fullPath"></router-view>
     </div>
     <FooterVue class="footer_fix"
         v-if="this.$route.name != 'waitingRoom' && this.$route.name != 'game' && this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth' && this.$route.name != 'Register'">
