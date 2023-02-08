@@ -17,7 +17,7 @@
     :title= "userInfo.nickname + '님의 프로필'"
   ></HeaderVue>
 
-  <div style="height: 75%; width:300px;">
+  <div style="height: 80%; width:300px;">
     <MyProfileView 
       @on-edit="onEdit"
       :me="me"
