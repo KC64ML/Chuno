@@ -6,12 +6,12 @@
   <div class="container-col" style="height:75%">
     <div class="container" id="money">
       <img src="@/assets/nyang.svg" alt="nyang">
-      <!-- {{ userInfo.money }} -->
+      {{ userInfo.money }}
     </div>
     <SelectedItemView
       :item="selected"
+      @get-user="getUser"
       />
-      <!-- @get-user="getUser" -->
     <div class="container-row ">
       <div class="box item" style="margin-right: 3%">
         <div id="item-title">
@@ -92,19 +92,19 @@
       }
     },
     methods: {
-      // getUser(){
-      //   const token = sessionStorage.token
-      //   this.axios.get(process.env.VUE_APP_SPRING +'user', { headers: { Authorization: token } })
-      //     .then((res) => {
-      //       const code = res.data.code
-      //       if(code) {
-      //         this.userInfo = res.data.result
-      //         console.log(this.userInfo)
-      //       } else {
-      //         console.log('code err')
-      //       }
-      //     })
-      // },
+      getUser(){
+        const token = sessionStorage.token
+        this.axios.get(process.env.VUE_APP_SPRING +'user', { headers: { Authorization: token } })
+          .then((res) => {
+            const code = res.data.code
+            if(code) {
+              this.userInfo = res.data.result
+              console.log(this.userInfo)
+            } else {
+              console.log('code err')
+            }
+          })
+      },
       onSelect(res) {
         this.selected = res
         console.log(this.selected)
@@ -131,7 +131,7 @@
     },
     created() {
       this.getItems()
-      // this.getUser()
+      this.getUser()
       console.log('-------------------------')
     },
     // computed: {
