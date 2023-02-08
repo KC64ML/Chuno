@@ -301,7 +301,7 @@ public class KakaoLoginController {
     }
 
 
-    @PostMapping(name = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     String register(
             @RequestPart(value = "file", required = false) MultipartFile file,
             @RequestPart(value = "nickname") String nickname,
