@@ -1,13 +1,11 @@
 <template>
   <div class="container-row">
     <img :src="URL + 'resources/images?path=' + item.imgPath" alt="item" style="height:50px;">
-    <!-- <div v-if="item.id < 5">{{ runnerItemCnt }}</div> -->
-    <!-- <div v-else>{{ chaserItemCnt }}</div> -->
     <div v-for="i in 8"
       :key="i"  
     >
-      <div v-if="i == userInfo.id - 1">
-        {{ userInfo.items[i] }}
+      <div v-if="i == item.id">
+        {{ userInfo.items[i-1] }}
       </div>
     </div>
     <div>{{ item.name }}</div>
