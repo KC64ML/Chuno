@@ -18,7 +18,7 @@ public class RoomResponse {
         private double lng;
         private int currentPlayers;
         private int maxPlayers;
-        private int radius;
+        private double radius;
         private double distance;
         private boolean isPushed;
         private UserEntity host;

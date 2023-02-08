@@ -27,7 +27,7 @@ public class RoomStartDto {
 //    @JsonDeserialize(as = Point.class)
 //    private Point location;
 
-    private int radius;
+    private double radius;
 
     private DateTime dateTime;
 
