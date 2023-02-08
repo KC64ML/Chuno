@@ -27,12 +27,17 @@ export default {
   },
   methods: {
     buy(){
+      console.log('구매 버튼')
+      console.log(this.item)
       const token = sessionStorage.token
-      this.axios.post(process.env.VUE_APP_SPRING + 'user/shop/' + this.item.id, { headers: { Authorization:token } })
+      this.axios.post(process.env.VUE_APP_SPRING + 'user/shop/' + this.item.id, { headers: { Authorization: token } })
         .then((res) => {
-          console.log(res)
-          console.log(res.data.code)
-          console.log(this.item.id)
+          const code = res.data.code
+          if(code) {
+            console.log('샀다')
+            this.$emit('get-user')
+            console.log(res.data.result)
+          }
         })
         .catch((e) => {
           console.log(e)
