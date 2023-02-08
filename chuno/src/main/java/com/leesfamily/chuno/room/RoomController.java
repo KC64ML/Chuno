@@ -143,7 +143,7 @@ public class RoomController {
             content = {
                     @Content(
                             mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = RoomStartDto.class))
+                            array = @ArraySchema(schema = @Schema(implementation = RoomGameStartResponseDto.class))
                     )
             }
     )
