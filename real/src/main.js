@@ -17,4 +17,11 @@ const app = createApp(App)
   .use(router)
 
 app.config.globalProperties.axios = axios;
+app.config.globalProperties.conn = new WebSocket(process.env.VUE_APP_SOCKET);
+app.config.globalProperties.conn.onopen = () => {
+  console.log("웹소켓이 연결되었어요");
+}
+app.config.globalProperties.conn.onclose = () => {
+  console.log("웹소켓 연결이 종료 되었어요")
+}
 app.mount('#app')

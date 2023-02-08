@@ -27,7 +27,7 @@ const routes = [
   {
     path: "/home",
     name: "home",
-    component: () => import("@/views/HomeView.vue")
+    component: () => import("@/views/NewHomeView.vue")
   },
   {
     path: '/profile/:uid',

@@ -167,6 +167,10 @@ export default {
         },
         nextButton1() {
             console.log(this.hour + (this.is_am ? 0 : 12), this.minute)
+            if (this.title == "") {
+                alert("제목을 입력해 주세요");
+                return;
+            }
             if (this.hour > 12 || this.hour <= 0 || this.minute < 0 || this.minute >= 60) {
                 alert("시간을 확인해 주세요");
                 return;
@@ -220,7 +224,14 @@ export default {
             }, {
                 headers: { Authorization: sessionStorage.getItem("token") }
             }).then(res => res.data.result)
+            var user = await this.axios.get(process.env.VUE_APP_SPRING + "user", {headers: {Authorization: sessionStorage.getItem("token")}}).then(res => res.data.result);
             console.log(data);
+            this.conn.send(JSON.stringify({
+                "event": "make",
+                "room": data,
+                "nickname": user.nickname,
+                "level": user.level,
+            }));
             this.$router.push({ path: "/waitingRoom/" + data })
         }
     },
