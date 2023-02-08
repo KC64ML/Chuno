@@ -4,8 +4,8 @@
     <div v-for="i in 8"
       :key="i"  
     >
-      <div v-if="i == userInfo.id" class="invenCnt">
-        {{ userInfo.items[i] }}
+      <div v-if="i == item.id" class="invenCnt">
+        {{ userInfo.items[i-1] }}
       </div>
     </div>
     <!-- <div>{{ item.name }}</div> -->
