@@ -12,6 +12,7 @@
       <input class="header_menu header_input" id="room_search" v-model="friendSearch" placeholder="친구 검색">
     </div>
     <FriendsItemView 
+      @get-friends="getFriends"
       :edit="edit"
       v-for="friend in friends"
       :key="friend.friendId"
