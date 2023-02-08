@@ -1,5 +1,5 @@
 <template>
-  <!-- <div> -->
+  <div>
   <HeaderVue
     :title="'상점'"
   ></HeaderVue>
@@ -39,7 +39,7 @@
       </div>
     </div>
   </div>
-<!-- </div> -->
+</div>
 </template>
 
 <script>
@@ -64,7 +64,7 @@
           forRunner: ' ',
         },
         items:[],
-        userInfo: []
+        userInfo: [],
       }
     },
     methods: {
@@ -108,37 +108,7 @@
     created() {
       this.getItems()
       this.getUser()
-      console.log('-------------------------')
     },
-    // computed: {
-    //   runnerItemCnt(){
-    //     // let res = []
-    //     // const items = this.userInfo.items
-      
-    //     // for (const i in items) {
-    //     //   if(i < 4){
-    //     //     res.append(items[i])
-    //     //   }
-    //     // }
-    //     // return res
-    //     return [0, 1, 2, 3]
-    //   },
-    //   chaserItemCnt(){
-    //     // let res = []
-    //     // const items = this.userInfo.items
-      
-    //     // for (const i in items) {
-    //     //   if(i > 3){
-    //     //     res.append(items[i])
-    //     //   }
-    //     // }
-    //     // return res
-    //     return [4, 5, 6, 7]
-    //   },
-    // },
-    mounted(){
-      
-    }
   }
 </script>
 
