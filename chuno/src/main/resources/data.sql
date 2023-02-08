@@ -9,7 +9,7 @@ VALUES
 insert into users
 (reg_dt, catch_count, chaser_play_count, chaser_win_count, email, exp, is_deleted, is_manager, level, money, nickname, paper_count, path, save_name, runner_play_count, runner_win_count)
 values
-(now(), 0, 11, 7, "opi6@hanmail.net", 0, 0, 0, 1, 0, "쿙쿙", 0, null, null, 30, 15),
+(now(), 0, 11, 7, "opi6@hanmail.net", 0, 0, 0, 1, 0, "인의동큰손", 0, null, null, 30, 15),
 (now(), 0, 11, 7, "lce511@naver.com", 0, 0, 0, 1, 85900, "채은짱님", 0, null, null, 30, 15);
 
 INSERT INTO rooms
