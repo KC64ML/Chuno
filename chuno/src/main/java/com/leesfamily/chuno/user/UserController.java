@@ -118,6 +118,17 @@ public class UserController {
         return new ResponseEntity<>(resMap, HttpStatus.OK);
     }
 
+    @GetMapping("/friend/search/{nickname}")
+    public ResponseEntity<Map<String, Object>> getMyFriendsByNickname(
+            @PathVariable("nickname") String nickname,
+            @RequestHeader HttpHeaders requestHeader
+    ) {
+        Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
+        List<UserEntity> myFriends = userService.getMyFriends(userId, nickname);
+        Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByList(myFriends);
+        return new ResponseEntity<>(resMap, HttpStatus.OK);
+    }
+
     @GetMapping("/friend/{userId}")
     public ResponseEntity<Map<String, Object>> isMyFriend(
             @RequestHeader HttpHeaders requestHeader,

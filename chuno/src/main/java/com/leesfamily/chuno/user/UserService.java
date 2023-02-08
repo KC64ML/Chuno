@@ -112,6 +112,21 @@ public class UserService {
         return null;
     }
 
+    public List<UserEntity> getMyFriends(Long userId, String nickname) {
+        Optional<List<FriendEntity>> myFriendsOption = friendRepository.findFriendEntitiesByFromUserId(userId);
+        if(myFriendsOption.isPresent()) {
+            List<UserEntity> myFriends = new ArrayList<>();
+            myFriendsOption.get().forEach((friendEntity) -> {
+                UserEntity friend = friendEntity.getToUser();
+                if(friend.getNickname().contains(nickname)) {
+                    myFriends.add(friend);
+                }
+            });
+            return myFriends;
+        }
+        return null;
+    }
+
     public int isMyFriend(Long myId, Long userId) {
         Optional<FriendEntity> option = friendRepository
                 .findByFromUserAndToUser(
