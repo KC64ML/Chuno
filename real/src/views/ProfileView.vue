@@ -151,6 +151,7 @@ export default {
     console.log('getUser 실행?')
     this.getUser()
     console.log('getUser 실행!')
+    this.getItems()
   }
 }
 </script>
