@@ -18,7 +18,7 @@ export default {
   name: 'SelectedItemView',
   props: {
     item: Object,
-    money: Number,
+    // money: Number,
   },
   data(){
     return {
