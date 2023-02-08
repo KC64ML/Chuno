@@ -80,7 +80,8 @@ export default {
         .then((res) => {
           const code = res.data.code
           if(code) {
-            this.friend = !this.friend
+            this.friend = true
+            console.log('친구 추가 성공')
           } else {
             console.log('code error')
           }
@@ -96,7 +97,8 @@ export default {
       .then((res) => {
         const code = res.data.code
         if(code) {
-          this.friend = !this.friend
+          this.friend = false
+          console.log('친구 끊었다..')
         } else {
           console.log('code error')
         }

@@ -44,6 +44,7 @@ export default {
         .catch((res) => {
           const code = res.data.code
           if(code) {
+            console.log('친구 겟또')
             this.friends = res.data.result
           } else {
             console.log('실패')
