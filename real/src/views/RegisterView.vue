@@ -21,7 +21,7 @@
       <input ref="file_input" type="file" @change="oneFileSelect" style="display:none"/>
     </div>
     <div id="input_box" style="display: flex; align-items: center;">
-      <div style="margin-right: 10px;">닉네임</div>
+      <div style="margin-right: 19px;">닉네임</div>
       <div>
         <input id="nickname_input" ref="nickname_input" v-model="nickname" maxlength="6">
       </div>
@@ -31,12 +31,12 @@
       <div v-else style="color: green;">사용 할 수 있어요</div>
     </div>
     <div id="input_box" style="display: flex; align-items: center;">
-      <div style="margin-right: 10px;">전화번호</div>
+      <div style="margin-right: 5px;">전화번호</div>
       <div>
         <input id="nickname_input" ref="nickname_input" v-model="phone" maxlength="12">
       </div>
-      <div>전화번호는 '-' 없이 숫자만 입력해주세요.</div>
     </div>
+      <div class="notice grey">전화번호는 '-' 없이 숫자만 입력해주세요.</div>
     <div>
       <button id="save_button" @click="save">저장</button>
     </div>
@@ -196,6 +196,12 @@ $div_interval: 40px;
   width: 100%;
   height: 100%;
   
+}
+.notice {
+  margin: 20px;
+}
+.grey {
+  color: gray;
 }
 
 </style>
