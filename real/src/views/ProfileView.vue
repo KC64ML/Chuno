@@ -24,7 +24,7 @@
       :userInfo="userInfo"
     />
     <p>노비용</p>
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; background-color: #1D182C; border-radius: 10%;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; background-color: #1D182C; border-radius: 10%; justify-items: center;">
       <InventoryView
         :userInfo="userInfo"
         v-for="item in items.filter((i)=>i.id<5)"
@@ -33,7 +33,7 @@
       />
     </div>
     <p>추노꾼용</p>
-    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; background-color: #1D182C; border-radius: 10%;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; background-color: #1D182C; border-radius: 10%; justify-items: center;">
       <InventoryView
         :userInfo="userInfo"
         v-for="item in items.filter((i)=>i.id>4)"

@@ -29,8 +29,8 @@ export default {
 
 <style scoped>
 #inventory{
-  height: 60px;
-  width: 60px;
+  height: 50px;
+  width: 50px;
   position: relative;
   background-color: #F5F5F5;
   border-radius: 10%;
