@@ -1,8 +1,9 @@
 <template>
-  <div class="modal-bf">
+  <div class="modal-bg">
     <div class="modal">
       <div style="font-size: 25px;">
-        프로필 입력
+        <div>프로필 입력</div>
+        <div @click="this.$emit('on-edit')">X</div>
       </div>
       <div id="profile_image">
         <div v-if="this.img_url">
@@ -19,7 +20,7 @@
         <input ref="file_input" type="file" @change="oneFileSelect" style="display:none"/>
       </div>
       <div id="input_box" style="display: flex; align-items: center;">
-        <div style="margin-right: 19px;">닉네임</div>
+        <div style="margin-right: 10px;">닉네임</div>
         <div>
           <input id="nickname_input" ref="nickname_input" v-model="nickname" maxlength="6">
         </div>
@@ -36,24 +37,28 @@
       </div>
         <div class="notice grey">전화번호는 '-' 없이 숫자만 입력해주세요.</div>
       <div>
+      <div>
         <button id="save_button" @click="save">저장</button>
       </div>
     </div>
   </div>
+  </div>
 </template>
 
+
 <script>
+import imgDefault from '@/assets/profile_default.svg'
 
 export default {
   name: 'RegisterView',
   data() {
     return {
-      email: '',
       nickname: '',
       phone: '',
       can_use: false,
       one_file: undefined,
       img_url: undefined,
+      imgDefault,
     }
   },
   methods: {
@@ -75,7 +80,7 @@ export default {
       this.one_file = e.target.files[0];
       this.img_url = URL.createObjectURL(e.target.files[0]);
     },
-    save() {
+    async save() {
       if (this.nickname.length == 0) {
         alert("닉네임을 확인해 주세요");
         return;
@@ -85,37 +90,21 @@ export default {
       }
       const formData = new FormData();
       formData.append("nickname", this.nickname);
-      formData.append("email", this.email);
       formData.append("phone", this.phone);
-
+      
       if (this.one_file) {
-        formData.append("file", this.one_file);
+        formData.append("file", this.oneFile);
       }
-
-      this.axios.post(process.env.VUE_APP_SPRING + "kakao/register", formData, { 
+      this.axios.post(process.env.VUE_APP_SPRING + "user/profile", formData, { 
         headers: { 
           'Content-Type': 'multipart/form-data', 
         }
+      }).then(({ data }) => {
+        console.log(data);
       })
-        .then((res)=>{
-          // const code = res.data.code
-          // if(code) {
-            sessionStorage.setItem('token', res.data)
-            console.log('회원가입 성공')
-            console.log(res)
-            alert("등록완료");
-            this.$router.push({ name: "home" });
-          // } else {
-          //   console.log(res)
-          //   console.log('code err')
-          // }
-        })
-        .catch((e)=>{
-          console.log('회원가입 실패')
-          console.log(e)
-        })
+      alert("등록완료");
+      this.$emit('on-edit')
     },
-
     reSelect() {
       alert("다시선택");
     },
@@ -125,14 +114,11 @@ export default {
       this.img_url = undefined;
     }
   },
-  
   watch: {
     'nickname': 'check'
   },
   created() {
     console.log("ffffeft")
-    console.log(this.$route.params.email);
-    this.email = this.$route.params.email;
   }
 }
 </script>
@@ -194,13 +180,10 @@ $div_interval: 40px;
 #preview_img {
   width: 100%;
   height: 100%;
-  
 }
 .notice {
   margin: 20px;
-}
-.grey {
-  color: gray;
-}
+} 
+
 
 </style>
