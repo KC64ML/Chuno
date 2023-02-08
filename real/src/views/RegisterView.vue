@@ -92,7 +92,7 @@ export default {
         .then((res)=>{
           // const code = res.data.code
           // if(code) {
-            sessionStorage.setItem(res.data)
+            sessionStorage.setItem('token', res.data)
             console.log('회원가입 성공')
             console.log(res)
             alert("등록완료");
