@@ -101,9 +101,10 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> putMyProfileImg(
             @RequestPart(value = "file", required = false) MultipartFile file,
             @RequestPart(value = "nickname") String nickname,
+            @RequestPart(value = "phone", required = false) String phone,
             @RequestHeader HttpHeaders requestHeader) {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
-        userService.putMyProfileImg(userId, file, nickname);
+        userService.putMyProfileImg(userId, file, nickname, phone);
         UserInventoryResponse result = userService.getProfile(userId);
         Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByObject(result);
         return ResponseEntity.ok().body(resMap);

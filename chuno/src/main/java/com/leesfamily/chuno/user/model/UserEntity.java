@@ -33,6 +33,8 @@ public class UserEntity extends BaseTimeEntity {
     private String email;
     @Column(nullable = true, length = 7, unique = true)
     private String nickname;
+    @Column(nullable = true)
+    private String phone;
     @Column(nullable = false)
     @ColumnDefault("1")
     private int level;
