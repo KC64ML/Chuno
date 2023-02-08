@@ -26,8 +26,12 @@ export default {
       const token = sessionStorage.token
       this.axios.delete(process.env.VUE_APP_SPRING + 'user/friend/' + this.friend.id, { headers: { Authorization: token } })
         .then((res) => {
-          console.log(res)
-          console.log('성공')
+          const code = res.data.result
+          if(code) {
+            console.log('성공')
+          } else {
+            console.log(res)
+          }
         })
         .catch((e) => {
           console.log(e)
