@@ -164,7 +164,6 @@ public class RoomController {
             @RequestHeader HttpHeaders requestHeader
     ){
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
-
         return ResponseEntity.ok(roomService.endRoom(roomGameEndRequestDto, userId));
     }
 }
