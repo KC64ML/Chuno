@@ -53,10 +53,12 @@
 
 <script>
 import HeaderVue from '@/components/HeaderVue.vue';
+import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
 
 export default {
     components: {
         HeaderVue,
+        NicknameCardVue
     },
     data() {
         return {
@@ -82,8 +84,37 @@ export default {
         // 내정보를 가저와요
         this.user = await this.axios.get(process.env.VUE_APP_SPRING + "user", { headers: { Authorization: this.token } }).then(res => res.data.result);
         console.log("현재 유저:", this.user);
+        // 방장인지 알아봐요
+        this.is_host = (this.room_info.nickname == this.user.nickname);
+        // 이벤트도 등록하면서 방안에 유저정보를 가저와요
+        this.enrollEvent();
     },
     methods: {
+        enrollEvent() {
+            new Promise((resolve) => {
+                this.conn.onmessage = async (e) => {
+                    var content = JSON.parse(e.data);
+                    console.log("소켓에서 온 메세지", content)
+                    if (content.type == 'already') {
+                        console.log("현재있는사람", content.players);
+                        this.subscribers = content.players
+                    } else if (content.type == 'me') {
+                        console.log(content.present);
+                    } else if (content.type == 'error') {
+                        console.log(content.msg);
+                    }
+                }
+                resolve();
+            }).then(() => {
+                this.init();
+            })
+        },
+        init() {
+            this.conn.send(JSON.stringify({
+                "event": "getAllUserInRoom", // rooms와 연결되어있음
+                "room": this.room_id,
+            }));
+        },
         dot_menu() {
             this.menu_modal = true;
         },

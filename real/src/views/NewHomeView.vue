@@ -77,7 +77,7 @@ export default {
                         // })
                         this.roomList = rooms;
                     } else if (content.type == 'error') {
-                        console.log("에러발생");
+                        console.log(content.msg);
                     }
                 }
                 resolve();
