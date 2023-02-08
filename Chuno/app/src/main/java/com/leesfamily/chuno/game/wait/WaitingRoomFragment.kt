@@ -13,9 +13,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.leesfamily.chuno.BuildConfig
 import com.leesfamily.chuno.MainViewModel
 import com.leesfamily.chuno.R
 import com.leesfamily.chuno.databinding.FragmentWaitingRoomListBinding
+import com.leesfamily.chuno.network.data.Chat
 import com.leesfamily.chuno.network.data.Player
 import com.leesfamily.chuno.network.data.Room
 import com.leesfamily.chuno.openvidu.utils.CustomHttpClient
@@ -58,7 +61,7 @@ class WaitingRoomFragment : Fragment() {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
 
-        APPLICATION_SERVER_URL = getString(R.string.application_server_url)
+        APPLICATION_SERVER_URL = BuildConfig.SERVER_URL
     }
 
     override fun onCreateView(
@@ -84,13 +87,17 @@ class WaitingRoomFragment : Fragment() {
             }
         }
 
-        binding.footer.sendButton.setOnClickListener {
-//            viewModel.updateText(binding.footer.chatEdit.text as Editable)
+        viewModel.chatList.observe(viewLifecycleOwner) {
+            binding.chatList.apply {
+                layoutManager =
+                    LinearLayoutManager(context)
+                adapter = ChatItemRecyclerViewAdapter(it)
+            }
         }
 
-//        viewModel.getData().observe(viewLifecycleOwner, Observer {
-//            binding.footer.chatEdit.text = it as Editable
-//        })
+        binding.footer.sendButton.setOnClickListener {
+            binding.userList
+        }
 
         binding.footer.readyButton.setOnClickListener {
             findNavController().navigate(R.id.action_waitingRoomFragment_to_game_view)
@@ -101,6 +108,16 @@ class WaitingRoomFragment : Fragment() {
         getToken(sessionId)
         Log.d(TAG, "onCreateView: sessionId $sessionId")
         return binding.root
+    }
+
+    fun addChat(chat: Chat) {
+        viewModel.addChat(chat)
+        binding.userList.adapter?.notifyDataSetChanged()
+    }
+
+    fun removePlayer(player: Player) {
+        viewModel.removePlayer(player)
+        binding.userList.adapter?.notifyDataSetChanged()
     }
 
     // OpenVidu 토큰을 요청
@@ -187,7 +204,7 @@ class WaitingRoomFragment : Fragment() {
         localParticipant.startCamera()
 
         activity?.runOnUiThread {
-            viewModel.addPlayer(Player(me.nickname!!, me.level, false))
+            viewModel.addPlayer(Player(me.nickname!!, me.level.toString(), false))
             binding.userList.adapter?.notifyItemChanged(0)
             Log.d(
                 TAG,
@@ -200,22 +217,13 @@ class WaitingRoomFragment : Fragment() {
         startWebSocket()
     }
 
-    fun setRemoteMediaStream(stream: MediaStream, remoteParticipant: RemoteParticipantWaiting) {
-        val videoTrack = stream.videoTracks[0]
-//        videoTrack.addSink(remoteParticipant.videoView)
-//        activity?.runOnUiThread {
-//            remoteParticipant.videoView?.visibility = View.VISIBLE
-//        }
-    }
-
-
     fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipantWaiting) {
         val mainHandler: Handler = Handler(requireContext().mainLooper)
         val myRunnable = Runnable {
             viewModel.addPlayer(
                 Player(
                     remoteParticipant.participantName,
-                    remoteParticipant.participantLevel.toInt(), false
+                    remoteParticipant.participantLevel, false
                 )
             )
             binding.userList.adapter?.notifyDataSetChanged()
@@ -226,6 +234,7 @@ class WaitingRoomFragment : Fragment() {
 
     fun leaveSession() {
         session.leaveSession()
+        viewModel.clearPlayer()
         Log.d(TAG, "leaveSession: waitingRoomFragment")
         httpClient.dispose()
     }

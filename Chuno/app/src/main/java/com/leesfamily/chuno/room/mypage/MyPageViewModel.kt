@@ -16,13 +16,13 @@ class MyPageViewModel : ViewModel() {
     val isDeleted: LiveData<Boolean>
         get() = _isDeleted
 
-//    private var _user: MutableLiveData<User> = MutableLiveData()
-//    val user: LiveData<User>
-//        get() = _user
-//
-//    fun setUser(user: User){
-//        _user.value = user
-//    }
+    private var _user: MutableLiveData<User> = MutableLiveData()
+    val user: LiveData<User>
+        get() = _user
+
+    fun setUser(user: User){
+        _user.value = user
+    }
 
     fun deleteUser(token: String) {
         viewModelScope.launch(Dispatchers.IO) {

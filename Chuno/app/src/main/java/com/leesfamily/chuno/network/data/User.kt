@@ -6,11 +6,15 @@ data class User(
 
     var email: String,
 
+    var phone: String,
+
     val nickname: String?,
 
     val level: Int,
 
     val paperCount: Int,
+
+    val catchCount: Int,
 
     val runnerPlayCount: Int,
 
@@ -22,7 +26,7 @@ data class User(
 
     val exp: Int,
 
-    val isManager: Boolean,
+    val manager: Boolean,
 
     val money: Int,
 

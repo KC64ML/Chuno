@@ -5,7 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -19,6 +22,7 @@ import com.leesfamily.chuno.util.login.LoginManager
 import com.leesfamily.chuno.util.login.LoginPrefManager
 import com.leesfamily.chuno.util.login.UserDB
 import com.leesfamily.chuno.databinding.FragmentMyPageBinding
+import com.leesfamily.chuno.room.shop.ShopFragment
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -45,10 +49,35 @@ class MyPageFragment : Fragment() {
     ): View? {
         binding = FragmentMyPageBinding.inflate(inflater, container, false)
         binding.toolbarInclude.toolbarTitle.text = getString(R.string.my_page_title)
+        val itemImageViews: ArrayList<AppCompatImageView> = arrayListOf(
+            binding.runnerItemView1,
+            binding.runnerItemView2,
+            binding.runnerItemView3,
+            binding.runnerItemView4,
+            binding.chaserItemView1,
+            binding.chaserItemView2,
+            binding.chaserItemView3,
+            binding.chaserItemView4,
+        )
+
+        val itemCountViews: ArrayList<TextView> = arrayListOf(
+            binding.runnerItemCount1,
+            binding.runnerItemCount2,
+            binding.runnerItemCount3,
+            binding.runnerItemCount4,
+            binding.chaserItemCount1,
+            binding.chaserItemCount2,
+            binding.chaserItemCount3,
+            binding.chaserItemCount4,
+        )
+
+        val itemList = mainViewModel.itemList
 
         val user = mainViewModel.user.value
         if (user == null) {
             Log.d(TAG, "onCreateView: mainViewModel.user == null")
+        } else {
+            myPageViewModel.setUser(user)
         }
         // https://i8d208.p.ssafy.io/api/resources/images?path=item/item2.png
 
@@ -58,6 +87,7 @@ class MyPageFragment : Fragment() {
             binding.userMoney.text = it.money.toString()
             binding.totalPlay.text = (it.chaserPlayCount + it.runnerPlayCount).toString()
             binding.chaserPlay.text = it.chaserPlayCount.toString()
+            binding.catchRunner.text = it.catchCount.toString()
             binding.runnerPlay.text = it.runnerPlayCount.toString()
             binding.winChaser.text = it.chaserWinCount.toString()
             binding.winRunner.text = it.runnerWinCount.toString()
@@ -73,11 +103,30 @@ class MyPageFragment : Fragment() {
                     .load(imageUrl)
                     .placeholder(R.drawable.account)
                     .error(R.drawable.account)
-                    .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                    .skipMemoryCache(true)
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .fallback(R.drawable.account)
                     .into(binding.profilePhoto)
             }
+            val userItems = it.items
+            userItems.forEachIndexed { index, item ->
+                itemCountViews[index].text = item.toString()
+            }
+        }
+
+        val server_url = BuildConfig.SERVER_URL
+        itemList.forEachIndexed { index, item ->
+
+            val imageUrl =
+                "${server_url}/resources/images?path=${item.imgPath}"
+
+            Glide.with(requireContext())
+                .load(imageUrl)
+                .placeholder(R.drawable.round_logo)
+                .error(R.drawable.account)
+                .into(itemImageViews[index])
+            Log.d(TAG, "onCreateView: item.name ${item.name}")
+
         }
 
         binding.logout.setOnClickListener {

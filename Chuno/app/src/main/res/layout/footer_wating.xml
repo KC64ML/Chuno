@@ -14,7 +14,6 @@
         android:backgroundTint="@color/chat"
         android:fontFamily="@font/main_font"
         android:padding="5dp"
-        android:singleLine="true"
         android:textColor="@color/primary"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

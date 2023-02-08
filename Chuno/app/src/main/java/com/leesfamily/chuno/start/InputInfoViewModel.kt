@@ -32,6 +32,10 @@ class InputInfoViewModel : ViewModel() {
     val image: LiveData<File>
         get() = _image
 
+    private var _phone: MutableLiveData<String> = MutableLiveData()
+    val phone: LiveData<String>
+        get() = _phone
+
     private var _registerSuccess: MutableLiveData<Boolean> = MutableLiveData()
     val registerSuccess: LiveData<Boolean>
         get() = _registerSuccess
@@ -43,6 +47,11 @@ class InputInfoViewModel : ViewModel() {
 
     fun setEmail(email: String) {
         _email.value = email
+    }
+
+
+    fun setPhone(phone: String) {
+        _phone.value = phone
     }
 
     fun setNickName(nickname: String) {
@@ -62,6 +71,7 @@ class InputInfoViewModel : ViewModel() {
                         LoginGetter().requestRegisterUser(
                             nickname.value!!,
                             email.value!!,
+                            phone.value!!,
                             image.value
                         )
                     }
@@ -101,12 +111,6 @@ class InputInfoViewModel : ViewModel() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-        } /*finally {
-            try {
-                out.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }*/
+        }
     }
 }

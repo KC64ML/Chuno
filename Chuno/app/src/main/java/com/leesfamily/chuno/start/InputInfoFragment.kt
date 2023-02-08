@@ -75,15 +75,22 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
         binding.saveButton.setOnClickListener {
             when (flag) {
                 2 -> {  // 가능
-                    inputInfoViewModel.setNickName(binding.editNick.text.toString())
-                    inputInfoViewModel.register { findNavController().navigate(R.id.homeFragment) }
-                    inputInfoViewModel.registerSuccess.observe(viewLifecycleOwner) {
-                        if (it) {
-                            Toast.makeText(context, "환영합니다!", Toast.LENGTH_SHORT).show()
+                    val phoneLength = binding.editNumber.text.length
+                    if (phoneLength in 10..11) {
+                        inputInfoViewModel.setNickName(binding.editNick.text.toString())
+                        inputInfoViewModel.setPhone(binding.editNumber.text.toString())
+                        inputInfoViewModel.register { findNavController().navigate(R.id.homeFragment) }
+                        inputInfoViewModel.registerSuccess.observe(viewLifecycleOwner) {
+                            if (it) {
+                                Toast.makeText(context, "환영합니다!", Toast.LENGTH_SHORT).show()
 
-                        } else {
-                            Toast.makeText(context, "회원 가입 실패", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "회원 가입 실패", Toast.LENGTH_SHORT).show()
+                            }
                         }
+                    } else {
+                        flag = 4
+                        showCustomDialog()
                     }
                 }
                 else -> {
@@ -105,14 +112,16 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
                         start: Int,
                         before: Int,
                         count: Int
-                    ) {}
+                    ) {
+                    }
 
                     override fun beforeTextChanged(
                         s: CharSequence,
                         start: Int,
                         count: Int,
                         after: Int
-                    ) {}
+                    ) {
+                    }
 
                     override fun afterTextChanged(arg0: Editable) {
                         // 입력이 끝났을 때 조치
@@ -163,6 +172,9 @@ class InputInfoFragment : Fragment(), MyCustomDialogInterface {
                 }
                 3 -> {  //초과
                     message = getString(R.string.nick_limit_message)
+                }
+                4 -> {    // 전화번호 미입력
+                    message = getString(R.string.phone_no_input_message)
                 }
             }
             yesMsg = getString(R.string.ok)

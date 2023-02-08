@@ -119,14 +119,15 @@ class LoginGetter {
     }
 
 
-    fun requestRegisterUser(nickname: String, email: String, image: File?): String? {
+    fun requestRegisterUser(nickname: String, email: String, phone: String, image: File?): String? {
 
         val formNickName = FormDataUtil.getBody("nickname", nickname)
         val formEmail = FormDataUtil.getBody("email", email)
+        val formPhone = FormDataUtil.getBody("phone", phone)
         val formFile = image?.let { FormDataUtil.getImageBody("file", it) }
 
         val loginResponse: Response<String> =
-            ChunoServer.loginServer.registerUser(formNickName, formEmail, formFile).execute()
+            ChunoServer.loginServer.registerUser(formNickName, formEmail, formPhone, formFile).execute()
 
         val networkResponse = loginResponse.raw().networkResponse?.code
         val requestCode = loginResponse.code()
@@ -141,13 +142,14 @@ class LoginGetter {
         return null
     }
 
-    fun requestRegisterImage(token: String, nickname: String, image: File): Boolean? {
+    fun requestRegisterImage(token: String, nickname: String, phone:String,image: File?): Boolean? {
 
         val formNickName = FormDataUtil.getBody("nickname", nickname)
-        val formFile = FormDataUtil.getImageBody("file", image)
+        val formPhone = FormDataUtil.getBody("phone", phone)
+        val formFile = image?.let { FormDataUtil.getImageBody("file", it) }
 
         val loginResponse: Response<DataForm> =
-            ChunoServer.loginServer.profileImage(token, formNickName, formFile).execute()
+            ChunoServer.loginServer.profileImage(token, formNickName, formPhone, formFile).execute()
 
         val networkResponse = loginResponse.raw().networkResponse?.code
         val requestCode = loginResponse.code()

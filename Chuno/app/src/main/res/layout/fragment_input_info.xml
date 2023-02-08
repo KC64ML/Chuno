@@ -75,6 +75,51 @@
         app:layout_constraintStart_toStartOf="@+id/edit_nick"
         app:layout_constraintTop_toBottomOf="@+id/edit_nick" />
 
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="20sp"
+        android:text="@string/phone_text"
+        android:textColor="@color/primary"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView13"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toStartOf="@+id/textView13"
+        app:layout_constraintTop_toBottomOf="@+id/textView13"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <EditText
+        android:id="@+id/edit_number"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gray_square"
+        android:fontFamily="@font/main_font"
+        android:gravity="center"
+        android:inputType="number"
+        android:maxLength="11"
+        android:singleLine="true"
+        android:textColor="@color/primary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textView14"
+        app:layout_constraintStart_toStartOf="@+id/edit_nick"
+        app:layout_constraintTop_toTopOf="@+id/textView14" />
+    <TextView
+        android:id="@+id/guide_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="5dp"
+        android:textSize="12sp"
+        android:text="'-'을 제외한 숫자만 입력해주세요."
+        android:textColor="@color/button"
+        app:layout_constraintEnd_toEndOf="@+id/edit_number"
+        app:layout_constraintStart_toStartOf="@+id/edit_number"
+        app:layout_constraintTop_toBottomOf="@+id/edit_number" />
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/save_button"
         android:layout_width="185dp"
@@ -99,6 +144,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.7" />
+        app:layout_constraintGuide_percent="0.75" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

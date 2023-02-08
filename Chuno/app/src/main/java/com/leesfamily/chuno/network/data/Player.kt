@@ -1,9 +1,9 @@
 package com.leesfamily.chuno.network.data
 
 data class Player(
-    val nickname: String,
+    val clientData: String,
 
-    val level: Int,
+    val clientLevel: String,
 
-    val ready: Boolean,
+    val clientReady: Boolean
 )

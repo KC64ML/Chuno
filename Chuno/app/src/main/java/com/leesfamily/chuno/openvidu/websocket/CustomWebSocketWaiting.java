@@ -257,12 +257,12 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     // 필수 매개변수와 함계 WebSocket을 통해 JSON-RPC메시지를 보내야한다.
     public void publishVideo(SessionDescription sessionDescription) {
         Map<String, String> publishVideoParams = new HashMap<>();
-        publishVideoParams.put("audioActive", "true");
-        publishVideoParams.put("videoActive", "true");
+        publishVideoParams.put("audioActive", "false");
+        publishVideoParams.put("videoActive", "false");
         publishVideoParams.put("doLoopback", "false");
         publishVideoParams.put("frameRate", "30");
-        publishVideoParams.put("hasAudio", "true");
-        publishVideoParams.put("hasVideo", "true");
+        publishVideoParams.put("hasAudio", "false");
+        publishVideoParams.put("hasVideo", "false");
         publishVideoParams.put("typeOfVideo", "CAMERA");
         publishVideoParams.put("videoDimensions", "{\"width\":320, \"height\":240}");
         publishVideoParams.put("sdpOffer", sessionDescription.description);
@@ -276,7 +276,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
         this.IDS_PREPARERECEIVEVIDEO.put(this.sendJson(JsonConstants.PREPARERECEIVEVIDEO_METHOD, prepareReceiveVideoFromParams), new Pair<>(remoteParticipant.getConnectionId(), streamId));
     }
 
-    // receiveVideo방법 으로 원격 비디오 구독하기
+    // receiveVideo 방법으로 원격 비디오 구독하기
     // 아래와 같이 필수 매개변수와 함께 WebSocket을 통해 JSON-RPC를 보내야 합니다.
     public void receiveVideoFrom(SessionDescription sessionDescription, RemoteParticipantWaiting remoteParticipant, String streamId) {
         Map<String, String> receiveVideoFromParams = new HashMap<>();
@@ -429,6 +429,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
 
     private void participantPublishedEvent(JSONObject params) throws
             JSONException {
+        Log.d(TAG, "participantPublishedEvent: ");
         String remoteParticipantId = params.getString(JsonConstants.ID);
         final RemoteParticipantWaiting remoteParticipant = this.session.getRemoteParticipant(remoteParticipantId);
         final String streamId = params.getJSONArray("streams").getJSONObject(0).getString("id");
@@ -436,16 +437,18 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     }
 
     private void participantLeftEvent(JSONObject params) throws JSONException {
+        Log.d(TAG, "participantLeftEvent: ");
         final RemoteParticipantWaiting remoteParticipant = this.session.removeRemoteParticipant(params.getString("connectionId"));
         remoteParticipant.dispose();
         Handler mainHandler = new Handler(fragment.requireContext().getMainLooper());
-        Runnable myRunnable = () -> session.removeView(remoteParticipant.getView());
+        Log.d(TAG, "participantLeftEvent: ");
+        Runnable myRunnable = () -> session.removeView(remoteParticipant.getPlayer());
         mainHandler.post(myRunnable);
     }
 
     private RemoteParticipantWaiting newRemoteParticipantAux(JSONObject participantJson) throws JSONException {
         final String connectionId = participantJson.getString(JsonConstants.ID);
-        Log.d(DONGHA, "newRemoteParticipantAux: " + connectionId);
+        Log.d(TAG, "newRemoteParticipantAux: " + connectionId);
         String participantName = "";
         participantJson.getString(JsonConstants.METADATA);
         String participantLevel = "";
@@ -459,20 +462,22 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
             participantName = clientData;
             participantLevel = clientLevel;
             participantReady = Boolean.valueOf(clientReady);
-            Log.d(TAG, "newRemoteParticipantAux: "+participantName);
-            Log.d(TAG, "newRemoteParticipantAux:"+participantLevel);
-            Log.d(TAG, "newRemoteParticipantAux:"+participantReady);
+            Log.d(TAG, "newRemoteParticipantAux: " + participantName);
+            Log.d(TAG, "newRemoteParticipantAux:" + participantLevel);
+            Log.d(TAG, "newRemoteParticipantAux:" + participantReady);
 
         } catch (JSONException e) {
             participantName = jsonStringified;
         }
         final RemoteParticipantWaiting remoteParticipant = new RemoteParticipantWaiting(connectionId, participantName, participantLevel, participantReady, this.session);
+        remoteParticipant.setPlayer();
         fragment.createRemoteParticipantVideo(remoteParticipant);
         this.session.createRemotePeerConnection(remoteParticipant.getConnectionId());
         return remoteParticipant;
     }
 
     private void subscribe(RemoteParticipantWaiting remoteParticipant, String streamId) {
+        Log.d(TAG, "subscribe: ");
         if ("kurento".equals(this.mediaServer)) {
             this.subscriptionInitiatedFromClient(remoteParticipant, streamId);
         } else {
@@ -481,9 +486,10 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     }
 
     private void subscriptionInitiatedFromClient(RemoteParticipantWaiting remoteParticipant, String streamId) {
+        Log.d(TAG, "subscriptionInitiatedFromClient: ");
         MediaConstraints sdpConstraints = new MediaConstraints();
-        sdpConstraints.mandatory.add(new MediaConstraints.KeyValuePair("offerToReceiveAudio", "true"));
-        sdpConstraints.mandatory.add(new MediaConstraints.KeyValuePair("offerToReceiveVideo", "true"));
+        sdpConstraints.mandatory.add(new MediaConstraints.KeyValuePair("offerToReceiveAudio", "false"));
+        sdpConstraints.mandatory.add(new MediaConstraints.KeyValuePair("offerToReceiveVideo", "false"));
 
         remoteParticipant.getPeerConnection().createOffer(new CustomSdpObserver("remote offer sdp") {
             @Override
@@ -501,6 +507,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     }
 
     private void subscriptionInitiatedFromServer(RemoteParticipantWaiting remoteParticipant, String streamId) {
+        Log.d(TAG, "subscriptionInitiatedFromServer: ");
         MediaConstraints sdpConstraints = new MediaConstraints();
         sdpConstraints.mandatory.add(new MediaConstraints.KeyValuePair("offerToReceiveAudio", "true"));
         sdpConstraints.mandatory.add(new MediaConstraints.KeyValuePair("offerToReceiveVideo", "true"));

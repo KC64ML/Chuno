@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.leesfamily.chuno.network.data.Chat
 import com.leesfamily.chuno.network.data.Player
 import com.leesfamily.chuno.network.data.Room
 import com.leesfamily.chuno.network.data.User
@@ -12,6 +13,7 @@ class RoomItemViewModel : ViewModel() {
     // 변경가능한 Mutable 타입의 LiveData
     private var _roomData: MutableLiveData<Room> = MutableLiveData()
     private var _players: ListLiveData<Player> = ListLiveData()
+    private var _chatList: ListLiveData<Chat> = ListLiveData()
 
     // 무결성을 위한 Getter
     val roomData: LiveData<Room>
@@ -19,6 +21,9 @@ class RoomItemViewModel : ViewModel() {
 
     val players: ListLiveData<Player>
         get() = _players
+
+    val chatList: ListLiveData<Chat>
+        get() = _chatList
 
     // setter
     fun updateRoomData(newRoomData: Room) {
@@ -29,6 +34,11 @@ class RoomItemViewModel : ViewModel() {
         _players.value = user
         Log.d("추노", "user: ${user}")
         Log.d("추노", "addPlayer: ${_players.value}")
+    }
+
+    fun removePlayer(player: Player){
+        _players.remove(player)
+        Log.d("추노", "removePlayer: ${_players.value}")
     }
 
     fun addPlayer(user: Player) {
@@ -43,6 +53,16 @@ class RoomItemViewModel : ViewModel() {
 
     fun getPlayer(index: Int) {
         _players.value?.get(index)
+    }
+
+    fun addChat(chat: Chat) {
+        _chatList.value?.add(chat)
+        Log.d("추노", "user: $chat")
+        Log.d("추노", "addPlayer: ${_chatList.value}")
+    }
+
+    fun clearChat(){
+        _chatList.clear(true)
     }
 
     override fun onCleared() {

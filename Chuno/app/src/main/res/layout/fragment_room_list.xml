@@ -58,9 +58,9 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/my_room_list"
-                    android:name="com.leesfamily.chuno.room.ItemFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:name="com.leesfamily.chuno.room.ItemFragment"
                     app:layoutManager="LinearLayoutManager"
                     tools:context=".room.roomlist.RoomItemFragment"
                     tools:listitem="@layout/fragment_room_item" />

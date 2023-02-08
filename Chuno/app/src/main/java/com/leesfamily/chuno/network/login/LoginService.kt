@@ -25,9 +25,10 @@ interface LoginService {
     @Multipart
     @POST("kakao/register")
     fun registerUser(
-        @Part file: MultipartBody.Part,
         @Part nickname: MultipartBody.Part,
-        @Part email: MultipartBody.Part?
+        @Part email: MultipartBody.Part,
+        @Part phone: MultipartBody.Part,
+        @Part file: MultipartBody.Part?
     ): Call<String>
 
     @Multipart
@@ -35,7 +36,8 @@ interface LoginService {
     fun profileImage(
         @Header("Authorization") auth: String,
         @Part nickname: MultipartBody.Part,
-        @Part file: MultipartBody.Part
+        @Part phone: MultipartBody.Part,
+        @Part file: MultipartBody.Part?
     ): Call<DataForm>
 
     @DELETE("user")

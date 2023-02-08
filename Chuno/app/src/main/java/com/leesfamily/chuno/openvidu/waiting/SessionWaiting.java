@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leesfamily.chuno.game.wait.WaitingRoomFragment;
+import com.leesfamily.chuno.network.data.Player;
 import com.leesfamily.chuno.openvidu.observers.CustomPeerConnectionObserver;
 import com.leesfamily.chuno.openvidu.observers.CustomSdpObserver;
 import com.leesfamily.chuno.openvidu.websocket.CustomWebSocketWaiting;
@@ -145,7 +146,7 @@ public class SessionWaiting {
             @Override
             public void onAddTrack(RtpReceiver rtpReceiver, MediaStream[] mediaStreams) {
                 super.onAddTrack(rtpReceiver, mediaStreams);
-                fragment.setRemoteMediaStream(mediaStreams[0], remoteParticipants.get(connectionId));
+//                fragment.setRemoteMediaStream(mediaStreams[0], remoteParticipants.get(connectionId));
             }
 
             @Override
@@ -182,6 +183,7 @@ public class SessionWaiting {
                     public void onSetSuccess() {
                         super.onSetSuccess();
                         websocket.publishVideo(sdp);
+                        Log.d("추노", "onSetSuccess: 게시 설정");
                     }
                 }, sdp);
             }
@@ -199,6 +201,7 @@ public class SessionWaiting {
                     public void onSetSuccess() {
                         super.onSetSuccess();
                         websocket.receiveVideoFrom(sdp, remoteParticipant, streamId);
+                        Log.d("추노", "onSetSuccess: ");
                     }
                 }, sdp);
             }
@@ -257,7 +260,7 @@ public class SessionWaiting {
                 if (remoteParticipant.getPeerConnection() != null) {
                     remoteParticipant.getPeerConnection().close();
                 }
-                views_container.removeView(remoteParticipant.getView());
+                fragment.removePlayer(remoteParticipant.getPlayer());
             }
         });
         AsyncTask.execute(() -> {
@@ -268,8 +271,8 @@ public class SessionWaiting {
         });
     }
 
-    public void removeView(View view) {
-        this.views_container.removeView(view);
+    public void removeView(Player player) {
+        fragment.removePlayer(player);
     }
 
 }

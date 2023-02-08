@@ -3,41 +3,45 @@ package com.leesfamily.chuno.openvidu.waiting;
 import android.view.View;
 import android.widget.TextView;
 
+import com.leesfamily.chuno.network.data.Player;
+
 public class RemoteParticipantWaiting extends ParticipantWaiting {
 
-    private View view;
+    private Player player;
     private TextView participantUserLevel;
-    private Boolean participantUserReady;
     private TextView participantUserName;
+    private Boolean participantUserReady;
 
     public RemoteParticipantWaiting(String connectionId, String participantName, String participantLevel, Boolean participantReady, SessionWaiting session) {
         super(connectionId, participantName, participantLevel, participantReady, session);
         this.session.addRemoteParticipant(this);
     }
 
-    public View getView() {
-        return this.view;
+    public Player getPlayer() {
+        return this.player;
     }
 
-    public void setView(View view) {
-        this.view = view;
-    }
-
-    public TextView getParticipantUserLevel() {
-        return this.participantUserLevel;
+    public void setPlayer() {
+        this.player = new Player(participantName,participantLevel,participantReady);
     }
 
     public TextView getParticipantUserName() {
         return this.participantUserName;
     }
 
+    public void setParticipantUserName(TextView participantUserName) {
+        this.participantUserName = participantUserName;
+    }
+
+
     public void setParticipantUserLevel(TextView participantUserLevel) {
         this.participantUserLevel = participantUserLevel;
     }
 
-    public void setParticipantUserName(TextView participantUserName) {
-        this.participantUserName = participantUserName;
+    public TextView getParticipantUserLevel() {
+        return this.participantUserLevel;
     }
+
 
     public Boolean getParticipantUserReady() {
         return this.participantUserReady;
