@@ -25,12 +25,12 @@ object LoginManager {
     }
 
     // 로그아웃
-    fun logout(fragment: Fragment) {
-        kakaoPlatform.logout(fragment)
+    fun logout() {
+        kakaoPlatform.logout()
     }
 
     // 탈퇴
-    fun unlink(fragment: Fragment) {
-        kakaoPlatform.unlink(fragment)
+    fun unlink() {
+        kakaoPlatform.unlink()
     }
 }

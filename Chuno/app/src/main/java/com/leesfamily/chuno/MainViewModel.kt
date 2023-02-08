@@ -65,13 +65,13 @@ class MainViewModel : ViewModel() {
                 when (this?.code) {
                     "member" -> {
                         LoginPrefManager.setLastLoginToken(this.result)
-                        Log.d("추노", "setToken:${LoginPrefManager.getLastLoginToken()} ")
                         _token.postValue(this.result)
                         _isNew.postValue(false)
+                        Log.d("추노", "setToken:${LoginPrefManager.getLastLoginToken()} isNew : $isNew ")
                     }
                     "no_email" -> {
                         _email.postValue(this.result)
-                        Log.d("추노_MainViewModel", "setToken: _email : $_email")
+                        Log.d("추노_MainViewModel", "setToken: _email : $_email isNew : $isNew")
                         _isNew.postValue(true)
                     }
                 }

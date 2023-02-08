@@ -26,7 +26,7 @@ data class User(
 
     val money: Int,
 
-    val profile: UserProfile,
+    val profile: UserProfile?,
 
 //    val inventory: List<Inventory>,
 

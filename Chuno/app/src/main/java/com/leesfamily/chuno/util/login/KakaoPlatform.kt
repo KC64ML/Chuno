@@ -77,34 +77,24 @@ class KakaoPlatform {
         }
     }
 
-    fun logout(fragment: Fragment) {
+    fun logout() {
         // 로그아웃
         UserApiClient.instance.logout { error ->
             if (error != null) {
                 Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제됨", error)
             } else {
                 Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제됨")
-                Toast.makeText(
-                    fragment.requireContext(),
-                    "로그아웃 성공. SDK에서 토큰 삭제됨",
-                    Toast.LENGTH_LONG
-                ).show()
             }
         }
     }
 
-    fun unlink(fragment: Fragment) {
+    fun unlink() {
         // 연결 끊기
         UserApiClient.instance.unlink { error ->
             if (error != null) {
                 Log.e(TAG, "연결 끊기 실패", error)
             } else {
                 Log.i(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
-                Toast.makeText(
-                    fragment.requireContext(),
-                    "연결 끊기 성공. SDK에서 토큰 삭제 됨",
-                    Toast.LENGTH_LONG
-                ).show()
             }
         }
     }

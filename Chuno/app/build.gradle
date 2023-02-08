@@ -10,6 +10,7 @@ android {
     properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
     def native_app_key = properties.getProperty('native_app_key')
+    def server_url = properties.getProperty('server_url')
 
     namespace 'com.leesfamily.chuno'
     compileSdk 33
@@ -24,6 +25,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [native_app_key: native_app_key]
         buildConfigField "String", "KAKAO_API_KEY", properties['kakao_api_key']
+        buildConfigField "String", "SERVER_URL", properties['server_url']
     }
 
     buildTypes {

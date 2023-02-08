@@ -57,6 +57,7 @@ import javax.net.ssl.X509TrustManager;
 
 public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void, Void> implements WebSocketListener {
 
+    private final String DONGHA = "DONGHA";
     private final String TAG = "CustomWebSocketListener";
     private final int PING_MESSAGE_INTERVAL = 5;
     private final TrustManager[] trustManagers = new TrustManager[]{new X509TrustManager() {
@@ -90,6 +91,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     private boolean websocketCancelled = false;
 
     public CustomWebSocketWaiting(SessionWaiting session, WaitingRoomFragment fragment) {
+        Log.d(DONGHA, "만듦");
         this.session = session;
         this.fragment = fragment;
     }
@@ -109,7 +111,6 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
 
     private void handleServerResponse(JSONObject json) throws
             JSONException {
-        Log.d(TAG, "handleServerResponse: ");
         final int rpcId = json.getInt(JsonConstants.ID);
         JSONObject result = new JSONObject(json.getString(JsonConstants.RESULT));
 
@@ -173,7 +174,6 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
 
             if (result.getJSONArray(JsonConstants.VALUE).length() > 0) {
                 // There were users already connected to the session
-                Log.d(TAG, "handleServerResponse: addRemoteParticipantsAlreadyInRoom");
                 addRemoteParticipantsAlreadyInRoom(result);
             }
 
@@ -232,17 +232,19 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     // 또한 로컬 PeerConnection 및 MediaStream을 초기화하고 publishVideo RPC 메서드를 호출하여 자체 카메라를 게시해야 합니다(다음 지점 참조).
 
     public void joinRoom() {
+        Log.d(DONGHA, "오나요??");
         Log.d(TAG, "joinRoom: ");
         Map<String, String> joinRoomParams = new HashMap<>();
         joinRoomParams.put(JsonConstants.METADATA, "{\"clientData\": \"" + this.session.getLocalParticipant().getParticipantName() + "\", \"clientLevel\": \"" + this.session.getLocalParticipant().getParticipantLevel() + "\"," +
                 "\"clientReady\": " + this.session.getLocalParticipant().getParticipantReady() + "}");
-        joinRoomParams.put("secret", "");
+        joinRoomParams.put("secret", "");//D208_CHUNO
         joinRoomParams.put("session", this.session.getId());
         joinRoomParams.put("platform", "Android " + android.os.Build.VERSION.SDK_INT);
         joinRoomParams.put("token", this.session.getToken());
         joinRoomParams.put("sdkVersion", "2.22.0");
+        Log.d(DONGHA, joinRoomParams.toString());
         this.ID_JOINROOM.set(this.sendJson(JsonConstants.JOINROOM_METHOD, joinRoomParams));
-        Log.d(TAG, "joinRoom: " + this.session.getLocalParticipant().getParticipantName());
+        Log.d(DONGHA, "joinRoom: " + this.session.getLocalParticipant().getParticipantName());
     }
 
     // leaveRoom방법 으로 세션 나가기
@@ -277,7 +279,6 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     // receiveVideo방법 으로 원격 비디오 구독하기
     // 아래와 같이 필수 매개변수와 함께 WebSocket을 통해 JSON-RPC를 보내야 합니다.
     public void receiveVideoFrom(SessionDescription sessionDescription, RemoteParticipantWaiting remoteParticipant, String streamId) {
-        Log.d(TAG, "receiveVideoFrom: ");
         Map<String, String> receiveVideoFromParams = new HashMap<>();
         receiveVideoFromParams.put("sender", streamId);
         if ("kurento".equals(this.mediaServer)) {
@@ -289,7 +290,7 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     }
 
     public void onIceCandidate(IceCandidate iceCandidate, String endpointName) {
-        Log.d(TAG, "onIceCandidate: ");
+        Log.d(DONGHA, "혹시??");
         Map<String, String> onIceCandidateParams = new HashMap<>();
         if (endpointName != null) {
             onIceCandidateParams.put("endpointName", endpointName);
@@ -321,7 +322,6 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
 
 
     private void handleServerEvent(JSONObject json) throws JSONException {
-        Log.d(TAG, "handleServerEvent: ");
         if (!json.has(JsonConstants.METHOD)) {
             Log.e(TAG, "Server event lacks a field '" + JsonConstants.METHOD + "'; JSON: "
                     + json.toString());
@@ -359,7 +359,6 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     }
 
     public synchronized int sendJson(String method, Map<String, String> params) {
-        Log.d(TAG, "sendJson: ");
         final int id = RPC_ID.get();
         JSONObject jsonObject = new JSONObject();
         try {
@@ -382,11 +381,11 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
 
     private void addRemoteParticipantsAlreadyInRoom(JSONObject result) throws
             JSONException {
+        Log.d(DONGHA, result.toString());
         for (int i = 0; i < result.getJSONArray(JsonConstants.VALUE).length(); i++) {
             JSONObject participantJson = result.getJSONArray(JsonConstants.VALUE).getJSONObject(i);
             RemoteParticipantWaiting remoteParticipant = this.newRemoteParticipantAux(participantJson);
             try {
-                Log.d(TAG, "addRemoteParticipantsAlreadyInRoom: in");
                 JSONArray streams = participantJson.getJSONArray("streams");
                 for (int j = 0; j < streams.length(); j++) {
                     JSONObject stream = streams.getJSONObject(0);
@@ -402,7 +401,6 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     }
 
     private void iceCandidateEvent(JSONObject params) throws JSONException {
-        Log.d(TAG, "iceCandidateEvent: ");
         IceCandidate iceCandidate = new IceCandidate(params.getString("sdpMid"), params.getInt("sdpMLineIndex"), params.getString("candidate"));
         final String connectionId = params.getString("senderConnectionId");
         boolean isRemote = !session.getLocalParticipant().getConnectionId().equals(connectionId);
@@ -446,8 +444,8 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
     }
 
     private RemoteParticipantWaiting newRemoteParticipantAux(JSONObject participantJson) throws JSONException {
-        Log.d(TAG, "newRemoteParticipantAux: ");
         final String connectionId = participantJson.getString(JsonConstants.ID);
+        Log.d(DONGHA, "newRemoteParticipantAux: " + connectionId);
         String participantName = "";
         participantJson.getString(JsonConstants.METADATA);
         String participantLevel = "";
@@ -461,6 +459,9 @@ public class CustomWebSocketWaiting extends AsyncTask<WaitingRoomFragment, Void,
             participantName = clientData;
             participantLevel = clientLevel;
             participantReady = Boolean.valueOf(clientReady);
+            Log.d(TAG, "newRemoteParticipantAux: "+participantName);
+            Log.d(TAG, "newRemoteParticipantAux:"+participantLevel);
+            Log.d(TAG, "newRemoteParticipantAux:"+participantReady);
 
         } catch (JSONException e) {
             participantName = jsonStringified;

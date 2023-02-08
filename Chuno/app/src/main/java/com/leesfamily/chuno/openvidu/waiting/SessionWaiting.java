@@ -21,10 +21,6 @@ import org.webrtc.PeerConnectionFactory;
 import org.webrtc.RtpReceiver;
 import org.webrtc.RtpTransceiver;
 import org.webrtc.SessionDescription;
-import org.webrtc.SoftwareVideoDecoderFactory;
-import org.webrtc.SoftwareVideoEncoderFactory;
-import org.webrtc.VideoDecoderFactory;
-import org.webrtc.VideoEncoderFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,15 +59,15 @@ public class SessionWaiting {
         PeerConnectionFactory.initialize(opt);
         PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
 
-        // Using software encoder and decoder
-        final VideoEncoderFactory encoderFactory;
-        final VideoDecoderFactory decoderFactory;
-        encoderFactory = new SoftwareVideoEncoderFactory();
-        decoderFactory = new SoftwareVideoDecoderFactory();
+//        // Using software encoder and decoder
+//        final VideoEncoderFactory encoderFactory;
+//        final VideoDecoderFactory decoderFactory;
+//        encoderFactory = new SoftwareVideoEncoderFactory();
+//        decoderFactory = new SoftwareVideoDecoderFactory();
 
         peerConnectionFactory = PeerConnectionFactory.builder()
-                .setVideoEncoderFactory(encoderFactory)
-                .setVideoDecoderFactory(decoderFactory)
+//                .setVideoEncoderFactory(encoderFactory)
+//                .setVideoDecoderFactory(decoderFactory)
                 .setOptions(options)
                 .createPeerConnectionFactory();
     }
@@ -81,7 +77,6 @@ public class SessionWaiting {
     }
 
     public PeerConnection createLocalPeerConnection() {
-        Log.d("추노", "createLocalPeerConnection: ");
         PeerConnection.RTCConfiguration config =
                 new PeerConnection.RTCConfiguration(iceServers.isEmpty()
                         ? iceServersDefault
@@ -98,7 +93,6 @@ public class SessionWaiting {
             @Override
             public void onIceCandidate(IceCandidate iceCandidate) {
                 super.onIceCandidate(iceCandidate);
-                Log.d("추노", "onIceCandidate: ");
                 websocket.onIceCandidate(iceCandidate, localParticipant.getConnectionId());
             }
 
@@ -106,7 +100,6 @@ public class SessionWaiting {
             public void onSignalingChange(PeerConnection.SignalingState signalingState) {
                 if (PeerConnection.SignalingState.STABLE.equals(signalingState)) {
                     // SDP Offer/Answer finished. Add stored remote candidates.
-                    Log.d("추노", "onSignalingChange: ");
                     Iterator<IceCandidate> it = localParticipant.getIceCandidateList().iterator();
                     while (it.hasNext()) {
                         IceCandidate candidate = it.next();

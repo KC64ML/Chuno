@@ -206,6 +206,8 @@ class CreateRoomDialog1(
             binding.passwordEdit.visibility = View.GONE
             binding.passwordText.visibility = View.GONE
             binding.number.text = curValue.toString()
+            binding.numberPlusBtn.isEnabled = false
+            binding.numberMinusBtn.isEnabled = false
         }
     }
 
@@ -224,15 +226,15 @@ class CreateRoomDialog1(
                 } else {
                     this.password = binding.passwordEdit.text.toString()
                 }
-            if (binding.reservationDate.text.toString().isEmpty() ||
-                binding.reservationHour.text.toString().isEmpty() ||
-                binding.reservationMin.text.toString().isEmpty()
-            ) {
-                showCustomDialog(2)
-                return false
-            } else {
+                if (binding.reservationDate.text.toString().isEmpty() ||
+                    binding.reservationHour.text.toString().isEmpty() ||
+                    binding.reservationMin.text.toString().isEmpty()
+                ) {
+                    showCustomDialog(2)
+                    return false
+                } else {
 //                this.reservationDate = binding.reservationDate.text
-            }
+                }
                 return true
             }
             return false

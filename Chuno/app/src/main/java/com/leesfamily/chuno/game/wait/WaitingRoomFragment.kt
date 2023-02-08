@@ -212,32 +212,13 @@ class WaitingRoomFragment : Fragment() {
     fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipantWaiting) {
         val mainHandler: Handler = Handler(requireContext().mainLooper)
         val myRunnable = Runnable {
-            /*          val rowView: View =
-                          this.layoutInflater.inflate(R.layout.fragment_user_item,null)
-                      val lp = LinearLayout.LayoutParams(
-                          LinearLayout.LayoutParams.MATCH_PARENT,
-                          LinearLayout.LayoutParams.WRAP_CONTENT
-                      )
-                      rowView.layoutParams = lp
-                      val rowId = View.generateViewId()
-                      rowView.id = rowId
-                      binding.userList.addView(rowView)
-
-                      val userName = (rowView as ViewGroup).getChildAt(1)
-                      val userLevel = (rowView as ViewGroup).getChildAt(2)
-                      Log.d(TAG, "createRemoteParticipantVideo: username : $userName")
-                      Log.d(TAG, "createRemoteParticipantVideo: userlevel : $userLevel")
-                      remoteParticipant.participantUserName = userName as TextView
-                      remoteParticipant.participantUserLevel = userLevel as TextView
-                      remoteParticipant.view = rowView
-                      remoteParticipant.participantUserName!!.text = remoteParticipant.participantName
-                      remoteParticipant.participantUserLevel!!.text = remoteParticipant.participantLevel*/
             viewModel.addPlayer(
                 Player(
                     remoteParticipant.participantName,
                     remoteParticipant.participantLevel.toInt(), false
                 )
             )
+            binding.userList.adapter?.notifyDataSetChanged()
             Log.d(TAG, "createRemoteParticipantVideo: players : ${viewModel.players} ")
         }
         mainHandler.post(myRunnable)
@@ -332,12 +313,6 @@ class WaitingRoomFragment : Fragment() {
         leaveSession()
         Log.d(TAG, "onDestroy: ")
         super.onDestroy()
-    }
-
-    override fun onStop() {
-        leaveSession()
-        Log.d(TAG, "onStop: ")
-        super.onStop()
     }
 
     override fun onAttach(context: Context) {

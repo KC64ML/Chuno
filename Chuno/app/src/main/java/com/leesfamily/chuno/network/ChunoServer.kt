@@ -1,6 +1,7 @@
 package com.leesfamily.chuno.network
 
 import com.google.gson.GsonBuilder
+import com.leesfamily.chuno.BuildConfig
 import com.leesfamily.chuno.network.item.ItemService
 import com.leesfamily.chuno.network.login.LoginService
 import com.leesfamily.chuno.network.room.RoomService
@@ -8,7 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ChunoServer {
-    private const val apiBaseUrl = "https://i8d208.p.ssafy.io/api/"
+    private const val apiBaseUrl = BuildConfig.SERVER_URL
 
     var gson = GsonBuilder().setLenient().create()
 
