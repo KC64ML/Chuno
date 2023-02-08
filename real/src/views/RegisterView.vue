@@ -89,11 +89,19 @@ export default {
         headers: { 
           'Content-Type': 'multipart/form-data', 
         } 
+        .then((res)=>{
+          console.log('회원가입 성공')
+          console.log(res)
+          alert("등록완료");
+          this.$router.push({ name: "home" });
+        })
+        .catch((e)=>{
+          console.log('회원가입 실패')
+          console.log(e)
+        })
       })
 
       // }
-      alert("등록완료");
-      this.$router.push({ name: "home" });
     },
     reSelect() {
       alert("다시선택");
