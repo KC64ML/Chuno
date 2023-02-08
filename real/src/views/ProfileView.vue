@@ -49,7 +49,7 @@
         :userInfo="userInfo"
       />
     </div>
-    <div id="checkout">
+    <div id="checkout" v-if="me">
       <span @click="onDelete">회원탈퇴</span> |
       <span @click="onLogout">로그아웃</span>
     </div>
