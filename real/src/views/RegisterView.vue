@@ -78,7 +78,7 @@ export default {
       }
       const formData = new FormData();
       formData.append("nickname", this.nickname);
-      formData.append("eamil", this.email);
+      formData.append("email", this.email);
 
       if (this.one_file) {
         formData.append("file", this.one_file);
