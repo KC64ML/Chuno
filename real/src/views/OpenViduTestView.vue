@@ -181,20 +181,27 @@
               });
               // Set the main video in the page to display our webcam and store our Publisher
               this.mainStreamManager = publisher;
-              this.publisher = publisher;
-                  this.publisher.stream.applyFilter("FaceOverlayFilter", {
-                streamId: this.publisher.stream.id,
-              })
-                .then(filter => {
-                    filter.execMethod(
-                        "setOverlayedImage",
-                        {
-                            "uri":"https://cdn.pixabay.com/photo/2013/07/12/14/14/derby-148046_960_720.png",
-                            "offsetXPercent":"-0.2F",
-                            "offsetYPercent":"-0.8F",
-                            "widthPercent":"1.3F",
-                            "heightPercent":"1.0F"
-                        });
+                  this.publisher = publisher;
+              
+              // this.mainStreamManager.stream.applyFilter("FaceOverlayFilter")
+              //   .then(filter => {
+              //     console.log("필터응답은 받음")
+              //       filter.execMethod(
+              //           "setOverlayedImage",
+              //           {
+              //               "uri":"https://cdn.pixabay.com/photo/2013/07/12/14/14/derby-148046_960_720.png",
+              //               "offsetXPercent":"-0.2F",
+              //               "offsetYPercent":"-0.8F",
+              //               "widthPercent":"1.3F",
+              //               "heightPercent":"1.0F"
+              //           });
+              //   });
+              publisher.stream.applyFilter("GStreamerFilter", { command: "videoflip method=vertical-flip" })
+                .then(() => {
+                    console.log("Video rotated!");
+                })
+                .catch(error => {
+                    console.error(error);
                 });
   
               // --- 6) Publish your stream ---
@@ -267,25 +274,25 @@
       },
   
       actionFilter() {
-        // this.publisher.stream.applyFilter("FaceOverlayFilter").then((filter) => {
-        //   filter.execMethod("setOverlayedImage", {
-        //     uri: "https://cdn.pixabay.com/photo/2013/07/12/14/14/derby-148046_960_720.png",
-        //     offsetXPercent: "-0.2F",
-        //     offsetYPercent: "-0.8F",
-        //     widthPercent: "1.3F",
-        //     heightPercent: "1.0F",
-        //   });
-        // });
-        this.publisher.stream
-          .applyFilter("GStreamerFilter", {
-            command: `timeoverlay valignment=bottom halignment=right font-desc="Sans, 20"`,
-          })
-          .then(() => {
-            console.log("Video rotated!");
-          })
-          .catch((error) => {
-            console.error(error);
+        this.publisher.stream.applyFilter("FaceOverlayFilter").then((filter) => {
+          filter.execMethod("setOverlayedImage", {
+            uri: "https://cdn.pixabay.com/photo/2013/07/12/14/14/derby-148046_960_720.png",
+            offsetXPercent: "-0.2F",
+            offsetYPercent: "-0.8F",
+            widthPercent: "1.3F",
+            heightPercent: "1.0F",
           });
+        });
+        // this.publisher.stream
+        //   .applyFilter("GStreamerFilter", {
+        //     command: `timeoverlay valignment=bottom halignment=right font-desc="Sans, 20"`,
+        //   })
+        //   .then(() => {
+        //     console.log("Video rotated!");
+        //   })
+        //   .catch((error) => {
+        //     console.error(error);
+        //   });
       },
   
       async openMediaDevices(constraints) {
