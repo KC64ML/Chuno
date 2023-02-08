@@ -1,8 +1,10 @@
 <template>
   <div>
     <div class="container-row">
-      <div class="container-row">
-        <img :src=" friend.profile? URL + 'resources/images?path=' + friend.profile.path :  defaultProfile" alt="profile" style="width:50px;">
+      <div class="container-row"
+        @click="this.$router.push(`/profile/${friend.id}`)"
+      >
+        <img :src=" friend.profile? URL + 'resources/images?path=' + friend.profile.path :  defaultProfile" alt="profile" style="width:50px; height: 50px; object-fit: cover; border-radius: 50%;">
 
         <span id="nickname">{{ friend.nickname }}</span>
       </div>
