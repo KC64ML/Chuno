@@ -17,14 +17,14 @@ public class RoomGameStartResponseDto {
 
 
     // (2) 노비 문서 위치 (경도, 위도를 인원 수 x 2로 반환해준다.)
-    List<Pair<Double,Double>>  roomSlaveDocumentList;
+    List<RoomGameStartSlaveDocumentDto>  roomSlaveDocumentList;
 
 
     // (3) 추노, 노비 결정된 배열
     List<RoomGameStartDecideChaserRunnerDto> roomDecideChunoOrSlaveList;
 
     public static RoomGameStartResponseDto of(RoomStartDto room,
-                                              List<Pair<Double,Double>> randomLatLng,
+                                              List<RoomGameStartSlaveDocumentDto> randomLatLng,
                                               List<RoomGameStartDecideChaserRunnerDto> roomDecideChunoOrSlaveList
     ) {
         return new RoomGameStartResponseDto(
