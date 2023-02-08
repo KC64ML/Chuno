@@ -196,7 +196,22 @@ public class RoomService {
 
     }
 
-    private List<RoomGameStartDecideChaserRunnerDto> randomUserChaserRunner(RoomGameStartRequestDto roomStartRequestDto) {
+    public RoomGameEndResponseDto endRoom(RoomGameEndRequestDto roomGameEndRequestDto, Long userId) {
+        return roomRepository.endRoom(roomGameEndRequestDto, userId);
+    }
+
+    public List<RoomGameStartSlaveDocumentDto> relocationSlaveDocument(RoomGameRelocationSlaveDocumentRequestDto requestDto){
+        // 재배치 함수 호출하기
+        Long roomId = requestDto.getId();
+        RoomStartDto room = roomRepository.findById(roomId)
+                .map(RoomStartDto::of)
+                .orElseThrow(() -> new RuntimeException("room 정보가 조회되지 않는다."));
+
+        return randomLatLngCoordinate2(room, requestDto);
+    }
+
+
+    public List<RoomGameStartDecideChaserRunnerDto> randomUserChaserRunner(RoomGameStartRequestDto roomStartRequestDto) {
         // 사용자들에게 추노꾼, 노비 랜덤 지정
         int userCount = roomStartRequestDto.getUserIdList().size();
         boolean[] visited = new boolean[userCount];
@@ -259,7 +274,7 @@ public class RoomService {
         return roomGameUserChaserOrRunnerItemCntDtoList;
     }
 
-    private List<RoomGameStartSlaveDocumentDto> randomLatLngCoordinate(RoomStartDto roomStartDto) {
+    public List<RoomGameStartSlaveDocumentDto> randomLatLngCoordinate(RoomStartDto roomStartDto) {
         // random 좌표를 구한다.
         List<RoomGameStartSlaveDocumentDto> resList = new ArrayList<>();
         // n 번 돌린다.
@@ -268,8 +283,8 @@ public class RoomService {
         double lng = roomStartDto.getLng();
         double radius = roomStartDto.getRadius() * 0.7;
         double radiusInDegrees = radius / 111000f;
-        int idx = 0;
-        while(idx < roomStartDto.getCurrentPlayers() * 2) {
+
+        for(int i =0 ;i< roomStartDto.getCurrentPlayers() * 2; i++){
             double u = Math.random();
             double v = Math.random();
             double w = radiusInDegrees * Math.sqrt(u);
@@ -285,8 +300,8 @@ public class RoomService {
 //                    * Math.cos(Math.toRadians(new_x + lng)) * Math.cos(Math.toRadians(y + lat) - Math.toRadians(lng))
 //                    + Math.sin(Math.toRadians(lat)) * Math.sin(Math.toRadians(new_x + lng))));
 
-            resList.add(new RoomGameStartSlaveDocumentDto(y + lat, new_x + lng));
-            idx += 1;
+            if(i < roomStartDto.getCurrentPlayers()) resList.add(new RoomGameStartSlaveDocumentDto(y + lat, new_x + lng, true));
+            else resList.add(new RoomGameStartSlaveDocumentDto(y + lat, new_x + lng, false));
 //            System.out.println("idx : " + idx + "distance : " + distance + " radius" + radius + " new_x : " + new_x);
         }
         // Convert radius from meters to degrees
@@ -294,7 +309,32 @@ public class RoomService {
         return resList;
     }
 
-    public RoomGameEndResponseDto endRoom(RoomGameEndRequestDto roomGameEndRequestDto, Long userId) {
-        return roomRepository.endRoom(roomGameEndRequestDto, userId);
+    public List<RoomGameStartSlaveDocumentDto> randomLatLngCoordinate2(RoomStartDto roomStartDto, RoomGameRelocationSlaveDocumentRequestDto requestDto) {
+        // random 좌표를 구한다.
+        List<RoomGameStartSlaveDocumentDto> resList = new ArrayList<>();
+        // n 번 돌린다.
+//        Random random = new Random();
+        double lat = roomStartDto.getLat();
+        double lng = roomStartDto.getLng();
+        double radius = roomStartDto.getRadius() * 0.7;
+        double radiusInDegrees = radius / 111000f;
+
+        for(int i =0 ;i< requestDto.getListSlaveDocument().size() ; i++){
+            double u = Math.random();
+            double v = Math.random();
+            double w = radiusInDegrees * Math.sqrt(u);
+            double t = 2 * Math.PI * v;
+            double x = w * Math.cos(t);
+            double y = w * Math.sin(t);
+
+            // Adjust the x-coordinate for the shrinking of the east-west distances
+            double new_x = x / Math.cos(lat);
+
+            if(requestDto.getListSlaveDocument().get(i).isReal()) resList.add(new RoomGameStartSlaveDocumentDto(y + lat, new_x + lng, true));
+            else resList.add(new RoomGameStartSlaveDocumentDto(y + lat, new_x + lng, false));
+        }
+
+        return resList;
     }
+
 }
