@@ -28,9 +28,8 @@ export default {
         .then((res) => {
           const code = res.data.result
           if(code) {
-            console.log('성공')
           } else {
-            console.log(res)
+            console.log('code err')
           }
         })
         .catch((e) => {
