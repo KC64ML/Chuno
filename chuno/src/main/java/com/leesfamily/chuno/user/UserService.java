@@ -61,7 +61,7 @@ public class UserService {
     public Long register(UserEntity user, MultipartFile file) {
         Optional<UserEntity> option = userRepository.findByEmail(user.getEmail());
         if(option.isPresent()) {
-            String userNickname = option.get().getNickname();
+            String userNickname = user.getNickname();
             user = option.get();
             user.setDeleted(false);
             user.setMoney(0);
