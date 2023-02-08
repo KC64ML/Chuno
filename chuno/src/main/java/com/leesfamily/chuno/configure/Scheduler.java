@@ -23,6 +23,6 @@ public class Scheduler {
     @Async // 병렬로 Scheduler 를 사용할 경우 @Async 추가
     @Scheduled(fixedRate = 60000)
     public void scheduleFixedRateTask() throws InterruptedException {
-        smsUtils.sendOne("01084054759");
+        
     }
 }
