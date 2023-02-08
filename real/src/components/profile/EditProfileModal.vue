@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-bf">
+  <div class="modal-bg">
     <div class="modal">
       <div style="font-size: 25px;">
         프로필 입력
