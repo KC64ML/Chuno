@@ -18,7 +18,6 @@ export default {
   name: 'SelectedItemView',
   props: {
     item: Object,
-    // money: Number,
   },
   data(){
     return {
@@ -30,12 +29,16 @@ export default {
       console.log('구매 버튼')
       console.log(this.item)
       const token = sessionStorage.token
-      this.axios.post(process.env.VUE_APP_SPRING + 'user/shop/' + this.item.id, { headers: { Authorization: token } })
+      console.log(token)
+      this.axios.post(process.env.VUE_APP_SPRING + 'user/shop/' + this.item.id, '', { headers: { Authorization: token } })
         .then((res) => {
           const code = res.data.code
           if(code) {
             console.log('샀다')
-            // this.$emit('get-user')
+            this.$emit('get-user')
+            console.log(res.data)
+          } else{
+            console.log('못샀다')
             console.log(res.data)
           }
         })

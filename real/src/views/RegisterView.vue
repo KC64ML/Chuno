@@ -21,7 +21,7 @@
       <input ref="file_input" type="file" @change="oneFileSelect" style="display:none"/>
     </div>
     <div id="input_box" style="display: flex; align-items: center;">
-      <div style="margin-right: 10px;">닉네임</div>
+      <div style="margin-right: 19px;">닉네임</div>
       <div>
         <input id="nickname_input" ref="nickname_input" v-model="nickname" maxlength="6">
       </div>
@@ -30,6 +30,13 @@
       <div v-if="!can_use" style="color: red;">이미 사용 중이에요</div>
       <div v-else style="color: green;">사용 할 수 있어요</div>
     </div>
+    <div id="input_box" style="display: flex; align-items: center;">
+      <div style="margin-right: 5px;">전화번호</div>
+      <div>
+        <input id="nickname_input" ref="nickname_input" v-model="phone" maxlength="12">
+      </div>
+    </div>
+      <div class="notice grey">전화번호는 '-' 없이 숫자만 입력해주세요.</div>
     <div>
       <button id="save_button" @click="save">저장</button>
     </div>
@@ -44,6 +51,7 @@ export default {
     return {
       email: '',
       nickname: '',
+      phone: '',
       can_use: false,
       one_file: undefined,
       img_url: undefined,
@@ -79,6 +87,7 @@ export default {
       const formData = new FormData();
       formData.append("nickname", this.nickname);
       formData.append("email", this.email);
+      formData.append("phone", this.phone);
 
       if (this.one_file) {
         formData.append("file", this.one_file);
@@ -187,6 +196,12 @@ $div_interval: 40px;
   width: 100%;
   height: 100%;
   
+}
+.notice {
+  margin: 20px;
+}
+.grey {
+  color: gray;
 }
 
 </style>

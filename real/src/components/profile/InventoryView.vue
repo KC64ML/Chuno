@@ -1,14 +1,14 @@
 <template>
-  <div class="container-row" id="inventory">
-    <img :src="URL + 'resources/images?path=' + item.imgPath" alt="item" style="height:50px;">
+  <div id="inventory">
+    <img :src="URL + 'resources/images?path=' + item.imgPath" alt="item">
     <div v-for="i in 8"
       :key="i"  
     >
-      <div v-if="i == userInfo.id - 1">
+      <div v-if="i == userInfo.id - 1" class="invenCnt">
         {{ userInfo.items[i] }}
       </div>
     </div>
-    <div>{{ item.name }}</div>
+    <!-- <div>{{ item.name }}</div> -->
   </div>
 </template>
 
@@ -29,8 +29,21 @@ export default {
 
 <style scoped>
 #inventory{
-  background-color: #1D182C;
+  height: 50px;
+  width: 50px;
+  position: relative;
+  background-color: #F5F5F5;
   border-radius: 10%;
-  color: #F5F5F5;
+  padding: 5%;
+  margin: 10%;
+
+}
+#inventory img{
+  height: 90%;
+}
+.invenCnt{
+  position: absolute;
+  right: 15%;
+  bottom: 5%;
 }
 </style>

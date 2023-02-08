@@ -88,6 +88,9 @@ body,
 #app {
     height: 100%;
 }
+.grey {
+    color: grey;
+}
 
 .button_style_1 {
     background-image: url("@/assets/main_button1.png");

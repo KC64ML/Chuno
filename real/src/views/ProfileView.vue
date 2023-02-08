@@ -23,10 +23,20 @@
       :me="me"
       :userInfo="userInfo"
     />
-    <div id="inventory">
+    <p>노비용</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; background-color: #1D182C; border-radius: 10%; justify-items: center;">
       <InventoryView
         :userInfo="userInfo"
-        v-for="item in items"
+        v-for="item in items.filter((i)=>i.id<5)"
+        :key="item.id"
+        :item="item"
+      />
+    </div>
+    <p>추노꾼용</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; background-color: #1D182C; border-radius: 10%; justify-items: center;">
+      <InventoryView
+        :userInfo="userInfo"
+        v-for="item in items.filter((i)=>i.id>4)"
         :key="item.id"
         :item="item"
       />
@@ -79,7 +89,31 @@ export default {
       editProfileModal: false,
       me: true,
       friend: false,
-      userInfo: [],
+      userInfo: {
+    "id": 7,
+    "email": "lce511@naver.com",
+    "nickname": "채은짱님",
+    "level": 1,
+    "paperCount": 0,
+    "runnerPlayCount": 30,
+    "runnerWinCount": 15,
+    "chaserPlayCount": 11,
+    "chaserWinCount": 7,
+    "exp": 0,
+    "money": 85900,
+    "profile": null,
+    "items": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "manager": false
+  },
       items: [],
     }
   },
@@ -168,8 +202,9 @@ export default {
   text-align: center;
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
-#inventory{
+/* #inventory{
   display: gird;
-}
+  background-color: #1D182C;
+} */
 
 </style>
