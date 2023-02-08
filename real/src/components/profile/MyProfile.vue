@@ -82,6 +82,7 @@ export default {
           if(code) {
             this.friend = true
             console.log('친구 추가 성공')
+            console.log(res.data)
           } else {
             console.log('code error')
           }

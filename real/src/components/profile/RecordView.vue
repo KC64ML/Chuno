@@ -18,11 +18,11 @@
       </div>
       <div>
         <div>잡은 노비</div>
-        <div id="cnt">{{ userInfo.catchCount }}</div>
+        <div id="cnt">{{ userInfo.catchCount }}명</div>
       </div>
       <div>
         <div>노비 승리</div>
-        <div id="cnt">{{ userInfo.runnerWinCount }}</div>
+        <div id="cnt">{{ userInfo.runnerWinCount }}회</div>
       </div>
       <div>
         <div>발견한 노비 문서</div>
