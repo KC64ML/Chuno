@@ -6,6 +6,11 @@ VALUES
     ('ljc1025@nate.com', '노예킹', NOW(), 20, 10, 4, 1),
     ('lkc263@naver.com', '아리따움', NOW(), 40, 30, 20, 15),
     ('siganshoyou@google.com', '추노장인', NOW(), 30, 15, 10, 6);
+insert into users
+(reg_dt, catch_count, chaser_play_count, chaser_win_count, email, exp, is_deleted, is_manager, level, money, nickname, paper_count, path, save_name, runner_play_count, runner_win_count)
+values
+    (now(), 0, 11, 7, "opi6@hanmail.net", 0, 0, 0, 1, 0, "쿙쿙", 0, null, null, 30, 15),
+    (now(), 0, 11, 7, "lce511@naver.com", 0, 0, 0, 1, 85900, "채은짱님", 0, null, null, 30, 15);
 
 INSERT INTO rooms
 (is_public, lat, lng, password, radius, title, host_id, year, month, day, hour, minute)

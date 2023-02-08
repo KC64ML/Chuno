@@ -174,13 +174,13 @@ public class RoomService {
         // 현재 반지름 기준 random
 
         // 좌표 인원 수 x 2개 위치 구하는 함수
-        List<Location> randomLatLng = randomLatLngCoordinate(roomStartDto);
-        log.info("현재 좌표 : " + roomStartDto.getLat() + " " + roomStartDto.getLng());
-        log.info("반지름 : " + roomStartDto.getRadius());
-        log.info("좌표 : " + randomLatLng.get(0).getLat() + " " + randomLatLng.get(0).getLng()
-                + " " + randomLatLng.get(1).getLat() + " " + randomLatLng.get(1).getLng()
-                + " " + randomLatLng.get(2).getLat() + " " + randomLatLng.get(2).getLng()
-        );
+//        List<Location> randomLatLng = randomLatLngCoordinate(roomStartDto);
+//        log.info("현재 좌표 : " + roomStartDto.getLat() + " " + roomStartDto.getLng());
+//        log.info("반지름 : " + roomStartDto.getRadius());
+//        log.info("좌표 : " + randomLatLng.get(0).getLat() + " " + randomLatLng.get(0).getLng()
+//                + " " + randomLatLng.get(1).getLat() + " " + randomLatLng.get(1).getLng()
+//                + " " + randomLatLng.get(2).getLat() + " " + randomLatLng.get(2).getLng()
+//        );
 
         // (3) 노비, 추노꾼 랜덤
         // 사용자 정보를 조회한 후, 거기서 아이템을 조회해햐아 한다.
@@ -188,26 +188,35 @@ public class RoomService {
         // chaser, runner
         List<RoomGameStartDecideChaserRunnerDto> roomGameUserChaserOrRunnerItemCntResultList = randomUserChaserRunner(roomStartRequestDto);
 
-        return RoomGameStartResponseDto.of(roomStartDto, randomLatLng, roomGameUserChaserOrRunnerItemCntResultList);
+        return RoomGameStartResponseDto.of(roomStartDto, roomGameUserChaserOrRunnerItemCntResultList);
 
     }
 
     private List<RoomGameStartDecideChaserRunnerDto> randomUserChaserRunner(RoomGameStartRequestDto roomStartRequestDto) {
         // 사용자들에게 추노꾼, 노비 랜덤 지정
-        int userCount = roomStartRequestDto.getUserIdList().size() + 1;
+        int userCount = roomStartRequestDto.getUserIdList().size();
         boolean[] visited = new boolean[userCount];
         List<RoomGameStartDecideChaserRunnerDto> roomGameUserChaserOrRunnerItemCntDtoList = new ArrayList<>();
         int addUserCnt = 0;
 
         // 노비 선정
         while (true) {
-            int randomIndex = (int) (Math.random() * userCount);
+            // randomIndex는 0 ~ n - 1까지
+            int randomIndex = (int) (Math.random() * (userCount));
+
+//            log.info("랜덤 시작");
+//            for(int i =0 ; i< 20; i++){
+//                log.info("i : " +((int) (Math.random() * (userCount-1))+1));
+//            }
+
+            log.info("현재나온 random Index : " + randomIndex);
             if (!visited[randomIndex]) {
                 visited[randomIndex] = true;
                 // 인벤토리를 가져온다.
                 // 넘거야할 것
                 // 아이템 횟수
                 log.info("random Index : " + randomIndex);
+                log.info("getProfile 넣기전 : " + roomStartRequestDto.getUserIdList().get(randomIndex));
                 log.info("items : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems()[0]);
                 log.info("items : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems()[1]);
                 log.info("items : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems()[2]);
@@ -229,10 +238,12 @@ public class RoomService {
         }
 
         // 추노 선정
-        for (int userIdx = 1; userIdx <= userCount - 1; userIdx++) {
+        for (int userIdx = 0; userIdx < userCount; userIdx++) {
             if (!visited[userIdx]) {
                 // 아직 포지션 정해지지 못했다면
+                log.info("index : " + userIdx);
                 log.info("for문 index : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(userIdx)).getNickname());
+
                 int[] items = userService.getProfile(roomStartRequestDto.getUserIdList().get(userIdx)).getItems();
                 Long userId = roomStartRequestDto.getUserIdList().get(userIdx); // userId
                 List<Integer> list = Arrays.stream(items).boxed().collect(Collectors.toList()); // int형 -> list형으로
