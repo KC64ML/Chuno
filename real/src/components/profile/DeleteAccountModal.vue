@@ -23,6 +23,16 @@ export default {
       console.log("탈퇴완료");
       this.$emit('on-delete')
       sessionStorage.setItem("token", null)
+      // Kakao.API.request({
+      //   url: '/v1/user/unlink',
+      // })
+      //   .then(function(res) {
+      //     alert('success: ' + JSON.stringify(res));
+      //     deleteCookie();
+      //   })
+      //   .catch(function(err) {
+      //     alert('fail: ' + JSON.stringify(err));
+      //   });
       this.$router.push({ name: 'start'})
     },
   }
