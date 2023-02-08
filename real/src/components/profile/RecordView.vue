@@ -14,11 +14,19 @@
       </div>
       <div>
         <div>추노꾼 승리</div>
-        <div id="cnt">{{ userInfo.chaserWinCount }}</div>
+        <div id="cnt">{{ userInfo.chaserWinCount }}회</div>
+      </div>
+      <div>
+        <div>잡은 노비</div>
+        <div id="cnt">{{ userInfo.catchCount }}</div>
       </div>
       <div>
         <div>노비 승리</div>
         <div id="cnt">{{ userInfo.runnerWinCount }}</div>
+      </div>
+      <div>
+        <div>발견한 노비 문서</div>
+        <div id="cnt">{{ userInfo.paperCount }}장</div>
       </div>
     </div>
   </div>

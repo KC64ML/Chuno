@@ -89,31 +89,7 @@ export default {
       editProfileModal: false,
       me: true,
       friend: false,
-      userInfo: {
-    "id": 7,
-    "email": "lce511@naver.com",
-    "nickname": "채은짱님",
-    "level": 1,
-    "paperCount": 0,
-    "runnerPlayCount": 30,
-    "runnerWinCount": 15,
-    "chaserPlayCount": 11,
-    "chaserWinCount": 7,
-    "exp": 0,
-    "money": 85900,
-    "profile": null,
-    "items": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    "manager": false
-  },
+      userInfo: [],
       items: [],
     }
   },
