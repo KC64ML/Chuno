@@ -64,7 +64,7 @@ export default {
       const token = sessionStorage.token
       // 내 정보 가져오기
       let myUid
-      this.axios.post(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
+      this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
         .then((res) => {
           myUid = res.data.result.userId
         })
