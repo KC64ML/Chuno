@@ -12,7 +12,7 @@
     style="position:absolute; bottom: 60px;"/>
   <div>
     
-    <!-- <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue> -->
+    <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue>
     <MapView />
 
     <!-- 아이템 사용 -->
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-// import OpenViduVue from '@/components/game/OpenViduVue.vue'
+import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue'
 import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
@@ -48,7 +48,7 @@ export default {
   name: 'GameView',
   components: {
     MapView,
-    // OpenViduVue,
+    OpenViduVue,
     MenuView,
     ItemModal,
   },
