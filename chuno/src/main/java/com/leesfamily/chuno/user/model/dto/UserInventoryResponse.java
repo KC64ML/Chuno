@@ -52,7 +52,7 @@ public class UserInventoryResponse {
         this.items = new int[ItemEntity.AMOUNT_OF_ITEMS];
         inventory.forEach((item) -> {
             int itemNum = Integer.parseInt(Long.toString(item.getId()));
-            this.items[itemNum]++;
+            this.items[itemNum - 1]++;
         });
     }
 }

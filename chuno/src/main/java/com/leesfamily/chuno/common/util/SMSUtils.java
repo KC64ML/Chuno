@@ -1,4 +1,4 @@
-package com.leesfamily.chuno.nurigo;
+package com.leesfamily.chuno.common.util;
 
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
@@ -12,6 +12,7 @@ import net.nurigo.sdk.message.response.MultipleDetailMessageSentResponse;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +27,14 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-@RestController
-@RequestMapping("/nurigo")
-public class ExampleController {
+//@RestController
+//@RequestMapping("/nurigo")
+@Component
+public class SMSUtils {
 
     final DefaultMessageService messageService;
 
-    public ExampleController() {
+    public SMSUtils() {
         // 반드시 계정 내 등록된 유효한 API 키, API Secret Key를 입력해주셔야 합니다!
         this.messageService = NurigoApp.INSTANCE.initialize("NCSF9RSZ8RN1O8SL", "ZF8NAQBWY0JI06OAGZML6EGTNNDKNGKO", "https://api.coolsms.co.kr");
     }
@@ -40,7 +42,7 @@ public class ExampleController {
     /**
      * 메시지 조회 예제
      */
-    @GetMapping("/get-message-list")
+//    @GetMapping("/get-message-list")
     public MessageListResponse getMessageList() {
         // 검색 조건이 있는 경우에 MessagListRequest를 초기화 하여 getMessageList 함수에 파라미터로 넣어서 검색할 수 있습니다!.
         // 수신번호와 발신번호는 반드시 -,* 등의 특수문자를 제거한 01012345678 형식으로 입력해주셔야 합니다!
@@ -95,13 +97,13 @@ public class ExampleController {
     /**
      * 단일 메시지 발송 예제
      */
-    @GetMapping("/send-one")
-    public SingleMessageSentResponse sendOne() {
+//    @GetMapping("/send-one")
+    public SingleMessageSentResponse sendOne(String phone) {
         Message message = new Message();
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
         message.setFrom("01051411025");
-        message.setTo("01082860799");
-        message.setText("아름쨩 병아리 같아 기여워");
+        message.setTo(phone);
+        message.setText("1분마다 가는 메세지");
 
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
         System.out.println(response);
@@ -113,7 +115,7 @@ public class ExampleController {
      * MMS 발송 예제
      * 단일 발송, 여러 건 발송 상관없이 이용 가능
      */
-    @PostMapping("/send-mms")
+//    @PostMapping("/send-mms")
     public SingleMessageSentResponse sendMmsByResourcePath() throws IOException {
         ClassPathResource resource = new ClassPathResource("static/sample.jpg");
         File file = resource.getFile();
@@ -137,7 +139,7 @@ public class ExampleController {
      * 여러 메시지 발송 예제
      * 한 번 실행으로 최대 10,000건 까지의 메시지가 발송 가능합니다.
      */
-    @PostMapping("/send-many")
+//    @PostMapping("/send-many")
     public MultipleDetailMessageSentResponse sendMany() {
         ArrayList<Message> messageList = new ArrayList<>();
 
@@ -178,7 +180,7 @@ public class ExampleController {
     }
 
 
-    @PostMapping("/send-scheduled-messages")
+//    @PostMapping("/send-scheduled-messages")
     public MultipleDetailMessageSentResponse sendScheduledMessages() {
         ArrayList<Message> messageList = new ArrayList<>();
 
@@ -219,7 +221,7 @@ public class ExampleController {
     /**
      * 잔액 조회 예제
      */
-    @GetMapping("/get-balance")
+//    @GetMapping("/get-balance")
     public Balance getBalance() {
         Balance balance = this.messageService.getBalance();
         System.out.println(balance);
