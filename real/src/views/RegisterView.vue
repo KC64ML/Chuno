@@ -77,17 +77,21 @@ export default {
         alert("이미 사용 중인 닉네임이에요");
         return;
       }
-      const token = await this.axios.post(process.env.VUE_APP_SPRING + "kakao/register", {"nickname": this.nickname, "email": this.email})
-      console.log(token);
-      sessionStorage.setItem("token", token.data);
+      const formData = new FormData();
+      formData.append("nickname", this.nickname);
+      formData.append("eamil", this.email);
+
       if (this.one_file) {
-        const formData = new FormData();
-        formData.append("nickname", this.nickname);
-        // formData.append("nickname", new Blob([JSON.stringify(this.nickname)], { type: "application/json" }));
         formData.append("file", this.one_file);
-        await this.axios.put(process.env.VUE_APP_SPRING + "user/profile", formData, { 
-          headers: { 'Content-Type': 'multipart/form-data', Authorization: token.data } })
       }
+
+      this.axios.post(process.env.VUE_APP_SPRING + "kakao/register", formData, { 
+        headers: { 
+          'Content-Type': 'multipart/form-data', 
+        } 
+      })
+
+      // }
       alert("등록완료");
       this.$router.push({ name: "home" });
     },

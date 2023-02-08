@@ -111,6 +111,9 @@
     created() {
       this.getItems()
       this.getUser()
+      console.log('-------------------------')
+      console.log(this.runnerItemCnt)
+      console.log(this.chaserItemCnt)
     },
     computed: {
       runnerItemCnt(){
@@ -123,6 +126,7 @@
           }
         }
         return res
+        // return [0,1,2,3]
       },
       chaserItemCnt(){
         let res = []
@@ -134,6 +138,7 @@
           }
         }
         return res
+        // return [4,5,6,7]
       },
     },
   }
