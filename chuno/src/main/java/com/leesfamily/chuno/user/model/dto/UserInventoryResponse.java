@@ -52,8 +52,8 @@ public class UserInventoryResponse {
     }
     public void countingItems(List<InventoryEntity> inventory) {
         this.items = new int[ItemEntity.AMOUNT_OF_ITEMS];
-        inventory.forEach((item) -> {
-            int itemNum = Integer.parseInt(Long.toString(item.getId()));
+        inventory.forEach((inven) -> {
+            int itemNum = Integer.parseInt(Long.toString(inven.getItem().getId()));
             this.items[itemNum - 1]++;
         });
     }
