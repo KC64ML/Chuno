@@ -50,7 +50,6 @@ export default {
     }
   },
   methods: {
-
     check() {
       console.log(this.nickname);
       this.axios.get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname)
@@ -69,7 +68,7 @@ export default {
       this.one_file = e.target.files[0];
       this.img_url = URL.createObjectURL(e.target.files[0]);
     },
-    async save() {
+    save() {
       if (this.nickname.length == 0) {
         alert("닉네임을 확인해 주세요");
         return;
@@ -88,21 +87,27 @@ export default {
       this.axios.post(process.env.VUE_APP_SPRING + "kakao/register", formData, { 
         headers: { 
           'Content-Type': 'multipart/form-data', 
-        } 
+        }
+      })
         .then((res)=>{
-          console.log('회원가입 성공')
-          console.log(res)
-          alert("등록완료");
-          this.$router.push({ name: "home" });
+          const code = res.data.code
+          if(code) {
+            sessionStorage.setItem(res.data)
+            console.log('회원가입 성공')
+            console.log(res)
+            alert("등록완료");
+            this.$router.push({ name: "home" });
+          } else {
+            console.log(res)
+            console.log('code err')
+          }
         })
         .catch((e)=>{
           console.log('회원가입 실패')
           console.log(e)
         })
-      })
-
-      // }
     },
+
     reSelect() {
       alert("다시선택");
     },
@@ -112,6 +117,7 @@ export default {
       this.img_url = undefined;
     }
   },
+  
   watch: {
     'nickname': 'check'
   },
