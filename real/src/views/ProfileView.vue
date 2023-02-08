@@ -49,7 +49,7 @@
         :userInfo="userInfo"
       />
     </div>
-    <div id="checkout">
+    <div id="checkout" v-if="me">
       <span @click="onDelete">회원탈퇴</span> |
       <span @click="onLogout">로그아웃</span>
     </div>
@@ -96,9 +96,9 @@ export default {
   methods: {
     getUser(){
       const token = sessionStorage.token
-      // 프로필 주인 아이디
+      // 파람스에 있는 uid
       const uid = this.$route.params.uid
-      // 내 정보 불러와서
+      //내 정보 불러와서
       this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
         .then((res) => {
           console.log('-----------내 정보 불러오기----------')
@@ -161,7 +161,7 @@ export default {
   },
   created(){
     console.log('getUser 실행?')
-    // this.getUser()
+    this.getUser()
     console.log('getUser 실행!')
     this.getItems()
   }
