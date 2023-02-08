@@ -29,7 +29,8 @@ export default {
       console.log('구매 버튼')
       console.log(this.item)
       const token = sessionStorage.token
-      this.axios.post(process.env.VUE_APP_SPRING + 'user/shop/' + this.item.id, { headers: { Authorization: token } })
+      console.log(token)
+      this.axios.post(process.env.VUE_APP_SPRING + 'user/shop/' + this.item.id, '', { headers: { Authorization: token } })
         .then((res) => {
           const code = res.data.code
           if(code) {
