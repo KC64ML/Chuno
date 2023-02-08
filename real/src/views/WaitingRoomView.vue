@@ -70,6 +70,8 @@ export default {
     },
     data() {
         return {
+            flag : false,
+
             menu_modal: false,
             token: sessionStorage.getItem("token"),
             user: undefined,
@@ -113,7 +115,15 @@ export default {
             this.subscribers.push(subscriber);
             console.log("스트림을 발견했어요!")
             console.log("현재 사람은 " + this.subscribers.length + "명이에요")
-
+            if ( this.flag == true) {
+                this.session.signal({
+                    data: JSON.stringify({
+                        "nickname": this.user.nickname,
+                        "msg": this.is_ready
+                    }),
+                    type: "welcome"
+                })
+            }
             const { connection } = subscriber.stream;
             console.log("커넥션 데이터에요:", connection.data)
             const { clientData } = JSON.parse(connection.data);
@@ -138,10 +148,17 @@ export default {
         this.session.on("exception", ({ exception }) => {
             console.warn("오류ㅠㅠ" + exception);
         });
-
+        this.session.on("signal:welcome", (e) => {
+            if (this.flag == false) {
+                alert("tt")
+                const fromdata = JSON.parse(e.data);
+                console.log(fromdata)
+                this.chat_log.push(fromdata);
+                this.chat_data = "";
+            }
+        })
         this.session.on("signal:ready_button", (e) => {
             console.log(e.from.connectionId);
-            alert("gggg")
             var index;
             for (var i = 0; i < this.subscribers.length; i++) {
                 if (e.from.connectionId == this.subscribers[i].stream.connection.connectionId) {
@@ -185,6 +202,7 @@ export default {
         window.addEventListener("beforeunload", this.leaveSession);
 
         console.log("퍼블리싱을 완료했어요")
+        this.flag = true;
         console.log(this.subscribers.length);
 
         // 아이디 키와, 방 키를 보내서 방 알람 설정을 했는지 아닌지 알아봐요 
@@ -369,10 +387,11 @@ $ready_button_height: 50px;
 }
 #chat_log {
     width: 100vw;
-    background-color: red;
     position: absolute;
-    bottom: $footer_height;
+    bottom: $footer_height ;
     left: 0;
     max-height: 50%;
+    font-size: 20px;
+    overflow-y: scroll;
 }
 </style>
