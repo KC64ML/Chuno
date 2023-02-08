@@ -29,6 +29,13 @@
         <div v-if="!can_use" style="color: red;">이미 사용 중이에요</div>
         <div v-else style="color: green;">사용 할 수 있어요</div>
       </div>
+      <div id="input_box" style="display: flex; align-items: center;">
+        <div style="margin-right: 10px;">전화번호</div>
+        <div>
+          <input id="nickname_input" ref="nickname_input" v-model="phone" maxlength="12">
+        </div>
+        <div>전화번호는 '-' 없이 숫자만 입력해주세요.</div>
+      </div>
       <div>
         <button id="save_button" @click="save">저장</button>
       </div>
@@ -45,6 +52,7 @@ export default {
   data() {
     return {
       nickname: '',
+      phone: '',
       can_use: false,
       one_file: undefined,
       img_url: undefined,
@@ -78,12 +86,20 @@ export default {
         alert("이미 사용 중인 닉네임이에요");
         return;
       }
+      const formData = new FormData();
+      formData.append("nickname", this.nickname);
+      formData.append("phone", this.phone);
       
       if (this.one_file) {
-        const formData = new FormData();
         formData.append("file", this.oneFile);
-        await this.axios.post(process.env.VUE_APP_SPRING + "user/saveUserProfile", formData, {headers: {'Content-Type': 'multipart/form-data', 'email': this.email}})
       }
+      this.axios.post(process.env.VUE_APP_SPRING + "user/profile", formData, { 
+        headers: { 
+          'Content-Type': 'multipart/form-data', 
+        }
+      }).then(({ data }) => {
+        console.log(data);
+      })
       alert("등록완료");
       this.$emit('on-edit')
     },
