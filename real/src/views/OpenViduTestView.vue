@@ -182,7 +182,9 @@
               // Set the main video in the page to display our webcam and store our Publisher
               this.mainStreamManager = publisher;
               this.publisher = publisher;
-              this.publisher.stream.applyFilter("FaceOverlayFilter")
+                  this.publisher.stream.applyFilter("FaceOverlayFilter", {
+                streamId: this.publisher.stream.id,
+              })
                 .then(filter => {
                     filter.execMethod(
                         "setOverlayedImage",
