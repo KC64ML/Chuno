@@ -36,6 +36,9 @@ export default {
             console.log('샀다')
             this.$emit('get-user')
             console.log(res.data)
+          } else{
+            console.log('못샀다')
+            console.log(res.data)
           }
         })
         .catch((e) => {
