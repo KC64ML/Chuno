@@ -90,17 +90,17 @@ export default {
         }
       })
         .then((res)=>{
-          const code = res.data.code
-          if(code) {
+          // const code = res.data.code
+          // if(code) {
             sessionStorage.setItem(res.data)
             console.log('회원가입 성공')
             console.log(res)
             alert("등록완료");
             this.$router.push({ name: "home" });
-          } else {
-            console.log(res)
-            console.log('code err')
-          }
+          // } else {
+          //   console.log(res)
+          //   console.log('code err')
+          // }
         })
         .catch((e)=>{
           console.log('회원가입 실패')
