@@ -12,8 +12,8 @@ export default {
   name: 'ChaserItemView',
   props: {
     item: Object,
-    runnerItemCnt: Array,
-    chaserItemCnt: Array,
+    // runnerItemCnt: Array,
+    // chaserItemCnt: Array,
   },
   data(){
     return {
@@ -21,8 +21,8 @@ export default {
     }
   },
   created(){
-    console.log(this.runnerItemCnt)
-    console.log(this.chaserItemCnt)
+    // console.log(this.runnerItemCnt)
+    // console.log(this.chaserItemCnt)
   }
 }
 </script>
