@@ -3,7 +3,7 @@
   <HeaderVue
     :title="'상점'"
   ></HeaderVue>
-  <div class="container-col" style="height:75%">
+  <div class="container-col" style="height:80%">
     <div class="container" id="money">
       <img src="@/assets/nyang.svg" alt="nyang">
       {{ userInfo.money }}

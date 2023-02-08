@@ -2,7 +2,7 @@
   <HeaderVue
     :title="'랭킹'"
   ></HeaderVue>
-  <div >
+  <div style="height: 80%">
     <RankTop3View
       :users="users"
     />
