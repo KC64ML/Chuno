@@ -17,7 +17,6 @@
       v-for="friend in friends"
       :key="friend.friendId"
       :friend="friend"
-      @click="this.$router.push(`/profile/${friend.id}`)"
     />
   </div>
 </template>
