@@ -1,8 +1,15 @@
 <template>
   <div class="container-row">
     <img :src="URL + 'resources/images?path=' + item.imgPath" alt="item" style="height:50px;">
-    <!-- <div v-if="item.id < 5">{{ runnerItemCnt[item.id - 1] }}</div>
-    <div v-else>{{ chaserItemCnt[item.id - 1] }}</div> -->
+    <!-- <div v-if="item.id < 5">{{ runnerItemCnt }}</div> -->
+    <!-- <div v-else>{{ chaserItemCnt }}</div> -->
+    <div v-for="i in 8"
+      :key="i"  
+    >
+      <div v-if="i == userInfo.id - 1">
+        {{ userInfo.items[i] }}
+      </div>
+    </div>
     <div>{{ item.name }}</div>
   </div>
 </template>
@@ -12,6 +19,7 @@ export default {
   name: 'ChaserItemView',
   props: {
     item: Object,
+    userInfo: Object
     // runnerItemCnt: Array,
     // chaserItemCnt: Array,
   },

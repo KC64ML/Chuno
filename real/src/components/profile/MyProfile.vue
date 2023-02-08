@@ -48,7 +48,7 @@ export default {
   data() {
     return {
       modal: false,
-      friend: true,
+      friend: false,
       defaultProfile: defaultProfile,
       URL: process.env.VUE_APP_SPRING,
     }
