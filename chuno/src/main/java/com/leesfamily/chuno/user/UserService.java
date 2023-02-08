@@ -150,7 +150,7 @@ public class UserService {
     }
 
     public int buyItem(Long userId, Long itemId) {
-        UserEntity user = userRepository.findById(itemId).get();
+        UserEntity user = userRepository.findById(userId).get();
         ItemEntity item = itemRepository.findById(itemId).get();
         int curMoney = user.getMoney();
         if(curMoney - item.getPrice() < 0) {
