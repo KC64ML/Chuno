@@ -79,7 +79,7 @@ public class RoomService {
                 .radius(room.getRadius())
                 .password(room.getPassword())
                 .dateTime(dt)
-                .host(userRepository.getOne(host_id))
+                .host(userRepository.findById(host_id).get())
                 .build();
         RoomEntity res = roomRepository.save(roomEntity);
         roomRepository.flush();
