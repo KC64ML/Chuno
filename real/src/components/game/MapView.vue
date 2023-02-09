@@ -282,7 +282,7 @@ export default {
     window.addEventListener('deviceorientation', this.handleOrientation)
     
     var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
- 
+
     if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
         //IOS
         console.log('iOS')
