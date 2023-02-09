@@ -8,8 +8,6 @@
     />
     <RankListView
       :users="users"
-      style="overflow: scroll;"
-      class="scroll"
     />
     <hr>
     <p @click="onGame">

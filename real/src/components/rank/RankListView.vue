@@ -11,6 +11,8 @@
     <tr
       v-for="(user, i) in users"
       :key="i"
+      style="overflow: scroll;"
+      class="scroll"
     >
       <td v-if="i>=3"><span>{{ i + 1 }}</span></td>
       <td 
