@@ -1,10 +1,12 @@
 <template>
-  <div class="container-row">
+  <div class="container-row" style="justify-content: center;">
     <div
       v-for="user in users"
       :key="user.id"
     >
       <div 
+        style="margin:0.5rem;"
+
         v-if="user.rank < 4"
       >
         <img src="@/assets/crown_gold.png" alt="" v-if="user.rank == 1" id="crown">
