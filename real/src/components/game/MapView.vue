@@ -197,7 +197,7 @@ export default {
     // 내 위치
     myLocation() {
       console.log('1. myLocation 함수 실행')
-      this.$watchLocation({enableHighAccuracy: true})
+      this.$getLocation({enableHighAccuracy: true})
       .then((coordinates) => {
         this.me.lat = coordinates.lat
         this.me.lng = coordinates.lng
@@ -292,8 +292,21 @@ export default {
     // 내 위치
     this.myLocation()
     // setInterval(this.myLocation(),1000)
-    this.generatePapers()
+
+    // 노비 문서 위치
+    const papers = sessionStorage.info.slavepaper
+    for (let i = 0; i < papers.length; i++){
+      this.papers.push({ 
+            id: i,
+            position: { lat: papers[i].lat, lng: papers[i].lng } ,
+            real: papers[i].real,
+            ripped: false,
+          })
+    }
+    console.log(this.papers)
+
     this.generatePlayer()
+
   },
   mounted() {
     this.ripPaper()
@@ -306,22 +319,22 @@ export default {
       return this.roomInfo.radius * 0.1
     }
   },
-  // watch: {
-  //   player(){
-  //     // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
-  //     this.catch()
-  //     this.ripPaper()
-  //     const roomCenter = { position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} }
-  //     console.log(roomCenter)
-  //     this.outOfPlayground(roomCenter)
-  //     // 위치 공유
-  //     this.session.on("streamCreated", function (event) {
-  //       this.session.subscribe(event.stream, "subscriber");
-  //       // const USER_DATA = {}
-  //       console.log("USER DATA: " + event.stream.connection.data);
-  //     });
-  //   }
-  // },
+  watch: {
+    // player(){
+    //   // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
+    //   this.catch()
+    //   this.ripPaper()
+    //   const roomCenter = { position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} }
+    //   console.log(roomCenter)
+    //   this.outOfPlayground(roomCenter)
+    //   // 위치 공유
+    //   this.session.on("streamCreated", function (event) {
+    //     this.session.subscribe(event.stream, "subscriber");
+    //     // const USER_DATA = {}
+    //     console.log("USER DATA: " + event.stream.connection.data);
+    //   });
+    // }
+  },
 };
 </script>
 

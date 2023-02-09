@@ -62,14 +62,6 @@ export default {
       menu: true,
       itemModal: false,
       usedItem: [],
-      // usedItem: {
-      //   "id": 7,
-      //   "name": "거짓\n정보통",
-      //   "price": 1000,
-      //   "description": "노비 문서의 위치를 셔플할 수 있다.",
-      //   "imgPath": "item/item7.png",
-      //   "forRunner": 0
-      // },
     }
   },
   methods: {
