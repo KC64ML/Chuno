@@ -110,7 +110,6 @@ export default {
                         console.log(content);
                         this.chat_log.push({ nickname: content.nickname, msg: content.message });
                     } else if (content.type == 'startGame') {
-                        this.conn.close();
                         console.log("게임을 위한 정보 : ", content.info);
                         sessionStorage.setItem("info", JSON.stringify(content.info));
                         this.$router.push({ path: "/game/" + this.room_id})

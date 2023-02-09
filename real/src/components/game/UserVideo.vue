@@ -1,7 +1,7 @@
 <template>
 <div v-if="streamManager">
     <div class="camera_name">
-        {{ clientData.username }}
+        {{ clientData.user.nickname }} {{ roleKor }}
     </div>
 	<ov-video 
     :stream-manager="streamManager"
@@ -32,6 +32,13 @@ import OvVideo from '@/components/game/OvVideo.vue';
                 const { clientData } = this.getConnectionData();
                 return clientData;
             },
+            roleKor() {
+                if (this.clientData.user.role == "runner") {
+                    return "노비";
+                } else {
+                    return "추노꾼";
+                }
+            }
         },
 
         methods: {
