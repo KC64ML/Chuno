@@ -39,11 +39,13 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 myStreamManager: undefined,
                 publisher: undefined,
                 subscribers: [],
+                nowVideoNum: 0,
                 enemy_name: undefined,
+                user: null,
 
                 // Join form
                 mySessionId: this.$route.params.roomId,
-                myUserName: "dddd",
+                myUserName: "불러오는 중",
             };
         },
         // computed: {
@@ -67,7 +69,6 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     console.log("커넥션 데이터에요:", connection.data)
                     const { clientData } = JSON.parse(connection.data);
                     this.enemy_name = clientData;
-                    
                 });
                 this.session.on("streamDestroyed", ({ stream }) => {
                     const index = this.subscribers.indexOf(stream.streamManager, 0);
@@ -88,8 +89,8 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                             videoSource: undefined, // The source of video. If undefined default webcam
                             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                            resolution: "8x6", // The resolution of your video
-                            frameRate: 5, // The frame rate of your video
+                            resolution: "640x480", // The resolution of your video
+                            frameRate: 60, // The frame rate of your video
                             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                             mirror: false, // Whether to mirror your local video or not
                         });
@@ -142,13 +143,28 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 return JSON.parse(connection.data);
             },
             leftArrow() {
-                alert(this.my_cam_modal)
+                let idx = this.subscribers.indexOf(this.mainStreamManager);
+                let len = this.subscribers.length;
+                idx--;
+                if (idx > 0) {
+                    idx = len - 1;
+                }
+                this.updateMainVideoStreamManager(this.subscribers[idx]);
             },
             rightArrow() {
-                alert("오른쪽 ㅋ르릭");
+                let idx = this.subscribers.indexOf(this.mainStreamManager);
+                let len = this.subscribers.length;
+                idx++;
+                if (idx < len) {
+                    idx = 0;
+                }
+                this.updateMainVideoStreamManager(this.subscribers[idx]);
             },
         },
-        async created() {
+    async created() {
+        const user = await this.axios.get(APPLICATION_SERVER_URL + 'user', { headers: { Authorization: sessionStorage.token } })
+        this.user = user;
+        this.myUserName = user.nickname;
             await this.init();
             console.log("--------------ffff--------------");
             console.log(this.subscribers.length + "명의 사람이 있어요");
