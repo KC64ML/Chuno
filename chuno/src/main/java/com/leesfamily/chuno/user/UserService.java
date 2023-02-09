@@ -202,7 +202,11 @@ public class UserService {
 
     // 랭킹 얻기
     public List<UserRankingListDto> getRankingList(){
-        return userRepository.getRankingList();
+        List<UserRankingListDto> userList = userRepository.getRankingList();
+        for(int i = 1; i <= userList.size(); i++) {
+            userList.get(i).setRank(i);
+        }
+        return userList;
     }
 
     // 회원 탈퇴 처리
