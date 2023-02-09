@@ -1,9 +1,12 @@
 <template>
-<div v-if="streamManager" class="my_video">
+<div v-if="streamManager">
     <div class="camera_name">
-        {{ clientData }}
+        {{ clientData.username }}
     </div>
-	<ov-video :stream-manager="streamManager"/>
+	<ov-video 
+    :stream-manager="streamManager"
+    :class-name="className"
+    />
 	<!-- <div><p>{{ clientData }}</p></div> -->
 </div>
 </template>
@@ -20,6 +23,7 @@ import OvVideo from '@/components/game/OvVideo.vue';
 
         props: {
             streamManager: Object,
+            className: String,
         },
 
         computed: {

@@ -1,4 +1,5 @@
 <template>
+  <div>
   <HeaderVue
     :title="'친구 관리'"
   />
@@ -21,15 +22,21 @@
       />
     </div>
     <div v-if="search">
-      <FriendsItemView 
-        @get-friends="getFriends"
-        :edit="edit"
-        v-for="friend in friends"
-        :key="friend.friendId"
-        :friend="friend"
-      />
+      <div v-if="friends.length">
+        <FriendsItemView 
+          @get-friends="getFriends"
+          :edit="edit"
+          v-for="friend in friends"
+          :key="friend.friendId"
+          :friend="friend"
+        />
+      </div>
+      <div v-else>
+        "{{ friendSearch }}" 검색 결과 없음
+      </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -68,12 +75,17 @@ export default {
     },
     search(){
       const token = sessionStorage.token
+      console.log('----')
       this.axios.get(process.env.VUE_APP_SPRING + 'user/friend/search/' + this.friendSearch, { headers: { Authorization: token }})
       .then((res) => {
         const code = res.data.code
         if(code) {
           console.log('친구 검색함')
           this.friends = res.data.result
+          this.search = true
+        } else{
+          console.log('검색 결과 없음')
+          this.search = false
         }
       })
     },

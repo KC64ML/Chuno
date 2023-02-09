@@ -4,7 +4,7 @@
         <div style="margin-left: 20px"></div>
         <input class="header_menu header_input" id="room_search" v-model="roomSearch" placeholder="방을 검색해 보세요">
     </div>
-    <div style="height: 80%; overflow: scroll;">
+    <div style="height: 80%; overflow: scroll;" class="scroll">
         <!-- <div style="text-align: center">저잣거리</div> -->
         <room-card v-for="(room, idx) in roomList" :key="idx" v-bind:room="room"></room-card>
     </div>

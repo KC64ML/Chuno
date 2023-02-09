@@ -2,13 +2,13 @@
   <HeaderVue
     :title="'랭킹'"
   ></HeaderVue>
-  <div style="height: 80%">
+  <div style="height: 80%;">
     <RankTop3View
       :users="users"
     />
     <RankListView
       :users="users"
-      style="overflow: scroll;"
+      :myId="myId"
     />
     <hr>
     <p @click="onGame">
@@ -31,15 +31,30 @@ export default {
   },
   data() {
     return {
-      users: []
+      users: [],
+      myId: null,
     }
   },
   methods:{
+    getUser(){
+      const token = sessionStorage.token
+      this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
+        .then((res) => {
+          const code = res.data.code
+          if(code) {
+            this.myId = res.data.result
+          } else {
+            console.log('code err')
+          }
+        })
+    },
+  
     getRank(){
       const token = sessionStorage.token
       this.axios.get(process.env.VUE_APP_SPRING + 'user/rank', { headers: { Authorization: token } })
       .then((res) => {
         this.users = res.data
+        console.log(res.data)
       })
       .catch(() => {
         console.log('error')

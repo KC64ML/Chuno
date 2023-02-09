@@ -3,7 +3,7 @@
         <!-- <video autoplay ref="video" class="enemy_video"></video> -->
         <user-video 
             :stream-manager="mainStreamManager" 
-            class="enemy_video">
+            :class-name="enemy_video">
         </user-video>
         <!-- <div class="camera_name">
             임시이름 {{ enemy_name }}
@@ -13,10 +13,11 @@
         <div class="arrow_box right_box" @click="rightArrow"></div>  
         <div class="arrow_box left_box" @click="leftArrow"></div>
     </div>
-    <div class="my_video_box" :class="{hidden_modal:!my_cam_modal}">
+    <div class="my_video_box" :class="{hidden_modal:!my_cam_modal.active}">
         <!-- <video autoplay ref="my_video" class="my_video"></video> -->
         <user-video 
-            :stream-manager="myStreamManager">
+            :stream-manager="myStreamManager"
+            :class-name="my_video">
         </user-video>
     </div>
 </template>
@@ -36,7 +37,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             UserVideo,
         },
         props: {
-            my_cam_modal: undefined
+            my_cam_modal: Object,
         },
         data() {
             return {
@@ -51,6 +52,8 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 nowVideoNum: 0,
                 enemy_name: undefined,
                 user: null,
+                my_video: "my_video",
+                enemy_video: "enemy_video",
 
                 // Join form
                 mySessionId: this.$route.params.roomId,
@@ -92,7 +95,13 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 });
                 await this.getToken(this.mySessionId + "game").then(async (token) => {
                     console.log("토큰을생성해요:" + token);
-                    this.session.connect(token, { clientData: this.myUserName, role: "good" })
+                    this.session.connect(token, {
+                        clientData: {
+                            username: this.myUserName,
+                            role: this.user.role,
+                        },
+                        role: "good"
+                    })
                         .then(() => {
                         let publisher = this.OV.initPublisher(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone
@@ -157,7 +166,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 let idx = this.subscribers.indexOf(this.mainStreamManager);
                 let len = this.subscribers.length;
                 idx--;
-                if (idx > 0) {
+                if (idx < 0) {
                     idx = len - 1;
                 }
                 this.updateMainVideoStreamManager(this.subscribers[idx]);
@@ -166,7 +175,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 let idx = this.subscribers.indexOf(this.mainStreamManager);
                 let len = this.subscribers.length;
                 idx++;
-                if (idx < len) {
+                if (idx >= len) {
                     idx = 0;
                 }
                 this.updateMainVideoStreamManager(this.subscribers[idx]);
@@ -176,7 +185,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             }
         },
     async created() {
-        this.openMediaDevices({
+        await this.openMediaDevices({
         video: true,
         audio: true,
         }).then((stream) => {
@@ -184,7 +193,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             console.log(stream);
             this.myVideoStream = stream;
         });
-        this.axios.get(APPLICATION_SERVER_URL + 'user',
+        await this.axios.get(APPLICATION_SERVER_URL + 'user',
             {
                 headers: { Authorization: sessionStorage.token }
             }).then(({ data }) => {
@@ -198,9 +207,9 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
         for (var sub of this.subscribers) {
             console.log("---", sub);
         }
+        this.init();
     },
     mounted() {
-        this.init();
     }
 }
 </script>
@@ -230,12 +239,7 @@ $my_video_margin: 20px;
     border-radius: 10px;
     font-size: 15px;
 }
-.enemy_video{
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-}
+
 
 .camera_arrow {
     position: absolute;
@@ -275,10 +279,7 @@ $my_video_margin: 20px;
     z-index: 100;
     width: 200px;
 }
-.my_video {
-    width: 100%;
-    border: solid blue;
-}
+
 .hidden_modal{
     visibility: hidden;
 }
