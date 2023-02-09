@@ -20,6 +20,7 @@
       :friend="friend"
       @get-user="getUser"
     />
+    <br>
     <p>노비용</p>
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; background-color: #1D182C; border-radius: 10%; justify-items: center;">
       <InventoryView
@@ -29,6 +30,7 @@
         :item="item"
       />
     </div>
+    <br>
     <p>추노꾼용</p>
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; background-color: #1D182C; border-radius: 10%; justify-items: center;">
       <InventoryView
@@ -38,6 +40,7 @@
         :item="item"
       />
     </div>
+    <br>
     <div class="container">
       <PlayTimeView
         :userInfo="userInfo"
@@ -46,6 +49,7 @@
         :userInfo="userInfo"
       />
     </div>
+    <br>
     <div id="checkout" v-if="me">
       <span @click="onDelete">회원탈퇴</span> |
       <span @click="onLogout">로그아웃</span>
