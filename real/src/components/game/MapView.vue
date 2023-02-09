@@ -263,12 +263,21 @@ export default {
     },
   },
   created() {
+    //userAgent 값 얻기
+    var varUA = navigator.userAgent.toLowerCase(); 
     // 자이로 센서 인식
-    DeviceMotionEvent.requestPermission().then(response => {
-        if (response == 'granted') {
-          window.addEventListener('deviceorientation', this.handleOrientation)
-        }
-    });
+    if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+      //IOS
+      DeviceMotionEvent.requestPermission()
+      .then(response => {
+          if (response == 'granted') {
+            window.addEventListener('deviceorientation', this.handleOrientation)
+          }
+        });
+    } else {
+      //아이폰 외
+      window.addEventListener('deviceorientation', this.handleOrientation)
+    }
     // 내 위치
     this.myLocation()
     // setInterval(this.myLocation(),1000)
