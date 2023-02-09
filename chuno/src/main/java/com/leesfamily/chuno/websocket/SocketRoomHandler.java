@@ -172,7 +172,7 @@ public class SocketRoomHandler extends TextWebSocketHandler {
 					w.sendMessage(msg);
 				}
 			} else {
-				System.out.println("방장이 아니라서 방을 없앨 수 없어요");
+//				System.out.println("방장이 아니라서 방을 없앨 수 없어요");
 				ErrorMsgDto emd = new ErrorMsgDto("error", "방장이 아니라서 방을 없앨수 없어요");
 				TextMessage tm = new TextMessage(mapper.writeValueAsString(emd));
 				session.sendMessage(tm);
