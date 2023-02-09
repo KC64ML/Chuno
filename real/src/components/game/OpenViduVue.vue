@@ -16,7 +16,8 @@
     <div class="my_video_box" :class="{hidden_modal:!my_cam_modal}">
         <!-- <video autoplay ref="my_video" class="my_video"></video> -->
         <user-video 
-            :stream-manager="myStreamManager">
+            :stream-manager="myStreamManager"
+            class="my_video">
         </user-video>
     </div>
 </template>
@@ -36,7 +37,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             UserVideo,
         },
         props: {
-            my_cam_modal: undefined
+            my_cam_modal: Object,
         },
         data() {
             return {

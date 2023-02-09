@@ -15,7 +15,13 @@
             console.log("+*+*+*+*+*+*+*+*",this.streamManager);
             console.log(this.$el);
             this.streamManager.addVideoElement(this.$el);
-        },
+    },
+
+    watch: {
+        streamManager(value) {
+            value.addVideoElement(this.$el);
+        }
+    }
     }
 </script>
 

@@ -54,7 +54,7 @@ export default {
   },
   data() {
     return {
-      my_cam_modal: false,
+      my_cam_modal: {active: false},
       menu: false,
       itemModal: false,
       usedItem: [],
@@ -67,7 +67,7 @@ export default {
       console.log(this.menu)
     },
     myCam() {
-      this.my_cam_modal = !this.my_cam_modal
+      this.my_cam_modal.active = !this.my_cam_modal.active
     },
     useItem(item){
       this.usedItem = item
