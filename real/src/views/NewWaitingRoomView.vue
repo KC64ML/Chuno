@@ -110,7 +110,8 @@ export default {
                         console.log(content);
                         this.chat_log.push({ nickname: content.nickname, msg: content.message });
                     } else if (content.type == 'startGame') {
-                        console("게임을 위한 정보 : ", content.info);
+                        this.conn.close();
+                        console.log("게임을 위한 정보 : ", content.info);
                         sessionStorage.setItem("info", JSON.stringify(content.info));
                         this.$router.push({ path: "/game/" + this.room_id })
                     } else if (content.type == 'error') {
@@ -169,6 +170,11 @@ export default {
         },
         async start_button() {
             alert("스타트버튼");
+            for (var s of this.subscribers) {
+                if (s.host || s.ready) continue;
+                alert("모두가 레디여야 해요");
+                return;
+            }
             var roomId = this.room_info.id;
             var userNickNameList = this.subscribers.map((e) => e.nickname)
 
