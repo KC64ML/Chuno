@@ -8,8 +8,8 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-
 FROM nginx:stable-alpine as production-stage
+COPY  ./nginx/chuno.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 3000
 
