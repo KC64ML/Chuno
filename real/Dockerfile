@@ -1,5 +1,5 @@
 FROM node:16.19.0 as build-stage
-VOLUME /home/ubuntu/volume:/home/ubuntu/volume
+VOLUME /tmp
 
 WORKDIR /real
 
