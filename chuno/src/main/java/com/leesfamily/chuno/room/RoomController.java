@@ -96,6 +96,7 @@ public class RoomController {
             @Parameter(name = "lat", description = "위도", example = "36.10734231483315"),
             @Parameter(name = "lng", description = "경도", example = "128.4168157734013"),
             @Parameter(name = "title", description = "방 제목", example = "너만 오면 고"),
+            @Parameter(name = "maxPlayers", description = "최대 인원", example = "4"),
             @Parameter(name = "isPublic", description = "공개방 여부", example = "true"),
             @Parameter(name = "radius", description = "반경", example = "3"),
             @Parameter(name = "password", description = "비밀번호", example = ""),
