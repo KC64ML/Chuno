@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     offing() {
-        this.$emit("on-edit")
+        this.$emit("on-modal")
     },
     check() {
       console.log(this.nickname);
