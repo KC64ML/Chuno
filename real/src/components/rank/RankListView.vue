@@ -24,7 +24,7 @@
     </table>
 
     <div
-      style="overflow: scroll; width: 85vw; height: 50vh;"
+      style="overflow: scroll; width: 85vw; height: 40vh;"
       class="scroll"
     >
     <table style="width: 85vw;">
