@@ -113,7 +113,7 @@ export default {
                         this.conn.close();
                         console.log("게임을 위한 정보 : ", content.info);
                         sessionStorage.setItem("info", JSON.stringify(content.info));
-                        this.$router.push({ path: "/game/" + this.room_id })
+                        this.$router.push({ path: "/game/" + this.room_id + "/" + this.user.nickname })
                     } else if (content.type == 'error') {
                         console.log(content.msg);
                     }
