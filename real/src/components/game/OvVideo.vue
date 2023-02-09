@@ -1,8 +1,6 @@
 <template>
-    <div>
-        <!-- {{ streamManager }} -->
-        <video autoplay></video>
-    </div>
+    <!-- {{ streamManager }} -->
+    <video autoplay></video>
 </template>
 
 <script>
