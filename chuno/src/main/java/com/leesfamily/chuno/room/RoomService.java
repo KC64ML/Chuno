@@ -284,6 +284,7 @@ public class RoomService {
         double radius = roomStartDto.getRadius() * 0.7;
         double radiusInDegrees = radius / 111000f;
 
+        
         for(int i =0 ;i< roomStartDto.getCurrentPlayers() * 2; i++){
             double u = Math.random();
             double v = Math.random();
