@@ -52,6 +52,8 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 nowVideoNum: 0,
                 enemy_name: undefined,
                 user: null,
+                my_video: "my_video",
+                enemy_video: "enemy_video",
 
                 // Join form
                 mySessionId: this.$route.params.roomId,
@@ -93,7 +95,13 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 });
                 await this.getToken(this.mySessionId + "game").then(async (token) => {
                     console.log("토큰을생성해요:" + token);
-                    this.session.connect(token, { clientData: this.myUserName, role: "good" })
+                    this.session.connect(token, {
+                        clientData: {
+                            username: this.myUserName,
+                            role: this.user.role,
+                        },
+                        role: "good"
+                    })
                         .then(() => {
                         let publisher = this.OV.initPublisher(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone

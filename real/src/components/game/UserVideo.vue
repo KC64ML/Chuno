@@ -1,7 +1,7 @@
 <template>
 <div v-if="streamManager">
     <div class="camera_name">
-        {{ clientData }}
+        {{ clientData.username }}
     </div>
 	<ov-video 
     :stream-manager="streamManager"
