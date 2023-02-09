@@ -55,5 +55,9 @@ import OvVideo from '@/components/game/OvVideo.vue';
 </script>
 
 <style lang="scss" scoped>
-
+.camera_name {
+    z-index: 10;
+    color: black;
+    position: absolute;
+}
 </style>
