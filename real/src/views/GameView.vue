@@ -77,9 +77,35 @@ export default {
       console.log('아이템 사용')
       console.log(item)
     },
-    itemYes(){
+    itemYes(item){
       this.itemModal = false
       //아이템 사용
+      if(item.id == 1){
+        // 천리안
+        console.log(item)
+      } else if (item.id == 2){
+        // 위장
+        console.log(item)
+        
+      } else if (item.id == 3) {
+        console.log(item)
+        
+        // 확실한 정보통
+      } else if (item.id == 4){
+        // 먹물탄
+        console.log(item)
+      } else if (item.id == 5){
+        // 조명탄
+        console.log(item)
+      } else if (item.id == 6){
+        // 긴 오랏줄
+        console.log(item)
+      } else {
+        // 연막탄
+        console.log(item)
+      }
+      
+
     },
     itemNo(){
       this.itemModal = false

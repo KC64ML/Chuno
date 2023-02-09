@@ -1,6 +1,6 @@
 <template>
   <!-- 아이템을 사용했을 때 뜨는 Cofirm용 모달 -->
-  <div class="modal-bg">
+  <div class="modal-bg" style="position: absolute;">
     <div class="modal">
       <p>{{ usedItem.name }}을(를) 사용하시겠습니까?</p>
       <div class="container-row">
@@ -8,7 +8,7 @@
           <div>아니오</div>
           <img src="@/assets/main_button1.png" alt="button">
         </div>
-        <div class="art-button" @click="itemYes">
+        <div class="art-button" @click="itemYes(usedItem)">
           <div>예</div>
           <img src="@/assets/main_button1.png" alt="button">
         </div>
@@ -25,9 +25,9 @@ export default {
     usedItem: Object,
   },
   methods: {
-    itemYes() {
+    itemYes(usedItem) {
       console.log('아이템 사용')
-      this.$emit('item-yes')
+      this.$emit('item-yes', usedItem)
     },
     itemNo() {
       console.log('아이템 미사용')
