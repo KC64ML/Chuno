@@ -152,6 +152,9 @@ input:focus {
   left: 20%;
   font-size: 20pt;
 }
+.scroll::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
 </style>
 
 <style lang="scss" scoped>

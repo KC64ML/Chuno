@@ -12,7 +12,7 @@
     :title= "userInfo.nickname + '님의 프로필'"
   ></HeaderVue>
 
-  <div style="height: 80%; width:300px; overflow: scroll;">
+  <div style="height: 80%; width:300px; overflow: scroll;" class="scroll">
     <MyProfileView 
       @on-edit="onEdit"
       :me="me"
