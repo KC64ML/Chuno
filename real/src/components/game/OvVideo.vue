@@ -1,6 +1,6 @@
 <template>
     <!-- {{ streamManager }} -->
-    <video autoplay></video>
+    <video autoplay :class="className"></video>
 </template>
 
 <script>
@@ -9,6 +9,7 @@
 
         props: {
             streamManager: Object,
+            className: String,
         },
 
         mounted () {
@@ -26,5 +27,14 @@
 </script>
 
 <style lang="scss" scoped>
-
+.my_video {
+    width: 100%;
+    border: solid blue;
+}
+.enemy_video{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
 </style>

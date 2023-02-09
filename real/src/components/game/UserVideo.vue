@@ -1,9 +1,12 @@
 <template>
-<div v-if="streamManager" :class="className">
+<div v-if="streamManager">
     <div class="camera_name">
         {{ clientData }}
     </div>
-	<ov-video :stream-manager="streamManager"/>
+	<ov-video 
+    :stream-manager="streamManager"
+    :class-name="className"
+    />
 	<!-- <div><p>{{ clientData }}</p></div> -->
 </div>
 </template>
@@ -45,14 +48,5 @@ import OvVideo from '@/components/game/OvVideo.vue';
 </script>
 
 <style lang="scss" scoped>
-.my_video {
-    width: 100%;
-    border: solid blue;
-}
-.enemy_video{
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-}
+
 </style>
