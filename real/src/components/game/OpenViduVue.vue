@@ -167,7 +167,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 let idx = this.subscribers.indexOf(this.mainStreamManager);
                 let len = this.subscribers.length;
                 idx++;
-                if (idx > len) {
+                if (idx >= len) {
                     idx = 0;
                 }
                 this.updateMainVideoStreamManager(this.subscribers[idx]);
