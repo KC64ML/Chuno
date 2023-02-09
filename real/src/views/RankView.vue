@@ -39,6 +39,7 @@ export default {
       this.axios.get(process.env.VUE_APP_SPRING + 'user/rank', { headers: { Authorization: token } })
       .then((res) => {
         this.users = res.data
+        console.log(res.data)
       })
       .catch(() => {
         console.log('error')
