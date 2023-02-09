@@ -13,7 +13,7 @@
         <div class="arrow_box right_box" @click="rightArrow"></div>  
         <div class="arrow_box left_box" @click="leftArrow"></div>
     </div>
-    <div class="my_video_box" :class="{hidden_modal:!my_cam_modal}">
+    <div class="my_video_box" :class="{hidden_modal:!my_cam_modal.active}">
         <!-- <video autoplay ref="my_video" class="my_video"></video> -->
         <user-video 
             :stream-manager="myStreamManager"
@@ -158,7 +158,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 let idx = this.subscribers.indexOf(this.mainStreamManager);
                 let len = this.subscribers.length;
                 idx--;
-                if (idx > 0) {
+                if (idx < 0) {
                     idx = len - 1;
                 }
                 this.updateMainVideoStreamManager(this.subscribers[idx]);
@@ -167,7 +167,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 let idx = this.subscribers.indexOf(this.mainStreamManager);
                 let len = this.subscribers.length;
                 idx++;
-                if (idx < len) {
+                if (idx > len) {
                     idx = 0;
                 }
                 this.updateMainVideoStreamManager(this.subscribers[idx]);

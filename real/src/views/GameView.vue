@@ -68,6 +68,7 @@ export default {
     },
     myCam() {
       this.my_cam_modal.active = !this.my_cam_modal.active
+      console.log("mycam 눌림");
     },
     useItem(item){
       this.usedItem = item
