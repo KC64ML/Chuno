@@ -5,13 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AllRoomMsgDto {
-	private String type;
-	private ArrayList<RoomInfo> roomInfo;
+public class InputDto {
+	private String event;
+	private String nickname;
+	private int level;
+	private int room;
+	private String msg;
+	private Object startData;
 }

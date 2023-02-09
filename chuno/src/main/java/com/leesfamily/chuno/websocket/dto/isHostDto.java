@@ -10,7 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class isHostDto {
+	private int level;
 	private String nickname;
-	private boolean is_ready;
-	private boolean is_host;
+	private boolean ready;
+	private boolean host;
 }

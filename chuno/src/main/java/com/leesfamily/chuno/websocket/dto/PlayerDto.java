@@ -12,6 +12,7 @@ import org.springframework.web.socket.WebSocketSession;
 @AllArgsConstructor
 public class PlayerDto {
 	private WebSocketSession session;
+	private int level;
 	private String nickname;
 	private boolean isReady;
 	private boolean isHost;
