@@ -56,6 +56,10 @@ import HeaderVue from '@/components/HeaderVue.vue';
 import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
 
 export default {
+    beforeRouteLeave(to, from, next) {
+        this.leave_room();
+        next();
+    },
     components: {
         HeaderVue,
         NicknameCardVue
@@ -71,6 +75,7 @@ export default {
             token: sessionStorage.getItem("token"),
 
             room_info: {title: ""},
+            user: undefined,
             subscribers: undefined,
 
             chat_data: "",
@@ -100,6 +105,7 @@ export default {
                         this.subscribers = content.players
                     } else if (content.type == 'me') {
                         console.log(content.present);
+                        this.subscribers = content.players;
                     } else if (content.type == 'error') {
                         console.log(content.msg);
                     }
@@ -134,15 +140,26 @@ export default {
         },
         exiting_room(e) {
             alert("나가기");
+            this.leave_room();
             e.stopPropagation();
+        },
+        leave_room() {
+            alert("ggg")
+            this.conn.send(JSON.stringify({
+                "event": "leave",
+                "room": this.room_id,
+                "nickname": this.user.nickname,
+                "level": this.user.level
+            }))
         },
         ready_button() {
             alert("준비 버튼");
             this.session.signal({
-                data: this.user.nickname,
-                type: "ready_button"
+                "event": "ready",
+                "room": this.room_info.id,
+                "nickname": this.user.nickname,
+                "level": this.user.level,
             })
-            // this.$router.push("/game/" + this.$route.params.roomId);
         },
         start_button() {
             alert("스타트버튼");
