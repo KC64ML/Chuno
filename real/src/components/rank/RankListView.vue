@@ -1,5 +1,17 @@
 <template>
-  <table>
+  <div>
+  <table
+    style="overflow: scroll; width: 90vw;"
+    class="scroll"
+  >
+    <colgroup>
+      <col width="11%">
+      <col width="35%">
+      <col width="11%">
+      <col width="14.5%">
+      <col width="14.5%">
+      <col width="11%">
+    </colgroup>
     <thead>
       <tr>
         <th>순위</th>
@@ -14,23 +26,39 @@
       style="overflow: scroll;"
       class="scroll"
     > -->
+  </table>
+
+    <tbody>
       <tr
-        style="overflow: scroll;"
-        class="scroll">
+        v-for="(user, i) in users"
+        :key="i"
       >
-        <td v-if="user.rank>=3"><span>{{ user.rank }}</span></td>
+        <td v-if="i>=3"><span>{{ user.rank }}</span></td>
         <td 
-          v-if="user.rank>=3"
+          v-if="i>=3"
           @click="this.$router.push({ name: 'Profile', params: { uid: user.id } })"
         ><span>{{ user.nickname }}</span></td>
-        <td v-if="user.rank>=3"><span>{{ user.level }}</span></td>
-        <td v-if="user.rank>=3"><span>{{ user.runnerWinCount }}</span></td>
-        <td v-if="user.rank>=3"><span>{{ user.chaserWinCount }}</span></td>
-        <td v-if="user.rank>=3"><span>{{ user.userCountAvg }}</span></td>
+        <td v-if="i>=3"><span>{{ user.level }}</span></td>
+        <td v-if="i>=3"><span>{{ user.runnerWinCount }}</span></td>
+        <td v-if="i>=3"><span>{{ user.chaserWinCount }}</span></td>
+        <td v-if="i>=3"><span>{{ user.userCountAvg }}</span></td>
       </tr>
-    <!-- </div> -->
-
-  </table>
+      <tr
+        v-for="(user, i) in users"
+        :key="i"
+      >
+        <td v-if="i>=3"><span>{{ user.rank }}</span></td>
+        <td 
+          v-if="i>=3"
+          @click="this.$router.push({ name: 'Profile', params: { uid: user.id } })"
+        ><span>{{ user.nickname }}</span></td>
+        <td v-if="i>=3"><span>{{ user.level }}</span></td>
+        <td v-if="i>=3"><span>{{ user.runnerWinCount }}</span></td>
+        <td v-if="i>=3"><span>{{ user.chaserWinCount }}</span></td>
+        <td v-if="i>=3"><span>{{ user.userCountAvg }}</span></td>
+      </tr>
+    </tbody>
+</div>
 
 </template>
 

@@ -1,15 +1,15 @@
 <template>
   <div class="container-row">
     <div
-      v-for="(user, i) in users"
-      :key="i"
+      v-for="user in users"
+      :key="user.id"
     >
       <div 
-        v-if="i < 3"
+        v-if="user.rank < 4"
       >
-        <img src="@/assets/crown_gold.png" alt="" v-if="i == 0" id="crown">
-        <img src="@/assets/crown_silver.png" alt="" v-if="i == 1" id="crown">
-        <img src="@/assets/crown_bronze.png" alt="" v-if="i == 2" id="crown">
+        <img src="@/assets/crown_gold.png" alt="" v-if="user.rank == 1" id="crown">
+        <img src="@/assets/crown_silver.png" alt="" v-if="user.rank == 2" id="crown">
+        <img src="@/assets/crown_bronze.png" alt="" v-if="user.rank == 3" id="crown">
         <img 
           :src=" user.profile ? URL + 'resources/images?path=' + user.profile :  defaultProfile" 
           alt="profile" 
