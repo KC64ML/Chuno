@@ -1,6 +1,6 @@
 <template>
 <div v-if="streamManager">
-    <div class="camera_name">
+    <div :class="['camera_name', clientData.user.role]">
         {{ clientData.user.nickname }} {{ roleKor }}
     </div>
 	<ov-video 
@@ -57,7 +57,15 @@ import OvVideo from '@/components/game/OvVideo.vue';
 <style lang="scss" scoped>
 .camera_name {
     z-index: 10;
-    color: black;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2px;
+    border-radius: 7px;
     position: absolute;
+}
+.runner {
+    color: #b1c2ff;
+}
+.chaser {
+    color: #ffb1b1;
 }
 </style>
