@@ -16,8 +16,7 @@
     <div class="my_video_box" :class="{hidden_modal:!my_cam_modal}">
         <!-- <video autoplay ref="my_video" class="my_video"></video> -->
         <user-video 
-            :stream-manager="myStreamManager" 
-            class="my_video">
+            :stream-manager="myStreamManager">
         </user-video>
     </div>
 </template>
@@ -177,7 +176,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             }
         },
     async created() {
-        await this.openMediaDevices({
+        this.openMediaDevices({
         video: true,
         audio: true,
         }).then((stream) => {
@@ -185,7 +184,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             console.log(stream);
             this.myVideoStream = stream;
         });
-        await this.axios.get(APPLICATION_SERVER_URL + 'user',
+        this.axios.get(APPLICATION_SERVER_URL + 'user',
             {
                 headers: { Authorization: sessionStorage.token }
             }).then(({ data }) => {
@@ -194,12 +193,14 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     this.myUserName = this.user.nickname;
                 }
             });
-        this.init();
         console.log("--------------ffff--------------");
         console.log(this.subscribers.length + "명의 사람이 있어요");
         for (var sub of this.subscribers) {
             console.log("---", sub);
         }
+    },
+    mounted() {
+        this.init();
     }
 }
 </script>
