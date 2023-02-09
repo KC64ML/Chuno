@@ -14,10 +14,10 @@
           :src=" user.profile ? URL + 'resources/images?path=' + user.profile :  defaultProfile" 
           alt="profile" 
           id="profile"
-          @click="this.$router.push({ name: Profile, params: { uid: user.id } })"
+          @click="this.$router.push({ name: 'Profile', params: { uid: user.id } })"
         >
         <p>Lv.{{ user.level }}</p>
-        <p @click="this.$router.push({ name: Profile, params: { uid: user.id } })">{{ user.nickname }}</p>
+        <p @click="this.$router.push({ name: 'Profile', params: { uid: user.id } })">{{ user.nickname }}</p>
         <p>{{ user.runnerWinCount }} | {{ user.chaserWinCount }} | {{ user.userCountAvg }}</p>
       </div>
     </div>
