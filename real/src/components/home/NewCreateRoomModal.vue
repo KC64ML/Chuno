@@ -179,7 +179,7 @@ export default {
             this.page2 = true;
         },
         minus() {
-            if (this.max_player <= 2) return;
+            if (this.max_player <= 4) return;
             this.max_player--;
         },
         plus() {

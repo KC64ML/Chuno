@@ -28,6 +28,7 @@
             <NicknameCardVue :sub="sub"></NicknameCardVue>
         </div>
     </div>
+    {{ subscribers }}
     <div id="chat_log">
         <div v-for="(c, idx) in chat_log" :key="idx">
             {{ c.nickname }} : {{ c.msg }}
@@ -74,7 +75,7 @@ export default {
             room_id: this.$route.params.roomId,
             token: sessionStorage.getItem("token"),
 
-            room_info: {title: ""},
+            room_info: { title: "" },
             user: undefined,
             subscribers: undefined,
 
@@ -88,9 +89,8 @@ export default {
         console.log("현재 방 정보:", this.room_info);
         // 내정보를 가저와요
         this.user = await this.axios.get(process.env.VUE_APP_SPRING + "user", { headers: { Authorization: this.token } }).then(res => res.data.result);
-        console.log("현재 유저:", this.user);
         // 방장인지 알아봐요
-        this.is_host = (this.room_info.nickname == this.user.nickname);
+        this.is_host = (this.room_info.host.nickname == this.user.nickname);
         // 이벤트도 등록하면서 방안에 유저정보를 가저와요
         this.enrollEvent();
     },
@@ -106,6 +106,13 @@ export default {
                     } else if (content.type == 'me') {
                         console.log(content.present);
                         this.subscribers = content.players;
+                    } else if (content.type == 'chat') {
+                        console.log(content);
+                        this.chat_log.push({ nickname: content.nickname, msg: content.message });
+                    } else if (content.type == 'startGame') {
+                        console("게임을 위한 정보 : ", content.info);
+                        sessionStorage.setItem("info", JSON.stringify(content.info));
+                        this.$router.push({ path: "/game/" + this.room_id })
                     } else if (content.type == 'error') {
                         console.log(content.msg);
                     }
@@ -144,7 +151,6 @@ export default {
             e.stopPropagation();
         },
         leave_room() {
-            alert("ggg")
             this.conn.send(JSON.stringify({
                 "event": "leave",
                 "room": this.room_id,
@@ -154,16 +160,64 @@ export default {
         },
         ready_button() {
             alert("준비 버튼");
-            this.session.signal({
+            this.conn.send(JSON.stringify({
                 "event": "ready",
                 "room": this.room_info.id,
                 "nickname": this.user.nickname,
                 "level": this.user.level,
-            })
+            }))
         },
-        start_button() {
+        async start_button() {
             alert("스타트버튼");
+            var roomId = this.room_info.id;
+            var userNickNameList = this.subscribers.map((e) => e.nickname)
+
+            console.log(roomId, userNickNameList);
+
+            // 데이터를 받아오는 코드에요
+            var data = await this.axios.post(process.env.VUE_APP_SPRING + "room/startRoom", {
+                "roomId": roomId,
+                "userNickNameList": userNickNameList,
+            }).then(res => res.data)
+
+            console.log(data.roomSlaveDocumentList);
+            var user_len = data.roomDecideChunoOrSlaveList.length;
+            console.log(data.roomDecideChunoOrSlaveList.slice(0, user_len / 2));
+            console.log(data.roomDecideChunoOrSlaveList.slice(user_len/2, user_len));
+
+            var team_slave = data.roomDecideChunoOrSlaveList.slice(0, user_len / 2);
+            var team_chuno = data.roomDecideChunoOrSlaveList.slice(user_len/2, user_len);
+            this.conn.send(JSON.stringify({
+                "event": "startGame",
+                "room": roomId,
+                "startData": {
+                    "slavepaper": data.roomSlaveDocumentList,
+                    "teamslave": team_slave,
+                    "teamchuno": team_chuno,
+                }
+            }));
+            // console.log(data.roomDecideChunoOrSlaveList.slice(0,))
+            // var user_len = data.roomDecideChunoOrSlaveList.length();
+            // var team_slave = data.roomDecideChunoOrSlaveList.slice(0,user_len / 2);
+            // var team_chuno = data.roomDecideChunoOrSlaveList.slice(user_len / 2, user_len);
+            
+            // console.log(team_slave)
+            // console.log(team_chuno)
+            // this.conn.send(JSON.stringify({
+            //     "event": "startGame",
+            //     "startData": JSON.stringify(data)
+            // }))
         },
+        transform_chat() {
+            alert("보내용");
+            this.conn.send(JSON.stringify({
+                "event": "chat",
+                "room": this.room_info.id,
+                "nickname": this.user.nickname,
+                "level": this.user.level,
+                "msg": this.chat_data
+            }))
+        }
     }
 }
 </script>
@@ -265,6 +319,7 @@ $ready_button_height: 50px;
     font-size: 20px;
     padding: 0 15px;
 }
+
 #chat_log {
     width: 100vw;
     position: absolute;
@@ -274,7 +329,6 @@ $ready_button_height: 50px;
     font-size: 20px;
     overflow-y: scroll;
 }
-
 </style>
 
 <!-- <template>

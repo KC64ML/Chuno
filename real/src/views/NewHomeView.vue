@@ -46,8 +46,11 @@ export default {
                     var content = JSON.parse(e.data);
                     console.log("소켓에서 온 메세지", content)
                     if (content.type == 'all_room') {
+                        var temp_room = await this.axios.get(process.env.VUE_APP_SPRING + "room?lat=" + this.lat + "&lng=" + this.lng).then(res => res.data.result);
+                        this.roomList = temp_room;
                         console.log("지금 있는 모든 방을 조회해요");
                         var rooms = content.roomInfo;
+
                         // rooms = rooms.map((f) => {return f.roomid})
                         // console.log(rooms)
                         // 룸 아이디를 담은 배열과 위도, 경도를 주면 현재 위도 경도를 기준으로 배열에 담긴 방넘버를 가까운 순으로 정렬해 주세요

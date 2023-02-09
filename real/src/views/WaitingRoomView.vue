@@ -28,7 +28,7 @@
             <NicknameCardVue :sub="sub"></NicknameCardVue>
         </div>
     </div>
-    {{ subscribers.length }}
+    {{ subscribers }}
     <div id="chat_log">
         <div v-for="(c, idx) in chat_log" :key="idx">
             {{ c.nickname }} : {{ c.msg }}
