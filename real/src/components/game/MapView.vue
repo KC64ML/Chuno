@@ -230,7 +230,7 @@ export default {
         DeviceMotionEvent.requestPermission()
           .then((state) => {
             if (state === 'granted') {
-              console.error('허용');
+              console.log('허용');
               // window.addEventListener('devicemotion', this.handleOrientation)
               
               // window.addEventListener('devicemotion', handleOrientation);
@@ -245,7 +245,7 @@ export default {
     handleOrientation(event) {
       const beta = event.beta
       console.log(beta)
-      if(beta > 130 || beta < 40) {
+      if(beta > 125 || beta < 55) {
         this.myMarker = true
       } else {
         this.myMarker = false
@@ -282,8 +282,8 @@ export default {
     },
   },
   created() {
-    this.onGyro()
-    window.addEventListener('devicemotion', this.handleOrientation)
+    // 자이로스코프 인식
+    window.addEventListener('deviceorientation', this.handleOrientation)
     
     // 내 위치
     this.myLocation()
