@@ -88,13 +88,13 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     await this.session.connect(token, { clientData: this.myUserName, role: "good" }).then(() => {
                         let publisher = this.OV.initPublisher(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone
-                            videoSource: undefined, // The source of video. If undefined default webcam
+                            videoSource: this.myVideoStream, // The source of video. If undefined default webcam
                             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
                             resolution: "640x480", // The resolution of your video
                             frameRate: 60, // The frame rate of your video
                             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-                            mirror: false, // Whether to mirror your local video or not
+                            mirror: true, // Whether to mirror your local video or not
                         });
                         this.myStreamManager = publisher;
                         this.publisher = publisher;
@@ -168,23 +168,25 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             }
         },
     async created() {
-        this.openMediaDevices({
+        await this.openMediaDevices({
         video: true,
         audio: true,
         }).then((stream) => {
+            console.log('created stream');
+            console.log(stream);
             this.myVideoStream = stream;
         });
         const user = await this.axios.get(APPLICATION_SERVER_URL + 'user', { headers: { Authorization: sessionStorage.token } })
         this.user = user;
         this.myUserName = user.nickname;
-            await this.init();
-            console.log("--------------ffff--------------");
-            console.log(this.subscribers.length + "명의 사람이 있어요");
-            for (var sub of this.subscribers) {
-                console.log("---", sub);
-            }
+        await this.init();
+        console.log("--------------ffff--------------");
+        console.log(this.subscribers.length + "명의 사람이 있어요");
+        for (var sub of this.subscribers) {
+            console.log("---", sub);
         }
     }
+}
 </script>
 
 <style lang="scss" scoped>
