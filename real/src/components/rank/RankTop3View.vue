@@ -4,13 +4,20 @@
       v-for="(user, i) in users"
       :key="i"
     >
-      <div v-if="i < 3">
+      <div 
+        v-if="i < 3"
+      >
         <img src="@/assets/crown_gold.png" alt="" v-if="i == 0" id="crown">
         <img src="@/assets/crown_silver.png" alt="" v-if="i == 1" id="crown">
         <img src="@/assets/crown_bronze.png" alt="" v-if="i == 2" id="crown">
-        <img :src=" user.profile ? URL + 'resources/images?path=' + user.profile :  defaultProfile" alt="profile" id="profile">
+        <img 
+          :src=" user.profile ? URL + 'resources/images?path=' + user.profile :  defaultProfile" 
+          alt="profile" 
+          id="profile"
+          @click="this.$router.push(`/profile/${user.id}`)"
+        >
         <p>Lv.{{ user.level }}</p>
-        <p>{{ user.nickname }}</p>
+        <p @click="this.$router.push(`/profile/${user.id}`)">{{ user.nickname }}</p>
         <p>{{ user.runnerWinCount }} | {{ user.chaserWinCount }} | {{ user.userCountAvg }}</p>
       </div>
     </div>
