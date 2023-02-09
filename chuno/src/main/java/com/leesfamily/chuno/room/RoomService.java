@@ -169,8 +169,9 @@ public class RoomService {
 
         log.info("room 정보 조회 : " + roomStartDto.getTitle() + " id : " + roomStartDto.getId() + " 사용자 : " + roomStartDto.getCurrentPlayers());
 
+        log.info("user Size : " + roomStartRequestDto.getUserNickNameList());
         // 현재 들어와있는 사용자 수 update
-        roomStartDto.setCurrentPlayers(roomStartRequestDto.getUserIdList().size());
+        roomStartDto.setCurrentPlayers(roomStartRequestDto.getUserNickNameList().size());
 
         // (2) 노비문서 위도, 경도 회원 x 2
         // 참고 : https://gist.github.com/fuxingloh/5f53a618ce3c80b0abaf
@@ -213,7 +214,7 @@ public class RoomService {
 
     public List<RoomGameStartDecideChaserRunnerDto> randomUserChaserRunner(RoomGameStartRequestDto roomStartRequestDto) {
         // 사용자들에게 추노꾼, 노비 랜덤 지정
-        int userCount = roomStartRequestDto.getUserIdList().size();
+        int userCount = roomStartRequestDto.getUserNickNameList().size();
         boolean[] visited = new boolean[userCount];
         List<RoomGameStartDecideChaserRunnerDto> roomGameUserChaserOrRunnerItemCntDtoList = new ArrayList<>();
         int addUserCnt = 0;
@@ -235,16 +236,16 @@ public class RoomService {
                 // 넘거야할 것
                 // 아이템 횟수
                 log.info("random Index : " + randomIndex);
-                log.info("getProfile 넣기전 : " + roomStartRequestDto.getUserIdList().get(randomIndex));
-                log.info("items : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems()[0]);
-                log.info("items : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems()[1]);
-                log.info("items : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems()[2]);
-                int[] beItems = userService.getProfile(roomStartRequestDto.getUserIdList().get(randomIndex)).getItems();
+                log.info("getProfile 넣기전 : " + roomStartRequestDto.getUserNickNameList().get(randomIndex));
+                log.info("items : " + userService.getProfile(roomStartRequestDto.getUserNickNameList().get(randomIndex)).getItems()[0]);
+                log.info("items : " + userService.getProfile(roomStartRequestDto.getUserNickNameList().get(randomIndex)).getItems()[1]);
+                log.info("items : " + userService.getProfile(roomStartRequestDto.getUserNickNameList().get(randomIndex)).getItems()[2]);
+                int[] beItems = userService.getProfile(roomStartRequestDto.getUserNickNameList().get(randomIndex)).getItems();
                 int[] items = Arrays.copyOfRange(beItems, 0, 4);
 
-                Long userId = roomStartRequestDto.getUserIdList().get(randomIndex); // userId
+                String nickname = roomStartRequestDto.getUserNickNameList().get(randomIndex); // userId
                 List<Integer> list = Arrays.stream(items).boxed().collect(Collectors.toList()); // int형 -> list형으로
-                roomGameUserChaserOrRunnerItemCntDtoList.add(new RoomGameStartDecideChaserRunnerDto(userId, list));
+                roomGameUserChaserOrRunnerItemCntDtoList.add(new RoomGameStartDecideChaserRunnerDto(nickname, list));
 
                 addUserCnt += 1;
             }
@@ -261,13 +262,13 @@ public class RoomService {
             if (!visited[userIdx]) {
                 // 아직 포지션 정해지지 못했다면
                 log.info("index : " + userIdx);
-                log.info("for문 index : " + userService.getProfile(roomStartRequestDto.getUserIdList().get(userIdx)).getNickname());
+                log.info("for문 index : " + userService.getProfile(roomStartRequestDto.getUserNickNameList().get(userIdx)).getNickname());
 
-                int[] beItems = userService.getProfile(roomStartRequestDto.getUserIdList().get(userIdx)).getItems();
+                int[] beItems = userService.getProfile(roomStartRequestDto.getUserNickNameList().get(userIdx)).getItems();
                 int[] items = Arrays.copyOfRange(beItems, 4, 8);
-                Long userId = roomStartRequestDto.getUserIdList().get(userIdx); // userId
+                String nickname = roomStartRequestDto.getUserNickNameList().get(userIdx); // userId
                 List<Integer> list = Arrays.stream(items).boxed().collect(Collectors.toList()); // int형 -> list형으로
-                roomGameUserChaserOrRunnerItemCntDtoList.add(new RoomGameStartDecideChaserRunnerDto(userId, list));
+                roomGameUserChaserOrRunnerItemCntDtoList.add(new RoomGameStartDecideChaserRunnerDto(nickname, list));
             }
         }
 
@@ -284,7 +285,6 @@ public class RoomService {
         double radius = roomStartDto.getRadius() * 0.7;
         double radiusInDegrees = radius / 111000f;
 
-        
         for(int i =0 ;i< roomStartDto.getCurrentPlayers() * 2; i++){
             double u = Math.random();
             double v = Math.random();
