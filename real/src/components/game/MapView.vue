@@ -58,7 +58,6 @@
         />
       </div>
     </GMapMap>
-    <button @click="onGyro">자이로스코프 확인</button>
 </template>
 
 <script>
