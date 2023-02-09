@@ -3,43 +3,45 @@
   <HeaderVue
     :title="'상점'"
   ></HeaderVue>
-  <div class="container-col" style="height:80%">
-    <div class="container" id="money">
-      <img src="@/assets/nyang.svg" alt="nyang">
-      {{ userInfo.money }}
-    </div>
-    <SelectedItemView
-      :item="selected"
-      @get-user="getUser"
-      />
-    <div class="container-row ">
-      <div class="box item" style="margin-right: 3%">
-        <div id="item-title">
-          <p>노비용</p>
-        </div>
-        <ItemView
-          :userInfo="userInfo"
-          @click="onSelect(item)"
-          v-for="item in items.filter((i) => i.forRunner == 1)"
-          :key="item.id"
-          :item="item"
-        />
+  <div style="height:80%">
+    <div class="container-col">
+      <div class="container-row" id="money">
+        <img src="@/assets/nyang.svg" alt="nyang" style="padding: 0 10px 0 0;">
+        {{ userInfo.money }}
       </div>
-      <div class="box item" style="margin-left: 3%">
-        <div id="item-title">
-          <p>추노꾼용</p>
+      <SelectedItemView
+        :item="selected"
+        @get-user="getUser"
+      />
+        <div class="container-row ">
+          <div class="box item" style="margin-right: 3%">
+            <div id="item-title">
+              <p>노비용</p>
+            </div>
+            <ItemView
+              :userInfo="userInfo"
+              @click="onSelect(item)"
+              v-for="item in items.filter((i) => i.forRunner == 1)"
+              :key="item.id"
+              :item="item"
+            />
+          </div>
+          <div class="box item" style="margin-left: 3%">
+            <div id="item-title">
+              <p>추노꾼용</p>
+            </div>
+            <ItemView
+              :userInfo="userInfo"
+              @click="onSelect(item)"
+              v-for="item in items.filter((i) => i.forRunner == 0)"
+              :key="item.id"
+              :item="item"
+            />
+          </div>
         </div>
-        <ItemView
-          :userInfo="userInfo"
-          @click="onSelect(item)"
-          v-for="item in items.filter((i) => i.forRunner == 0)"
-          :key="item.id"
-          :item="item"
-        />
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -122,10 +124,10 @@
   text-align: center;
 }
 #money{
-  width: 5rem;
+  width: fit-content;
   border-radius: 30%;
   background-color: #F5F5F5;
-  padding: 0 5%;
+  padding: 3% 5%;
 }
 .item{
   width: 50%;
