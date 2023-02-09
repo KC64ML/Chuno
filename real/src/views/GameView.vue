@@ -89,9 +89,11 @@ export default {
         console.log(item)
         
       } else if (item.id == 3) {
+        // 확실한 정보통: 30초간 노비 위치 표시
         console.log(item)
+        this.visibility = true
+        setTimeout(, 30000)
         
-        // 확실한 정보통
       } else if (item.id == 4){
         // 먹물탄
         console.log(item)
@@ -162,5 +164,6 @@ $button_width: 60px;
 .map_search::placeholder {
   color: rgba(255, 255, 255, 0.56)
 }
+
 
 </style>

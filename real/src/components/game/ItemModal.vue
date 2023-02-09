@@ -1,6 +1,6 @@
 <template>
   <!-- 아이템을 사용했을 때 뜨는 Cofirm용 모달 -->
-  <div class="modal-bg" style="position: absolute;">
+  <div class="modal-back" style="position: absolute;">
     <div class="modal">
       <p>{{ usedItem.name }}을(를) 사용하시겠습니까?</p>
       <div class="container-row">
@@ -42,7 +42,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 /* #modal {
   padding: 5%;
   margin: 5%;
@@ -62,4 +62,11 @@ export default {
   left: 20%;
   font-size: 20pt;
 } */
+#modal_back {
+    position: absolute;
+    width: 100vw;
+    height: 100%;
+    background: rgb(0, 0, 0, 0.6);
+    z-index: 1;
+}
 </style>
