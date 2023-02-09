@@ -5,8 +5,8 @@
   ></HeaderVue>
   <div style="height:80%">
     <div class="container-col">
-      <div class="container" id="money">
-        <img src="@/assets/nyang.svg" alt="nyang">
+      <div class="container-row" id="money">
+        <img src="@/assets/nyang.svg" alt="nyang" style="padding: 0 10px 0 0;">
         {{ userInfo.money }}
       </div>
       <SelectedItemView
@@ -124,10 +124,10 @@
   text-align: center;
 }
 #money{
-  width: 5rem;
+  width: fit-content;
   border-radius: 30%;
   background-color: #F5F5F5;
-  padding: 0 5%;
+  padding: 3% 5%;
 }
 .item{
   width: 50%;
