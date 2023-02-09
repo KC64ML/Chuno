@@ -24,6 +24,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
 
         return jpaQueryFactory
                 .select(new QUserRankingListDto(
+                        userEntity.id,
                         userEntity.nickname,
                         userEntity.level,
                         userEntity.runnerWinCount,
