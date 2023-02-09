@@ -254,6 +254,9 @@ public class SocketRoomHandler extends TextWebSocketHandler {
 			for (PlayerDto p : room_map.get(room)) {
 				p.getSession().sendMessage(msg5);
 			}
+		}else if (event.equals("reset")) {
+			room_host = new HashMap<>();
+			room_map = new HashMap<>();
 		}
 	}
 
