@@ -265,7 +265,7 @@ export default {
   created() {
     if (typeof DeviceMotionEvent.requestPermission === 'function') {
       // Handle iOS 13+ devices.
-      DeviceMotionEvent.requestPermission()
+      DeviceOrientationEvent.requestPermission()
         .then((state) => {
           if (state === 'granted') {
             window.addEventListener('deviceorientation', this.handleOrientation)
