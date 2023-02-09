@@ -85,16 +85,16 @@ export default {
       console.log(this.menu)
     },
     getMyRole(teamslave, teamchuno, nickname) {
-      teamslave.forEach((obj) => {
-        if (obj.nickname == nickname) {
+      for (let i = 0; i < teamslave.length; i++) {
+        if (teamslave[i].nickname == nickname) {
           return "runner";
         }
-      })
-      teamchuno.forEach((obj) => {
-        if (obj.nickname == nickname) {
+      }
+      for (let i = 0; i < teamchuno.length; i++) {
+        if (teamchuno[i].nickname == nickname) {
           return "chaser";
         }
-      })
+      }
     },
     myCam() {
       this.my_cam_modal.active = !this.my_cam_modal.active
