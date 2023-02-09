@@ -1,4 +1,4 @@
-FROM node:16.19.0 as build-stage
+FROM node:lts-alpine as builder
 VOLUME /tmp
 
 WORKDIR /real
@@ -9,14 +9,14 @@ COPY . .
 RUN npm run build
 
 
-FROM nginx:stable-alpine as production-stage
-
-RUN rm /etc/nginx/conf.d/default.conf
+FROM nginx:stable-alpine
+RUN rm -rf /etc/nginx/conf.d/default.conf
 COPY  ./nginx/chuno.conf /etc/nginx/conf.d/default.conf
-COPY --from=build-stage /real/dist /usr/share/nginx/html
+
+
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /real/dist /usr/share/nginx/html
 
 EXPOSE 3000
-
-
 
 CMD ["nginx", "-g", "daemon off;"]
