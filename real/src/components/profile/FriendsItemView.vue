@@ -9,7 +9,7 @@
         <span id="nickname">{{ friend.nickname }}</span>
       </div>
       <img src="@/assets/deleteFriend.svg" alt="delete" 
-        v-if="edit"
+        v-show="edit"
         @click="deleteFriend()"
       >
     </div>
