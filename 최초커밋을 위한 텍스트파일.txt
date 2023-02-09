@@ -1,8 +1,1 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 chlchvkdlf1
->>>>>>> 8db59eef3e02c75c1f31cb1115808c1a1fba4d03
-=======
-ooo
->>>>>>> bf96b62927abd934a39d6f3d710373bb5933d038
