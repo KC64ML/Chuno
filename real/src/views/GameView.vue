@@ -1,4 +1,5 @@
 <template>
+  <div>
   <MenuView 
     v-if="menu" 
     @use-item="useItem"
@@ -35,6 +36,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -72,6 +74,7 @@ export default {
     },
     useItem(item){
       this.usedItem = item
+      this.itemModal = true
       console.log('아이템 사용')
       console.log(item)
     },
