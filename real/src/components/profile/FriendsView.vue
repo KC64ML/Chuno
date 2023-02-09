@@ -7,7 +7,7 @@
     <p v-if="!edit">관리</p>
     <p v-if="edit">취소</p>
   </div>
-  <div class="container-col" style="height:75%; width: 100vw;">
+  <div class="container-col" style="height:80%; width: 100vw;">
     <div class="container-row" id="friend-search">
       <img class="header_menu" src="@/assets/Search_black.png">
       <input class="header_menu header_input" id="room_search" v-model="friendSearch" placeholder="친구 검색" @change="search">
