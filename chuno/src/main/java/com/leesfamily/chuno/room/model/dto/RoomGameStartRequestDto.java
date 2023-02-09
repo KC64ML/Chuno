@@ -11,7 +11,7 @@ public class RoomGameStartRequestDto {
 
     // 방 정보 id, 사용자 정보 id들
     Long roomId;  // 방 ID
-    List<Long> userIdList;  // 사용자 ID List
+    List<String> userNickNameList;  // 사용자 ID List
 
     // ex) 방 ID: 감자튀김, 유저정보
     // - 유저 A : 1233

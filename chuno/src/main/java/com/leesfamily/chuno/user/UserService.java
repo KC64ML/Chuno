@@ -48,6 +48,17 @@ public class UserService {
             return userInventoryResponse;
         }
     }
+    public UserInventoryResponse getProfile(String nickname) {
+        Optional<UserEntity> user = userRepository.findByNickname(nickname);
+        List<InventoryEntity> inventoryList = inventoryEntityRepository.findAllByUser(user.get());
+        UserInventoryResponse userInventoryResponse = UserInventoryResponse.toUserInventoryResponse(user.get());
+        userInventoryResponse.countingItems(inventoryList);
+        if(user.isEmpty()) {
+            return null;
+        }else {
+            return userInventoryResponse;
+        }
+    }
 
     public UserEntity findUserByEmail(String email) {
         Optional<UserEntity> option = userRepository.findByEmail(email);

@@ -9,6 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 @Getter @Setter
 public class RoomGameStartDecideChaserRunnerDto {
-    Long userId; // userId
+    String nickname; // nickname
     List<Integer> items; // 4개
 }
