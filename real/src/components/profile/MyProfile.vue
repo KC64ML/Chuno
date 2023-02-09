@@ -1,7 +1,7 @@
 <template>
   <NewEditProfileModal 
     v-if="modal"
-    @on-edit="onModal"
+    @on-modal="onModal"
     :userInfo="userInfo"
   />
 

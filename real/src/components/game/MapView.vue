@@ -264,7 +264,11 @@ export default {
   },
   created() {
     // 자이로 센서 인식
-    window.addEventListener('deviceorientation', this.handleOrientation)
+    DeviceMotionEvent.requestPermission().then(response => {
+        if (response == 'granted') {
+          window.addEventListener('deviceorientation', this.handleOrientation)
+        }
+    });
     // 내 위치
     this.myLocation()
     // setInterval(this.myLocation(),1000)

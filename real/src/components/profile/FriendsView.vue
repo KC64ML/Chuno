@@ -9,15 +9,26 @@
   <div class="container-col" style="height:75%; width: 100vw;">
     <div class="container-row" id="friend-search">
       <img class="header_menu" src="@/assets/Search_black.png">
-      <input class="header_menu header_input" id="room_search" v-model="friendSearch" placeholder="친구 검색">
+      <input class="header_menu header_input" id="room_search" v-model="friendSearch" placeholder="친구 검색" @change="search">
     </div>
-    <FriendsItemView 
+    <div v-if="!search">
+      <FriendsItemView 
       @get-friends="getFriends"
       :edit="edit"
       v-for="friend in friends"
       :key="friend.friendId"
       :friend="friend"
-    />
+      />
+    </div>
+    <div v-if="search">
+      <FriendsItemView 
+        @get-friends="getFriends"
+        :edit="edit"
+        v-for="friend in friends"
+        :key="friend.friendId"
+        :friend="friend"
+      />
+    </div>
   </div>
 </template>
 
@@ -36,6 +47,7 @@ export default {
       friends: [],
       friendSearch: '',
       edit: false,
+      serach: false,
     }
   },
   methods: {
@@ -54,12 +66,36 @@ export default {
           }
         })
     },
+    search(){
+      const token = sessionStorage.token
+      this.axios.get(process.env.VUE_APP_SPRING + 'user/friend/search/' + this.friendSearch, { headers: { Authorization: token }})
+      .then((res) => {
+        const code = res.data.code
+        if(code) {
+          console.log('친구 검색함')
+          this.friends = res.data.result
+        }
+      })
+    },
     onEdit() {
       this.edit = !this.edit
     }
   },
   created() {
     this.getFriends()
+  },
+  watch: {
+    friendSearch(keyword){
+      if(keyword){
+        console.log(keyword)
+        this.search = true
+        console.log(this.serach)
+      } else {
+        console.log('not search keyword')
+        this.search = false
+        console.log(this.serach)
+      }
+    }
   }
 }
 </script>
