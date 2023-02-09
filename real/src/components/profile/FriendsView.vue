@@ -1,4 +1,5 @@
 <template>
+  <div>
   <HeaderVue
     :title="'친구 관리'"
   />
@@ -21,15 +22,21 @@
       />
     </div>
     <div v-if="search">
-      <FriendsItemView 
-        @get-friends="getFriends"
-        :edit="edit"
-        v-for="friend in friends"
-        :key="friend.friendId"
-        :friend="friend"
-      />
+      <div v-if="friends.length">
+        <FriendsItemView 
+          @get-friends="getFriends"
+          :edit="edit"
+          v-for="friend in friends"
+          :key="friend.friendId"
+          :friend="friend"
+        />
+      </div>
+      <div v-else>
+        "{{ friendSearch }}" 검색 결과 없음
+      </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
