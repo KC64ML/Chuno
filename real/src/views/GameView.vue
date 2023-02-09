@@ -35,6 +35,7 @@
       </div>
     </div>
   </div>
+  <SpiningModalVue></SpiningModalVue>
 </template>
 
 <script>
@@ -42,6 +43,8 @@ import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue'
 import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
+
+import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
 
 export default {
 
@@ -51,6 +54,7 @@ export default {
     OpenViduVue,
     MenuView,
     ItemModal,
+    SpiningModalVue
   },
   data() {
     return {
