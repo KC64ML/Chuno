@@ -13,7 +13,9 @@
     style="position:absolute; bottom: 60px;"/>
   <div>
     
-    <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue>
+    <OpenViduVue
+    :my_cam_modal="my_cam_modal"
+    :user="user"></OpenViduVue>
     <MapView />
 
     <!-- 아이템 사용 -->
@@ -44,6 +46,7 @@ import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue'
 import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
+const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 export default {
 
@@ -54,11 +57,24 @@ export default {
     MenuView,
     ItemModal,
   },
+  async created() {
+    await this.axios.get(APPLICATION_SERVER_URL + 'user',
+          {
+              headers: { Authorization: sessionStorage.token }
+          }).then(({ data }) => {
+              if (data.code) {
+                  this.user = data.result;
+              }
+          });
+    const info = JSON.parse(sessionStorage.info);
+    this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
+  },
   data() {
     return {
       my_cam_modal: {active: false},
       menu: false,
       itemModal: false,
+      user: undefined,
       usedItem: [],
     }
   },
@@ -67,6 +83,18 @@ export default {
       console.log('menu clicked')
       this.menu = !this.menu
       console.log(this.menu)
+    },
+    getMyRole(teamslave, teamchuno, nickname) {
+      teamslave.forEach((obj) => {
+        if (obj.nickname == nickname) {
+          return "runner";
+        }
+      })
+      teamchuno.forEach((obj) => {
+        if (obj.nickname == nickname) {
+          return "chaser";
+        }
+      })
     },
     myCam() {
       this.my_cam_modal.active = !this.my_cam_modal.active
