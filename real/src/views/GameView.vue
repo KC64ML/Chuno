@@ -91,7 +91,7 @@ export default {
         // 확실한 정보통: 30초간 노비 위치 표시
         console.log(item)
         this.visibility = true
-        setTimeout(, 30000)
+        setTimeout(this.visibility=true, 30000)
         
       } else if (item.id == 4){
         // 먹물탄
