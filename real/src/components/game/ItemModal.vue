@@ -1,15 +1,17 @@
 <template>
   <!-- 아이템을 사용했을 때 뜨는 Cofirm용 모달 -->
-  <div class="modal">
-    <p>{{ usedItem.name }}을(를) 사용하시겠습니까?</p>
-    <div class="container-row">
-      <div class="art-button" @click="itemNo">
-        <div>아니오</div>
-        <img src="@/assets/main_button1.png" alt="button">
-      </div>
-      <div class="art-button" @click="itemYes">
-        <div>예</div>
-        <img src="@/assets/main_button1.png" alt="button">
+  <div class="modal-bg">
+    <div class="modal">
+      <p>{{ usedItem.name }}을(를) 사용하시겠습니까?</p>
+      <div class="container-row">
+        <div class="art-button" @click="itemNo">
+          <div>아니오</div>
+          <img src="@/assets/main_button1.png" alt="button">
+        </div>
+        <div class="art-button" @click="itemYes">
+          <div>예</div>
+          <img src="@/assets/main_button1.png" alt="button">
+        </div>
       </div>
     </div>
   </div>
