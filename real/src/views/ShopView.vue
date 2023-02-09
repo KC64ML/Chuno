@@ -3,7 +3,7 @@
   <HeaderVue
     :title="'상점'"
   ></HeaderVue>
-  <div style="height:80%;  overflow: scroll;" class="scroll">
+  <div style="height: 80%;  overflow: scroll;" class="scroll">
     <!-- <div class="container-col"> -->
       <div class="container-row" id="money">
         <img src="@/assets/nyang.svg" alt="nyang" style="padding: 0 10px 0 0;">
