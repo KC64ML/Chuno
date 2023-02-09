@@ -58,6 +58,7 @@
         />
       </div>
     </GMapMap>
+    <button @click="onGyro">자이로스코프 확인</button>
 </template>
 
 <script>
@@ -282,7 +283,7 @@ export default {
     },
   },
   created() {
-    this.onGyro()
+    // this.onGyro()
     // //userAgent 값 얻기
     // var varUA = navigator.userAgent.toLowerCase(); 
     // // 자이로 센서 인식
