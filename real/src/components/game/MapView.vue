@@ -221,7 +221,26 @@ export default {
         console.log(error)
       })
     },
-    
+    // 자이로 센서 허용
+    onGyro() {
+      if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        // Handle iOS 13+ devices.
+        DeviceMotionEvent.requestPermission()
+          .then((state) => {
+            if (state === 'granted') {
+              window.addEventListener('devicemotion', this.handleOrientation)
+              // window.addEventListener('devicemotion', handleOrientation);
+            } else {
+              console.error('Request to access the orientation was rejected');
+            }
+          })
+          .catch(console.error);
+      } else {
+        // Handle regular non iOS 13+ devices.
+        window.addEventListener('devicemotion', this.handleOrientation)
+        // window.addEventListener('devicemotion', handleOrientation);
+      }
+    },
     // 자이로 센서 인식
     handleOrientation(event) {
       const beta = event.beta
@@ -263,21 +282,7 @@ export default {
     },
   },
   created() {
-    if (typeof DeviceMotionEvent.requestPermission === 'function') {
-      // Handle iOS 13+ devices.
-      DeviceOrientationEvent.requestPermission()
-        .then((state) => {
-          if (state === 'granted') {
-            window.addEventListener('deviceorientation', this.handleOrientation)
-          } else {
-            console.error('Request to access the orientation was rejected')
-          }
-        })
-        .catch(console.error);
-    } else {
-      // Handle regular non iOS 13+ devices.
-      window.addEventListener('deviceorientation', this.handleOrientation)
-    }
+    this.onGyro()
     // //userAgent 값 얻기
     // var varUA = navigator.userAgent.toLowerCase(); 
     // // 자이로 센서 인식
@@ -286,7 +291,7 @@ export default {
     //   DeviceMotionEvent.requestPermission()
     //   .then(response => {
     //       if (response == 'granted') {
-    //         window.addEventListener('deviceorientation', this.handleOrientation)
+    //         c
     //       }
     //     });
     // } else {
