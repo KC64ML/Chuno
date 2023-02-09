@@ -90,6 +90,7 @@ public class RoomController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    
     @Operation(summary = "방 생성하기", description = "필요한 정보들로 방 정보를 생성한다.")
     @Parameters({
             @Parameter(name = "lat", description = "위도", example = "36.10734231483315"),
