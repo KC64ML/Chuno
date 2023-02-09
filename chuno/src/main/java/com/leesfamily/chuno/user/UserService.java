@@ -203,8 +203,8 @@ public class UserService {
     // 랭킹 얻기
     public List<UserRankingListDto> getRankingList(){
         List<UserRankingListDto> userList = userRepository.getRankingList();
-        for(int i = 1; i <= userList.size(); i++) {
-            userList.get(i).setRank(i);
+        for(int i = 0; i < userList.size(); i++) {
+            userList.get(i).setRank(i + 1);
         }
         return userList;
     }
