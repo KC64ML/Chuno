@@ -180,12 +180,12 @@ public class RoomService {
 
         // 좌표 인원 수 x 2개 위치 구하는 함수
         List<RoomGameStartSlaveDocumentDto> randomLatLng = randomLatLngCoordinate(roomStartDto);
-        log.info("현재 좌표 : " + roomStartDto.getLat() + " " + roomStartDto.getLng());
-        log.info("반지름 : " + roomStartDto.getRadius());
-        log.info("좌표 : " + randomLatLng.get(0).getLat() + " " + randomLatLng.get(0).getLng()
-                + " " + randomLatLng.get(1).getLat() + " " + randomLatLng.get(1).getLng()
-                + " " + randomLatLng.get(2).getLat() + " " + randomLatLng.get(2).getLng()
-        );
+//        log.info("현재 좌표 : " + roomStartDto.getLat() + " " + roomStartDto.getLng());
+//        log.info("반지름 : " + roomStartDto.getRadius());
+//        log.info("좌표 : " + randomLatLng.get(0).getLat() + " " + randomLatLng.get(0).getLng()
+//                + " " + randomLatLng.get(1).getLat() + " " + randomLatLng.get(1).getLng()
+//                + " " + randomLatLng.get(2).getLat() + " " + randomLatLng.get(2).getLng()
+//        );
 
         // (3) 노비, 추노꾼 랜덤
         // 사용자 정보를 조회한 후, 거기서 아이템을 조회해햐아 한다.
