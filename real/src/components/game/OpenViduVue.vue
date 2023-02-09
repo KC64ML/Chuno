@@ -3,7 +3,7 @@
         <!-- <video autoplay ref="video" class="enemy_video"></video> -->
         <user-video 
             :stream-manager="mainStreamManager" 
-            class="enemy_video">
+            :class-name="enemy_video">
         </user-video>
         <!-- <div class="camera_name">
             임시이름 {{ enemy_name }}
@@ -17,7 +17,7 @@
         <!-- <video autoplay ref="my_video" class="my_video"></video> -->
         <user-video 
             :stream-manager="myStreamManager"
-            class="my_video">
+            :class-name="my_video">
         </user-video>
     </div>
 </template>
@@ -231,12 +231,7 @@ $my_video_margin: 20px;
     border-radius: 10px;
     font-size: 15px;
 }
-.enemy_video{
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-}
+
 
 .camera_arrow {
     position: absolute;
@@ -276,10 +271,7 @@ $my_video_margin: 20px;
     z-index: 100;
     width: 200px;
 }
-.my_video {
-    width: 100%;
-    border: solid blue;
-}
+
 .hidden_modal{
     visibility: hidden;
 }
