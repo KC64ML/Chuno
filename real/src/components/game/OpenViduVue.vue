@@ -1,6 +1,7 @@
 <template>
     <div id="main_vedio_container" style="z-index: 1000">
         <video autoplay ref="video" class="enemy_video"></video>
+        <!-- <user-video :stream-manager="mainStreamManager" class="enemy_video"></user-video> -->
         <div class="camera_name">
             임시이름 {{ enemy_name }}
         </div>
@@ -35,6 +36,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 // OpenVidu objects
                 OV: undefined,
                 session: undefined,
+                myVideoStream: null,
                 mainStreamManager: undefined,
                 myStreamManager: undefined,
                 publisher: undefined,
@@ -86,7 +88,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     await this.session.connect(token, { clientData: this.myUserName, role: "good" }).then(() => {
                         let publisher = this.OV.initPublisher(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone
-                            videoSource: undefined, // The source of video. If undefined default webcam
+                            videoSource: this.myVideoStream, // The source of video. If undefined default webcam
                             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
                             resolution: "640x480", // The resolution of your video
@@ -119,6 +121,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             updateMainVideoStreamManager(stream) {
                 if (this.mainStreamManager === stream) return;
                 this.mainStreamManager = stream;
+                this.mainStreamManager.addVideoElement(this.$refs.video);
             },
             async getToken(mySessionId) {
                 console.log("getToken 시작")
@@ -160,8 +163,17 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 }
                 this.updateMainVideoStreamManager(this.subscribers[idx]);
             },
+            async openMediaDevices(constraints) {
+                return await navigator.mediaDevices.getUserMedia(constraints);
+            }
         },
     async created() {
+        this.openMediaDevices({
+        video: true,
+        audio: true,
+        }).then((stream) => {
+            this.myVideoStream = stream;
+        });
         const user = await this.axios.get(APPLICATION_SERVER_URL + 'user', { headers: { Authorization: sessionStorage.token } })
         this.user = user;
         this.myUserName = user.nickname;
