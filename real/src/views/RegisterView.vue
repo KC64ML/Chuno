@@ -182,7 +182,7 @@ $div_interval: 40px;
   font-size: 20px;
 }
 #profile_background {
-  background-color: rgb(24, 138, 28);
+  // background-color: rgb(24, 138, 28);
   margin: 20px auto;
   height: $image_size * 0.8;
   width: $image_size * 0.8;

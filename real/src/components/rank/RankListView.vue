@@ -13,7 +13,10 @@
       :key="i"
     >
       <td v-if="i>=3"><span>{{ i + 1 }}</span></td>
-      <td v-if="i>=3" @click="onProfile"><span>{{ user.nickname }}</span></td>
+      <td 
+        v-if="i>=3"
+        @click="this.$router.push({ name: 'Profile', params: { uid: user.id } })"
+      ><span>{{ user.nickname }}</span></td>
       <td v-if="i>=3"><span>{{ user.level }}</span></td>
       <td v-if="i>=3"><span>{{ user.runnerWinCount }}</span></td>
       <td v-if="i>=3"><span>{{ user.chaserWinCount }}</span></td>

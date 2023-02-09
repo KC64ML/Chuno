@@ -58,6 +58,7 @@
         />
       </div>
     </GMapMap>
+    <button @click="onGyro">자이로스코프 확인</button>
 </template>
 
 <script>
@@ -221,7 +222,26 @@ export default {
         console.log(error)
       })
     },
-    
+    // 자이로 센서 허용
+    onGyro() {
+      if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        // Handle iOS 13+ devices.
+        DeviceMotionEvent.requestPermission()
+          .then((state) => {
+            if (state === 'granted') {
+              window.addEventListener('devicemotion', this.handleOrientation)
+              // window.addEventListener('devicemotion', handleOrientation);
+            } else {
+              console.error('Request to access the orientation was rejected');
+            }
+          })
+          .catch(console.error);
+      } else {
+        // Handle regular non iOS 13+ devices.
+        window.addEventListener('devicemotion', this.handleOrientation)
+        // window.addEventListener('devicemotion', handleOrientation);
+      }
+    },
     // 자이로 센서 인식
     handleOrientation(event) {
       const beta = event.beta
@@ -263,8 +283,22 @@ export default {
     },
   },
   created() {
-    // 자이로 센서 인식
-    window.addEventListener('deviceorientation', this.handleOrientation)
+    // this.onGyro()
+    // //userAgent 값 얻기
+    // var varUA = navigator.userAgent.toLowerCase(); 
+    // // 자이로 센서 인식
+    // if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+    //   //IOS
+    //   DeviceMotionEvent.requestPermission()
+    //   .then(response => {
+    //       if (response == 'granted') {
+    //         c
+    //       }
+    //     });
+    // } else {
+    //   //아이폰 외
+    //   window.addEventListener('deviceorientation', this.handleOrientation)
+    // }
     // 내 위치
     this.myLocation()
     // setInterval(this.myLocation(),1000)

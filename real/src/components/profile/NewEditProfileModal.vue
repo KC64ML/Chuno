@@ -2,41 +2,45 @@
     <div id="modal_back">
         <div id="make_room_modal">
             <div id="close_button" @click="offing">x</div>
-            <div id="modal_title" style="font-size: 24px;">프로필 편집</div>
-            <div v-if="page1">
-                <table style="width: 300px; margin: 0 auto;">
-                    <colgroup>
-                        <col style="width: 90px">
-                        <col style="width: 200px">
-                    </colgroup>
-                    <tr id="profile_image">
-                        <div v-if="this.img_url">
-                        <div id="profile_background">
-                            <img id="preview_img" :src="this.img_url"/>
-                        </div>
-                        <div>
-                            <button @click="clearImage" >다시 선택할래요</button>
-                        </div>
-                        </div>
-                        <div v-else>
-                        <img id="blank_img" src="@/assets/profile_default_with_cam.svg" alt="" @click="profile_click">
-                        </div>
-                        <input ref="file_input" type="file" @change="oneFileSelect" style="display:none"/>
-                    </tr>
-                    <tr>
-                        <td>닉네임</td>
-                        <td>
-                            <input v-model="title" style="padding: 0 20px">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>전화번호</td>
-                        <td>
-                            <input v-model="phone" style="padding: 0 20px" maxlength="12">
-                        </td>
-                        <td class="notice grey">전화번호는 '-' 없이 숫자만 입력해주세요.</td>
-                    </tr>
-                </table>
+            <div id="modal_title" style="font-size: 24px;">프로필 편집ddd</div>
+            <div>
+              <table style="width: 300px; margin: 0 auto;">
+                <colgroup>
+                  <col style="width: 90px">
+                  <col style="width: 200px">
+                </colgroup>
+                <tr id="profile_image">
+                  <td>
+                    <div v-if="img_url">
+                    <div id="profile_background">
+                        <img id="preview_img" :src="img_url"/>
+                    </div>
+                    <div>
+                        <button @click="clearImage" >다시 선택할래요</button>
+                    </div>
+                    </div>
+                    <div v-else>
+                      <img id="blank_img" src="@/assets/profile_default_with_cam.svg" alt="" @click="profile_click">
+                    </div>
+                    <input ref="file_input" type="file" @change="oneFileSelect" style="display:none"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td>닉네임</td>
+                  <td>
+                      <input v-model="nickname" style="padding: 0 20px">
+                  </td>
+                </tr>
+                <tr>
+                  <td>전화번호</td>
+                  <td>
+                      <input v-model="phone" style="padding: 0 20px" maxlength="12">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="grey">전화번호는 '-' 없이 숫자만 입력해주세요.</td>
+                </tr>
+              </table>
                 <div class="flex_center hover_pointer" @click="save">
                     <img src="@/assets/main_button1.png" id="button1" style="width: 140px">
                     <div class="image_text">저장</div>
@@ -47,25 +51,93 @@
 </template>
 
 <script>
-import Slider from '@vueform/slider'
+
 
 export default {
-    props: {
+  props: {
+    userInfo: Object,
+  },
+  data() {
+    return {
+      nickname: this.userInfo.nickname,
+      phone: this.userInfo.phone,
+      can_use: false,
+      one_file: undefined,
+      img_url: this.userInfo.profile.path,
+    }
+  },
+  methods: {
+    offing() {
+        this.$emit("on-modal")
     },
-    data() {
-        return {
-            name: '',
-            phone: '',
+    check() {
+      console.log(this.nickname);
+      this.axios.get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname)
+        .then(({data})=>{
+          if(data.code) {
+            this.can_use = false;
+          } else {
+            this.can_use = true;
+          }
+        })
+    },
+    profile_click() {
+      this.$refs.file_input.click();
+    },
+    oneFileSelect(e) {
+      this.one_file = e.target.files[0];
+      this.img_url = URL.createObjectURL(e.target.files[0]);
+    },
+    save() {
+      if (this.nickname.length == 0) {
+        alert("닉네임을 확인해 주세요");
+        return;
+      } else if (this.can_use == false) {
+        alert("이미 사용 중인 닉네임이에요");
+        return;
+      }
+      const formData = new FormData();
+      formData.append("nickname", this.nickname);
+      formData.append("phone", this.phone);
 
+      if (this.one_file) {
+        formData.append("file", this.one_file);
+      }
+
+      this.axios.post(process.env.VUE_APP_SPRING + "kakao/register", formData, { 
+        headers: { 
+          'Content-Type': 'multipart/form-data', 
         }
+      })
+        .then((res)=>{
+          // const code = res.data.code
+          // if(code) {
+            sessionStorage.setItem('token', res.data)
+            console.log('회원가입 성공')
+            console.log(res)
+            alert("등록완료");
+            this.$router.push({ name: "home" });
+          // } else {
+          //   console.log(res)
+          //   console.log('code err')
+          // }
+        })
+        .catch((e)=>{
+          console.log('회원가입 실패')
+          console.log(e)
+        })
     },
-    methods: {
-        offing() {
-            this.$emit("modal_off")
-        },
-        
-        
+
+    reSelect() {
+      alert("다시선택");
     },
+    clearImage() {
+      this.$refs.file_input.value = ''
+      this.one_file = undefined;
+      this.img_url = undefined;
+    }
+      
+  },
         
 }
 </script>

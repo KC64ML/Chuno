@@ -1,5 +1,9 @@
 <template>
-  <!-- <EditProfileModal v-if="modal"/> -->
+  <NewEditProfileModal 
+    v-if="modal"
+    @on-modal="onModal"
+    :userInfo="userInfo"
+  />
 
   <!-- <div>   -->
     <div class="container-col" id="myProfile">
@@ -35,10 +39,11 @@
 <script>
 import defaultProfile from '@/assets/profile_default.svg'
 // import EditProfileModal from '@/components/profile/EditProfileModal.vue'
-
+import NewEditProfileModal from './NewEditProfileModal.vue'
 export default {
   name: 'MyProfile',
   components: {
+    NewEditProfileModal,
     // EditProfileModal,
   },
   props: {
@@ -51,11 +56,12 @@ export default {
       modal: false,
       defaultProfile: defaultProfile,
       URL: process.env.VUE_APP_SPRING,
+      // editProfileModal: false,
     }
   },
   methods: {
     onModal(){
-      this.modal = true
+      this.modal = !this.modal
       console.log(this.modal)
     },
     // 친구 추가
