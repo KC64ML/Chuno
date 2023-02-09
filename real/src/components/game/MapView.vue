@@ -263,21 +263,36 @@ export default {
     },
   },
   created() {
-    //userAgent 값 얻기
-    var varUA = navigator.userAgent.toLowerCase(); 
-    // 자이로 센서 인식
-    if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
-      //IOS
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+      // Handle iOS 13+ devices.
       DeviceMotionEvent.requestPermission()
-      .then(response => {
-          if (response == 'granted') {
+        .then((state) => {
+          if (state === 'granted') {
             window.addEventListener('deviceorientation', this.handleOrientation)
+          } else {
+            console.error('Request to access the orientation was rejected')
           }
-        });
+        })
+        .catch(console.error);
     } else {
-      //아이폰 외
+      // Handle regular non iOS 13+ devices.
       window.addEventListener('deviceorientation', this.handleOrientation)
     }
+    // //userAgent 값 얻기
+    // var varUA = navigator.userAgent.toLowerCase(); 
+    // // 자이로 센서 인식
+    // if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+    //   //IOS
+    //   DeviceMotionEvent.requestPermission()
+    //   .then(response => {
+    //       if (response == 'granted') {
+    //         window.addEventListener('deviceorientation', this.handleOrientation)
+    //       }
+    //     });
+    // } else {
+    //   //아이폰 외
+    //   window.addEventListener('deviceorientation', this.handleOrientation)
+    // }
     // 내 위치
     this.myLocation()
     // setInterval(this.myLocation(),1000)
