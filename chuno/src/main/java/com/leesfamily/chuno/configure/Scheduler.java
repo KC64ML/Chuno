@@ -34,7 +34,7 @@ public class Scheduler {
     @Scheduled(fixedRate = 60000)
     public void scheduleFixedRateTask() throws InterruptedException {
         LocalDateTime now = LocalDateTime.now();
-        now.plusMinutes(10l);
+        LocalDateTime later10m = now.plusMinutes(10l);
         List<PushEntity> pushList = pushRepository.findAll();
         pushList.forEach((push) -> {
             DateTime roomDt = push.getRoom().getDateTime();
@@ -43,16 +43,26 @@ public class Scheduler {
             int roomDay = roomDt.getDay();
             int roomHour = roomDt.getHour();
             int roomMinute = roomDt.getMinute();
-            int nowYear = now.getYear();
-            int nowMonth = now.getMonthValue();
-            int nowDay = now.getDayOfMonth();
-            int nowHour = now.getHour();
-            int nowMinute = now.getMinute();
+            int nowYear = later10m.getYear();
+            int nowMonth = later10m.getMonthValue();
+            int nowDay = later10m.getDayOfMonth();
+            int nowHour = later10m.getHour();
+            int nowMinute = later10m.getMinute();
             if(nowMinute == roomMinute && nowHour == roomHour
                     && nowDay == roomDay && nowMonth == roomMonth && nowYear == roomYear) {
                 UserEntity user = push.getUser();
                 RoomEntity room = push.getRoom();
                 smsUtils.sendOne(user.getPhone(), room.getTitle());
+                return;
+            }
+            nowYear = now.getYear();
+            nowMonth = now.getMonthValue();
+            nowDay = now.getDayOfMonth();
+            nowHour = now.getHour();
+            nowMinute = now.getMinute();
+            if(nowMinute == roomMinute && nowHour == roomHour
+                    && nowDay == roomDay && nowMonth == roomMonth && nowYear == roomYear) {
+                pushRepository.delete(push);
             }
         });
     }
