@@ -226,13 +226,10 @@ export default {
     onGyro() {
       if (typeof DeviceMotionEvent.requestPermission === 'function') {
         // Handle iOS 13+ devices.
-        alert('자이로스코프 사용을 허용해 주세요.')
+        alert('아이폰의 경우 동장 및 방향 사용에 허가가 필요합니다.')
         DeviceMotionEvent.requestPermission()
           .then((state) => {
             if (state === 'granted') {
-              console.log('허용');
-              // window.addEventListener('devicemotion', this.handleOrientation)
-              
               // window.addEventListener('devicemotion', handleOrientation);
             } else {
               console.error('Request to access the orientation was rejected');
@@ -285,6 +282,14 @@ export default {
     // 자이로스코프 인식
     window.addEventListener('deviceorientation', this.handleOrientation)
     
+    var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+ 
+    if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+        //IOS
+        console.log('iOS')
+        this.onGyro()
+    }
+
     // 내 위치
     this.myLocation()
     // setInterval(this.myLocation(),1000)
