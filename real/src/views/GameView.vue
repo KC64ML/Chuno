@@ -9,8 +9,10 @@
     v-if="itemModal" 
     :usedItem="usedItem" 
     @item-yes="itemYes"
-    @item-no="itemNo"
-    style="position:absolute; bottom: 60px;"/>
+    @item-no="itemNo" 
+    @on-modal="OnModal"
+    style="position:absolute; bottom: 60px;"
+   />
   <div>
     
     <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue>
@@ -57,9 +59,17 @@ export default {
   data() {
     return {
       my_cam_modal: false,
-      menu: false,
+      menu: true,
       itemModal: false,
       usedItem: [],
+      // usedItem: {
+      //   "id": 7,
+      //   "name": "거짓\n정보통",
+      //   "price": 1000,
+      //   "description": "노비 문서의 위치를 셔플할 수 있다.",
+      //   "imgPath": "item/item7.png",
+      //   "forRunner": 0
+      // },
     }
   },
   methods: {
@@ -72,23 +82,25 @@ export default {
       this.my_cam_modal = !this.my_cam_modal
     },
     useItem(item){
+      console.log('게임뷰임. 사용한 아이템표시')
+      console.log(item)
       this.usedItem = item
       this.itemModal = true
+      console.log(this.itemModal)
       console.log('아이템 사용')
-      console.log(item)
     },
     itemYes(item){
       this.itemModal = false
       //아이템 사용
       if(item.id == 1){
-        // 천리안
+        // 천리안: 가장 가까운 추노꾼 위치 표시
         console.log(item)
       } else if (item.id == 2){
-        // 위장
+        // 위장: 추노꾼의 catch 범위 축소
         console.log(item)
         
       } else if (item.id == 3) {
-        // 확실한 정보통: 30초간 노비 위치 표시
+        // 확실한 정보통: 진짜 노비 문서 위치 표시
         console.log(item)
         this.visibility = true
         setTimeout(this.visibility=true, 30000)
@@ -97,10 +109,10 @@ export default {
         // 먹물탄
         console.log(item)
       } else if (item.id == 5){
-        // 조명탄
+        // 조명탄: 30초간 노비 위치 표시
         console.log(item)
       } else if (item.id == 6){
-        // 긴 오랏줄
+        // 긴 오랏줄: 노비 catch 범위 확대
         console.log(item)
       } else {
         // 연막탄
