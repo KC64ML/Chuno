@@ -70,6 +70,9 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 this.OV = new OpenVidu();
                 this.session = this.OV.initSession();
                 this.session.on("streamCreated", ({ stream }) => {
+                    if (stream.connection.data.nickname == this.user.nickname) {
+                        return;
+                    }
                     const subscriber = this.session.subscribe(stream);
                     this.subscribers.push(subscriber);
                     console.log("스트림을 발견했어요!")
@@ -264,7 +267,7 @@ $my_video_margin: 20px;
 }
 
 .my_video_box {
-    background-color: red;
+    background-color: whitesmoke;
     position: absolute;
     bottom: $footer_height;
     right: 0;
