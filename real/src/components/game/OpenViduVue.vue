@@ -177,7 +177,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             }
         },
     async created() {
-        this.openMediaDevices({
+        await this.openMediaDevices({
         video: true,
         audio: true,
         }).then((stream) => {
@@ -185,7 +185,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             console.log(stream);
             this.myVideoStream = stream;
         });
-        this.axios.get(APPLICATION_SERVER_URL + 'user',
+        await this.axios.get(APPLICATION_SERVER_URL + 'user',
             {
                 headers: { Authorization: sessionStorage.token }
             }).then(({ data }) => {
@@ -199,9 +199,9 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
         for (var sub of this.subscribers) {
             console.log("---", sub);
         }
+        this.init();
     },
     mounted() {
-        this.init();
     }
 }
 </script>
