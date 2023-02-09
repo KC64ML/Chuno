@@ -226,20 +226,19 @@ export default {
     onGyro() {
       if (typeof DeviceMotionEvent.requestPermission === 'function') {
         // Handle iOS 13+ devices.
+        alert('자이로스코프 사용을 허용해 주세요.')
         DeviceMotionEvent.requestPermission()
           .then((state) => {
             if (state === 'granted') {
-              window.addEventListener('devicemotion', this.handleOrientation)
+              console.error('허용');
+              // window.addEventListener('devicemotion', this.handleOrientation)
+              
               // window.addEventListener('devicemotion', handleOrientation);
             } else {
               console.error('Request to access the orientation was rejected');
             }
           })
           .catch(console.error);
-      } else {
-        // Handle regular non iOS 13+ devices.
-        window.addEventListener('devicemotion', this.handleOrientation)
-        // window.addEventListener('devicemotion', handleOrientation);
       }
     },
     // 자이로 센서 인식
@@ -283,22 +282,9 @@ export default {
     },
   },
   created() {
-    // this.onGyro()
-    // //userAgent 값 얻기
-    // var varUA = navigator.userAgent.toLowerCase(); 
-    // // 자이로 센서 인식
-    // if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
-    //   //IOS
-    //   DeviceMotionEvent.requestPermission()
-    //   .then(response => {
-    //       if (response == 'granted') {
-    //         c
-    //       }
-    //     });
-    // } else {
-    //   //아이폰 외
-    //   window.addEventListener('deviceorientation', this.handleOrientation)
-    // }
+    this.onGyro()
+    window.addEventListener('devicemotion', this.handleOrientation)
+    
     // 내 위치
     this.myLocation()
     // setInterval(this.myLocation(),1000)
