@@ -7,7 +7,7 @@
             <div class="image_text">시작해요</div>
         </div>
         <br>
-        <div @click="play(bgm)">audioPlayer</div>
+        <div @click="play()">audioPlayer</div>
     </div>
 </template>
 
@@ -29,10 +29,8 @@ import bgm from '@/assets/bgm.mp3'
         bgm,
       }
     },
-    created(){
-      this.play
-    },
     
+
   }
 </script>
 

@@ -249,6 +249,7 @@ export default {
       }
       // console.log(window)
     },
+    // 나와 marker의 거리 계산
     calculateDistance(marker){
       console.log('!!calculateDistance 함수 실행됨')
       console.log(marker)
@@ -268,14 +269,14 @@ export default {
     // 노비 잡기
     catch(){
       console.log('!! catch 함수 실행되기는 함')
-      for(const marker of this.papers){
+      for(const marker of this.others){
         const distance = this.calculateDistance(marker)
         if(distance <= this.catchRadius){
           alert('잡으세요.')
           // console.log('잡을 수 있음')
           this.conn.send(JSON.stringify(
             {
-              event:'(백에서 받아서 분류)',
+              event:'catch',
               // nickname:(선택),
               room: this.roomInfo.id,
               startData: {
