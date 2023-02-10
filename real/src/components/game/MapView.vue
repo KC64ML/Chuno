@@ -40,7 +40,7 @@
           v-if="!m.ripped"
           :icon=paperMarkerImg
           :animation=1
-          :position="m.position"
+          :position="m.location"
           @click="openInfoWindow(marker.id)"
           />
           <!-- :clickable="true" -->
@@ -138,8 +138,9 @@ export default {
   methods: {                  
     enrollEvent() {
       new Promise((resolve) => {
-        this.conn.onmessege = (e) => {
-          const content = JSON.parse(e);
+        this.conn.onmessage = async (e) => {
+          console.log(e);
+          const content = JSON.parse(e.data);
           if (content.type == "othersLocation") {
             const other = content.info; // startData가 여기 담겨잇다.
             this.others[other.nickname] = {
@@ -148,6 +149,7 @@ export default {
               location: other.location,
               myMarker: other.myMarker
             };
+            console.log("ohters 받아오는 중 : ", this.others);
             this.catch(other);
             
           } else if (content.type == "") {
@@ -178,6 +180,7 @@ export default {
       console.log('노비 문서 가져오기')
       const info = JSON.parse(sessionStorage.info)
       const papers = info.slavepaper
+      console.log("받아온 노비문서", papers);
       for (let i = 0; i < papers.length; i++){
         console.log(i)
         this.papers.push({ 
@@ -185,9 +188,9 @@ export default {
               location: { lat: papers[i].lat, lng: papers[i].lng } ,
               real: papers[i].real,
               ripped: false,
-            })
+        })
+        console.log("노비문서 받는 중", this.papers);
       }
-      console.log(this.papers)
     },
     generatePlayer(){
       console.log('2. generatePapers 함수 실행')
