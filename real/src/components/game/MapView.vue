@@ -1,6 +1,6 @@
 <template>
     <GMapMap
-      :center="me"
+      :center="location"
       :zoom="18"
       :options="{
         zoomControl: true,
@@ -26,7 +26,7 @@
         />
         <GMapCircle
           :radius="catchRadius"
-          :center="me"
+          :center="location"
           :options="circleOptions"
         />
       </div>
@@ -40,7 +40,7 @@
           v-if="!m.ripped"
           :icon=paperMarkerImg
           :animation=1
-          :position="m.position"
+          :position="m.location"
           @click="openInfoWindow(marker.id)"
           />
           <!-- :clickable="true" -->
@@ -48,13 +48,13 @@
       <!-- 다른 플레이어 위치 -->
       <div
         v-for="m in others"
-        :key="m.id"
+        :key="m.nickname"
         @click="ripPaper(m)"
       >
         <GMapMarker
-          v-if="!m.ripped"
+          v-if="!m.myMarker"
           :icon=othersMarkerImg
-          :position="m.position"
+          :position="m.location"
           :clickable="true"
         />
       </div>
@@ -75,7 +75,16 @@ export default {
     // papers: Object, // 노비 문서 정보
     // others: Object, // 다른 플레이어 위치 정보
     user: Object, // 내 정보
-    roomInfo: Object, // 방 정보
+    roomInfo: {
+      type: Object,
+      default() {
+        return {
+          lat: 0,
+          lng: 0,
+          radius: 0,
+        }
+      }
+    }, // 방 정보
   },
   data() {
     return {
@@ -128,14 +137,23 @@ export default {
   },
   methods: {                  
     enrollEvent() {
+      console.log("enrollEvent at MapView");
       new Promise((resolve) => {
-        this.conn.onmessege = (e) => {
-          const content = JSON.parse(e);
+        console.log("promise at MapView");
+        this.conn.onmessage = async (e) => {
+          console.log("message received at MapView", e);
+          const content = JSON.parse(e.data);
           if (content.type == "othersLocation") {
             const other = content.info; // startData가 여기 담겨잇다.
             this.others[other.nickname] = {
-              
+              nickname: other.nickname,
+              role: other.role,
+              location: other.location,
+              myMarker: other.myMarker
             };
+            console.log("ohters 받아오는 중 : ", this.others);
+            this.catch(other);
+            
           } else if (content.type == "") {
             /* 뭔가 하자 */
           }
@@ -158,22 +176,23 @@ export default {
       }
 
       // 내 위치
-      setInterval(this.myLocation(), 3000);
+      setInterval(() => {this.myLocation()}, 3000);
       // this.myLocation()
       // 노비 문서 위치
       console.log('노비 문서 가져오기')
       const info = JSON.parse(sessionStorage.info)
       const papers = info.slavepaper
+      console.log("받아온 노비문서", papers);
       for (let i = 0; i < papers.length; i++){
         console.log(i)
         this.papers.push({ 
               id: i,
-              position: { lat: papers[i].lat, lng: papers[i].lng } ,
+              location: { lat: papers[i].lat, lng: papers[i].lng } ,
               real: papers[i].real,
               ripped: false,
-            })
+        })
+        console.log("노비문서 받는 중", this.papers);
       }
-      console.log(this.papers)
     },
     generatePlayer(){
       console.log('2. generatePapers 함수 실행')
@@ -188,7 +207,7 @@ export default {
         }
         this.others.push({ 
           id: i,
-          position: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
+          location: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
           real: real,
           ripped: false,
         })
@@ -239,7 +258,7 @@ export default {
             startData: {
               nickname: this.user.nickname,
               role: this.user.role,
-              location: this.user.location,
+              location: this.location,
               myMarker: this.myMarker,
             }
           }
@@ -287,8 +306,8 @@ export default {
       console.log(marker)
       const lat1 = this.location.lat
       const lng1 = this.location.lng
-      const lat2 = marker['position'].lat
-      const lng2 = marker['position'].lng
+      const lat2 = marker['location'].lat
+      const lng2 = marker['location'].lng
       const r = 6371; //지구의 반지름(km)
       const dLat = (lat2-lat1) * (Math.PI/180)
       const dLon = (lng2-lng1) * (Math.PI/180)
@@ -299,7 +318,7 @@ export default {
       return distance
     },
     // 노비 잡기
-    catch(){
+    catch(marker){
       console.log('!! catch 함수 실행되기는 함')
       for(const marker of this.others){
         const distance = this.calculateDistance(marker)
@@ -316,19 +335,21 @@ export default {
                 others : marker,
               }
             }
-          ));
-        } else {
-          console.log('잡을 수 없음')
-        }
+          }
+        ));
+      } else {
+        console.log('잡을 수 없음')
       }
     },
   },
   created() {
-
+    console.log("MapView created start");
     // 내 위치
     // this.myLocation()
     // setInterval(this.myLocation(),1000) */
-    this.enrollEvent();
+    setTimeout(() => {
+      this.enrollEvent();
+    }, 5500);
     
     // this.catch()
 
@@ -337,10 +358,9 @@ export default {
 
   },
   mounted() {
-    this.ripPaper()
-    this.outOfPlayground({position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}})
+    // this.ripPaper()
+    this.outOfPlayground({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}})
     // this.catch()
-    setInterval(this.catch(), 3000)
 
   },
   computed: {
@@ -363,6 +383,10 @@ export default {
     //     console.log("USER DATA: " + event.stream.connection.data);
     //   });
     // }
+    roomInfo() {
+      console.log("roomInfo at MapView");
+      console.log(this.roomInfo);
+    }
   },
 };
 </script>

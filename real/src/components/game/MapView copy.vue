@@ -319,7 +319,9 @@ export default {
     },
   },
   created() {
-    this.enrollEvent();
+    setTimeout(() => {
+      this.enrollEvent();
+    }, 5500);
   },
   mounted() {
     this.ripPaper()

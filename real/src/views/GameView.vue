@@ -1,4 +1,5 @@
-<template>
+
+<template> 
   <!-- <div> -->
   <MenuView 
     v-if="menu" 
@@ -40,7 +41,8 @@
       </div>
     </div>
   </div>
-  <!-- <SpiningModalVue></SpiningModalVue> -->
+  <SpiningModalVue @spinningEnd="spinningEnd" v-if="spinningModal"></SpiningModalVue>
+  <RoleModalVue v-if="roleModal" @modalAllClose="modalAllClose"></RoleModalVue>
 
 </template>
 
@@ -49,9 +51,10 @@ import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue'
 import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
+import RoleModalVue from '@/components/game/RoleModalVue.vue'
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
-// import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
+import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
 
 export default {
 
@@ -61,7 +64,8 @@ export default {
     OpenViduVue,
     MenuView,
     ItemModal,
-    // SpiningModalVue
+    SpiningModalVue,
+    RoleModalVue,
   },
   async created() {
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
@@ -76,10 +80,12 @@ export default {
       .then(({ data }) => {
         if (data.code) {
           this.roomInfo = data.result;
+          console.log("GameView room info loaded");
         }
       })
     const info = JSON.parse(sessionStorage.info);
     this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
+    console.log("GameView created complete");
   },
   data() {
     return {
@@ -88,6 +94,8 @@ export default {
       itemModal: false,
       user: undefined,
       usedItem: [],
+      spinningModal: true,
+      roleModal: false,
       roomInfo: undefined,
     }
   },
@@ -156,6 +164,14 @@ export default {
     itemNo() {
       this.itemModal = false
     },
+    spinningEnd() {
+      this.spinningModal = false;
+      this.roleModal = true;
+    },
+    modalAllClose() {
+      console.log("-------------왔나요?????--------------");
+      this.roleModal = false;
+    }
   }
 }
 

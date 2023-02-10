@@ -1,6 +1,6 @@
 <template>
-    <div id="spining_container">
-        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <div id="spining_container" class="flex_center">
+        <div>
             <div style="width: 100vw; margin-bottom: 40px; font-size: 20px; text-align: center">
                 열심히 정보를 가져오는 중이에요
             </div>
@@ -16,59 +16,154 @@
                     <div></div>
                 </div>
             </div>
-            {{ user_info_list }}
+            <div style="text-align: center; margin-top: 20px;">
+                {{ display_info }}
+            </div>
+            <div class="flex_center" style="margin-top: 30px">
+                <GMapMap :center="roomcenter" :zoom="map_zoom" :options="{
+                    zoomControl: false,
+                    mapTypeControl: false,
+                    streetViewControl: false,
+                    fullscreenControl: false,
+                    minZoom: map_zoom,
+                    maxZoom: map_zoom,
+                }" class="map_size">
+                    <div v-for="(mk, idx) in location_list" :key="idx">
+                        <GMapMarker :icon="me_img" :animation=1 :position="roomcenter" v-if="mk.me == true" />
+                        <div v-else>
+                            <GMapMarker :icon="chuno_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
+                                v-if="mk.role == 'chuno'" />
+                            <GMapMarker :icon="slave_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
+                                v-else-if="mk.me == 'slave'" />
+                        </div>
+                    </div>
+                    <GMapCircle :radius="roomradius" :center="roomcenter" :options="gameCircle" />
+                </GMapMap>
+                <div class="map_size mak" @click="noTouch"></div>
+            </div>
+            <div :class="{div_hidden : !count_down_start}" style="text-align: center; font-size: 25px; margin-top: 20px;">
+                {{ count_down }}초 후에 게임이 시작되요!
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
-
+import me_img from '@/assets/runner.png'
+import chuno_img from '@/assets/Clock.svg'
+import slave_img from '@/assets/Door.svg'
 
 export default {
     data() {
         return {
+            count_down_start: false,
+            count_down : 5,
             room_id: this.$route.params.roomId,
-            user_info_list: [],
+            nickname: "",
             lat: 0,
             lng: 0,
+            info: undefined,
+            teamchuno: [],
+            teamslave: [],
+            my_position: undefined,
+            role: "cc",
+            player_len: 0,
+            cnt_len: 0,
+            location_list: [],
+            roomcenter: undefined,
+            roomradius: 0,
+            display_info: "백성을 추리고 있어요",
+            gameCircle: {
+                strokeColor: "#0000FF",
+                strokeOpacity: 0.3,
+                strokeWeight: 2,
+                fillColor: "#0000FF",
+                fillOpacity: 0.15,
+            },
+            me_img: me_img,
+            chuno_img: chuno_img,
+            slave_img: slave_img,
         }
     },
-    created() {
+    computed: {
+        map_zoom() {
+            return 16 - (this.roomradius - 250) * 0.00224;
+        }
+    },
+    async created() {
+        this.conn.onmessage = (e) => {
+            var content = JSON.parse(e.data);
+            if (content.type == 'receivelocation') {
+                this.location_list.push({ "nickname": content.nickname, "role": content.info.role, "lat": content.info.lat, "lng": content.info.lat, "me": (content.nickname == this.nickname) ? (true) : (false) });
+                this.cnt_len++;
+                this.display_info = this.cnt_len + " / " + this.player_len;
+                if (this.cnt_len == this.player_len) {
+                    this.display_info = "모든 사용자로 부터 정보를 받아왔어요!"
+                    var count = setInterval(() => {
+                        this.count_down_start = true;
+                        this.count_down--;
+                        if (this.count_down == 0) {
+                            clearInterval(count);
+                            this.$emit("spinningEnd");
+                        }
+                    }, 1000);
+                    count();
+                }
+            }
+        }
+        this.info = JSON.parse(sessionStorage.getItem("info"));
+        this.roomradius = this.info.radius;
+        this.roomcenter = { lat: this.info.roomlat, lng: this.info.roomlng };
+
+        this.nickname = await this.axios.get(process.env.VUE_APP_SPRING + "user", { headers: { Authorization: sessionStorage.getItem("token") } }).then(res => res.data.result.nickname);
+        this.teamchuno = this.info.teamchuno.map((e) => e.nickname);
+        if (this.teamchuno.includes(this.nickname)) this.role = "chuno";
+        this.teamslave = this.info.teamslave.map((e) => e.nickname);
+        if (this.teamslave.includes(this.nickname)) this.role = "slave";
+        this.player_len = this.teamchuno.length + this.teamslave.length;
+        this.display_info = "0 / " + this.player_len;
         navigator.geolocation.getCurrentPosition(this.getPositionValue);
     },
     methods: {
         async getPositionValue(val) {
             this.lat = val.coords.latitude;
             this.lng = val.coords.longitude;
-            console.log(this.lat, this.lng)
-            this.conn.onmessage = (e) => {
-                console.log("---------------/----------------/---------------")
-                var content = JSON.parse(e.data);
-                if (content.type == 'receivelocation') {
-                    console.log("위치를 받을게요");
-                    console.log(e);
-                }
-            }
-
-            var nickname = await axios.get(process.env.VUE_APP_SPRING + "user", { headers: { Authorization: sessionStorage.getItem("token") } }).then(res=>res.data.result.nickname);
 
             this.conn.send(JSON.stringify({
                 "event": "sendlocation",
-                "nickname": nickname,
+                "nickname": this.nickname,
                 "room": this.room_id,
                 "startData": {
+                    "role": this.role,
                     "lat": this.lat,
                     "lng": this.lng,
                 }
             }))
         },
+        noTouch(e) {
+            e.stopPropagation();
+        }
     }
 }
 
 </script>
 
 <style lang="scss" scoped>
+$map_width: 100vw * 0.9;
+$map_height: $map_width;
+
+.div_hidden {
+    visibility: hidden;
+}
+.map_size {
+    height: $map_height;
+    width: $map_height;
+}
+
+.mak {
+    position: absolute;
+    // background-color: rgb(100, 0, 0, 0.5);
+}
 #spining_container {
     position: absolute;
     z-index: 10000;
