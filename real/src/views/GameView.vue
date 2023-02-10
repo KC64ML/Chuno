@@ -60,7 +60,7 @@ export default {
 
   name: 'GameView',
   components: {
-
+    MapView,
     OpenViduVue,
     MenuView,
     ItemModal,
