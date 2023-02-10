@@ -282,7 +282,7 @@ public class RoomService {
         Random random = new Random();
         double lat = roomStartDto.getLat();
         double lng = roomStartDto.getLng();
-        double radius = roomStartDto.getRadius() * 0.7;
+        double radius = roomStartDto.getRadius();
         double radiusInDegrees = radius / 111000f;
 
         for(int i =0 ;i< roomStartDto.getCurrentPlayers() * 2; i++){
