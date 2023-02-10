@@ -335,10 +335,11 @@ export default {
                 others : marker,
               }
             }
-          }
+          
         ));
       } else {
         console.log('잡을 수 없음')
+      }
       }
     },
   },
