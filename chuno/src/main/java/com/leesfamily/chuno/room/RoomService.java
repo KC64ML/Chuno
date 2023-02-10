@@ -279,15 +279,17 @@ public class RoomService {
         // random 좌표를 구한다.
         List<RoomGameStartSlaveDocumentDto> resList = new ArrayList<>();
         // n 번 돌린다.
-//        Random random = new Random();
+        Random random = new Random();
         double lat = roomStartDto.getLat();
         double lng = roomStartDto.getLng();
         double radius = roomStartDto.getRadius() * 0.7;
         double radiusInDegrees = radius / 111000f;
 
         for(int i =0 ;i< roomStartDto.getCurrentPlayers() * 2; i++){
-            double u = Math.random();
-            double v = Math.random();
+//            double u = Math.random();
+//            double v = Math.random();
+            double u = random.nextDouble();
+            double v = random.nextDouble();
             double w = radiusInDegrees * Math.sqrt(u);
             double t = 2 * Math.PI * v;
             double x = w * Math.cos(t);
