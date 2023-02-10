@@ -19,7 +19,6 @@
             <div style="text-align: center; margin-top: 20px;">
                 {{ display_info }}
             </div>
-            {{ roomcenter }} {{ roomradius }}
             <div class="flex_center" style="margin-top: 30px">
                 <GMapMap :center="roomcenter" :zoom="map_zoom" :options="{
                     zoomControl: false,
@@ -42,10 +41,9 @@
                 </GMapMap>
                 <div class="map_size mak" @click="noTouch"></div>
             </div>
-            <div :class="{div_hidden : !count_down_start}">
-                {{ count_down }}
+            <div :class="{div_hidden : !count_down_start}" style="text-align: center; font-size: 25px; margin-top: 20px;">
+                {{ count_down }}초 후에 게임이 시작되요!
             </div>
-            {{ location_list }}
         </div>
     </div>
 </template>
