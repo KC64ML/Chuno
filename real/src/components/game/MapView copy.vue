@@ -241,8 +241,8 @@ export default {
         .then((coordinates) => {
         this.location.lat = coordinates.lat
         this.location.lng = coordinates.lng
-        console.log(this.me.lat)
-        console.log(this.me.lng)
+        console.log(this.location.lat)
+        console.log(this.location.lng)
         // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
         this.catch()
         // this.ripPaper()
