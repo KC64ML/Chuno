@@ -46,15 +46,20 @@
           <!-- :clickable="true" -->
       </div>
       <!-- 다른 플레이어 위치 -->
-      <div
+      <!-- <div
         v-for="m in others"
         :key="m.nickname"
         @click="ripPaper(m)"
+      > -->
+      <div
+        v-for="o in others.length"
+        :key="o"
+        @click="ripPaper(others[o])"
       >
         <GMapMarker
-          v-if="!m.myMarker"
+          v-if="!others[o].myMarker"
           :icon=othersMarkerImg
-          :position="m.location"
+          :position="others[o].location"
           :clickable="true"
         />
       </div>
