@@ -58,7 +58,7 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
 
 export default {
     beforeRouteLeave(to, from, next) {
-        this.leave_room();
+        if (to.name != "game") this.leave_room();
         next();
     },
     components: {
@@ -185,17 +185,17 @@ export default {
                 "userNickNameList": userNickNameList,
             }).then(res => res.data)
 
-            console.log(data.roomSlaveDocumentList);
             var user_len = data.roomDecideChunoOrSlaveList.length;
-            console.log(data.roomDecideChunoOrSlaveList.slice(0, user_len / 2));
-            console.log(data.roomDecideChunoOrSlaveList.slice(user_len/2, user_len));
-
             var team_slave = data.roomDecideChunoOrSlaveList.slice(0, user_len / 2);
             var team_chuno = data.roomDecideChunoOrSlaveList.slice(user_len/2, user_len);
+            console.log(data.roomStartDto.lat)
             this.conn.send(JSON.stringify({
                 "event": "startGame",
                 "room": roomId,
                 "startData": {
+                    "radius": data.roomStartDto.radius,
+                    "roomlat": data.roomStartDto.lat,
+                    "roomlng": data.roomStartDto.lng,
                     "slavepaper": data.roomSlaveDocumentList,
                     "teamslave": team_slave,
                     "teamchuno": team_chuno,
