@@ -123,6 +123,14 @@ export default {
     text-align: center;
     font-weight: bold;
     font-size: 30px;
+    animation-name: plus_button;
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
+}
+@keyframes plus_button {
+    50% {
+        transform: translateY(-50%);
+    }
 }
 
 

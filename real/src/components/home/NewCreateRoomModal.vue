@@ -263,7 +263,7 @@ $plma_size: 30px;
     border-radius: 10px;
     animation-name: modal_appearance;
     animation-iteration-count: 1;
-    animation-duration: 1s;
+    animation-duration: 0.8s;
 }
 
 #close_button {
