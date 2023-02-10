@@ -1,45 +1,55 @@
-<template>
-  <!-- <div>
-    <MenuView v-if="menu" @use-item="useItem" style="position:absolute; bottom: 60px;" />
-    <ItemModal v-if="itemModal" :usedItem="usedItem" @item-yes="itemYes" @item-no="itemNo"
-      style="position:absolute; bottom: 60px;" />
-    <div>
+<template> 
+  <!-- <div> -->
+  <MenuView 
+    v-if="menu" 
+    @use-item="useItem"
+    style="position:absolute; bottom: 60px;"
+  />
+  <ItemModal 
+    v-if="itemModal" 
+    :usedItem="usedItem" 
+    @item-yes="itemYes"
+    @item-no="itemNo" 
+    @on-modal="OnModal"
+    style="position:absolute; bottom: 60px;"
+   />
+  <div>
+    
+    <OpenViduVue
+    :my_cam_modal="my_cam_modal"
+    :user="user"></OpenViduVue>
+    <MapView :user="user" :roomInfo="roomInfo" />
 
-      <OpenViduVue :my_cam_modal="my_cam_modal" :user="user"></OpenViduVue>
-      <MapView /> -->
-
-      <!-- 아이템 사용 -->
-      <!-- <div v-if="this.$store.state.itemModal"> -->
-      <!-- </div> -->
-
-      <!-- <div id="footer_container">
-        <div class="menu_box flex_center" @click="this.$router.push('/home')">
-          <img class="menu" src="@/assets/game_chat.png">
-        </div>
-        <div> -->
-          <!-- 채팅창 수정 필요 -->
-          <!-- <input class="map_search" type="text" placeholder="채팅을 입력해 주세요">
-        </div>
-        <div class="menu_box" @click="myCam">
-          <img class="menu" src="@/assets/game_myCam.png">
-        </div>
-        <div class="menu_box" @click="onMenu">
-          <img class="menu" src="@/assets/game_menu.png">
-        </div>
+    <!-- 아이템 사용 -->
+    <!-- <div v-if="this.$store.state.itemModal"> -->
+    <!-- </div> -->
+    
+    <div id="footer_container">
+      <div class="menu_box flex_center" @click="this.$router.push('/home')">
+        <img class="menu" src="@/assets/game_chat.png">
+      </div>
+      <div>
+        <!-- 채팅창 수정 필요 -->
+        <input class="map_search" type="text" placeholder="채팅을 입력해 주세요">
+      </div>
+      <div class="menu_box" @click="myCam">
+        <img class="menu" src="@/assets/game_myCam.png">
+      </div>
+      <div class="menu_box" @click="onMenu">
+        <img class="menu" src="@/assets/game_menu.png">
       </div>
     </div>
-  </div> -->
+  </div>
   <SpiningModalVue @spinningEnd="spinningEnd" v-if="spinningModal"></SpiningModalVue>
-  <FirstMapModal v-if="firstMapModal" :location_list="firstMapModalProp"></FirstMapModal>
 
 </template>
 
 <script>
-// import OpenViduVue from '@/components/game/OpenViduVue.vue'
-// import MapView from '@/components/game/MapView.vue'
-// import MenuView from '@/components/game/MenuView.vue'
-// import ItemModal from '@/components/game/ItemModal.vue'
-// const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
+import OpenViduVue from '@/components/game/OpenViduVue.vue'
+import MapView from '@/components/game/MapView.vue'
+import MenuView from '@/components/game/MenuView.vue'
+import ItemModal from '@/components/game/ItemModal.vue'
+const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
 
@@ -47,24 +57,32 @@ export default {
 
   name: 'GameView',
   components: {
-    // MapView,
-    // OpenViduVue,
-    // MenuView,
-    // ItemModal,
-    SpiningModalVue,
+    MapView,
+    OpenViduVue,
+    MenuView,
+    ItemModal,
+    SpiningModalVue
   },
-  // async created() {
-  //   await this.axios.get(APPLICATION_SERVER_URL + 'user',
-  //     {
-  //       headers: { Authorization: sessionStorage.token }
-  //     }).then(({ data }) => {
-  //       if (data.code) {
-  //         this.user = data.result;
-  //       }
-  //     });
-  //   const info = JSON.parse(sessionStorage.info);
-  //   this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
-  // },
+  async created() {
+    await this.axios.get(APPLICATION_SERVER_URL + 'user',
+          {
+              headers: { Authorization: sessionStorage.token }
+          }).then(({ data }) => {
+              if (data.code) {
+                  this.user = data.result;
+              }
+          });
+    await this.axios.get(APPLICATION_SERVER_URL + 'room/' + this.$route.params.roomId)
+      .then(({ data }) => {
+        if (data.code) {
+          this.roomInfo = data.result;
+          console.log("GameView room info loaded");
+        }
+      })
+    const info = JSON.parse(sessionStorage.info);
+    this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
+    console.log("GameView created complete");
+  },
   data() {
     return {
       my_cam_modal: { active: false },
@@ -73,6 +91,7 @@ export default {
       user: undefined,
       usedItem: [],
       spinningModal: true,
+      roomInfo: undefined,
     }
   },
   methods: {
@@ -97,24 +116,26 @@ export default {
       this.my_cam_modal.active = !this.my_cam_modal.active
       console.log("mycam 눌림");
     },
-    useItem(item) {
+    useItem(item){
+      console.log('게임뷰임. 사용한 아이템표시')
+      console.log(item)
       this.usedItem = item
       this.itemModal = true
+      console.log(this.itemModal)
       console.log('아이템 사용')
-      console.log(item)
     },
     itemYes(item) {
       this.itemModal = false
       //아이템 사용
-      if (item.id == 1) {
-        // 천리안
+      if(item.id == 1){
+        // 천리안: 가장 가까운 추노꾼 위치 표시
         console.log(item)
-      } else if (item.id == 2) {
-        // 위장
+      } else if (item.id == 2){
+        // 위장: 추노꾼의 catch 범위 축소
         console.log(item)
 
       } else if (item.id == 3) {
-        // 확실한 정보통: 30초간 노비 위치 표시
+        // 확실한 정보통: 진짜 노비 문서 위치 표시
         console.log(item)
         this.visibility = true
         setTimeout(this.visibility = true, 30000)
@@ -122,11 +143,11 @@ export default {
       } else if (item.id == 4) {
         // 먹물탄
         console.log(item)
-      } else if (item.id == 5) {
-        // 조명탄
+      } else if (item.id == 5){
+        // 조명탄: 30초간 노비 위치 표시
         console.log(item)
-      } else if (item.id == 6) {
-        // 긴 오랏줄
+      } else if (item.id == 6){
+        // 긴 오랏줄: 노비 catch 범위 확대
         console.log(item)
       } else {
         // 연막탄

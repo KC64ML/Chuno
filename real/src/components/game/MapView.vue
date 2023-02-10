@@ -1,6 +1,6 @@
 <template>
     <GMapMap
-      :center="me"
+      :center="location"
       :zoom="18"
       :options="{
         zoomControl: true,
@@ -14,19 +14,19 @@
     >
       <!-- 플레이 영역 표시 -->
       <GMapCircle
-        :radius="roomInfo.radius"
-        :center="{lat: roomInfo.lat, lng: roomInfo.lng}"
+        :radius="roomInfo?.radius"
+        :center="{lat: roomInfo?.lat, lng: roomInfo?.lng}"
         :options="playgroundOptions"
       />
       <!-- 내 위치 -->
       <div v-if="myMarker">
         <GMapMarker
           :animation=4
-          :position=this.me
+          :position=this.location
         />
         <GMapCircle
           :radius="catchRadius"
-          :center="me"
+          :center="location"
           :options="circleOptions"
         />
       </div>
@@ -41,19 +41,20 @@
           :icon=paperMarkerImg
           :animation=1
           :position="m.position"
-          :clickable="true"
-        />
+          @click="openInfoWindow(marker.id)"
+          />
+          <!-- :clickable="true" -->
       </div>
       <!-- 다른 플레이어 위치 -->
       <div
         v-for="m in others"
-        :key="m.id"
-        @click="ripPaper(m)"
+        :key="m"
+        @click="ripPaper(others[m])"
       >
         <GMapMarker
-          v-if="!m.ripped"
+          v-if="!others[m].myMarker"
           :icon=othersMarkerImg
-          :position="m.position"
+          :position="others[m].location"
           :clickable="true"
         />
       </div>
@@ -73,12 +74,23 @@ export default {
   props:{
     // papers: Object, // 노비 문서 정보
     // others: Object, // 다른 플레이어 위치 정보
+    user: Object, // 내 정보
+    roomInfo: {
+      type: Object,
+      default() {
+        return {
+          lat: 0,
+          lng: 0,
+          radius: 0,
+        }
+      }
+    }, // 방 정보
   },
   data() {
     return {
       // 나랑 관련된 정보
       myMarker: true,
-      me: {
+      location: {
         lat: null,
         lng: null,
       },
@@ -96,7 +108,7 @@ export default {
         scaledSize: { width: 40, height: 40 }
       },
       // 다른 플레이어 관련 정보
-      others: [], //props로
+      others: {}, //props로
       othersMarkerImg: {
         url: othersMarker,
         scaledSize: { width: 40, height: 40 }
@@ -121,38 +133,59 @@ export default {
       //   host_id: "gogo",
       //   room_start_time: new Date(2023, 1, 1, 13, 20, 0)
       //   },
-      roomInfo: {
-        room_id: 1,
-        title: "방이름1",
-        is_public: true,
-        password: null,
-        lat: 36.103879,
-        lng: 128.4187361,
-        radius: 1000,
-        host_id: "gogo",
-        room_start_time: new Date(2023, 1, 1, 13, 20, 0)
-      },
     };
   },
   methods: {                  
-    // 노비 문서 생성 -> 백에서 받아오는 API로 수정하기
-    generatePapers(){
-      console.log('2. generatePapers 함수 실행')
-
-      for(let i = 0; i < 10; i++) {
-        const randomPoint = randomLocation.randomCirclePoint({latitude: this.roomInfo.lat, longitude: this.roomInfo.lng}, this.roomInfo.radius*0.9)
-        let real
-        if(i < 5){
-          real = true
-        } else {
-          real = false
+    enrollEvent() {
+      new Promise((resolve) => {
+        this.conn.onmessege = (e) => {
+          const content = JSON.parse(e);
+          if (content.type == "othersLocation") {
+            const other = content.info; // startData가 여기 담겨잇다.
+            this.others[other.nickname] = {
+              nickname: other.nickname,
+              role: other.role,
+              location: other.location,
+              myMarker: other.myMarker
+            };
+            this.catch(other);
+            
+          } else if (content.type == "") {
+            /* 뭔가 하자 */
+          }
         }
+        resolve();
+      }).then(() => {
+        this.init();
+      })
+    },
+    init() {
+      // 자이로스코프 인식
+      window.addEventListener('deviceorientation', this.handleOrientation)
+      
+      var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+
+      if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+          //IOS
+          console.log('iOS')
+          this.onGyro()
+      }
+
+      // 내 위치
+      setInterval(() => {this.myLocation()}, 3000);
+      // this.myLocation()
+      // 노비 문서 위치
+      console.log('노비 문서 가져오기')
+      const info = JSON.parse(sessionStorage.info)
+      const papers = info.slavepaper
+      for (let i = 0; i < papers.length; i++){
+        console.log(i)
         this.papers.push({ 
-          id: i,
-          position: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
-          real: real,
-          ripped: false,
-        })
+              id: i,
+              location: { lat: papers[i].lat, lng: papers[i].lng } ,
+              real: papers[i].real,
+              ripped: false,
+            })
       }
       console.log(this.papers)
     },
@@ -169,7 +202,7 @@ export default {
         }
         this.others.push({ 
           id: i,
-          position: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
+          location: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
           real: real,
           ripped: false,
         })
@@ -183,6 +216,7 @@ export default {
       const distance = this.calculateDistance(marker)
       if(distance > this.catchRadius) {
         console.log('노비문서를 확인하시겠습니까?')
+        alert('노비문서를 확인하시겠습니까?')
       }
     },
     // 범위 밖으로 나갈 시 경고
@@ -197,20 +231,33 @@ export default {
     // 내 위치
     myLocation() {
       console.log('1. myLocation 함수 실행')
-      this.$watchLocation({enableHighAccuracy: true})
+      this.$getLocation({enableHighAccuracy: true})
       .then((coordinates) => {
-        this.me.lat = coordinates.lat
-        this.me.lng = coordinates.lng
-        console.log(this.me.lat)
-        console.log(this.me.lng)
+        this.location.lat = coordinates.lat
+        this.location.lng = coordinates.lng
+        console.log(this.location.lat)
+        console.log(this.location.lng)
         // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
-        this.catch()
+        // this.catch()
         // this.ripPaper()
         // const roomCenter = { position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} }
         // console.log('---------------------')
         // console.log(roomCenter)
         // this.outOfPlayground({ position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} })
         // 위치 공유
+        this.conn.send(JSON.stringify(
+          {
+            event:"playerLocation",
+            nickname: this.user.nickname,
+            room: this.roomInfo.id,
+            startData: {
+              nickname: this.user.nickname,
+              role: this.user.role,
+              location: this.location,
+              myMarker: this.myMarker,
+            }
+          }
+        ));
         // this.session.on("streamCreated", function (event) {
         //   this.session.subscribe(event.stream, "subscriber");
         //   // const USER_DATA = {}
@@ -248,13 +295,14 @@ export default {
       }
       // console.log(window)
     },
+    // 나와 marker의 거리 계산
     calculateDistance(marker){
       console.log('!!calculateDistance 함수 실행됨')
       console.log(marker)
-      const lat1 = this.me.lat
-      const lng1 = this.me.lng
-      const lat2 = marker.position.lat
-      const lng2 = marker.position.lng
+      const lat1 = this.location.lat
+      const lng1 = this.location.lng
+      const lat2 = marker['location'].lat
+      const lng2 = marker['location'].lng
       const r = 6371; //지구의 반지름(km)
       const dLat = (lat2-lat1) * (Math.PI/180)
       const dLon = (lng2-lng1) * (Math.PI/180)
@@ -265,39 +313,43 @@ export default {
       return distance
     },
     // 노비 잡기
-    catch(){
+    catch(marker){
       console.log('!! catch 함수 실행되기는 함')
-      for(const marker of this.papers){
-        const distance = this.calculateDistance(marker)
-        if(distance <= this.catchRadius){
-          console.log('잡을 수 있음')
-        } else {
-          console.log('잡을 수 없음')
-        }
+      const distance = this.calculateDistance(marker)
+      if(distance <= this.catchRadius){
+        alert('잡으세요.')
+        // console.log('잡을 수 있음')
+        this.conn.send(JSON.stringify(
+          {
+            event:'catch',
+            // nickname:(선택),
+            room: this.roomInfo.id,
+            startData: {
+              others : marker,
+            }
+          }
+        ));
+      } else {
+        console.log('잡을 수 없음')
       }
     },
   },
   created() {
-    // 자이로스코프 인식
-    window.addEventListener('deviceorientation', this.handleOrientation)
-    
-    var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
-
-    if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
-        //IOS
-        console.log('iOS')
-        this.onGyro()
-    }
-
+    console.log("MapView created start");
     // 내 위치
-    this.myLocation()
-    // setInterval(this.myLocation(),1000)
-    this.generatePapers()
-    this.generatePlayer()
+    // this.myLocation()
+    // setInterval(this.myLocation(),1000) */
+    this.enrollEvent();
+    
+    // this.catch()
+
+
+    // this.generatePlayer()
+
   },
   mounted() {
-    this.ripPaper()
-    this.outOfPlayground({position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}})
+    // this.ripPaper()
+    this.outOfPlayground({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}})
     // this.catch()
 
   },
@@ -306,22 +358,26 @@ export default {
       return this.roomInfo.radius * 0.1
     }
   },
-  // watch: {
-  //   player(){
-  //     // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
-  //     this.catch()
-  //     this.ripPaper()
-  //     const roomCenter = { position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} }
-  //     console.log(roomCenter)
-  //     this.outOfPlayground(roomCenter)
-  //     // 위치 공유
-  //     this.session.on("streamCreated", function (event) {
-  //       this.session.subscribe(event.stream, "subscriber");
-  //       // const USER_DATA = {}
-  //       console.log("USER DATA: " + event.stream.connection.data);
-  //     });
-  //   }
-  // },
+  watch: {
+    // player(){
+    //   // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
+    //   this.catch()
+    //   this.ripPaper()
+    //   const roomCenter = { position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} }
+    //   console.log(roomCenter)
+    //   this.outOfPlayground(roomCenter)
+    //   // 위치 공유
+    //   this.session.on("streamCreated", function (event) {
+    //     this.session.subscribe(event.stream, "subscriber");
+    //     // const USER_DATA = {}
+    //     console.log("USER DATA: " + event.stream.connection.data);
+    //   });
+    // }
+    roomInfo() {
+      console.log("roomInfo at MapView");
+      console.log(this.roomInfo);
+    }
+  },
 };
 </script>
 
