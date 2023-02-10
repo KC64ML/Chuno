@@ -139,6 +139,7 @@ export default {
     enrollEvent() {
       new Promise((resolve) => {
         this.conn.onmessege = (e) => {
+          console.log(e);
           const content = JSON.parse(e.data);
           if (content.type == "othersLocation") {
             const other = content.info; // startData가 여기 담겨잇다.
