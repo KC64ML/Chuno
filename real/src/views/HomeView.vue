@@ -1,6 +1,5 @@
-<template>
-    <!-- <CreateRoomModal></CreateRoomModal> -->
-    <NewCreateRoomModal v-if="modal_show" @modal_off="modalOff()" :player="{'lat': lat, 'lng': lng}"/>
+<template> 
+    <NewCreateRoomModal class="" v-if="modal_show" @modal_off="modalOff()" :player="{'lat': lat, 'lng': lng}"/>
     <HeaderVue :title="'홈'"></HeaderVue>
     <div id="room_box" style="height: 80%; overflow: scroll;" class:="scroll">
         <room-card v-for="(room, idx) in roomList" :key="idx" v-bind:room="room"></room-card>
