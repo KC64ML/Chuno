@@ -157,8 +157,21 @@ export default {
       // 내 위치
       setInterval(this.myLocation(), 3000);
       // this.myLocation()
-      // setInterval(this.myLocation(),1000)
-      this.generatePapers()
+
+      console.log('노비 문서 가져오기')
+      const info = JSON.parse(sessionStorage.info)
+      const papers = info.slavepaper
+      for (let i = 0; i < papers.length; i++){
+        console.log(i)
+        this.papers.push({ 
+              id: i,
+              position: { lat: papers[i].lat, lng: papers[i].lng } ,
+              real: papers[i].real,
+              ripped: false,
+            })
+      }
+      console.log(this.papers)
+
       this.generatePlayer()
     },
     
@@ -306,11 +319,7 @@ export default {
     },
   },
   created() {
-    
-
     this.enrollEvent();
-    
-
   },
   mounted() {
     this.ripPaper()
