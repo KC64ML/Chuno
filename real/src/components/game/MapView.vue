@@ -52,14 +52,14 @@
         @click="ripPaper(m)"
       > -->
       <div
-        v-for="o in others.length"
-        :key="o"
-        @click="ripPaper(others[o])"
+        v-for="(o, key, idx) in others"
+        :key="idx"
+        @click="ripPaper(o)"
       >
         <GMapMarker
-          v-if="!others[o].myMarker"
+          v-if="!o.myMarker"
           :icon=othersMarkerImg
-          :position="others[o].location"
+          :position="o.location"
           :clickable="true"
         />
       </div>
