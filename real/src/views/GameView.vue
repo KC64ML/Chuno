@@ -42,7 +42,7 @@
     </div>
   </div>
   <SpiningModalVue @spinningEnd="spinningEnd" v-if="spinningModal"></SpiningModalVue>
-  <RoleModalVue v-if="roleModal"></RoleModalVue>
+  <RoleModalVue v-if="roleModal" @modalAllClose="modalAllClose"></RoleModalVue>
 
 </template>
 
@@ -167,6 +167,10 @@ export default {
     spinningEnd() {
       this.spinningModal = false;
       this.roleModal = true;
+    },
+    modalAllClose() {
+      this.spinningModal = false;
+      this.roleModal = false;
     }
   }
 }
