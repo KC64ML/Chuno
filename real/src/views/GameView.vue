@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <!-- <div> -->
   <MenuView 
     v-if="menu" 
     @use-item="useItem"
