@@ -171,6 +171,7 @@ export default {
     modalAllClose() {
       console.log("-------------왔나요?????--------------");
       this.spinningModal = false;
+      this.roleModal = false;
     }
   }
 }
