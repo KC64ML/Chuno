@@ -316,8 +316,8 @@ public class RoomService {
             double y = lng + (rlng * Math.cos(theta));
             double x = lat + (rlat * Math.sin(theta));
 
-            if(i < roomStartDto.getCurrentPlayers()) resList.add(new RoomGameStartSlaveDocumentDto(y, x, true));
-            else resList.add(new RoomGameStartSlaveDocumentDto(y, x, false));
+            if(i < roomStartDto.getCurrentPlayers()) resList.add(new RoomGameStartSlaveDocumentDto(x, y, true));
+            else resList.add(new RoomGameStartSlaveDocumentDto(x, y, false));
 //            System.out.println("idx : " + idx + "distance : " + distance + " radius" + radius + " new_x : " + new_x);
         }
         // Convert radius from meters to degrees
