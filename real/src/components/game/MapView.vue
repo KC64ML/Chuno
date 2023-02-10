@@ -320,26 +320,22 @@ export default {
     // 노비 잡기
     catch(marker){
       console.log('!! catch 함수 실행되기는 함')
-      for(const marker of this.others){
-        const distance = this.calculateDistance(marker)
-        if(distance <= this.catchRadius){
-          // alert('잡으세요.')
-          console.log('잡을 수 있음')
-          console.log(marker)
-          this.conn.send(JSON.stringify(
-            {
-              event:'catch',
-              // nickname:(선택),
-              room: this.roomInfo.id,
-              startData: {
-                others : marker,
-              }
+      const distance = this.calculateDistance(marker)
+      if(distance <= this.catchRadius){
+        alert('잡으세요.')
+        // console.log('잡을 수 있음')
+        this.conn.send(JSON.stringify(
+          {
+            event:'catch',
+            // nickname:(선택),
+            room: this.roomInfo.id,
+            startData: {
+              others : marker,
             }
-          
+          }
         ));
       } else {
         console.log('잡을 수 없음')
-      }
       }
     },
   },
@@ -350,7 +346,7 @@ export default {
     // setInterval(this.myLocation(),1000) */
     setTimeout(() => {
       this.enrollEvent();
-    }, 5500);
+    }, 10000);
     
     // this.catch()
 
