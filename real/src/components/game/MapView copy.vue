@@ -238,18 +238,7 @@ export default {
         // console.log(roomCenter)
         // this.outOfPlayground({ position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} })
         // 위치 공유
-        this.conn.send(JSON.stringify(
-          {
-            event:"playerLocation",
-            nickname: this.user.nickname,
-            room: this.roomInfo.id,
-            startData: {
-              nickname: this.user.nickname,
-              role: this.user.role,
-              location: this.user.location,
-            }
-          }
-        ));
+        
         // this.session.on("streamCreated", function (event) {
         //   this.session.subscribe(event.stream, "subscriber");
         //   // const USER_DATA = {}

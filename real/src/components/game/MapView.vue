@@ -74,12 +74,14 @@ export default {
   props:{
     // papers: Object, // 노비 문서 정보
     // others: Object, // 다른 플레이어 위치 정보
+    user: Object, // 내 정보
+    roomInfo: Object, // 방 정보
   },
   data() {
     return {
       // 나랑 관련된 정보
       myMarker: true,
-      me: {
+      location: {
         lat: null,
         lng: null,
       },
@@ -97,7 +99,7 @@ export default {
         scaledSize: { width: 40, height: 40 }
       },
       // 다른 플레이어 관련 정보
-      others: [], //props로
+      others: {}, //props로
       othersMarkerImg: {
         url: othersMarker,
         scaledSize: { width: 40, height: 40 }
@@ -122,41 +124,55 @@ export default {
       //   host_id: "gogo",
       //   room_start_time: new Date(2023, 1, 1, 13, 20, 0)
       //   },
-      roomInfo: {
-        room_id: 1,
-        title: "방이름1",
-        is_public: true,
-        password: null,
-        lat: 36.103879,
-        lng: 128.4187361,
-        radius: 1000,
-        host_id: "gogo",
-        room_start_time: new Date(2023, 1, 1, 13, 20, 0)
-      },
     };
   },
   methods: {                  
-    // 노비 문서 생성 -> 백에서 받아오는 API로 수정하기
-    // generatePapers(){
-    //   console.log('2. generatePapers 함수 실행')
+    enrollEvent() {
+      new Promise((resolve) => {
+        this.conn.onmessege = (e) => {
+          const content = JSON.parse(e);
+          if (content.type == "othersLocation") {
+            const other = content.info; // startData가 여기 담겨잇다.
+            this.others[other.userInfo.id] = other.location;
+          } else if (content.type == "") {
+            /* 뭔가 하자 */
+          }
+        }
+        resolve();
+      }).then(() => {
+        this.init();
+      })
+    },
+    init() {
+      // 자이로스코프 인식
+      window.addEventListener('deviceorientation', this.handleOrientation)
+      
+      var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
 
-    //   for(let i = 0; i < 10; i++) {
-    //     const randomPoint = randomLocation.randomCirclePoint({latitude: this.roomInfo.lat, longitude: this.roomInfo.lng}, this.roomInfo.radius*0.9)
-    //     let real
-    //     if(i < 5){
-    //       real = true
-    //     } else {
-    //       real = false
-    //     }
-    //     this.papers.push({ 
-    //       id: i,
-    //       position: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
-    //       real: real,
-    //       ripped: false,
-    //     })
-    //   }
-    //   console.log(this.papers)
-    // },
+      if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+          //IOS
+          console.log('iOS')
+          this.onGyro()
+      }
+
+      // 내 위치
+      setInterval(this.myLocation(), 3000);
+      // this.myLocation()
+      // 노비 문서 위치
+      console.log('노비 문서 가져오기')
+      const info = JSON.parse(sessionStorage.info)
+      const papers = info.slavepaper
+      for (let i = 0; i < papers.length; i++){
+        console.log(i)
+        this.papers.push({ 
+              id: i,
+              position: { lat: papers[i].lat, lng: papers[i].lng } ,
+              real: papers[i].real,
+              ripped: false,
+            })
+      }
+      console.log(this.papers)
+    },
     generatePlayer(){
       console.log('2. generatePapers 함수 실행')
 
@@ -213,6 +229,18 @@ export default {
         // console.log(roomCenter)
         // this.outOfPlayground({ position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} })
         // 위치 공유
+        this.conn.send(JSON.stringify(
+          {
+            event:"playerLocation",
+            nickname: this.user.nickname,
+            room: this.roomInfo.id,
+            startData: {
+              nickname: this.user.nickname,
+              role: this.user.role,
+              location: this.user.location,
+            }
+          }
+        ));
         // this.session.on("streamCreated", function (event) {
         //   this.session.subscribe(event.stream, "subscriber");
         //   // const USER_DATA = {}
@@ -292,36 +320,13 @@ export default {
     },
   },
   created() {
-    // 자이로스코프 인식
-    window.addEventListener('deviceorientation', this.handleOrientation)
-    
-    var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
-
-    if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
-        //IOS
-        console.log('iOS')
-        this.onGyro()
-    }
 
     // 내 위치
     console.log('내 위치 가져오기')
-    this.myLocation()
-    // setInterval(this.myLocation(),1000)
-
-    // 노비 문서 위치
-    console.log('노비 문서 가져오기')
-    const info = JSON.parse(sessionStorage.info)
-    const papers = info.slavepaper
-    for (let i = 0; i < papers.length; i++){
-      console.log(i)
-      this.papers.push({ 
-            id: i,
-            position: { lat: papers[i].lat, lng: papers[i].lng } ,
-            real: papers[i].real,
-            ripped: false,
-          })
-    }
-    console.log(this.papers)
+    // this.myLocation()
+    // setInterval(this.myLocation(),1000) */
+    this.enrollEvent();
+    
     // this.catch()
 
 
