@@ -146,8 +146,10 @@ export default {
               nickname: other.nickname,
               role: other.role,
               location: other.location,
-              myMarker: this.myMarker
+              myMarker: other.myMarker
             };
+            this.catch(other);
+            
           } else if (content.type == "") {
             /* 뭔가 하자 */
           }
@@ -170,7 +172,7 @@ export default {
       }
 
       // 내 위치
-      setInterval(this.myLocation(), 3000);
+      setInterval(() => {this.myLocation()}, 3000);
       // this.myLocation()
       // 노비 문서 위치
       console.log('노비 문서 가져오기')
@@ -180,7 +182,7 @@ export default {
         console.log(i)
         this.papers.push({ 
               id: i,
-              position: { lat: papers[i].lat, lng: papers[i].lng } ,
+              location: { lat: papers[i].lat, lng: papers[i].lng } ,
               real: papers[i].real,
               ripped: false,
             })
@@ -200,7 +202,7 @@ export default {
         }
         this.others.push({ 
           id: i,
-          position: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
+          location: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
           real: real,
           ripped: false,
         })
@@ -299,8 +301,8 @@ export default {
       console.log(marker)
       const lat1 = this.location.lat
       const lng1 = this.location.lng
-      const lat2 = marker['position'].lat
-      const lng2 = marker['position'].lng
+      const lat2 = marker['location'].lat
+      const lng2 = marker['location'].lng
       const r = 6371; //지구의 반지름(km)
       const dLat = (lat2-lat1) * (Math.PI/180)
       const dLon = (lng2-lng1) * (Math.PI/180)
@@ -311,26 +313,24 @@ export default {
       return distance
     },
     // 노비 잡기
-    catch(){
+    catch(marker){
       console.log('!! catch 함수 실행되기는 함')
-      for(const marker of this.others){
-        const distance = this.calculateDistance(marker)
-        if(distance <= this.catchRadius){
-          alert('잡으세요.')
-          // console.log('잡을 수 있음')
-          this.conn.send(JSON.stringify(
-            {
-              event:'catch',
-              // nickname:(선택),
-              room: this.roomInfo.id,
-              startData: {
-                others : marker,
-              }
+      const distance = this.calculateDistance(marker)
+      if(distance <= this.catchRadius){
+        alert('잡으세요.')
+        // console.log('잡을 수 있음')
+        this.conn.send(JSON.stringify(
+          {
+            event:'catch',
+            // nickname:(선택),
+            room: this.roomInfo.id,
+            startData: {
+              others : marker,
             }
-          ));
-        } else {
-          console.log('잡을 수 없음')
-        }
+          }
+        ));
+      } else {
+        console.log('잡을 수 없음')
       }
     },
   },
@@ -348,10 +348,9 @@ export default {
 
   },
   mounted() {
-    this.ripPaper()
-    this.outOfPlayground({position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}})
+    // this.ripPaper()
+    this.outOfPlayground({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}})
     // this.catch()
-    setInterval(this.catch(), 3000)
 
   },
   computed: {
