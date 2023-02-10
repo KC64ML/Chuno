@@ -75,7 +75,16 @@ export default {
     // papers: Object, // 노비 문서 정보
     // others: Object, // 다른 플레이어 위치 정보
     user: Object, // 내 정보
-    roomInfo: Object, // 방 정보
+    roomInfo: {
+      type: Object,
+      default() {
+        return {
+          lat: 0,
+          lng: 0,
+          radius: 0,
+        }
+      }
+    }, // 방 정보
   },
   data() {
     return {
