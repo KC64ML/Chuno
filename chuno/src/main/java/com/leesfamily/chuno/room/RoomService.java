@@ -286,25 +286,38 @@ public class RoomService {
         double radiusInDegrees = radius / 111000f;
 
         for(int i =0 ;i< roomStartDto.getCurrentPlayers() * 2; i++){
+
 //            double u = Math.random();
 //            double v = Math.random();
-            double u = random.nextDouble();
-            double v = random.nextDouble();
-            double w = radiusInDegrees * Math.sqrt(u);
-            double t = 2 * Math.PI * v;
-            double x = w * Math.cos(t);
-            double y = w * Math.sin(t);
-
-            // Adjust the x-coordinate for the shrinking of the east-west distances
-            double new_x = x / Math.cos(lat);
+//            double u = random.nextDouble();
+//            double v = random.nextDouble();
+//            double w = radiusInDegrees * Math.sqrt(u);
+//            double t = 2 * Math.PI * v;
+//            double x = w * Math.cos(t);
+//            double y = w * Math.sin(t);
+//
+//            // Adjust the x-coordinate for the shrinking of the east-west distances
+//            double new_x = x / Math.cos(lat);
 
             // 거리를 계산
 //            double distance = (6371 * Math.acos(Math.cos(Math.toRadians(lat))
 //                    * Math.cos(Math.toRadians(new_x + lng)) * Math.cos(Math.toRadians(y + lat) - Math.toRadians(lng))
 //                    + Math.sin(Math.toRadians(lat)) * Math.sin(Math.toRadians(new_x + lng))));
 
-            if(i < roomStartDto.getCurrentPlayers()) resList.add(new RoomGameStartSlaveDocumentDto(y + lat, new_x + lng, true));
-            else resList.add(new RoomGameStartSlaveDocumentDto(y + lat, x + lng, false));
+            double d2r = Math.PI / 180;
+            double r2d = 180 / Math.PI;
+            double earth_rad = 6378000f; //지구 반지름 근사값
+
+            double r = new Random().nextInt((int)radius) + new Random().nextDouble();
+            double rlat = (r / earth_rad) * r2d;
+            double rlng = rlat / Math.cos(lat * d2r);
+
+            double theta = Math.PI * (new Random().nextInt(2) + new Random().nextDouble());
+            double y = lng + (rlng * Math.cos(theta));
+            double x = lat + (rlat * Math.sin(theta));
+
+            if(i < roomStartDto.getCurrentPlayers()) resList.add(new RoomGameStartSlaveDocumentDto(y, x, true));
+            else resList.add(new RoomGameStartSlaveDocumentDto(y, x, false));
 //            System.out.println("idx : " + idx + "distance : " + distance + " radius" + radius + " new_x : " + new_x);
         }
         // Convert radius from meters to degrees
@@ -339,5 +352,20 @@ public class RoomService {
 
         return resList;
     }
+
+//    public RoomGameStartSlaveDocumentDto getRandomLocation(double lat, double lng, int radius) {
+//        double d2r = Math.PI / 180;
+//        double r2d = 180 / Math.PI;
+//        double earth_rad = 6378000f; //지구 반지름 근사값
+//
+//        double r = new Random().nextInt(radius) + new Random().nextDouble();
+//        double rlat = (r / earth_rad) * r2d;
+//        double rlng = rlat / Math.cos(lat * d2r);
+//
+//        double theta = Math.PI * (new Random().nextInt(2) + new Random().nextDouble());
+//        double y = lng + (rlng * Math.cos(theta));
+//        double x = lat + (rlat * Math.sin(theta));
+//        return new RoomGameStartSlaveDocumentDto(x, y);
+//    }
 
 }
