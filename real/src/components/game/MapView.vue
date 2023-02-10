@@ -57,7 +57,7 @@
         @click="ripPaper(o)"
       >
         <GMapMarker
-          v-if="!o.myMarker"
+          v-if="o.myMarker"
           :icon=othersMarkerImg
           :position="o.location"
           :clickable="true"
