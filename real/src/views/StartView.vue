@@ -1,6 +1,6 @@
 <template>
     <div id="container">
-        <img src="@/assets/main_logo1.png" class="block_center img_animation" style="width:150px">
+        <img src="@/assets/main_logo1.png" class="block_center sliding_down_appearance" style="width:150px">
         <div style="margin-top: 30px"></div>
         <div class="flex_center hover_pointer button_animation" @click="start">
             <img src="@/assets/main_button1.png" id="button1">
@@ -41,33 +41,15 @@ import bgm from '@/assets/bgm.mp3'
     .button_animation {
       animation-name:btn_scale;
       animation-iteration-count: infinite;
-      animation-timing-function: linear;
       animation-duration: 2s;
     }
 
     @keyframes btn_scale {
       50% {
-        transform: scale(1.3);
+        transform: scale(1.2);
       }
       100% {
         transform: scale(1);
-      }
-    }
-
-    .img_animation {
-      animation-name: img_ani;
-      animation-iteration-count: 1;
-      animation-duration: 1s;
-    }
-
-    @keyframes img_ani {
-      0% {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-      100% {
-        opacity: 100;
-        transform: translateX(0);
       }
     }
 </style>

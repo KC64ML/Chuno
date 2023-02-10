@@ -1,5 +1,5 @@
 <template>
-    <div id="container">
+    <div id="container" class="sliding_down_appearance">
         <img src="@/assets/main_logo2.png" class="block_center" style="width: 120px">
         <div style="margin-top: 60px"></div>
         <div>계정과 비밀번호 입력 없이</div>

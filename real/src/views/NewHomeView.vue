@@ -1,6 +1,6 @@
 <template>
     <NewCreateRoomModal v-if="modal_show" @modal_off="modalOff()" :player="{ 'lat': lat, 'lng': lng }" />
-    <HeaderVue :title="'홈'"></HeaderVue>
+    <HeaderVue :title="'저잣거리'"></HeaderVue>
     <div id="room_box" style="height: 80%; overflow: scroll;">
         <room-card v-for="(room, idx) in roomList" :key="idx" v-bind:room_info="room"></room-card>
     </div>
