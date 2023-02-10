@@ -170,7 +170,6 @@ export default {
     },
     modalAllClose() {
       this.spinningModal = false;
-      this.roleModal = false;
     }
   }
 }
