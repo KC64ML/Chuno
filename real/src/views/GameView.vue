@@ -76,10 +76,12 @@ export default {
       .then(({ data }) => {
         if (data.code) {
           this.roomInfo = data.result;
+          console.log("GameView room info loaded");
         }
       })
     const info = JSON.parse(sessionStorage.info);
     this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
+    console.log("GameView created complete");
   },
   data() {
     return {
