@@ -58,8 +58,8 @@ import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
 
 export default {
     beforeRouteLeave(to, from, next) {
-        this.leave_room();
-        next();
+      if (to.name != "game") this.leave_room();
+      next();
     },
     components: {
         HeaderVue,

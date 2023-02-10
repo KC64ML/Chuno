@@ -8,7 +8,7 @@
         :key="item.id"
         @click="useItem(item)"
       >
-        <img :src="item.imgPath" alt="item">
+        <img :src="URL + 'resources/images?path=' + item.imgPath" alt="item" >
         <p>{{ item.name }}</p>
       </div>
       <!-- <p id="menu-title">메뉴</p>
@@ -29,7 +29,8 @@ export default {
   name: 'MenuView',
   data() {
     return {
-      items: []
+      items: [],
+      URL: process.env.VUE_APP_SPRING,
     }
   },
   methods: {

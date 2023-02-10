@@ -1,16 +1,17 @@
 <template>
-  <!-- 아이템을 사용했을 때 뜨는 Cofirm용 모달 -->
-  <div id="modal-back" style="position: absolute;">
+  <div id="modal_back">
     <div id="make_room_modal">
-      <p>{{ usedItem.name }}을(를) 사용하시겠습니까?</p>
-      <div class="container-row">
-        <div class="art-button" @click="itemNo">
-          <div>아니오</div>
-          <img src="@/assets/main_button1.png" alt="button">
-        </div>
-        <div class="art-button" @click="itemYes(usedItem)">
-          <div>예</div>
-          <img src="@/assets/main_button1.png" alt="button">
+      <div>
+        <p>{{ usedItem.name }}을(를) 사용하시겠습니까?</p>
+        <div class="container-row">
+          <div class="art-button" @click="itemNo">
+            <div>아니오</div>
+            <img src="@/assets/main_button1.png" alt="button">
+          </div>
+          <div class="art-button" @click="itemYes(usedItem)">
+            <div>예</div>
+            <img src="@/assets/main_button1.png" alt="button">
+          </div>
         </div>
       </div>
     </div>
@@ -18,11 +19,14 @@
 </template>
 
 <script>
-
 export default {
-  name: 'LogoutModal',
   props: {
     usedItem: Object,
+  },
+  data() {
+      return {
+          
+      }
   },
   methods: {
     itemYes(usedItem) {
@@ -33,42 +37,24 @@ export default {
       console.log('아이템 미사용')
       this.$emit('item-no')
     },
+
   },
-  mounted(){
-    this.item = this.$store.state.item
-    console.log(this.item)
-  },
-  
 }
 </script>
 
+<style src="@vueform/slider/themes/default.css"></style>
 <style lang="scss" scoped>
-/* #modal {
-  padding: 5%;
-  margin: 5%;
-  background-color: #F5F5F5;
-  border-radius: 10%;
-}
-.art-button{
-  position: relative;
-}
-.art-button img{
-  width: 90%;
-}
-.art-button div {
-  color: #F5F5F5;
-  position: absolute;
-  top: 30%;
-  left: 20%;
-  font-size: 20pt;
-} */
+$input_height: 30px;
+$plma_size: 30px;
+
 #modal_back {
-    position: absolute;
-    width: 100vw;
-    height: 100%;
-    background: rgb(0, 0, 0, 0.6);
-    z-index: 1;
+  position: absolute;
+  width: 100vw;
+  height: 100%;
+  background: rgb(0, 0, 0, 0.6);
+  z-index: 1;
 }
+
 #make_room_modal {
   position: absolute;
   top: 50%;
@@ -80,4 +66,13 @@ export default {
   font-size: 18px;
   border-radius: 10px;
 }
+
+#close_button {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 20px;
+}
+
+
 </style>
