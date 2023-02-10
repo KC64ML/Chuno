@@ -14,8 +14,8 @@
     >
       <!-- 플레이 영역 표시 -->
       <GMapCircle
-        :radius="roomInfo.radius"
-        :center="{lat: roomInfo.lat, lng: roomInfo.lng}"
+        :radius="roomInfo?.radius"
+        :center="{lat: roomInfo?.lat, lng: roomInfo?.lng}"
         :options="playgroundOptions"
       />
       <!-- 내 위치 -->
@@ -133,7 +133,9 @@ export default {
           const content = JSON.parse(e);
           if (content.type == "othersLocation") {
             const other = content.info; // startData가 여기 담겨잇다.
-            this.others[other.userInfo.id] = other.location;
+            this.others[other.nickname] = {
+              
+            };
           } else if (content.type == "") {
             /* 뭔가 하자 */
           }
@@ -217,10 +219,10 @@ export default {
       console.log('1. myLocation 함수 실행')
       this.$getLocation({enableHighAccuracy: true})
       .then((coordinates) => {
-        this.me.lat = coordinates.lat
-        this.me.lng = coordinates.lng
-        console.log(this.me.lat)
-        console.log(this.me.lng)
+        this.location.lat = coordinates.lat
+        this.location.lng = coordinates.lng
+        console.log(this.location.lat)
+        console.log(this.location.lng)
         // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
         // this.catch()
         // this.ripPaper()
@@ -238,6 +240,7 @@ export default {
               nickname: this.user.nickname,
               role: this.user.role,
               location: this.user.location,
+              myMarker: this.myMarker,
             }
           }
         ));
@@ -322,7 +325,6 @@ export default {
   created() {
 
     // 내 위치
-    console.log('내 위치 가져오기')
     // this.myLocation()
     // setInterval(this.myLocation(),1000) */
     this.enrollEvent();
