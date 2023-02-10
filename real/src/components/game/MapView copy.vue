@@ -292,7 +292,7 @@ export default {
     calculateDistance(marker){
       console.log('!!calculateDistance 함수 실행됨')
       console.log(marker)
-      const lat1 = this.me.lat
+      const lat1 = this.location.lat
       const lng1 = this.me.lng
       const lat2 = marker.position.lat
       const lng2 = marker.position.lng
