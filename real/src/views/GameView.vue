@@ -42,7 +42,7 @@
     </div>
   </div>
   <SpiningModalVue @spinningEnd="spinningEnd" v-if="spinningModal"></SpiningModalVue>
-  <RoleModalVue></RoleModalVue>
+  <RoleModalVue v-if="roleModal"></RoleModalVue>
 
 </template>
 
@@ -60,7 +60,7 @@ export default {
 
   name: 'GameView',
   components: {
-
+    MapView,
     OpenViduVue,
     MenuView,
     ItemModal,
@@ -95,6 +95,7 @@ export default {
       user: undefined,
       usedItem: [],
       spinningModal: true,
+      roleModal: false,
       roomInfo: undefined,
     }
   },
@@ -165,6 +166,7 @@ export default {
     },
     spinningEnd() {
       this.spinningModal = false;
+      this.roleModal = true;
     }
   }
 }

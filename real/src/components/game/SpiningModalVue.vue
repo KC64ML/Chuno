@@ -162,7 +162,7 @@ $map_height: $map_width;
 
 .mak {
     position: absolute;
-    background-color: rgb(100, 0, 0, 0.5);
+    // background-color: rgb(100, 0, 0, 0.5);
 }
 #spining_container {
     position: absolute;

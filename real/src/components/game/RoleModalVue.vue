@@ -5,7 +5,7 @@
     </div>
     <div class="centering big_text">당신은</div>
     <div class="centering role_text">
-      {{ `노비` }}
+      {{ my_role }}
     </div>
     <div class="centering big_text">입니다.</div>
     <div style="display: flex; justify-content: space-evenly">
@@ -40,24 +40,21 @@ export default {
       nickname : '',
       teamchuno: [],
       teamslave: [],
+      my_role: "undefined",
     };
   },
-  created() {
+  async created() {
     this.info = JSON.parse(sessionStorage.getItem("info"));
-    this.teamchuno = this.info.teamchuno.map((e) => e.nickname);
-    this.teamslave = this.info.teamslave.map((e) => e.nickname);
-    this.getUser();
-  },
-  methods: {
-    async getUser() {
-      const token = sessionStorage.token;
-      this.nickname = await this.axios
+    const token = sessionStorage.token;
+    this.nickname = await this.axios
         .get(process.env.VUE_APP_SPRING + "user", {
           headers: { Authorization: token },
         })
         .then((res) => res.data.result.nickname);
-        console.log("this.nickname ",this.nickname)
-    },
+    this.teamchuno = this.info.teamchuno.map((e) => e.nickname);
+    this.teamslave = this.info.teamslave.map((e) => e.nickname);
+    if (this.teamchuno.includes(this.nickname)) this.my_role = "추노꾼";
+    else if (this.teamslave.includes(this.nickname)) this.my_role = "노비";
   },
 };
 </script>
