@@ -44,6 +44,9 @@ export default {
     };
   },
   async created() {
+    setTimeout(() => {
+      this.$emit("modalAllClose");
+    }, 3000);
     this.info = JSON.parse(sessionStorage.getItem("info"));
     const token = sessionStorage.token;
     this.nickname = await this.axios
