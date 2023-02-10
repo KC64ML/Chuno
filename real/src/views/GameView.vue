@@ -29,7 +29,7 @@
       </div>
     </div>
   </div>
-  <SpiningModalVue></SpiningModalVue>
+  <!-- <SpiningModalVue></SpiningModalVue> -->
 
 </template>
 
@@ -40,7 +40,7 @@ import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
-import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
+// import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
 
 export default {
 
@@ -50,7 +50,7 @@ export default {
     OpenViduVue,
     MenuView,
     ItemModal,
-    SpiningModalVue
+    // SpiningModalVue
   },
   async created() {
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
