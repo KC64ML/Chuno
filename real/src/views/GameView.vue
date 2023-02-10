@@ -166,7 +166,7 @@ export default {
     },
     spinningEnd() {
       this.spinningModal = false;
-      this.roleModal = true;
+      this.roleModal = false;
     }
   }
 }
