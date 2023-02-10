@@ -46,7 +46,8 @@ export default {
   async created() {
     setTimeout(() => {
       this.$emit("modalAllClose");
-    }, 3000);
+      // 개발이 끝난뒤에는 3초로 고쳐줘요!!!!!!!!!!!
+    }, 1000);
     this.info = JSON.parse(sessionStorage.getItem("info"));
     const token = sessionStorage.token;
     this.nickname = await this.axios
