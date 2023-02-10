@@ -344,7 +344,9 @@ export default {
     // 내 위치
     // this.myLocation()
     // setInterval(this.myLocation(),1000) */
-    this.enrollEvent();
+    setTimeout(() => {
+      this.enrollEvent();
+    }, 5500);
     
     // this.catch()
 
