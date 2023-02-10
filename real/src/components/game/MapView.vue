@@ -137,9 +137,11 @@ export default {
   },
   methods: {                  
     enrollEvent() {
+      console.log("enrollEvent at MapView");
       new Promise((resolve) => {
+        console.log("promise at MapView");
         this.conn.onmessage = async (e) => {
-          console.log(e);
+          console.log("message received at MapView", e);
           const content = JSON.parse(e.data);
           if (content.type == "othersLocation") {
             const other = content.info; // startData가 여기 담겨잇다.
