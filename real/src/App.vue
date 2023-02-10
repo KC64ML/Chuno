@@ -44,11 +44,24 @@ export default {
         align-items: center;
         justify-content: center;
     }
+    .flex_left {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+    }
+    .flex_right {
+        display: flex;
+        align-items: center;
+        justify-content: right;
+    }
     .relative {
         position: relative;
     }
     .image_text {
         color: white; position: absolute
+    }
+    .image_text_logout {
+        color: white; position: absolute; text-align: center;
     }
     .hover_pointer:hover {
         cursor: pointer;

@@ -2,7 +2,7 @@
     <div id="modal_back">
         <div id="make_room_modal">
             <div id="close_button" @click="offing">x</div>
-            <div id="modal_title" style="font-size: 24px;">프로필 편집ddd</div>
+            <div id="modal_title" style="font-size: 24px;">프로필 편집</div>
             <div>
               <table style="width: 300px; margin: 0 auto;">
                 <colgroup>
