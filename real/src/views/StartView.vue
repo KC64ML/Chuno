@@ -54,7 +54,7 @@ import bgm from '@/assets/bgm.mp3'
       }
     }
 
-    .image_animation {
+    .img_animation {
       animation-name: img_ani;
       animation-iteration-count: 1;
       animation-duration: 1s;
@@ -62,7 +62,12 @@ import bgm from '@/assets/bgm.mp3'
 
     @keyframes img_ani {
       0% {
-        transform: translateX(-30px);
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      100% {
+        opacity: 100;
+        transform: translateX(0);
       }
     }
 </style>
