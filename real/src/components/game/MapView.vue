@@ -138,7 +138,12 @@ export default {
       //   host_id: "gogo",
       //   room_start_time: new Date(2023, 1, 1, 13, 20, 0)
       //   },
+      locationInterval: null,
     };
+  },
+  beforeRouteLeave(to, from, next) {
+    clearInterval(this.locationInterval);
+    next();
   },
   methods: {                  
     enrollEvent() {
@@ -181,7 +186,7 @@ export default {
       }
 
       // 내 위치
-      setInterval(() => {this.myLocation()}, 3000);
+      this.locationInterval = setInterval(() => {this.myLocation()}, 1000);
       // this.myLocation()
       // 노비 문서 위치
       console.log('노비 문서 가져오기')
@@ -352,7 +357,7 @@ export default {
     // setInterval(this.myLocation(),1000) */
     setTimeout(() => {
       this.enrollEvent();
-    }, 10000);
+    }, 4000);
     
     // this.catch()
 
