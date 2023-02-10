@@ -310,7 +310,8 @@ export default {
 
     // 노비 문서 위치
     console.log('노비 문서 가져오기')
-    const papers = sessionStorage.info['slavepaper']
+    const info = JSON.parse(sessionStorage.info)
+    const papers = info.slavepaper
     for (let i = 0; i < papers.length; i++){
       console.log(i)
       this.papers.push({ 
