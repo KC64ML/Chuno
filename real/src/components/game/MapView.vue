@@ -304,8 +304,9 @@ export default {
       for(const marker of this.others){
         const distance = this.calculateDistance(marker)
         if(distance <= this.catchRadius){
-          alert('잡으세요.')
-          // console.log('잡을 수 있음')
+          // alert('잡으세요.')
+          console.log('잡을 수 있음')
+          console.log(marker)
           this.conn.send(JSON.stringify(
             {
               event:'catch',
