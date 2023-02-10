@@ -19,7 +19,7 @@
             <div style="text-align: center; margin-top: 20px;">
                 {{ display_info }}
             </div>
-            <!-- {{ roomcenter }} {{ roomradius }} -->
+            {{ roomcenter }} {{ roomradius }}
             <div class="flex_center" style="margin-top: 30px">
                 <GMapMap :center="roomcenter" :zoom="map_zoom" :options="{
                     zoomControl: false,
@@ -45,6 +45,7 @@
             <div :class="{div_hidden : !count_down_start}">
                 {{ count_down }}
             </div>
+            {{ location_list }}
         </div>
     </div>
 </template>
@@ -57,9 +58,6 @@ import slave_img from '@/assets/Door.svg'
 export default {
     data() {
         return {
-            tempposition1: { lat: 0, lng: 0 },
-            tempposition2: { lat: 0, lng: 0 },
-
             count_down_start: false,
             count_down : 5,
             room_id: this.$route.params.roomId,
@@ -118,9 +116,6 @@ export default {
         this.info = JSON.parse(sessionStorage.getItem("info"));
         this.roomradius = this.info.radius;
         this.roomcenter = { lat: this.info.roomlat, lng: this.info.roomlng };
-
-        this.tempposition1 = { lat: this.roomcenter.lat, lng: this.roomcenter.lng + 0.001 };
-        this.tempposition2 = { lat: this.roomcenter.lat, lng: this.roomcenter.lng - 0.001 };
 
         this.nickname = await this.axios.get(process.env.VUE_APP_SPRING + "user", { headers: { Authorization: sessionStorage.getItem("token") } }).then(res => res.data.result.nickname);
         this.teamchuno = this.info.teamchuno.map((e) => e.nickname);
