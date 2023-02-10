@@ -4,12 +4,12 @@
       style="width: 85vw;"
     >
       <colgroup>
-        <col width="11%">
-        <col width="35%">
         <col width="12%">
-        <col width="14.5%">
-        <col width="14.5%">
-        <col width="11%">
+        <col width="30%">
+        <col width="13%">
+        <col width="15.5%">
+        <col width="15.5%">
+        <col width="12%">
       </colgroup>
       <thead>
         <tr>
@@ -24,17 +24,17 @@
     </table>
 
     <div
-      style="overflow: scroll; width: 85vw; height: 50vh;"
+      style="overflow: scroll; width: 85vw; height: 40vh;"
       class="scroll"
     >
     <table style="width: 85vw;">
       <colgroup>
-        <col width="11%">
-        <col width="35%">
         <col width="12%">
-        <col width="14.5%">
-        <col width="14.5%">
-        <col width="11%">
+        <col width="30%">
+        <col width="13%">
+        <col width="15.5%">
+        <col width="15.5%">
+        <col width="12%">
       </colgroup>
 
       <tbody>

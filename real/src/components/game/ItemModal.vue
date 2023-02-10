@@ -1,15 +1,17 @@
 <template>
   <!-- 아이템을 사용했을 때 뜨는 Cofirm용 모달 -->
-  <div class="modal">
-    <p>{{ usedItem.name }}을(를) 사용하시겠습니까?</p>
-    <div class="container-row">
-      <div class="art-button" @click="itemNo">
-        <div>아니오</div>
-        <img src="@/assets/main_button1.png" alt="button">
-      </div>
-      <div class="art-button" @click="itemYes">
-        <div>예</div>
-        <img src="@/assets/main_button1.png" alt="button">
+  <div id="modal-back" style="position: absolute;">
+    <div id="make_room_modal">
+      <p>{{ usedItem.name }}을(를) 사용하시겠습니까?</p>
+      <div class="container-row">
+        <div class="art-button" @click="itemNo">
+          <div>아니오</div>
+          <img src="@/assets/main_button1.png" alt="button">
+        </div>
+        <div class="art-button" @click="itemYes(usedItem)">
+          <div>예</div>
+          <img src="@/assets/main_button1.png" alt="button">
+        </div>
       </div>
     </div>
   </div>
@@ -23,9 +25,9 @@ export default {
     usedItem: Object,
   },
   methods: {
-    itemYes() {
+    itemYes(usedItem) {
       console.log('아이템 사용')
-      this.$emit('item-yes')
+      this.$emit('item-yes', usedItem)
     },
     itemNo() {
       console.log('아이템 미사용')
@@ -40,7 +42,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 /* #modal {
   padding: 5%;
   margin: 5%;
@@ -60,4 +62,22 @@ export default {
   left: 20%;
   font-size: 20pt;
 } */
+#modal_back {
+    position: absolute;
+    width: 100vw;
+    height: 100%;
+    background: rgb(0, 0, 0, 0.6);
+    z-index: 1;
+}
+#make_room_modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 85%;
+  padding: 30px 0;
+  background-color: #f2f2f2;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  border-radius: 10px;
+}
 </style>

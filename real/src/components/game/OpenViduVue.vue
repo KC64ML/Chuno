@@ -38,6 +38,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
         },
         props: {
             my_cam_modal: Object,
+            user: Object,
         },
         data() {
             return {
@@ -51,13 +52,11 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 subscribers: [],
                 nowVideoNum: 0,
                 enemy_name: undefined,
-                user: null,
                 my_video: "my_video",
                 enemy_video: "enemy_video",
 
                 // Join form
                 mySessionId: this.$route.params.roomId,
-                myUserName: "불러오는 중",
             };
         },
         // computed: {
@@ -71,6 +70,9 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 this.OV = new OpenVidu();
                 this.session = this.OV.initSession();
                 this.session.on("streamCreated", ({ stream }) => {
+                    if (stream.connection.data.nickname == this.user.nickname) {
+                        return;
+                    }
                     const subscriber = this.session.subscribe(stream);
                     this.subscribers.push(subscriber);
                     console.log("스트림을 발견했어요!")
@@ -97,8 +99,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     console.log("토큰을생성해요:" + token);
                     this.session.connect(token, {
                         clientData: {
-                            username: this.myUserName,
-                            role: this.user.role,
+                            user: this.user,
                         },
                         role: "good"
                     })
@@ -193,15 +194,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             console.log(stream);
             this.myVideoStream = stream;
         });
-        await this.axios.get(APPLICATION_SERVER_URL + 'user',
-            {
-                headers: { Authorization: sessionStorage.token }
-            }).then(({ data }) => {
-                if (data.code) {
-                    this.user = data.result;
-                    this.myUserName = this.user.nickname;
-                }
-            });
+        
         console.log("--------------ffff--------------");
         console.log(this.subscribers.length + "명의 사람이 있어요");
         for (var sub of this.subscribers) {
@@ -209,8 +202,11 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
         }
         this.init();
     },
-    mounted() {
-    }
+    computed: {
+        myUserName() {
+            return this.user.nickname;
+        }
+    },
 }
 </script>
 
@@ -271,7 +267,7 @@ $my_video_margin: 20px;
 }
 
 .my_video_box {
-    background-color: red;
+    background-color: whitesmoke;
     position: absolute;
     bottom: $footer_height;
     right: 0;

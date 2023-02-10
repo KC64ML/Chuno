@@ -51,9 +51,8 @@ export default {
                 }
             }
 
-            console.log("4$$$$$111",process.env.VUE_APP_SPRING)
             var nickname = await axios.get(process.env.VUE_APP_SPRING + "user", { headers: { Authorization: sessionStorage.getItem("token") } }).then(res=>res.data.result.nickname);
-            console.log("*/*/*/*/*/*//*////*/*/", nickname)
+
             this.conn.send(JSON.stringify({
                 "event": "sendlocation",
                 "nickname": nickname,

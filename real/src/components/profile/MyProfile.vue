@@ -1,11 +1,11 @@
 <template>
+<div>  
   <NewEditProfileModal 
     v-if="modal"
     @on-modal="onModal"
     :userInfo="userInfo"
   />
 
-  <!-- <div>   -->
     <div class="container-col" id="myProfile">
       <div class="container-row">
         <!-- <img src="@/assets/profile_default.svg" alt="profile pic" class="uploadedImg"> -->
@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-  <!-- </div> -->
+  </div>
 
 </template>
 <script>

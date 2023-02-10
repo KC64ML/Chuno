@@ -1,41 +1,38 @@
 <template>
-  <MenuView 
-    v-if="menu" 
-    @use-item="useItem"
-    style="position:absolute; bottom: 60px;"
-  />
-  <ItemModal 
-    v-if="itemModal" 
-    :usedItem="usedItem" 
-    @item-yes="itemYes"
-    @item-no="itemNo"
-    style="position:absolute; bottom: 60px;"/>
   <div>
-    
-    <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue>
-    <MapView />
+    <MenuView v-if="menu" @use-item="useItem" style="position:absolute; bottom: 60px;" />
+    <ItemModal v-if="itemModal" :usedItem="usedItem" @item-yes="itemYes" @item-no="itemNo"
+      style="position:absolute; bottom: 60px;" />
+    <div>
 
-    <!-- 아이템 사용 -->
-    <!-- <div v-if="this.$store.state.itemModal"> -->
-    <!-- </div> -->
-    
-    <div id="footer_container">
-      <div class="menu_box flex_center" @click="this.$router.push('/home')">
-        <img class="menu" src="@/assets/game_chat.png">
-      </div>
-      <div>
-        <!-- 채팅창 수정 필요 -->
-        <input class="map_search" type="text" placeholder="채팅을 입력해 주세요">
-      </div>
-      <div class="menu_box" @click="myCam">
-        <img class="menu" src="@/assets/game_myCam.png">
-      </div>
-      <div class="menu_box" @click="onMenu">
-        <img class="menu" src="@/assets/game_menu.png">
+      <OpenViduVue :my_cam_modal="my_cam_modal" :user="user"></OpenViduVue>
+      <MapView />
+
+      <!-- 아이템 사용 -->
+      <!-- <div v-if="this.$store.state.itemModal"> -->
+      <!-- </div> -->
+
+      <div id="footer_container">
+        <div class="menu_box flex_center" @click="this.$router.push('/home')">
+          <img class="menu" src="@/assets/game_chat.png">
+        </div>
+        <div>
+          <!-- 채팅창 수정 필요 -->
+          <input class="map_search" type="text" placeholder="채팅을 입력해 주세요">
+        </div>
+        <div class="menu_box" @click="myCam">
+          <img class="menu" src="@/assets/game_myCam.png">
+        </div>
+        <div class="menu_box" @click="onMenu">
+          <img class="menu" src="@/assets/game_menu.png">
+        </div>
       </div>
     </div>
+
+    <SpiningModalVue></SpiningModalVue>
+
   </div>
-  <SpiningModalVue></SpiningModalVue>
+
 </template>
 
 <script>
@@ -43,6 +40,7 @@ import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue'
 import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
+const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
 
@@ -56,11 +54,24 @@ export default {
     ItemModal,
     SpiningModalVue
   },
+  async created() {
+    await this.axios.get(APPLICATION_SERVER_URL + 'user',
+      {
+        headers: { Authorization: sessionStorage.token }
+      }).then(({ data }) => {
+        if (data.code) {
+          this.user = data.result;
+        }
+      });
+    const info = JSON.parse(sessionStorage.info);
+    this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
+  },
   data() {
     return {
-      my_cam_modal: {active: false},
+      my_cam_modal: { active: false },
       menu: false,
       itemModal: false,
+      user: undefined,
       usedItem: [],
     }
   },
@@ -70,20 +81,61 @@ export default {
       this.menu = !this.menu
       console.log(this.menu)
     },
+    getMyRole(teamslave, teamchuno, nickname) {
+      for (let i = 0; i < teamslave.length; i++) {
+        if (teamslave[i].nickname == nickname) {
+          return "runner";
+        }
+      }
+      for (let i = 0; i < teamchuno.length; i++) {
+        if (teamchuno[i].nickname == nickname) {
+          return "chaser";
+        }
+      }
+    },
     myCam() {
       this.my_cam_modal.active = !this.my_cam_modal.active
       console.log("mycam 눌림");
     },
-    useItem(item){
+    useItem(item) {
       this.usedItem = item
+      this.itemModal = true
       console.log('아이템 사용')
       console.log(item)
     },
-    itemYes(){
+    itemYes(item) {
       this.itemModal = false
       //아이템 사용
+      if (item.id == 1) {
+        // 천리안
+        console.log(item)
+      } else if (item.id == 2) {
+        // 위장
+        console.log(item)
+
+      } else if (item.id == 3) {
+        // 확실한 정보통: 30초간 노비 위치 표시
+        console.log(item)
+        this.visibility = true
+        setTimeout(this.visibility = true, 30000)
+
+      } else if (item.id == 4) {
+        // 먹물탄
+        console.log(item)
+      } else if (item.id == 5) {
+        // 조명탄
+        console.log(item)
+      } else if (item.id == 6) {
+        // 긴 오랏줄
+        console.log(item)
+      } else {
+        // 연막탄
+        console.log(item)
+      }
+
+
     },
-    itemNo(){
+    itemNo() {
       this.itemModal = false
     },
   }
@@ -113,9 +165,10 @@ $button_width: 60px;
 
 .menu-window {
   float: right;
-  position:absolute; 
+  position: absolute;
   bottom: 60px;
 }
+
 .menu_box {
   width: 20%;
   display: flex;
@@ -134,8 +187,8 @@ $button_width: 60px;
   border-radius: 15px;
   font-size: 20px;
 }
+
 .map_search::placeholder {
   color: rgba(255, 255, 255, 0.56)
 }
-
 </style>

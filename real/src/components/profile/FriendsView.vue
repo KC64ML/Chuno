@@ -7,10 +7,11 @@
     <p v-if="!edit">관리</p>
     <p v-if="edit">취소</p>
   </div>
-  <div class="container-col" style="height:75%; width: 100vw;">
-    <div class="container-row" id="friend-search">
+
+  <div style="height: 80%; width:100vw; overflow: scroll;" class="scroll">
+    <div class="container-row" id="friend-search" style="position:">
       <img class="header_menu" src="@/assets/Search_black.png">
-      <input class="header_menu header_input" id="room_search" v-model="friendSearch" placeholder="친구 검색" @change="search">
+      <input class="header_menu header_input" id="room_search" v-model="friendSearch" placeholder="친구 검색">
     </div>
     <div v-if="!search">
       <FriendsItemView 
@@ -74,6 +75,7 @@ export default {
         })
     },
     search(){
+      this.friends = true
       const token = sessionStorage.token
       console.log('----')
       this.axios.get(process.env.VUE_APP_SPRING + 'user/friend/search/' + this.friendSearch, { headers: { Authorization: token }})
@@ -97,17 +99,7 @@ export default {
     this.getFriends()
   },
   watch: {
-    friendSearch(keyword){
-      if(keyword){
-        console.log(keyword)
-        this.search = true
-        console.log(this.serach)
-      } else {
-        console.log('not search keyword')
-        this.search = false
-        console.log(this.serach)
-      }
-    }
+    'friendSearch': 'serch'
   }
 }
 </script>
