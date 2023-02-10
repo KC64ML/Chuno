@@ -41,8 +41,9 @@
           :icon=paperMarkerImg
           :animation=1
           :position="m.position"
-          :clickable="true"
-        />
+          @click="openInfoWindow(marker.id)"
+          />
+          <!-- :clickable="true" -->
       </div>
       <!-- 다른 플레이어 위치 -->
       <div

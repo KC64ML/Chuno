@@ -54,9 +54,8 @@
           v-if="!m.ripped"
           :icon=othersMarkerImg
           :position="m.position"
-          @click="openInfoWindow(marker.id)"
-          />
-          <!-- :clickable="true" -->
+          :clickable="true"
+        />
       </div>
     </GMapMap>
 </template>
