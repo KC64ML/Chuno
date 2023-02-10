@@ -138,7 +138,7 @@ export default {
   methods: {                  
     enrollEvent() {
       new Promise((resolve) => {
-        this.conn.onmessege = (e) => {
+        this.conn.onmessege = async (e) => {
           console.log(e);
           const content = JSON.parse(e.data);
           if (content.type == "othersLocation") {
