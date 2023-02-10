@@ -48,13 +48,13 @@
       <!-- 다른 플레이어 위치 -->
       <div
         v-for="m in others"
-        :key="m.id"
-        @click="ripPaper(m)"
+        :key="m"
+        @click="ripPaper(others[m])"
       >
         <GMapMarker
-          v-if="!m.ripped"
+          v-if="!others[m].myMarker"
           :icon=othersMarkerImg
-          :position="m.position"
+          :position="others[m].location"
           :clickable="true"
         />
       </div>
@@ -143,7 +143,10 @@ export default {
           if (content.type == "othersLocation") {
             const other = content.info; // startData가 여기 담겨잇다.
             this.others[other.nickname] = {
-              
+              nickname: other.nickname,
+              role: other.role,
+              location: other.location,
+              myMarker: this.myMarker
             };
           } else if (content.type == "") {
             /* 뭔가 하자 */
@@ -248,7 +251,7 @@ export default {
             startData: {
               nickname: this.user.nickname,
               role: this.user.role,
-              location: this.user.location,
+              location: this.location,
               myMarker: this.myMarker,
             }
           }
