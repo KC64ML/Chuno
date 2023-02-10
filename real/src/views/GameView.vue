@@ -15,8 +15,10 @@
    />
   <div>
     
-    <OpenViduVue :my_cam_modal="my_cam_modal"></OpenViduVue>
-    <MapView />
+    <OpenViduVue
+    :my_cam_modal="my_cam_modal"
+    :user="user"></OpenViduVue>
+    <MapView :user="user" :roomInfo="roomInfo" />
 
     <!-- 아이템 사용 -->
     <!-- <div v-if="this.$store.state.itemModal"> -->
@@ -63,13 +65,19 @@ export default {
   },
   async created() {
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
-      {
-        headers: { Authorization: sessionStorage.token }
-      }).then(({ data }) => {
+          {
+              headers: { Authorization: sessionStorage.token }
+          }).then(({ data }) => {
+              if (data.code) {
+                  this.user = data.result;
+              }
+          });
+    await this.axios.get(APPLICATION_SERVER_URL + 'room/' + this.$route.params.roomId)
+      .then(({ data }) => {
         if (data.code) {
-          this.user = data.result;
+          this.roomInfo = data.result;
         }
-      });
+      })
     const info = JSON.parse(sessionStorage.info);
     this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
   },
@@ -80,6 +88,7 @@ export default {
       itemModal: false,
       user: undefined,
       usedItem: [],
+      roomInfo: undefined,
     }
   },
   methods: {
