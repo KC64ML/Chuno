@@ -1,6 +1,6 @@
 <template>
     <GMapMap
-      :center="me"
+      :center="location"
       :zoom="18"
       :options="{
         zoomControl: true,
@@ -26,7 +26,7 @@
         />
         <GMapCircle
           :radius="catchRadius"
-          :center="me"
+          :center="location"
           :options="circleOptions"
         />
       </div>
