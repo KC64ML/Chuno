@@ -38,7 +38,8 @@
       </div>
     </div>
   </div>
-</div>
+  <!-- <SpiningModalVue></SpiningModalVue> -->
+
 </template>
 
 <script>
@@ -46,6 +47,9 @@ import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue'
 import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
+const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
+
+// import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
 
 export default {
 
@@ -55,12 +59,26 @@ export default {
     OpenViduVue,
     MenuView,
     ItemModal,
+    // SpiningModalVue
+  },
+  async created() {
+    await this.axios.get(APPLICATION_SERVER_URL + 'user',
+      {
+        headers: { Authorization: sessionStorage.token }
+      }).then(({ data }) => {
+        if (data.code) {
+          this.user = data.result;
+        }
+      });
+    const info = JSON.parse(sessionStorage.info);
+    this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
   },
   data() {
     return {
-      my_cam_modal: false,
-      menu: true,
+      my_cam_modal: { active: false },
+      menu: false,
       itemModal: false,
+      user: undefined,
       usedItem: [],
     }
   },
@@ -70,8 +88,21 @@ export default {
       this.menu = !this.menu
       console.log(this.menu)
     },
+    getMyRole(teamslave, teamchuno, nickname) {
+      for (let i = 0; i < teamslave.length; i++) {
+        if (teamslave[i].nickname == nickname) {
+          return "runner";
+        }
+      }
+      for (let i = 0; i < teamchuno.length; i++) {
+        if (teamchuno[i].nickname == nickname) {
+          return "chaser";
+        }
+      }
+    },
     myCam() {
-      this.my_cam_modal = !this.my_cam_modal
+      this.my_cam_modal.active = !this.my_cam_modal.active
+      console.log("mycam 눌림");
     },
     useItem(item){
       console.log('게임뷰임. 사용한 아이템표시')
@@ -81,7 +112,7 @@ export default {
       console.log(this.itemModal)
       console.log('아이템 사용')
     },
-    itemYes(item){
+    itemYes(item) {
       this.itemModal = false
       //아이템 사용
       if(item.id == 1){
@@ -90,14 +121,14 @@ export default {
       } else if (item.id == 2){
         // 위장: 추노꾼의 catch 범위 축소
         console.log(item)
-        
+
       } else if (item.id == 3) {
         // 확실한 정보통: 진짜 노비 문서 위치 표시
         console.log(item)
         this.visibility = true
-        setTimeout(this.visibility=true, 30000)
-        
-      } else if (item.id == 4){
+        setTimeout(this.visibility = true, 30000)
+
+      } else if (item.id == 4) {
         // 먹물탄
         console.log(item)
       } else if (item.id == 5){
@@ -110,10 +141,10 @@ export default {
         // 연막탄
         console.log(item)
       }
-      
+
 
     },
-    itemNo(){
+    itemNo() {
       this.itemModal = false
     },
   }
@@ -143,9 +174,10 @@ $button_width: 60px;
 
 .menu-window {
   float: right;
-  position:absolute; 
+  position: absolute;
   bottom: 60px;
 }
+
 .menu_box {
   width: 20%;
   display: flex;
@@ -164,9 +196,8 @@ $button_width: 60px;
   border-radius: 15px;
   font-size: 20px;
 }
+
 .map_search::placeholder {
   color: rgba(255, 255, 255, 0.56)
 }
-
-
 </style>

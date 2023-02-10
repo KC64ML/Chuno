@@ -1,7 +1,13 @@
 <template>
 <div v-if="streamManager">
-	<ov-video :stream-manager="streamManager"/>
-	<div><p>{{ clientData }}</p></div>
+    <div :class="['camera_name', clientData.user.role]">
+        {{ clientData.user.nickname }} {{ roleKor }}
+    </div>
+	<ov-video 
+    :stream-manager="streamManager"
+    :class-name="className"
+    />
+	<!-- <div><p>{{ clientData }}</p></div> -->
 </div>
 </template>
 
@@ -17,6 +23,7 @@ import OvVideo from '@/components/game/OvVideo.vue';
 
         props: {
             streamManager: Object,
+            className: String,
         },
 
         computed: {
@@ -25,6 +32,13 @@ import OvVideo from '@/components/game/OvVideo.vue';
                 const { clientData } = this.getConnectionData();
                 return clientData;
             },
+            roleKor() {
+                if (this.clientData.user.role == "runner") {
+                    return "노비";
+                } else {
+                    return "추노꾼";
+                }
+            }
         },
 
         methods: {
@@ -41,5 +55,17 @@ import OvVideo from '@/components/game/OvVideo.vue';
 </script>
 
 <style lang="scss" scoped>
-
+.camera_name {
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2px;
+    border-radius: 7px;
+    position: absolute;
+}
+.runner {
+    color: #b1c2ff;
+}
+.chaser {
+    color: #ffb1b1;
+}
 </style>

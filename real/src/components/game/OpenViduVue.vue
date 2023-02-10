@@ -1,21 +1,30 @@
 <template>
     <div id="main_vedio_container" style="z-index: 1000">
-        <video autoplay ref="video" class="enemy_video"></video>
-        <div class="camera_name">
+        <!-- <video autoplay ref="video" class="enemy_video"></video> -->
+        <user-video 
+            :stream-manager="mainStreamManager" 
+            :class-name="enemy_video">
+        </user-video>
+        <!-- <div class="camera_name">
             임시이름 {{ enemy_name }}
-        </div>
+        </div> -->
         <img class="camera_arrow left_arrow" src="@/assets/camera_left.svg" alt="">
         <img class="camera_arrow right_arrow" src="@/assets/camera_right.svg" alt="">
         <div class="arrow_box right_box" @click="rightArrow"></div>  
         <div class="arrow_box left_box" @click="leftArrow"></div>
     </div>
-    <div class="my_video_box" :class="{hidden_modal:!my_cam_modal}">
-        <video autoplay ref="my_video" class="my_video"></video>
+    <div class="my_video_box" :class="{hidden_modal:!my_cam_modal.active}">
+        <!-- <video autoplay ref="my_video" class="my_video"></video> -->
+        <user-video 
+            :stream-manager="myStreamManager"
+            :class-name="my_video">
+        </user-video>
     </div>
 </template>
 
 <script>
 import { OpenVidu } from "openvidu-browser";
+import UserVideo from "@/components/game/UserVideo.vue";
 
 // const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 // const APPLICATION_SERVER_URL = "http://localhost:5000/";
@@ -25,25 +34,29 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
     export default {
         components: {
-            // UserVideo,
+            UserVideo,
         },
         props: {
-            my_cam_modal: undefined
+            my_cam_modal: Object,
+            user: Object,
         },
         data() {
             return {
                 // OpenVidu objects
                 OV: undefined,
                 session: undefined,
+                myVideoStream: null,
                 mainStreamManager: undefined,
                 myStreamManager: undefined,
                 publisher: undefined,
                 subscribers: [],
+                nowVideoNum: 0,
                 enemy_name: undefined,
+                my_video: "my_video",
+                enemy_video: "enemy_video",
 
                 // Join form
                 mySessionId: this.$route.params.roomId,
-                myUserName: "dddd",
             };
         },
         // computed: {
@@ -57,17 +70,19 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 this.OV = new OpenVidu();
                 this.session = this.OV.initSession();
                 this.session.on("streamCreated", ({ stream }) => {
+                    if (stream.connection.data.nickname == this.user.nickname) {
+                        return;
+                    }
                     const subscriber = this.session.subscribe(stream);
                     this.subscribers.push(subscriber);
                     console.log("스트림을 발견했어요!")
                     console.log("현재 사람은 " + this.subscribers.length + "명이에요")
                     this.mainStreamManager = subscriber;
-                    this.mainStreamManager.addVideoElement(this.$refs.video);
+                    // this.mainStreamManager.addVideoElement(this.$refs.video);
                     const { connection } = this.mainStreamManager.stream;
                     console.log("커넥션 데이터에요:", connection.data)
                     const { clientData } = JSON.parse(connection.data);
                     this.enemy_name = clientData;
-                    
                 });
                 this.session.on("streamDestroyed", ({ stream }) => {
                     const index = this.subscribers.indexOf(stream.streamManager, 0);
@@ -82,21 +97,27 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 });
                 await this.getToken(this.mySessionId + "game").then(async (token) => {
                     console.log("토큰을생성해요:" + token);
-                    await this.session.connect(token, { clientData: this.myUserName, role: "good" }).then(() => {
+                    this.session.connect(token, {
+                        clientData: {
+                            user: this.user,
+                        },
+                        role: "good"
+                    })
+                        .then(() => {
                         let publisher = this.OV.initPublisher(undefined, {
                             audioSource: undefined, // The source of audio. If undefined default microphone
-                            videoSource: undefined, // The source of video. If undefined default webcam
+                            videoSource: this.myVideoStream, // The source of video. If undefined default webcam
                             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                             publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                            resolution: "8x6", // The resolution of your video
-                            frameRate: 5, // The frame rate of your video
+                            resolution: "640x480", // The resolution of your video
+                            frameRate: 60, // The frame rate of your video
                             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-                            mirror: false, // Whether to mirror your local video or not
+                            mirror: true, // Whether to mirror your local video or not
                         });
                         this.myStreamManager = publisher;
                         this.publisher = publisher;
                         this.session.publish(this.publisher);
-                        this.myStreamManager.addVideoElement(this.$refs.my_video);
+                        // this.myStreamManager.addVideoElement(this.$refs.my_video);
                     })
                     .catch((error) => {
                         console.log("There was an error connecting to the session:", error.code, error.message);
@@ -118,6 +139,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             updateMainVideoStreamManager(stream) {
                 if (this.mainStreamManager === stream) return;
                 this.mainStreamManager = stream;
+                // this.mainStreamManager.addVideoElement(this.$refs.video);
             },
             async getToken(mySessionId) {
                 console.log("getToken 시작")
@@ -137,26 +159,55 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 });
                 return response.data; // The token
             },
-            getConnectionData () {
-                const { connection } = this.mainStreamManager.stream;
-                return JSON.parse(connection.data);
-            },
+            // getConnectionData () {
+            //     const { connection } = this.mainStreamManager.stream;
+            //     return JSON.parse(connection.data);
+            // },
             leftArrow() {
-                alert(this.my_cam_modal)
+                let idx = this.subscribers.indexOf(this.mainStreamManager);
+                let len = this.subscribers.length;
+                idx--;
+                if (idx < 0) {
+                    idx = len - 1;
+                }
+                this.updateMainVideoStreamManager(this.subscribers[idx]);
             },
             rightArrow() {
-                alert("오른쪽 ㅋ르릭");
+                let idx = this.subscribers.indexOf(this.mainStreamManager);
+                let len = this.subscribers.length;
+                idx++;
+                if (idx >= len) {
+                    idx = 0;
+                }
+                this.updateMainVideoStreamManager(this.subscribers[idx]);
             },
-        },
-        async created() {
-            await this.init();
-            console.log("--------------ffff--------------");
-            console.log(this.subscribers.length + "명의 사람이 있어요");
-            for (var sub of this.subscribers) {
-                console.log("---", sub);
+            async openMediaDevices(constraints) {
+                return await navigator.mediaDevices.getUserMedia(constraints);
             }
+        },
+    async created() {
+        await this.openMediaDevices({
+        video: true,
+        audio: true,
+        }).then((stream) => {
+            console.log('created stream');
+            console.log(stream);
+            this.myVideoStream = stream;
+        });
+        
+        console.log("--------------ffff--------------");
+        console.log(this.subscribers.length + "명의 사람이 있어요");
+        for (var sub of this.subscribers) {
+            console.log("---", sub);
         }
-    }
+        this.init();
+    },
+    computed: {
+        myUserName() {
+            return this.user.nickname;
+        }
+    },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -184,12 +235,7 @@ $my_video_margin: 20px;
     border-radius: 10px;
     font-size: 15px;
 }
-.enemy_video{
-    width: 100%;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-}
+
 
 .camera_arrow {
     position: absolute;
@@ -221,7 +267,7 @@ $my_video_margin: 20px;
 }
 
 .my_video_box {
-    background-color: red;
+    background-color: whitesmoke;
     position: absolute;
     bottom: $footer_height;
     right: 0;
@@ -229,10 +275,7 @@ $my_video_margin: 20px;
     z-index: 100;
     width: 200px;
 }
-.my_video {
-    width: 100%;
-    border: solid blue;
-}
+
 .hidden_modal{
     visibility: hidden;
 }

@@ -5,6 +5,7 @@
     <FooterVue class="footer_fix"
         v-if="this.$route.name != 'waitingRoom' && this.$route.name != 'game' && this.$route.fullPath != '/' && this.$route.fullPath != '/login' && this.$route.path != '/oauth' && this.$route.name != 'Register'">
     </FooterVue>
+    <button @click="test">test</button>
 </template>
 
 <script>
@@ -15,6 +16,11 @@ export default {
       FooterVue,
     },
     methods: {
+        test() {
+            this.conn.send({
+                "event": "reset"
+            })
+        }
     },
     created() {
         console.log("앱시작")

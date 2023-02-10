@@ -1,5 +1,5 @@
 <template>
-    <div id="container" class="white" :class="[ {yellow : sub.isReady, green : sub.isHost} ]">
+    <div id="container" class="white" :class="[ {yellow : sub.ready, green : sub.host} ]">
         {{ sub.level }} {{ sub.nickname }}
     </div>
 </template>
