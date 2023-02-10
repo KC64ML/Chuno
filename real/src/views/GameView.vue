@@ -1,24 +1,24 @@
 <template>
-  <div>
+  <!-- <div>
     <MenuView v-if="menu" @use-item="useItem" style="position:absolute; bottom: 60px;" />
     <ItemModal v-if="itemModal" :usedItem="usedItem" @item-yes="itemYes" @item-no="itemNo"
       style="position:absolute; bottom: 60px;" />
-    <div>
+    <div> -->
 
       <OpenViduVue :my_cam_modal="my_cam_modal" :user="user"></OpenViduVue>
-      <MapView />
+      <!-- <MapView /> -->
 
       <!-- 아이템 사용 -->
       <!-- <div v-if="this.$store.state.itemModal"> -->
       <!-- </div> -->
 
-      <div id="footer_container">
+      <!-- <div id="footer_container">
         <div class="menu_box flex_center" @click="this.$router.push('/home')">
           <img class="menu" src="@/assets/game_chat.png">
         </div>
-        <div>
+        <div> -->
           <!-- 채팅창 수정 필요 -->
-          <input class="map_search" type="text" placeholder="채팅을 입력해 주세요">
+          <!-- <input class="map_search" type="text" placeholder="채팅을 입력해 주세요">
         </div>
         <div class="menu_box" @click="myCam">
           <img class="menu" src="@/assets/game_myCam.png">
@@ -28,16 +28,18 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- <SpiningModalVue></SpiningModalVue> -->
+  <RoleModalVue></RoleModalVue>
 
 </template>
 
 <script>
-import OpenViduVue from '@/components/game/OpenViduVue.vue'
-import MapView from '@/components/game/MapView.vue'
-import MenuView from '@/components/game/MenuView.vue'
-import ItemModal from '@/components/game/ItemModal.vue'
+// import OpenViduVue from '@/components/game/OpenViduVue.vue'
+// import MapView from '@/components/game/MapView.vue'
+// import MenuView from '@/components/game/MenuView.vue'
+// import ItemModal from '@/components/game/ItemModal.vue'
+import RoleModalVue from '@/components/game/RoleModalVue.vue'
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 // import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
@@ -46,11 +48,12 @@ export default {
 
   name: 'GameView',
   components: {
-    MapView,
-    OpenViduVue,
-    MenuView,
-    ItemModal,
-    // SpiningModalVue
+    // MapView,
+    // OpenViduVue,
+    // MenuView,
+    // ItemModal,
+    // SpiningModalVue,
+    RoleModalVue,
   },
   async created() {
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
