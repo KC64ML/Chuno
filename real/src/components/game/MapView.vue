@@ -77,12 +77,6 @@ export default {
     user: Object, // 내 정보
     roomInfo: Object, // 방 정보
   },
-  watch: {
-    roomInfo() {
-      console.log("roomInfo at MapView");
-      console.log(this.roomInfo);
-    }
-  },
   data() {
     return {
       // 나랑 관련된 정보
@@ -368,6 +362,10 @@ export default {
     //     console.log("USER DATA: " + event.stream.connection.data);
     //   });
     // }
+    roomInfo() {
+      console.log("roomInfo at MapView");
+      console.log(this.roomInfo);
+    }
   },
 };
 </script>
