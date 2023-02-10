@@ -155,7 +155,7 @@ export default {
       }
 
       // 내 위치
-      setInterval(this.myLocation(), 3000);
+      setInterval(() => {this.myLocation()}, 3000);
       // this.myLocation()
 
       console.log('노비 문서 가져오기')
