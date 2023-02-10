@@ -136,26 +136,26 @@ export default {
   },
   methods: {                  
     // 노비 문서 생성 -> 백에서 받아오는 API로 수정하기
-    generatePapers(){
-      console.log('2. generatePapers 함수 실행')
+    // generatePapers(){
+    //   console.log('2. generatePapers 함수 실행')
 
-      for(let i = 0; i < 10; i++) {
-        const randomPoint = randomLocation.randomCirclePoint({latitude: this.roomInfo.lat, longitude: this.roomInfo.lng}, this.roomInfo.radius*0.9)
-        let real
-        if(i < 5){
-          real = true
-        } else {
-          real = false
-        }
-        this.papers.push({ 
-          id: i,
-          position: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
-          real: real,
-          ripped: false,
-        })
-      }
-      console.log(this.papers)
-    },
+    //   for(let i = 0; i < 10; i++) {
+    //     const randomPoint = randomLocation.randomCirclePoint({latitude: this.roomInfo.lat, longitude: this.roomInfo.lng}, this.roomInfo.radius*0.9)
+    //     let real
+    //     if(i < 5){
+    //       real = true
+    //     } else {
+    //       real = false
+    //     }
+    //     this.papers.push({ 
+    //       id: i,
+    //       position: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
+    //       real: real,
+    //       ripped: false,
+    //     })
+    //   }
+    //   console.log(this.papers)
+    // },
     generatePlayer(){
       console.log('2. generatePapers 함수 실행')
 
@@ -183,6 +183,7 @@ export default {
       const distance = this.calculateDistance(marker)
       if(distance > this.catchRadius) {
         console.log('노비문서를 확인하시겠습니까?')
+        alert('노비문서를 확인하시겠습니까?')
       }
     },
     // 범위 밖으로 나갈 시 경고
@@ -204,7 +205,7 @@ export default {
         console.log(this.me.lat)
         console.log(this.me.lng)
         // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
-        this.catch()
+        // this.catch()
         // this.ripPaper()
         // const roomCenter = { position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} }
         // console.log('---------------------')
@@ -270,7 +271,18 @@ export default {
       for(const marker of this.papers){
         const distance = this.calculateDistance(marker)
         if(distance <= this.catchRadius){
-          console.log('잡을 수 있음')
+          alert('잡으세요.')
+          // console.log('잡을 수 있음')
+          this.conn.send(JSON.stringify(
+            {
+              event:'(백에서 받아서 분류)',
+              // nickname:(선택),
+              room: this.roomInfo.id,
+              startData: {
+                others : marker,
+              }
+            }
+          ));
         } else {
           console.log('잡을 수 없음')
         }
@@ -290,12 +302,15 @@ export default {
     }
 
     // 내 위치
+    console.log('내 위치 가져오기')
     this.myLocation()
     // setInterval(this.myLocation(),1000)
 
     // 노비 문서 위치
+    console.log('노비 문서 가져오기')
     const papers = sessionStorage.info.slavepaper
     for (let i = 0; i < papers.length; i++){
+      console.log(i)
       this.papers.push({ 
             id: i,
             position: { lat: papers[i].lat, lng: papers[i].lng } ,
@@ -304,14 +319,17 @@ export default {
           })
     }
     console.log(this.papers)
+    // this.catch()
 
-    this.generatePlayer()
+
+    // this.generatePlayer()
 
   },
   mounted() {
     this.ripPaper()
     this.outOfPlayground({position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}})
     // this.catch()
+    setInterval(this.catch(), 3000)
 
   },
   computed: {

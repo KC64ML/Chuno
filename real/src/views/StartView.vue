@@ -6,17 +6,34 @@
             <img src="@/assets/main_button1.png" id="button1">
             <div class="image_text">시작해요</div>
         </div>
+        <br>
+        <div @click="play(bgm)">audioPlayer</div>
     </div>
 </template>
 
 <script>
-    export default {
-        methods: {
-            start() {
-                this.$router.push("/login")
-            }
+import bgm from '@/assets/bgm.mp3'
+  export default {
+    methods: {
+      start() {
+          this.$router.push("/login")
+      },
+      play() {
+          var audio = new Audio(this.bgm);
+          audio.play();
         }
-    }
+    },
+
+    data(){
+      return {
+        bgm,
+      }
+    },
+    created(){
+      this.play
+    },
+    
+  }
 </script>
 
 <style lang="scss" scoped>
