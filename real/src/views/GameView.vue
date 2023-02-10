@@ -1,3 +1,4 @@
+
 <template> 
   <!-- <div> -->
   <MenuView 
@@ -41,6 +42,7 @@
     </div>
   </div>
   <SpiningModalVue @spinningEnd="spinningEnd" v-if="spinningModal"></SpiningModalVue>
+  <RoleModalVue></RoleModalVue>
 
 </template>
 
@@ -49,6 +51,7 @@ import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue'
 import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
+import RoleModalVue from '@/components/game/RoleModalVue.vue'
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
@@ -57,11 +60,12 @@ export default {
 
   name: 'GameView',
   components: {
-    MapView,
+
     OpenViduVue,
     MenuView,
     ItemModal,
-    SpiningModalVue
+    SpiningModalVue,
+    RoleModalVue,
   },
   async created() {
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
