@@ -28,10 +28,8 @@
         </div>
       </div>
     </div>
-
-    <SpiningModalVue></SpiningModalVue>
-
   </div>
+  <SpiningModalVue></SpiningModalVue>
 
 </template>
 
