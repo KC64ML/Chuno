@@ -287,8 +287,8 @@ export default {
       console.log(marker)
       const lat1 = this.location.lat
       const lng1 = this.location.lng
-      const lat2 = marker.position.lat
-      const lng2 = marker.position.lng
+      const lat2 = marker['position'].lat
+      const lng2 = marker['position'].lng
       const r = 6371; //지구의 반지름(km)
       const dLat = (lat2-lat1) * (Math.PI/180)
       const dLon = (lng2-lng1) * (Math.PI/180)

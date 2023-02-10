@@ -241,8 +241,8 @@ export default {
         .then((coordinates) => {
         this.location.lat = coordinates.lat
         this.location.lng = coordinates.lng
-        console.log(this.me.lat)
-        console.log(this.me.lng)
+        console.log(this.location.lat)
+        console.log(this.location.lng)
         // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
         this.catch()
         // this.ripPaper()
@@ -292,7 +292,7 @@ export default {
     calculateDistance(marker){
       console.log('!!calculateDistance 함수 실행됨')
       console.log(marker)
-      const lat1 = this.me.lat
+      const lat1 = this.location.lat
       const lng1 = this.me.lng
       const lat2 = marker.position.lat
       const lng2 = marker.position.lng
