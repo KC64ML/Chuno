@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <!-- <div> -->
   <MenuView 
     v-if="menu" 
     @use-item="useItem"
@@ -9,8 +9,10 @@
     v-if="itemModal" 
     :usedItem="usedItem" 
     @item-yes="itemYes"
-    @item-no="itemNo"
-    style="position:absolute; bottom: 60px;"/>
+    @item-no="itemNo" 
+    @on-modal="OnModal"
+    style="position:absolute; bottom: 60px;"
+   />
   <div>
     
     <OpenViduVue
@@ -38,7 +40,8 @@
       </div>
     </div>
   </div>
-</div>
+  <!-- <SpiningModalVue></SpiningModalVue> -->
+
 </template>
 
 <script>
@@ -48,6 +51,8 @@ import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
+// import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
+
 export default {
 
   name: 'GameView',
@@ -56,6 +61,7 @@ export default {
     OpenViduVue,
     MenuView,
     ItemModal,
+    // SpiningModalVue
   },
   async created() {
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
@@ -77,7 +83,7 @@ export default {
   },
   data() {
     return {
-      my_cam_modal: {active: false},
+      my_cam_modal: { active: false },
       menu: false,
       itemModal: false,
       user: undefined,
@@ -108,44 +114,46 @@ export default {
       console.log("mycam 눌림");
     },
     useItem(item){
+      console.log('게임뷰임. 사용한 아이템표시')
+      console.log(item)
       this.usedItem = item
       this.itemModal = true
+      console.log(this.itemModal)
       console.log('아이템 사용')
-      console.log(item)
     },
-    itemYes(item){
+    itemYes(item) {
       this.itemModal = false
       //아이템 사용
       if(item.id == 1){
-        // 천리안
+        // 천리안: 가장 가까운 추노꾼 위치 표시
         console.log(item)
       } else if (item.id == 2){
-        // 위장
+        // 위장: 추노꾼의 catch 범위 축소
         console.log(item)
-        
+
       } else if (item.id == 3) {
-        // 확실한 정보통: 30초간 노비 위치 표시
+        // 확실한 정보통: 진짜 노비 문서 위치 표시
         console.log(item)
         this.visibility = true
-        setTimeout(this.visibility=true, 30000)
-        
-      } else if (item.id == 4){
+        setTimeout(this.visibility = true, 30000)
+
+      } else if (item.id == 4) {
         // 먹물탄
         console.log(item)
       } else if (item.id == 5){
-        // 조명탄
+        // 조명탄: 30초간 노비 위치 표시
         console.log(item)
       } else if (item.id == 6){
-        // 긴 오랏줄
+        // 긴 오랏줄: 노비 catch 범위 확대
         console.log(item)
       } else {
         // 연막탄
         console.log(item)
       }
-      
+
 
     },
-    itemNo(){
+    itemNo() {
       this.itemModal = false
     },
   }
@@ -175,9 +183,10 @@ $button_width: 60px;
 
 .menu-window {
   float: right;
-  position:absolute; 
+  position: absolute;
   bottom: 60px;
 }
+
 .menu_box {
   width: 20%;
   display: flex;
@@ -196,9 +205,8 @@ $button_width: 60px;
   border-radius: 15px;
   font-size: 20px;
 }
+
 .map_search::placeholder {
   color: rgba(255, 255, 255, 0.56)
 }
-
-
 </style>

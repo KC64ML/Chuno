@@ -41,8 +41,9 @@
           :icon=paperMarkerImg
           :animation=1
           :position="m.position"
-          :clickable="true"
-        />
+          @click="openInfoWindow(marker.id)"
+          />
+          <!-- :clickable="true" -->
       </div>
       <!-- 다른 플레이어 위치 -->
       <div
@@ -136,26 +137,26 @@ export default {
   },
   methods: {                  
     // 노비 문서 생성 -> 백에서 받아오는 API로 수정하기
-    generatePapers(){
-      console.log('2. generatePapers 함수 실행')
+    // generatePapers(){
+    //   console.log('2. generatePapers 함수 실행')
 
-      for(let i = 0; i < 10; i++) {
-        const randomPoint = randomLocation.randomCirclePoint({latitude: this.roomInfo.lat, longitude: this.roomInfo.lng}, this.roomInfo.radius*0.9)
-        let real
-        if(i < 5){
-          real = true
-        } else {
-          real = false
-        }
-        this.papers.push({ 
-          id: i,
-          position: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
-          real: real,
-          ripped: false,
-        })
-      }
-      console.log(this.papers)
-    },
+    //   for(let i = 0; i < 10; i++) {
+    //     const randomPoint = randomLocation.randomCirclePoint({latitude: this.roomInfo.lat, longitude: this.roomInfo.lng}, this.roomInfo.radius*0.9)
+    //     let real
+    //     if(i < 5){
+    //       real = true
+    //     } else {
+    //       real = false
+    //     }
+    //     this.papers.push({ 
+    //       id: i,
+    //       position: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
+    //       real: real,
+    //       ripped: false,
+    //     })
+    //   }
+    //   console.log(this.papers)
+    // },
     generatePlayer(){
       console.log('2. generatePapers 함수 실행')
 
@@ -183,6 +184,7 @@ export default {
       const distance = this.calculateDistance(marker)
       if(distance > this.catchRadius) {
         console.log('노비문서를 확인하시겠습니까?')
+        alert('노비문서를 확인하시겠습니까?')
       }
     },
     // 범위 밖으로 나갈 시 경고
@@ -197,14 +199,14 @@ export default {
     // 내 위치
     myLocation() {
       console.log('1. myLocation 함수 실행')
-      this.$watchLocation({enableHighAccuracy: true})
+      this.$getLocation({enableHighAccuracy: true})
       .then((coordinates) => {
         this.me.lat = coordinates.lat
         this.me.lng = coordinates.lng
         console.log(this.me.lat)
         console.log(this.me.lng)
         // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
-        this.catch()
+        // this.catch()
         // this.ripPaper()
         // const roomCenter = { position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} }
         // console.log('---------------------')
@@ -248,6 +250,7 @@ export default {
       }
       // console.log(window)
     },
+    // 나와 marker의 거리 계산
     calculateDistance(marker){
       console.log('!!calculateDistance 함수 실행됨')
       console.log(marker)
@@ -267,10 +270,21 @@ export default {
     // 노비 잡기
     catch(){
       console.log('!! catch 함수 실행되기는 함')
-      for(const marker of this.papers){
+      for(const marker of this.others){
         const distance = this.calculateDistance(marker)
         if(distance <= this.catchRadius){
-          console.log('잡을 수 있음')
+          alert('잡으세요.')
+          // console.log('잡을 수 있음')
+          this.conn.send(JSON.stringify(
+            {
+              event:'catch',
+              // nickname:(선택),
+              room: this.roomInfo.id,
+              startData: {
+                others : marker,
+              }
+            }
+          ));
         } else {
           console.log('잡을 수 없음')
         }
@@ -290,15 +304,35 @@ export default {
     }
 
     // 내 위치
+    console.log('내 위치 가져오기')
     this.myLocation()
     // setInterval(this.myLocation(),1000)
-    this.generatePapers()
-    this.generatePlayer()
+
+    // 노비 문서 위치
+    console.log('노비 문서 가져오기')
+    const info = JSON.parse(sessionStorage.info)
+    const papers = info.slavepaper
+    for (let i = 0; i < papers.length; i++){
+      console.log(i)
+      this.papers.push({ 
+            id: i,
+            position: { lat: papers[i].lat, lng: papers[i].lng } ,
+            real: papers[i].real,
+            ripped: false,
+          })
+    }
+    console.log(this.papers)
+    // this.catch()
+
+
+    // this.generatePlayer()
+
   },
   mounted() {
     this.ripPaper()
     this.outOfPlayground({position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}})
     // this.catch()
+    setInterval(this.catch(), 3000)
 
   },
   computed: {
@@ -306,22 +340,22 @@ export default {
       return this.roomInfo.radius * 0.1
     }
   },
-  // watch: {
-  //   player(){
-  //     // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
-  //     this.catch()
-  //     this.ripPaper()
-  //     const roomCenter = { position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} }
-  //     console.log(roomCenter)
-  //     this.outOfPlayground(roomCenter)
-  //     // 위치 공유
-  //     this.session.on("streamCreated", function (event) {
-  //       this.session.subscribe(event.stream, "subscriber");
-  //       // const USER_DATA = {}
-  //       console.log("USER DATA: " + event.stream.connection.data);
-  //     });
-  //   }
-  // },
+  watch: {
+    // player(){
+    //   // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
+    //   this.catch()
+    //   this.ripPaper()
+    //   const roomCenter = { position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} }
+    //   console.log(roomCenter)
+    //   this.outOfPlayground(roomCenter)
+    //   // 위치 공유
+    //   this.session.on("streamCreated", function (event) {
+    //     this.session.subscribe(event.stream, "subscriber");
+    //     // const USER_DATA = {}
+    //     console.log("USER DATA: " + event.stream.connection.data);
+    //   });
+    // }
+  },
 };
 </script>
 

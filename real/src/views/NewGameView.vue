@@ -15,6 +15,7 @@
             <img class="menu" src="@/assets/game_menu.png">
         </div>
     </div>
+    sefesfa
 </template>
 
 <script>
