@@ -258,11 +258,13 @@ public class SocketRoomHandler extends TextWebSocketHandler {
 			room_host = new HashMap<>();
 			room_map = new HashMap<>();
 		}else if(event.equals("playerLocation")) {
+			System.out.println("playerLocation 이벤트 리슨");
 			HashMap<String, Object> dto5 = new HashMap<>();
 			dto5.put("type", "othersLocation");
 			dto5.put("info", inputDto.getStartData());
 			TextMessage msg5 = new TextMessage(mapper.writeValueAsString(dto5));
 			for(PlayerDto p : room_map.get(room)) {
+				System.out.println(p.getNickname());
 				p.getSession().sendMessage(msg5);
 			}
 		}else if (event.equals("sendlocation")) {
