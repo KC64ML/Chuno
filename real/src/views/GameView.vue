@@ -138,13 +138,11 @@ export default {
       } else if (item.id == 2){
         // 위장: 추노꾼의 catch 범위 축소
         console.log(item)
-
       } else if (item.id == 3) {
         // 확실한 정보통: 진짜 노비 문서 위치 표시
         console.log(item)
         this.visibility = true
-        setTimeout(this.visibility = true, 30000)
-
+        setTimeout(this.visibility = false, 30000)
       } else if (item.id == 4) {
         // 먹물탄
         console.log(item)

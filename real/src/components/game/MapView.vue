@@ -157,8 +157,9 @@ export default {
         })
       }
         console.log("노비문서 받는 중", this.papers);
-
-      console.log("enrollEvent at MapView");
+      
+    },
+    erollEvent() {
       new Promise((resolve) => {
         console.log("promise at MapView");
         this.conn.onmessage = async (e) => {
@@ -189,9 +190,7 @@ export default {
     },
     myLocationInterval() {
       // 내 위치
-      setTimeout(() => {
-        this.locationInterval = setInterval(() => {this.myLocation()}, 1000);
-      }, 3000)
+      this.locationInterval = setInterval(() => {this.myLocation()}, 1000);
     },
 
     // 노비문서 찢기
@@ -343,6 +342,9 @@ export default {
     // this.myLocation()
     // setInterval(this.myLocation(),1000) */
     this.init();
+    setTimeout(() => {
+      this.erollEvent();
+    }, 5000);
     
     // this.catch()
 
