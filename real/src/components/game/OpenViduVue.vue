@@ -1,5 +1,5 @@
 <template>
-    <div id="main_vedio_container" style="z-index: 100000;">
+    <div id="main_vedio_container" style="z-index: 10000;">
         <!-- <video autoplay ref="video" class="enemy_video"></video> -->
         <user-video 
             :stream-manager="mainStreamManager" 

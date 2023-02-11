@@ -26,6 +26,7 @@ $card_height: 40px;
   line-height: $card_height;
   box-shadow: 0 10px 10px $shadow_color;
   font-weight: 800;
+  z-index: 99999;
 }
 .yellow {
   background-color: #f9cf65;

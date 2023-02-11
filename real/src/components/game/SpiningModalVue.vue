@@ -166,7 +166,7 @@ $map_height: $map_width;
 }
 #spining_container {
     position: absolute;
-    z-index: 10000;
+    z-index: 100000;
     width: 100vw;
     height: 100%;
     background-image: url("@/assets/main_back.png");
