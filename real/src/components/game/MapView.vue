@@ -83,7 +83,6 @@ import truePaper from '@/assets/TruePaper.png'
 import othersMarker from '@/assets/runner.png'
 import CatchModal from './CatchModal.vue';
 import RipModal from './RipModal.vue';
-import { connect } from 'http2';
 
 export default {
   name: 'MapView',
@@ -203,7 +202,7 @@ export default {
               } else {
                 console.log(target.nickname + '님이' + content.nickname + '님한테 잡혔다...')
               }
-            } else if (connect.type == "ripPaper") {
+            } else if (content.type == "ripPaper") {
               const content = JSON.parse(e.data);
               const paper = content.user.paper
               console.log(content.nickname + '이 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
