@@ -28,7 +28,6 @@
             <NicknameCardVue :sub="sub"></NicknameCardVue>
         </div>
     </div>
-    {{ subscribers }}
     <div id="chat_log">
         <div v-for="(c, idx) in chat_log" :key="idx">
             {{ c.nickname }} : {{ c.msg }}
@@ -159,16 +158,15 @@ export default {
             }))
         },
         ready_button() {
-            alert("준비 버튼");
             this.conn.send(JSON.stringify({
                 "event": "ready",
                 "room": this.room_info.id,
                 "nickname": this.user.nickname,
                 "level": this.user.level,
             }))
+
         },
         async start_button() {
-            alert("스타트버튼");
             for (var s of this.subscribers) {
                 if (s.host || s.ready) continue;
                 alert("모두가 레디여야 해요");
@@ -214,7 +212,6 @@ export default {
             // }))
         },
         transform_chat() {
-            alert("보내용");
             this.conn.send(JSON.stringify({
                 "event": "chat",
                 "room": this.room_info.id,

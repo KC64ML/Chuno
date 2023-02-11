@@ -1,4 +1,7 @@
 <template>
+    <div>
+        <div></div>
+    </div>
     <div class="main_back flex_center">
         <router-view :key="$route.fullPath"></router-view>
     </div>

@@ -2,11 +2,11 @@
     <div id="container">
         <div class="menu_box" @click="this.$router.push('/home')">
             <img class="menu" src="@/assets/Home.svg">
-            <div style="color: white">둘러보기</div>
+            <div style="color: white">저잣거리</div>
         </div>
         <div class="menu_box" @click="this.$router.push('/search')">
             <img class="menu" src="@/assets/Search.svg">
-            <div style="color: white">탐색</div>
+            <div style="color: white">거리탐색</div>
         </div>
         <div class="menu_box" @click="this.$router.push({ name: 'Profile', params: { uid: userInfo.id } })">
             <img class="menu" src="@/assets/Profile_footer.svg">
