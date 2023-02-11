@@ -10,7 +10,7 @@
             </div>
             <div style="font-size: 25px; margin-right: 20px;">X</div>
         </div>
-        sdfs
+        sef
         <div v-for="(e, idx) in chat_log" :key="idx">
             {{ e }}
         </div>

@@ -17,7 +17,24 @@
   <OpenViduVue
     :my_cam_modal="my_cam_modal"
     :user="user"></OpenViduVue>
-  <ChatModalVue :signal="signalingToChatModal" :chat_data="chat_data" @clearChatData="clearChatData" v-if="chat_modal"></ChatModalVue> 
+   
+  <div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
+        <div id="chat_header"
+            style="display: flex; align-items:center; justify-content: space-between; margin-bottom: 10px;">
+            <div>
+                <img src="@/assets/main_logo2.png" alt="" style="width: 50px; height: 50px; margin-left: 20px;">
+            </div>
+            <div style="font-size: 30px">
+                전언
+            </div>
+            <div style="font-size: 25px; margin-right: 20px;" @click="close_chat_modal">X</div>
+        </div>
+        sef
+        <div v-for="(e, idx) in chat_log" :key="idx">
+            {{ e }}
+        </div>
+    </div>
+  
   <MapView :user="user" :roomInfo="roomInfo" />
   <div style="position: absolute; bottom: 0; left: 0;">
 
@@ -26,7 +43,7 @@
     <!-- </div> -->
     
     <div id="footer_container">
-      <div class="menu_box flex_center" @click="this.$router.push('/home')">
+      <div class="menu_box flex_center" @click="open_chat_modal">
         <img class="menu" src="@/assets/game_chat.png">
       </div>
       <div>
@@ -54,7 +71,6 @@ import MapView from '@/components/game/MapView.vue' // huh
 import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
 import RoleModalVue from '@/components/game/RoleModalVue.vue'
-import ChatModalVue from '@/components/game/ChatModalVue.vue'
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
@@ -69,9 +85,14 @@ export default {
     ItemModal,
     SpiningModalVue,
     RoleModalVue,
-    ChatModalVue,
   },
   async created() {
+    this.conn.onmessage = async (e) => {
+      var content = JSON.parse(e.data);
+      if (content.type == 'chat') {
+        console.log({ nickname: content.nickname, msg: content.message })
+      }
+    }
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
           {
               headers: { Authorization: sessionStorage.token }
@@ -90,6 +111,9 @@ export default {
     const info = JSON.parse(sessionStorage.info);
     this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
     console.log("GameView created complete");
+    console.log("-----------------------")
+    console.log(this.user);
+    console.log(this.roomInfo);
   },
   data() {
     return {
@@ -103,7 +127,6 @@ export default {
       roomInfo: undefined,
 
       chat_modal: false,
-      signalingToChatModal: 0,
       chat_data: "",
     }
   },
@@ -177,9 +200,22 @@ export default {
     modalAllClose() {
       this.roleModal = false;
     },
+
+    open_chat_modal() {
+      this.chat_modal = !this.chat_modal;
+    },
+    close_chat_modal() {
+      this.chat_modal = false;
+    },
     transmit_chat() {
-      console.log(this.signalingToChatModal)
-      this.signalingToChatModal++;
+      alert("챗보내기")
+      this.conn.send(JSON.stringify({
+        "evnet": "chat",
+        "room": 1,
+        "nickname": "1",
+        "level": this.user.level,
+        "msg": "222",
+      }))
     },
     clearChatData() {
       this.chat_data = "";
@@ -236,5 +272,17 @@ $button_width: 50px;
 
 .map_search::placeholder {
   color: rgba(255, 255, 255, 0.56)
+}
+
+#chat_container {
+    z-index: 1010;
+    position: absolute;
+    bottom: $footer-height;
+    background-image: url("@/assets/main_back_horizon.png");
+    background-size: cover;
+    width: 100vw;
+    max-height: 60%;
+    min-height: 200px;
+    overflow-y: scroll;
 }
 </style>
