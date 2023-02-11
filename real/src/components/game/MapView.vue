@@ -31,17 +31,16 @@
         :options="playgroundOptions"
       />
       <!-- 내 위치 -->
-      <div v-if="myMarker">
-        <GMapMarker
-          :animation=4
-          :position=this.location
-        />
-        <GMapCircle
-          :radius="catchRadius"
-          :center="location"
-          :options="circleOptions"
-        />
-      </div>
+      <GMapMarker
+        :animation=4
+        :position=this.location
+      />
+      <GMapCircle
+        :radius="catchRadius"
+        :center="location"
+        :options="circleOptions"
+      />
+      
       <!-- 노비문서 위치 -->
       <div v-if="user.role == runner">
 
@@ -256,6 +255,15 @@ export default {
             }
           }
         ));
+      this.conn.send(JSON.stringify(
+        {
+          event: "chat",
+          nickname: 'system',
+          startData: {
+            paper: target,
+          }
+        }
+      ))
     },
     // 범위 밖으로 나갈 시 경고
     outOfPlayground(location){
@@ -399,6 +407,15 @@ export default {
               others : target,
             }
           }
+      ))
+      this.conn.send(JSON.stringify(
+        {
+          event: 'chat',
+          nickname: 'system',
+          startData: {
+            others : target,
+          }
+        }
       ))
     },
   },

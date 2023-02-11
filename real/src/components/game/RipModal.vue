@@ -21,6 +21,7 @@
           </div>
         </div>
       </div>
+      </div>
       <div id="make_room_modal" v-if="!page1">
         <div class="flex_center">
             <img
