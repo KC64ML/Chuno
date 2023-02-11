@@ -39,14 +39,14 @@
                         </div>
                         <div v-else>
                             <GMapMarker :icon="chuno_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
-                                v-if="mk.role == 'chuno'" />
+                                v-if="mk.role == 'chuno'" /> 
                             <GMapMarker :icon="slave_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
                                 v-else-if="mk.me == 'slave'" />
                         </div>
                     </div>
                     <GMapCircle :radius="roomradius" :center="roomcenter" :options="gameCircle" />
                 </GMapMap>
-                <div class="map_size mak" @click="noTouch"></div>
+                <!-- <div class="map_size mak" @click="noTouch"></div> -->
             </div>
             <div :class="{div_hidden : !count_down_start}" style="text-align: center; font-size: 25px; margin-top: 20px;">
                 {{ count_down }}초 후에 게임이 시작되요!
