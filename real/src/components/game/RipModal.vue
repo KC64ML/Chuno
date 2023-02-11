@@ -20,6 +20,7 @@
             <div class="image_text" data-v-7961e374="" @click="verify">확인하기</div>
           </div>
       </div>
+      </div>
       <div id="make_room_modal" v-if="!page1">
         <div class="flex_center">
             <img
@@ -31,7 +32,7 @@
           <div id="modal_title" style="font-size: 24px">이 문서를는 진짜입니다.</div>
           <div class="flex_center hover_pointer" data-v-7961e374="">
             <img
-              src="@/assets/main_utton1.png"
+              src="@/assets/main_button1.png"
               id="button1"
               data-v-7961e374=""
               style="width: 140px"
@@ -53,7 +54,7 @@
               <div class="image_text" data-v-7961e374="" @click="onFalsePaper">확인</div>
           </div>
         </div>
-  
+        </div>
       </div>
     </div>
   </template>
