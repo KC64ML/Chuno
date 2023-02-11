@@ -53,11 +53,6 @@
       </div>
       <!-- 다른 플레이어 위치 -->
       <div
-        v-for="m in others"
-        :key="m.nickname"
-        @click="ripPaper(m)"
-
-      <div
         v-for="(o, key, idx) in others"
         :key="idx"
         @click="ripPaper(o)"
