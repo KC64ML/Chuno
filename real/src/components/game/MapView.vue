@@ -180,10 +180,11 @@ export default {
             
           } else if (content.type == "caughtRunner") {
               const content = JSON.parse(e.data);
+              const target = content.info.others;
               if(content.info.nickname == this.user.nickname) {
                 console.log('잡혔다...')
               } else {
-                console.log(content.info.nickname + '님이' + content.nickname + '님한테 잡혔다...')
+                console.log(target.nickname + '님이' + content.nickname + '님한테 잡혔다...')
               }
             
           }
