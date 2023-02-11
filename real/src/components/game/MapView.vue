@@ -43,12 +43,14 @@
         />
       </div>
       <!-- 노비문서 위치 -->
-      <div
-        v-for="m in papers"
-        :key="m.id"
-        @click="ripPaper(m)"
-      >
-        <GMapMarker
+      <div v-if="user.role == runner">
+
+        <div
+          v-for="m in papers"
+          :key="m.id"
+          @click="ripPaper(m)"
+          >
+          <GMapMarker
           v-if="!m.ripped"
           :icon=paperMarkerImg
           :animation=1
@@ -56,7 +58,9 @@
           @click="openInfoWindow(marker.id)"
           />
           <!-- :clickable="true" -->
+        </div>
       </div>
+
       <!-- 다른 플레이어 위치 -->
       <div
         v-for="(o, key, idx) in others"
@@ -205,7 +209,7 @@ export default {
               console.log(paper)
               const target = this.papers[paper.id -1]
               target.ripped = true
-              console.log('밑에 찍히는 대로 업뎃했다.')
+              console.log('밑에 찍히는  대로 업뎃했다.')
               console.log(target)
           }
         }
