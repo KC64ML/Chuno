@@ -4,6 +4,7 @@
       v-if="catchModal"
       :catchTarget="catchTarget"
       @on-no-catch="onNoCatch"
+      @on-yes-catch="onYesCatch"
     />
     <GMapMap
       :center="location"
@@ -308,22 +309,16 @@ export default {
     // 노비 잡기
     catchRunner(marker){
       console.log('!! catchRunner 함수 실행되기는 함')
+      console.log('--------------MARKER-----------------')
+      console.log(marker)
       const distance = this.calculateDistance(marker)
+      console.log('--------------DISTANCE-----------------')
+      console.log(distance)
       if(distance <= this.catchRadius){
-
         console.log('잡을 수 있음' + marker)
         this.catchModal = true
         this.catchTarget = marker
-        this.conn.send(JSON.stringify(
-          {
-            event:'catch',
-            // nickname:(선택),
-            room: this.roomInfo.id,
-            startData: {
-              others : marker,
-            }
-          }
-        ));
+        
       } else {
         console.log('잡을 수 없음')
       }
@@ -332,6 +327,23 @@ export default {
     onNoCatch(){
       this.catchModal == false
       console.log('노비 안잡을래..')
+    },
+    // 노비 잡기
+    onYesCatch(target){
+      console.log('노비 잡을래!!!')
+      console.log('--------------TARGET-----------------')
+      console.log(target)
+      this.catchModal == false
+      this.conn.send(JSON.stringify(
+          {
+            event:'catchRunner',
+            nickname: user.nickname,
+            room: this.roomInfo.id,
+            startData: {
+              others : target,
+            }
+          }
+      ))
     },
   },
   created() {
