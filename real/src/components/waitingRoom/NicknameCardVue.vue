@@ -9,11 +9,11 @@ export default {
     props: {
         sub: undefined
     },
-    watch: {
-        sub: function(value, oldvalue) {
-            alert("변했어요" + value + oldvalue);
-        }
-    }
+    // watch: {
+    //     sub: function(value, oldvalue) {
+    //         alert("변했어요" + value + oldvalue);
+    //     }
+    // }
 }
 </script>
 
