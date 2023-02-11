@@ -56,11 +56,16 @@
         v-for="m in others"
         :key="m.nickname"
         @click="ripPaper(m)"
+
+      <div
+        v-for="(o, key, idx) in others"
+        :key="idx"
+        @click="ripPaper(o)"
       >
         <GMapMarker
-          v-if="!m.myMarker"
+          v-if="o.myMarker"
           :icon=othersMarkerImg
-          :position="m.location"
+          :position="o.location"
           :clickable="true"
         />
       </div>
@@ -132,7 +137,12 @@ export default {
       // 노비 잡는 모달
       catchModal: false,
       catchTrarget: {},
+      locationInterval: null,
     };
+  },
+  beforeRouteLeave(to, from, next) {
+    clearInterval(this.locationInterval);
+    next();
   },
   methods: {                  
     enrollEvent() {
@@ -144,6 +154,9 @@ export default {
           const content = JSON.parse(e.data);
           if (content.type == "othersLocation") {
             const other = content.info; // startData가 여기 담겨잇다.
+            if (other.nickname == this.user.nickname) {
+              return;
+            }
             this.others[other.nickname] = {
               nickname: other.nickname,
               role: other.role,
@@ -175,7 +188,7 @@ export default {
       }
 
       // 내 위치
-      setInterval(() => {this.myLocation()}, 3000);
+      this.locationInterval = setInterval(() => {this.myLocation()}, 1000);
       // this.myLocation()
       // 노비 문서 위치
       console.log('노비 문서 가져오기')
@@ -301,7 +314,7 @@ export default {
       console.log('!! catchRunner 함수 실행되기는 함')
       const distance = this.calculateDistance(marker)
       if(distance <= this.catchRadius){
-        // alert('잡으세요.')
+
         console.log('잡을 수 있음' + marker)
         this.catchModal = true
         this.catchTarget = marker
@@ -332,7 +345,7 @@ export default {
     // setInterval(this.myLocation(),1000) */
     setTimeout(() => {
       this.enrollEvent();
-    }, 10000);
+    }, 4000);
     
     // this.catch()
 

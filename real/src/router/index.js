@@ -8,6 +8,8 @@ import GameView from '@/views/GameView.vue'
 
 import module from '@/router/module.js'
 
+
+
 const routes = [
   {
     path: "/",
