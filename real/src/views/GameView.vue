@@ -88,13 +88,13 @@ export default {
     ChatCardVue,
   },
   async created() {
-    this.conn.onmessage = async (e) => {
+    this.conn.addEventListener('message', (e)  => {
       var content = JSON.parse(e.data);
       if (content.type == 'chat') {
         console.log({ nickname: content.nickname, msg: content.message })
         this.chat_log.push({ nickname: content.nickname, msg: content.message })
       }
-    }
+    })
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
           {
               headers: { Authorization: sessionStorage.token }
