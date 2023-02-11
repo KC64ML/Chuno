@@ -181,8 +181,8 @@ export default {
           } else if (content.type == "caughtRunner") {
               const content = JSON.parse(e.data);
               const target = content.info.others;
-              if(content.info.nickname == this.user.nickname) {
-                console.log('잡혔다...')
+              if(target.nickname == this.user.nickname) {
+                console.log(target.nickname + '님이 잡혀버렸다...')
               } else {
                 console.log(target.nickname + '님이' + content.nickname + '님한테 잡혔다...')
               }
