@@ -31,17 +31,16 @@
         :options="playgroundOptions"
       />
       <!-- 내 위치 -->
-      <div v-if="myMarker">
-        <GMapMarker
-          :animation=4
-          :position=this.location
-        />
-        <GMapCircle
-          :radius="catchRadius"
-          :center="location"
-          :options="circleOptions"
-        />
-      </div>
+      <GMapMarker
+        :animation=4
+        :position=this.location
+      />
+      <GMapCircle
+        :radius="catchRadius"
+        :center="location"
+        :options="circleOptions"
+      />
+      
       <!-- 노비문서 위치 -->
       <div v-if="user.role == runner">
 
