@@ -155,6 +155,9 @@ export default {
           const content = JSON.parse(e.data);
           if (content.type == "othersLocation") {
             const other = content.info; // startData가 여기 담겨잇다.
+            if (other.nickname == this.user.nickname) {
+              return;
+            }
             this.others[other.nickname] = {
               nickname: other.nickname,
               role: other.role,
