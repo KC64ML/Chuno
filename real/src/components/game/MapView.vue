@@ -178,8 +178,14 @@ export default {
             console.log("ohters 받아오는 중 : ", this.others);
             this.catchRunner(other);
             
-          } else if (content.type == "") {
-            /* 뭔가 하자 */
+          } else if (content.type == "caughtRunner") {
+              const content = JSON.parse(e.data);
+              if(content.info.nickname == this.user.nickname) {
+                console.log('잡혔다...')
+              } else {
+                console.log(content.info.nickname + '님이' + content.nickname + '님한테 잡혔다...')
+              }
+            
           }
         }
         resolve();
@@ -324,7 +330,7 @@ export default {
     },
     // 노비 잡지 않기
     onNoCatch(){
-      this.catchModal == false
+      this.catchModal = false
       console.log('노비 안잡을래..')
     },
     // 노비 잡기
@@ -332,7 +338,7 @@ export default {
       console.log('노비 잡을래!!!')
       console.log('--------------TARGET-----------------')
       console.log(target)
-      this.catchModal == false
+      this.catchModal = false
       this.conn.send(JSON.stringify(
           {
             event:'catchRunner',
