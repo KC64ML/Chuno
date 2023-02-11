@@ -1,7 +1,9 @@
 <template>
+  <div>
     <CatchModal
       v-if="catchModal"
       :catchTarget="catchTarget"
+      @on-no-catch="onNoCatch"
     />
     <GMapMap
       :center="location"
@@ -63,12 +65,12 @@
         />
       </div>
     </GMapMap>
+  </div>
 </template>
 
 <script>
 import truePaper from '@/assets/TruePaper.png'
 import othersMarker from '@/assets/runner.png'
-import randomLocation from 'random-location'
 import CatchModal from './CatchModal.vue';
 export default {
   name: 'MapView',
@@ -86,6 +88,9 @@ export default {
         }
       }
     }, // 방 정보
+  },
+  components: {
+    CatchModal,
   },
   data() {
     return {
@@ -187,26 +192,6 @@ export default {
         })
         console.log("노비문서 받는 중", this.papers);
       }
-    },
-    generatePlayer(){
-      console.log('2. generatePapers 함수 실행')
-
-      for(let i = 0; i < 10; i++) {
-        const randomPoint = randomLocation.randomCirclePoint({latitude: this.roomInfo.lat, longitude: this.roomInfo.lng}, this.roomInfo.radius*0.9)
-        let real
-        if(i < 5){
-          real = true
-        } else {
-          real = false
-        }
-        this.others.push({ 
-          id: i,
-          location: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
-          real: real,
-          ripped: false,
-        })
-      }
-      console.log(this.papers)
     },
 
     // 노비문서 찢기
@@ -313,7 +298,7 @@ export default {
     },
     // 노비 잡기
     catchRunner(marker){
-      console.log('!! catch 함수 실행되기는 함')
+      console.log('!! catchRunner 함수 실행되기는 함')
       const distance = this.calculateDistance(marker)
       if(distance <= this.catchRadius){
         // alert('잡으세요.')
@@ -333,6 +318,11 @@ export default {
       } else {
         console.log('잡을 수 없음')
       }
+    },
+    // 노비 잡지 않기
+    onNoCatch(){
+      this.catchModal == false
+      console.log('노비 안잡을래..')
     },
   },
   created() {

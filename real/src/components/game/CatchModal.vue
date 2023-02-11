@@ -44,7 +44,7 @@
     },
     methods: {
         onYesCatch() {
-        alert("잡았다");
+        console.log("잡았다");
         this.$emit('on-no-catch');
       },
     },
