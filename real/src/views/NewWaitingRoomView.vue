@@ -145,8 +145,7 @@ export default {
             e.stopPropagation();
         },
         exiting_room(e) {
-            alert("나가기");
-            this.leave_room();
+            this.$router.push({ name: 'home' })
             e.stopPropagation();
         },
         leave_room() {
@@ -219,6 +218,7 @@ export default {
                 "level": this.user.level,
                 "msg": this.chat_data
             }))
+            this.chat_data = "";
         }
     }
 }
@@ -325,11 +325,14 @@ $ready_button_height: 50px;
 #chat_log {
     width: 100vw;
     position: absolute;
-    bottom: $footer_height ;
-    left: 0;
+    bottom: $footer_height + 20px;
+    left: 20px;
     max-height: 50%;
     font-size: 20px;
     overflow-y: scroll;
+}
+#chat_log > div {
+    margin: 10px 0;
 }
 </style>
 

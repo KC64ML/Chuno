@@ -169,7 +169,6 @@ export default {
       this.roleModal = true;
     },
     modalAllClose() {
-      console.log("-------------왔나요?????--------------");
       this.roleModal = false;
     }
   }
