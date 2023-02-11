@@ -201,7 +201,7 @@ export default {
               } else {
                 console.log(target.nickname + '님이' + content.nickname + '님한테 잡혔다...')
               }
-            } else if (content.type == "ripPaper") {
+            } else if (content.type == "rippedPaper") {
               const content = JSON.parse(e.data);
               const paper = content.user.paper
               console.log(content.nickname + '이 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
@@ -258,10 +258,10 @@ export default {
       this.conn.send(JSON.stringify(
         {
           event: "chat",
+          room: this.roomInfo.id,
           nickname: 'system',
-          startData: {
-            paper: target,
-          }
+          level: 1,
+          msg: `${this.user.nickname}이 노비문서를 찢었습니다.`
         }
       ))
     },
@@ -411,10 +411,10 @@ export default {
       this.conn.send(JSON.stringify(
         {
           event: 'chat',
+          room: this.roomInfo.id,
           nickname: 'system',
-          startData: {
-            others : target,
-          }
+          level: 1,
+          msg: `${this.user.nickname}이 ${target.nickname}을 잡았습니다.`
         }
       ))
     },
