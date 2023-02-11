@@ -14,9 +14,9 @@
     @on-modal="OnModal"
     style="position:absolute; bottom: 60px;"
    />
-  <!-- <OpenViduVue
+  <OpenViduVue
     :my_cam_modal="my_cam_modal"
-    :user="user"></OpenViduVue> -->
+    :user="user"></OpenViduVue>
    
   <div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
         <div id="chat_header"
@@ -34,7 +34,7 @@
         </div>
     </div>
   
-  <!-- <MapView :user="user" :roomInfo="roomInfo" /> -->
+  <MapView :user="user" :roomInfo="roomInfo" />
   <div style="position: absolute; bottom: 0; left: 0;">
 
     <!-- 아이템 사용 -->
@@ -65,8 +65,8 @@
 </template>
 
 <script>
-// import OpenViduVue from '@/components/game/OpenViduVue.vue'
-// import MapView from '@/components/game/MapView.vue' // huh
+import OpenViduVue from '@/components/game/OpenViduVue.vue'
+import MapView from '@/components/game/MapView.vue' // huh
 import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
 import RoleModalVue from '@/components/game/RoleModalVue.vue'
@@ -79,8 +79,8 @@ export default {
 
   name: 'GameView',
   components: {
-    // MapView,
-    // OpenViduVue,
+    MapView,
+    OpenViduVue,
     MenuView,
     ItemModal,
     SpiningModalVue,
@@ -124,11 +124,11 @@ export default {
       itemModal: false,
       user: undefined,
       usedItem: [],
-      spinningModal: false,
+      spinningModal: true,
       roleModal: false,
       roomInfo: undefined,
 
-      chat_modal: true,
+      chat_modal: false,
       chat_data: "",
       chat_log:[],
     }
