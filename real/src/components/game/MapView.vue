@@ -337,7 +337,7 @@ export default {
       this.conn.send(JSON.stringify(
           {
             event:'catchRunner',
-            nickname: user.nickname,
+            nickname: this.user.nickname,
             room: this.roomInfo.id,
             startData: {
               others : target,
