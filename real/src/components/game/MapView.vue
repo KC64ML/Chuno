@@ -31,10 +31,20 @@
         :options="playgroundOptions"
       />
       <!-- 내 위치 -->
-      <GMapMarker
-        :animation=4
-        :position=this.location
-      />
+      <div v-if="user.role == 'runner'">
+        <GMapMarker
+          :icon=myRunnerMarkerImg
+          :animation=4
+          :position=this.location
+        />
+      </div>
+      <div v-if="user.role == 'chaser'">
+        <GMapMarker
+          :icon=myChaserMarkerImg
+          :animation=4
+          :position=this.location
+        />
+      </div>
       <GMapCircle
         :radius="catchRadius"
         :center="location"
@@ -64,14 +74,45 @@
       <div
         v-for="(o, key, idx) in others"
         :key="idx"
-        >
+      >
         <!-- @click="ripPaper(o)" -->
-        <GMapMarker
-          v-if="o.myMarker"
-          :icon=othersMarkerImg
-          :position="o.location"
-          :clickable="true"
-        />
+        <!-- 내가 노비인데, -->
+        <!-- 상대도 노비일 때 -->
+        <div v-if="o.role == 'runner' && user.role == 'runner'">
+          <GMapMarker
+            :icon=otherRunnerMarkerImg
+            :position="o.location"
+            :clickable="true"
+          />
+        </div>
+        <!-- 상대가 추노일 때 -->
+        <div v-if="o.role == 'chasere' && user.role == 'runner'">
+          <GMapMarker
+            v-if="o.myMarker"
+            :icon=otherChaserMarkerImg
+            :position="o.location"
+            :clickable="true"
+          />
+        </div>
+
+        <!-- 내가 추노인데, -->
+        <!-- 상대도 추노일 때 -->
+        <div v-if="o.role == 'chaser' && user.role == 'chaser'">
+          <GMapMarker
+            :icon=otherChaserMarkerImg
+            :position="o.location"
+            :clickable="true"
+          />
+        </div>
+        <!-- 상대가 노비일 때 -->
+        <div v-if="o.role == 'chaser' && user.role == 'chaser'">
+          <GMapMarker
+            v-if="o.myMarker"
+            :icon=otherRunnerMarkerImg
+            :position="o.location"
+            :clickable="true"
+          />
+        </div>
       </div>
     </GMapMap>
   </div>
@@ -79,7 +120,10 @@
 
 <script>
 import truePaper from '@/assets/TruePaper.png'
-import othersMarker from '@/assets/runner.png'
+import RunnerMarker from '@/assets/slave_img.png'
+import ChaserMarker from '@/assets/chuno_img.png'
+import MyRunnerMarker from '@/assets/slave_me_img.png'
+import MyChaserMarker from '@/assets/chuno_me_img.png'
 import CatchModal from './CatchModal.vue';
 import RipModal from './RipModal.vue';
 
@@ -117,6 +161,14 @@ export default {
         fillColor: "#0000FF",
         fillOpacity: 0.15,
       },
+      myRunnerMarkerImg: {
+        url: MyRunnerMarker,
+        scaledSize: { width: 40, height: 40 }
+      },
+      myChaserMarkerImg: {
+        url: MyChaserMarker,
+        scaledSize: { width: 40, height: 40 }
+      },
       // 노비 문서 관련 정보
       papers: [], // props로
       paperMarkerImg: {
@@ -125,8 +177,12 @@ export default {
       },
       // 다른 플레이어 관련 정보
       others: {}, //props로
-      othersMarkerImg: {
-        url: othersMarker,
+      otherRunnerMarkerImg: {
+        url: RunnerMarker,
+        scaledSize: { width: 40, height: 40 }
+      },
+      otherChaserMarkerImg: {
+        url: ChaserMarker,
         scaledSize: { width: 40, height: 40 }
       },
 

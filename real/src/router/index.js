@@ -71,6 +71,11 @@ const routes = [
     name: 'Openvidutest',
     component: () => import("@/views/OpenViduTestView.vue")
   },
+  {
+    path: '/door',
+    name: 'Door',
+    component: () => import('@/components/game/DoorView.vue')
+  },
 
   ...module
 
