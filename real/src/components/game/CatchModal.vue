@@ -1,7 +1,7 @@
 <template>
     <div id="modal_back">
       <div id="make_room_modal">
-        <div id="modal_title" style="font-size: 24px">을(를) 잡으시겠습니까?</div>
+        <div id="modal_title" style="font-size: 24px">{{ catchTarget.nickname }}을(를) 잡으시겠습니까?</div>
   
         <div class="flex_center">
           <div class="flex_center hover_pointer" data-v-7961e374="">
@@ -11,7 +11,7 @@
               data-v-7961e374=""
               style="width: 140px"
             />
-            <div class="image_text" data-v-7961e374="" @click="del">예</div>
+            <div class="image_text" data-v-7961e374="" @click="onYesCatch">예</div>
           </div>
   
           <div class="flex_center">
@@ -25,7 +25,7 @@
               <div
                 class="image_text"
                 data-v-7961e374=""
-                @click="$emit('on-delete')"
+                @click="$emit('on-no-catch')"
               >
                 아니오
               </div>
@@ -39,29 +39,13 @@
   <script>
   export default {
     name: "DeleteAccountModal",
+    props: {
+        catchTarget: Object,
+    },
     methods: {
-      async del() {
-        alert("탈퇴완료");
-        const token = sessionStorage.token;
-        await this.axios.delete(process.env.VUE_APP_SPRING + "user", {
-          headers: { Authorization: token },
-        });
-        console.log("탈퇴완료");
-        this.$emit("on-delete");
-        sessionStorage.setItem("token", null);
-        // Kakao.API.request({
-        //   url: '/v1/user/unlink',
-        // })
-        //   .then(function(res) {
-        //     alert('success: ' + JSON.stringify(res));
-        //     deleteCookie();
-        //   })
-        //   .catch(function(err) {
-        //     alert('fail: ' + JSON.stringify(err));
-        //   });
-  
-        console.log("탈퇴되는지 확인");
-        this.$router.push({ name: "start" });
+        onYesCatch() {
+        console.log("잡았다");
+        this.$emit('on-no-catch');
       },
     },
   };

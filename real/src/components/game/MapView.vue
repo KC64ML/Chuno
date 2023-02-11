@@ -1,4 +1,10 @@
 <template>
+  <div>
+    <CatchModal
+      v-if="catchModal"
+      :catchTarget="catchTarget"
+      @on-no-catch="onNoCatch"
+    />
     <GMapMap
       :center="location"
       :zoom="18"
@@ -46,11 +52,11 @@
           <!-- :clickable="true" -->
       </div>
       <!-- 다른 플레이어 위치 -->
-      <!-- <div
+      <div
         v-for="m in others"
         :key="m.nickname"
         @click="ripPaper(m)"
-      > -->
+
       <div
         v-for="(o, key, idx) in others"
         :key="idx"
@@ -64,16 +70,13 @@
         />
       </div>
     </GMapMap>
+  </div>
 </template>
 
 <script>
-// import { OpenVidu } from "openvidu-browser";
-// const APPLICATION_SERVER_URL = process.env.RTC;
-
 import truePaper from '@/assets/TruePaper.png'
 import othersMarker from '@/assets/runner.png'
-import randomLocation from 'random-location'
-
+import CatchModal from './CatchModal.vue';
 export default {
   name: 'MapView',
   props:{
@@ -90,6 +93,9 @@ export default {
         }
       }
     }, // 방 정보
+  },
+  components: {
+    CatchModal,
   },
   data() {
     return {
@@ -127,17 +133,10 @@ export default {
         fillColor: "#FFFFFF",
         fillOpacity: 0,
       },
-      // roomInfo: {
-      //   room_id: 1,
-      //   title: "방이름1",
-      //   is_public: true,
-      //   password: null,
-      //   lat: 36.119485,
-      //   lng: 128.3445734,
-      //   radius: 1000,
-      //   host_id: "gogo",
-      //   room_start_time: new Date(2023, 1, 1, 13, 20, 0)
-      //   },
+      
+      // 노비 잡는 모달
+      catchModal: false,
+      catchTrarget: {},
       locationInterval: null,
     };
   },
@@ -165,7 +164,7 @@ export default {
               myMarker: other.myMarker
             };
             console.log("ohters 받아오는 중 : ", this.others);
-            this.catch(other);
+            this.catchRunner(other);
             
           } else if (content.type == "") {
             /* 뭔가 하자 */
@@ -206,26 +205,6 @@ export default {
         })
         console.log("노비문서 받는 중", this.papers);
       }
-    },
-    generatePlayer(){
-      console.log('2. generatePapers 함수 실행')
-
-      for(let i = 0; i < 10; i++) {
-        const randomPoint = randomLocation.randomCirclePoint({latitude: this.roomInfo.lat, longitude: this.roomInfo.lng}, this.roomInfo.radius*0.9)
-        let real
-        if(i < 5){
-          real = true
-        } else {
-          real = false
-        }
-        this.others.push({ 
-          id: i,
-          location: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
-          real: real,
-          ripped: false,
-        })
-      }
-      console.log(this.papers)
     },
 
     // 노비문서 찢기
@@ -331,13 +310,14 @@ export default {
       return distance
     },
     // 노비 잡기
-    catch(marker){
-      console.log('!! catch 함수 실행되기는 함')
+    catchRunner(marker){
+      console.log('!! catchRunner 함수 실행되기는 함')
       const distance = this.calculateDistance(marker)
       if(distance <= this.catchRadius){
-        // alert('잡으세요.')
-        console.log('잡을 수 있음')
-        console.log(marker);
+
+        console.log('잡을 수 있음' + marker)
+        this.catchModal = true
+        this.catchTarget = marker
         this.conn.send(JSON.stringify(
           {
             event:'catch',
@@ -351,6 +331,11 @@ export default {
       } else {
         console.log('잡을 수 없음')
       }
+    },
+    // 노비 잡지 않기
+    onNoCatch(){
+      this.catchModal == false
+      console.log('노비 안잡을래..')
     },
   },
   created() {
