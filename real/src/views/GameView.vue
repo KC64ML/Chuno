@@ -14,19 +14,16 @@
     @on-modal="OnModal"
     style="position:absolute; bottom: 60px;"
    />
-  <ChatModalVue :signal="signalingToChatModal" :chat_data="chat_data" @clearChatData="clearChatData"></ChatModalVue> 
-  <MapView :user="user" :roomInfo="roomInfo" />
-  <div style="position: absolute; bottom: 0; left: 0;">
-    
-    <OpenViduVue
+  <OpenViduVue
     :my_cam_modal="my_cam_modal"
     :user="user"></OpenViduVue>
-    
+  <ChatModalVue :signal="signalingToChatModal" :chat_data="chat_data" @clearChatData="clearChatData" v-if="chat_modal"></ChatModalVue> 
+  <MapView :user="user" :roomInfo="roomInfo" />
+  <div style="position: absolute; bottom: 0; left: 0;">
 
     <!-- 아이템 사용 -->
     <!-- <div v-if="this.$store.state.itemModal"> -->
     <!-- </div> -->
-
     
     <div id="footer_container">
       <div class="menu_box flex_center" @click="this.$router.push('/home')">
@@ -96,7 +93,7 @@ export default {
   },
   data() {
     return {
-      my_cam_modal: { active: false },
+      my_cam_modal: { active: true },
       menu: false,
       itemModal: false,
       user: undefined,
@@ -105,6 +102,7 @@ export default {
       roleModal: false,
       roomInfo: undefined,
 
+      chat_modal: false,
       signalingToChatModal: 0,
       chat_data: "",
     }
