@@ -141,12 +141,29 @@ export default {
       locationInterval: null,
     };
   },
-  beforeRouteLeave(to, from, next) {
+  beforeUnmount(to, from, next) {
     clearInterval(this.locationInterval);
     next();
   },
   methods: {                  
-    enrollEvent() {
+    init() {
+      this.GyroAllow();
+      // 노비 문서 위치
+      console.log('노비 문서 가져오기')
+      const info = JSON.parse(sessionStorage.info)
+      const papers = info.slavepaper
+      console.log("받아온 노비문서", papers);
+      for (let i = 0; i < papers.length; i++){
+        console.log(i)
+        this.papers.push({ 
+              id: i,
+              location: { lat: papers[i].lat, lng: papers[i].lng } ,
+              real: papers[i].real,
+              ripped: false,
+        })
+      }
+        console.log("노비문서 받는 중", this.papers);
+
       console.log("enrollEvent at MapView");
       new Promise((resolve) => {
         console.log("promise at MapView");
@@ -173,39 +190,14 @@ export default {
         }
         resolve();
       }).then(() => {
-        this.init();
+        this.myLocationInterval();
       })
     },
-    init() {
-      // 자이로스코프 인식
-      window.addEventListener('deviceorientation', this.handleOrientation)
-      
-      var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
-
-      if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
-          //IOS
-          console.log('iOS')
-          this.onGyro()
-      }
-
+    myLocationInterval() {
       // 내 위치
-      this.locationInterval = setInterval(() => {this.myLocation()}, 1000);
-      // this.myLocation()
-      // 노비 문서 위치
-      console.log('노비 문서 가져오기')
-      const info = JSON.parse(sessionStorage.info)
-      const papers = info.slavepaper
-      console.log("받아온 노비문서", papers);
-      for (let i = 0; i < papers.length; i++){
-        console.log(i)
-        this.papers.push({ 
-              id: i,
-              location: { lat: papers[i].lat, lng: papers[i].lng } ,
-              real: papers[i].real,
-              ripped: false,
-        })
-        console.log("노비문서 받는 중", this.papers);
-      }
+      setTimeout(() => {
+        this.locationInterval = setInterval(() => {this.myLocation()}, 1000);
+      }, 3000)
     },
     generatePlayer(){
       console.log('2. generatePapers 함수 실행')
@@ -286,6 +278,18 @@ export default {
         console.log(error)
       })
     },
+    GyroAllow() {
+      // 자이로스코프 인식
+      window.addEventListener('deviceorientation', this.handleOrientation)
+      
+      var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+
+      if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+          //IOS
+          console.log('iOS')
+          this.onGyro()
+      }
+    },
     // 자이로 센서 허용
     onGyro() {
       if (typeof DeviceMotionEvent.requestPermission === 'function') {
@@ -358,9 +362,7 @@ export default {
     // 내 위치
     // this.myLocation()
     // setInterval(this.myLocation(),1000) */
-    setTimeout(() => {
-      this.enrollEvent();
-    }, 4000);
+    this.init();
     
     // this.catch()
 
