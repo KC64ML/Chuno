@@ -33,6 +33,9 @@
         <!-- 채팅창 수정 필요 -->
         <input class="map_search" type="text" placeholder="채팅을 입력해 주세요">
       </div>
+      <div class="menu_box" @click="transmit_chat">
+          <img src="@/assets/paper_plane.svg" alt="">
+      </div>
       <div class="menu_box" @click="myCam">
         <img class="menu" src="@/assets/game_myCam.png">
       </div>
@@ -94,9 +97,12 @@ export default {
       itemModal: false,
       user: undefined,
       usedItem: [],
-      spinningModal: true,
+      spinningModal: false,
       roleModal: false,
       roomInfo: undefined,
+
+      latest_chat: "",
+      chat_log: [],
     }
   },
   methods: {
@@ -170,6 +176,9 @@ export default {
     },
     modalAllClose() {
       this.roleModal = false;
+    },
+    transmit_chat() {
+      alert("채팅 전송!!");
     }
   }
 }
@@ -178,7 +187,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/variable.scss";
-$button_width: 60px;
+$button_width: 50px;
 
 #footer_container {
   position: absolute;
@@ -187,7 +196,7 @@ $button_width: 60px;
   height: $footer_height;
   width: 100vw;
   display: grid;
-  grid-template-columns: $button_width 1fr $button_width $button_width;
+  grid-template-columns: $button_width 1fr $button_width $button_width $button_width;
   justify-content: space-around;
   align-items: center;
 }
