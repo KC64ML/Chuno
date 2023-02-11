@@ -105,7 +105,7 @@
           />
         </div>
         <!-- 상대가 노비일 때 -->
-        <div v-if="o.role == 'chaser' && user.role == 'chaser'">
+        <div v-if="o.role == 'runner' && user.role == 'chaser'">
           <GMapMarker
             v-if="o.myMarker"
             :icon=otherRunnerMarkerImg
