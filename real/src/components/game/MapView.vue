@@ -6,6 +6,11 @@
       @on-no-catch="onNoCatch"
       @on-yes-catch="onYesCatch"
     />
+    <RipModal
+      v-if="ripModal"
+      :ripTarget="ripTarget"
+      @on-rip="onRip"
+    />
     <GMapMap
       :center="location"
       :zoom="18"
@@ -38,12 +43,14 @@
         />
       </div>
       <!-- 노비문서 위치 -->
-      <div
-        v-for="m in papers"
-        :key="m.id"
-        @click="ripPaper(m)"
-      >
-        <GMapMarker
+      <div v-if="user.role == runner">
+
+        <div
+          v-for="m in papers"
+          :key="m.id"
+          @click="ripPaper(m)"
+          >
+          <GMapMarker
           v-if="!m.ripped"
           :icon=paperMarkerImg
           :animation=1
@@ -51,7 +58,9 @@
           @click="openInfoWindow(marker.id)"
           />
           <!-- :clickable="true" -->
+        </div>
       </div>
+
       <!-- 다른 플레이어 위치 -->
       <div
         v-for="(o, key, idx) in others"
@@ -73,6 +82,9 @@
 import truePaper from '@/assets/TruePaper.png'
 import othersMarker from '@/assets/runner.png'
 import CatchModal from './CatchModal.vue';
+import RipModal from './RipModal.vue';
+import { connect } from 'http2';
+
 export default {
   name: 'MapView',
   props:{
@@ -90,6 +102,7 @@ export default {
   },
   components: {
     CatchModal,
+    RipModal,
   },
   data() {
     return {
@@ -130,6 +143,8 @@ export default {
       
       // 노비 잡는 모달
       catchModal: false,
+      // 노비 문서 찢는 모달
+      ripModal: false,
       catchTrarget: {},
       locationInterval: null,
     };
@@ -188,7 +203,15 @@ export default {
               } else {
                 console.log(target.nickname + '님이' + content.nickname + '님한테 잡혔다...')
               }
-            
+            } else if (connect.type == "ripPaper") {
+              const content = JSON.parse(e.data);
+              const paper = content.user.paper
+              console.log(content.nickname + '이 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
+              console.log(paper)
+              const target = this.papers[paper.id -1]
+              target.ripped = true
+              console.log('밑에 찍히는  대로 업뎃했다.')
+              console.log(target)
           }
         }
         resolve();
@@ -201,13 +224,39 @@ export default {
       this.locationInterval = setInterval(() => {this.myLocation()}, 1000);
     },
 
-    // 노비문서 찢기
+    // 노비문서 찢기 모달
     ripPaper(marker){
       console.log('3. ripPaper 함수 실행')
+      console.log(marker)
       const distance = this.calculateDistance(marker)
       if(distance < this.catchRadius) {
-        console.log('노비문서를 확인하시겠습니까?')
+        console.log('해당 노비문서를 잡을 수 있습니다.')
+        this.ripTarget = marker
+        this.ripModal = true
+      } else {
+        console.log('해당 노비문서가 너무 멀리 있습니다.')
       }
+    },
+    // 노비문서를 확인하고 나서
+    onRip(ripTarget){
+      console.log('얘랑')
+      console.log(ripTarget)
+      const target = this.papers[ripTarget.id -1]
+      target.ripped = true
+      console.log('얘랑')
+      console.log(target)
+      console.log('같아야함')
+
+      this.conn.send(JSON.stringify(
+          {
+            event:"ripPaper",
+            nickname: this.user.nickname,
+            room: this.roomInfo.id,
+            startData: {
+              paper: target,
+            }
+          }
+        ));
     },
     // 범위 밖으로 나갈 시 경고
     outOfPlayground(location){
