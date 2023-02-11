@@ -166,6 +166,8 @@ export default {
           const content = JSON.parse(e.data);
           if (content.type == "othersLocation") {
             const other = content.info; // startData가 여기 담겨잇다.
+            console.log('내 닉네임!!!!!!!!')
+            console.log(this.user.nickname)
             if (other.nickname == this.user.nickname) {
               return;
             }
@@ -272,7 +274,7 @@ export default {
     onGyro() {
       if (typeof DeviceMotionEvent.requestPermission === 'function') {
         // Handle iOS 13+ devices.
-        alert('아이폰의 경우 동장 및 방향 사용에 허가가 필요합니다.')
+        alert('아이폰의 경우 동작 및 방향 사용에 허가가 필요합니다.')
         DeviceMotionEvent.requestPermission()
           .then((state) => {
             if (state === 'granted') {
