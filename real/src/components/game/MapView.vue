@@ -1,5 +1,5 @@
 <template>
-  <div id="map_modal_container">
+  <div id="map_modal_container" style="z-index: 99">
     <CatchModal
       v-if="catchModal"
       :catchTarget="catchTarget"

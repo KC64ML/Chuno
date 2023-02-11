@@ -13,7 +13,7 @@
         <div class="arrow_box right_box" @click="rightArrow"></div>  
         <div class="arrow_box left_box" @click="leftArrow"></div>
     </div>
-    <div class="my_video_box" :class="{hidden_modal:!my_cam_modal.active}">
+    <div class="my_video_box" :class="{hidden_modal:!my_cam_modal.active}" style="z-index: 100000">
         <!-- <video autoplay ref="my_video" class="my_video"></video> -->
         <user-video 
             :stream-manager="myStreamManager"
