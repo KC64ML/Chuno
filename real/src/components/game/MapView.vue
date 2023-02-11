@@ -55,8 +55,8 @@
       <div
         v-for="(o, key, idx) in others"
         :key="idx"
-        @click="ripPaper(o)"
-      >
+        >
+        <!-- @click="ripPaper(o)" -->
         <GMapMarker
           v-if="o.myMarker"
           :icon=othersMarkerImg
@@ -75,10 +75,8 @@ import CatchModal from './CatchModal.vue';
 export default {
   name: 'MapView',
   props:{
-    // papers: Object, // 노비 문서 정보
-    // others: Object, // 다른 플레이어 위치 정보
     user: Object, // 내 정보
-    roomInfo: {
+    roomInfo: {   // 방 정보
       type: Object,
       default() {
         return {
@@ -87,7 +85,7 @@ export default {
           radius: 0,
         }
       }
-    }, // 방 정보
+    },
   },
   components: {
     CatchModal,
@@ -198,9 +196,8 @@ export default {
     ripPaper(marker){
       console.log('3. ripPaper 함수 실행')
       const distance = this.calculateDistance(marker)
-      if(distance > this.catchRadius) {
+      if(distance < this.catchRadius) {
         console.log('노비문서를 확인하시겠습니까?')
-        alert('노비문서를 확인하시겠습니까?')
       }
     },
     // 범위 밖으로 나갈 시 경고
