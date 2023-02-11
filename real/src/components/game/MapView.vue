@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="map_modal_container">
     <CatchModal
       v-if="catchModal"
       :catchTarget="catchTarget"
@@ -17,7 +17,7 @@
         minZoom: 11,
         maxZoom: 18,
       }"
-      style="width: 100vw; height: 25rem"
+      class="gmap"
     >
       <!-- 플레이 영역 표시 -->
       <GMapCircle
@@ -402,8 +402,20 @@ export default {
 };
 </script>
 
-<style>
-body {
-  margin: 0;
-}
+<style lang="scss" scoped>
+@import "@/assets/scss/variable.scss";
+  #map_modal_container {
+    position: absolute;
+    bottom: $footer-height;
+    top: $video-height;
+    width: 100vw;
+  }
+  #map_modal_container > div {
+    height: 100%
+  }
+  .gmap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
 </style>

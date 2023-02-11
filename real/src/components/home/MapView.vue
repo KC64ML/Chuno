@@ -7,7 +7,7 @@
     fullscreenControl: true,
     minZoom: 10,
     maxZoom: 18,
-  }" style="width: 15rem; height: 15rem">
+  }" class="gmap">
 
     <GMapMarker :animation=4 :position=this.player />
 
@@ -58,8 +58,9 @@ export default {
 };
 </script>
 
-<style>
-/* body {
-  margin: 0;
-} */
+<style lang="scss" scoped>
+.gmap {
+  position: absolute;
+  
+}
 </style>

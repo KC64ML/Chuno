@@ -14,24 +14,26 @@
     @on-modal="OnModal"
     style="position:absolute; bottom: 60px;"
    />
-  <div>
+  <ChatModalVue :signal="signalingToChatModal" :chat_data="chat_data" @clearChatData="clearChatData"></ChatModalVue> 
+  <MapView :user="user" :roomInfo="roomInfo" />
+  <div style="position: absolute; bottom: 0; left: 0;">
     
     <OpenViduVue
     :my_cam_modal="my_cam_modal"
     :user="user"></OpenViduVue>
-    <MapView :user="user" :roomInfo="roomInfo" />
+    
 
     <!-- 아이템 사용 -->
     <!-- <div v-if="this.$store.state.itemModal"> -->
     <!-- </div> -->
+
     
     <div id="footer_container">
       <div class="menu_box flex_center" @click="this.$router.push('/home')">
         <img class="menu" src="@/assets/game_chat.png">
       </div>
       <div>
-        <!-- 채팅창 수정 필요 -->
-        <input class="map_search" type="text" placeholder="채팅을 입력해 주세요">
+        <input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data">
       </div>
       <div class="menu_box" @click="transmit_chat">
           <img src="@/assets/paper_plane.svg" alt="">
@@ -51,10 +53,11 @@
 
 <script>
 import OpenViduVue from '@/components/game/OpenViduVue.vue'
-import MapView from '@/components/game/MapView.vue'
+import MapView from '@/components/game/MapView.vue' // huh
 import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
 import RoleModalVue from '@/components/game/RoleModalVue.vue'
+import ChatModalVue from '@/components/game/ChatModalVue.vue'
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
@@ -69,6 +72,7 @@ export default {
     ItemModal,
     SpiningModalVue,
     RoleModalVue,
+    ChatModalVue,
   },
   async created() {
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
@@ -101,8 +105,8 @@ export default {
       roleModal: false,
       roomInfo: undefined,
 
-      latest_chat: "",
-      chat_log: [],
+      signalingToChatModal: 0,
+      chat_data: "",
     }
   },
   methods: {
@@ -176,7 +180,11 @@ export default {
       this.roleModal = false;
     },
     transmit_chat() {
-      alert("채팅 전송!!");
+      console.log(this.signalingToChatModal)
+      this.signalingToChatModal++;
+    },
+    clearChatData() {
+      this.chat_data = "";
     }
   }
 }
