@@ -13,6 +13,9 @@
       <img class="header_menu" src="@/assets/Search_black.png">
       <input class="header_menu header_input" id="room_search" v-model="friendSearch" placeholder="친구 검색">
     </div>
+    <div v-if="this.friendSearch">
+      <div v-if="friends.length>0">${this.friends}</div>
+    </div>
     <div v-if="!search">
       <FriendsItemView 
       @get-friends="getFriends"
