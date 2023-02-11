@@ -19,6 +19,7 @@
             />
             <div class="image_text" data-v-7961e374="" @click="verify">확인하기</div>
           </div>
+        </div>
       </div>
       </div>
       <div id="make_room_modal" v-if="!page1">
@@ -54,7 +55,7 @@
               <div class="image_text" data-v-7961e374="" @click="onFalsePaper">확인</div>
           </div>
         </div>
-        </div>
+      </div>
       </div>
     </div>
   </template>

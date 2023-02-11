@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import me_img from '@/assets/runner.png'
+import me_img from '@/assets/Notification.svg'
 import chuno_img from '@/assets/Clock.svg'
 import slave_img from '@/assets/Door.svg'
 
