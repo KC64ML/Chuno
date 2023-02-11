@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="regiterview-header" id="main_logo">
+    <div id="main_logo">
       <img src="@/assets/main_logo2.png" alt="">
     </div>
     
     <div class="regiterview">
-      <div class="container-col" id="container">
+      <div id="container">
         <div class="header_menu" style="font-size: 25px;">
           프로필 입력
         </div>
@@ -150,9 +150,18 @@ $logo_size: 120px;
 $image_size: 140px;
 $div_interval: 40px;
 
+
+// position: absolute;
+//   top: 2%;
+//   right: 10%;
+//   border: solid 1px black;
+//   padding: 1.5% 3%;
+
 #main_logo {
   position: absolute;
-  top: 60px;
+  top: 2%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 #main_logo>img {
@@ -165,6 +174,7 @@ $div_interval: 40px;
 
 #container {
   transform: translateY(-5%);
+  margin-top:20%
 }
 
 #container div {
@@ -219,11 +229,10 @@ $div_interval: 40px;
 }
 
 .regiterview {
-  width: vw;
+  height: 80vh;
+  margin-top: 200px;
+  width: 100%;
 }
 
-.regiterview-header {
-  position: absolute;
-  top: 70px;
-}
+
 </style>
