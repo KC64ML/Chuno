@@ -47,7 +47,7 @@ export default {
     setTimeout(() => {
       this.$emit("modalAllClose");
       // 개발이 끝난뒤에는 3초로 고쳐줘요!!!!!!!!!!!
-    }, 1000);
+    }, 3000);
     this.info = JSON.parse(sessionStorage.getItem("info"));
     const token = sessionStorage.token;
     this.nickname = await this.axios
@@ -74,7 +74,7 @@ $big_text_size: 24px;
   left: 0;
   background-image: url("@/assets/main_back.png");
   background-size: cover;
-  z-index: 1000;
+  z-index: 100000;
 }
 .centering {
   text-align: center;
