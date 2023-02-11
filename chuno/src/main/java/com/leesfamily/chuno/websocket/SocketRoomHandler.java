@@ -280,6 +280,15 @@ public class SocketRoomHandler extends TextWebSocketHandler {
 				System.out.println(p.getNickname());
 				p.getSession().sendMessage(msg);
 			}
+		}else if(event.equals("catchRunner")) {
+			HashMap<String, Object> dto = new HashMap<>();
+			dto.put("type", "caughtRunner");
+			dto.put("info", inputDto.getStartData());
+			dto.put("nickname", nickname);
+			TextMessage msg = new TextMessage(mapper.writeValueAsString(dto));
+			for (PlayerDto p : room_map.get(room)) {
+				p.getSession().sendMessage(msg);
+			}
 		}
 	}
 
