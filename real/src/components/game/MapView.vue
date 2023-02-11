@@ -1,4 +1,8 @@
 <template>
+    <CatchModal
+      v-if="catchModal"
+      :catchTarget="catchTarget"
+    />
     <GMapMap
       :center="location"
       :zoom="18"
@@ -46,20 +50,15 @@
           <!-- :clickable="true" -->
       </div>
       <!-- 다른 플레이어 위치 -->
-      <!-- <div
+      <div
         v-for="m in others"
         :key="m.nickname"
         @click="ripPaper(m)"
-      > -->
-      <div
-        v-for="o in others.length"
-        :key="o"
-        @click="ripPaper(others[o])"
       >
         <GMapMarker
-          v-if="!others[o].myMarker"
+          v-if="!m.myMarker"
           :icon=othersMarkerImg
-          :position="others[o].location"
+          :position="m.location"
           :clickable="true"
         />
       </div>
@@ -67,13 +66,10 @@
 </template>
 
 <script>
-// import { OpenVidu } from "openvidu-browser";
-// const APPLICATION_SERVER_URL = process.env.RTC;
-
 import truePaper from '@/assets/TruePaper.png'
 import othersMarker from '@/assets/runner.png'
 import randomLocation from 'random-location'
-
+import CatchModal from './CatchModal.vue';
 export default {
   name: 'MapView',
   props:{
@@ -127,17 +123,10 @@ export default {
         fillColor: "#FFFFFF",
         fillOpacity: 0,
       },
-      // roomInfo: {
-      //   room_id: 1,
-      //   title: "방이름1",
-      //   is_public: true,
-      //   password: null,
-      //   lat: 36.119485,
-      //   lng: 128.3445734,
-      //   radius: 1000,
-      //   host_id: "gogo",
-      //   room_start_time: new Date(2023, 1, 1, 13, 20, 0)
-      //   },
+      
+      // 노비 잡는 모달
+      catchModal: false,
+      catchTrarget: {},
     };
   },
   methods: {                  
@@ -157,7 +146,7 @@ export default {
               myMarker: other.myMarker
             };
             console.log("ohters 받아오는 중 : ", this.others);
-            this.catch(other);
+            this.catchRunner(other);
             
           } else if (content.type == "") {
             /* 뭔가 하자 */
@@ -323,12 +312,14 @@ export default {
       return distance
     },
     // 노비 잡기
-    catch(marker){
+    catchRunner(marker){
       console.log('!! catch 함수 실행되기는 함')
       const distance = this.calculateDistance(marker)
       if(distance <= this.catchRadius){
-        alert('잡으세요.')
-        // console.log('잡을 수 있음')
+        // alert('잡으세요.')
+        console.log('잡을 수 있음' + marker)
+        this.catchModal = true
+        this.catchTarget = marker
         this.conn.send(JSON.stringify(
           {
             event:'catch',
