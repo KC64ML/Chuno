@@ -65,7 +65,7 @@ export default {
     data() {
         return {
             count_down_start: false,
-            count_down : 3,
+            count_down : 20,
             room_id: this.$route.params.roomId,
             nickname: "",
             lat: 0,
