@@ -9,6 +9,11 @@ export default {
     props: {
         sub: undefined
     },
+    watch: {
+        sub: function(value, oldvalue) {
+            alert("변했어요" + value + oldvalue);
+        }
+    }
 }
 </script>
 
@@ -28,6 +33,12 @@ $container_height: 30px;
     animation-name: nicknmae_card;
     animation-iteration-count: 1;
     animation-duration: 1s;
+
+    transition: all 0.2s;
+}
+
+.bounce {
+    border: dashed;
 }
 
 @keyframes nicknmae_card {
@@ -48,7 +59,6 @@ $container_height: 30px;
 .yellow {
     background-color: #F9CF65;
 }
-
 .green {
     background-color: #34ff74
 }
