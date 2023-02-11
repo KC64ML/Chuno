@@ -54,6 +54,7 @@
 
 
 export default {
+  name: "NewEditProfileModal",
   props: {
     userInfo: Object,
   },
@@ -63,7 +64,7 @@ export default {
       phone: this.userInfo.phone,
       can_use: false,
       one_file: undefined,
-      img_url: this.userInfo.profile.path,
+      img_url: this.userInfo.profile,
     }
   },
   methods: {
