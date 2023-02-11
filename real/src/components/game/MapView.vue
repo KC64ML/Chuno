@@ -31,17 +31,16 @@
         :options="playgroundOptions"
       />
       <!-- 내 위치 -->
-      <div v-if="myMarker">
-        <GMapMarker
-          :animation=4
-          :position=this.location
-        />
-        <GMapCircle
-          :radius="catchRadius"
-          :center="location"
-          :options="circleOptions"
-        />
-      </div>
+      <GMapMarker
+        :animation=4
+        :position=this.location
+      />
+      <GMapCircle
+        :radius="catchRadius"
+        :center="location"
+        :options="circleOptions"
+      />
+      
       <!-- 노비문서 위치 -->
       <div v-if="user.role == runner">
 
@@ -202,7 +201,7 @@ export default {
               } else {
                 console.log(target.nickname + '님이' + content.nickname + '님한테 잡혔다...')
               }
-            } else if (content.type == "ripPaper") {
+            } else if (content.type == "rippedPaper") {
               const content = JSON.parse(e.data);
               const paper = content.user.paper
               console.log(content.nickname + '이 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
@@ -256,6 +255,15 @@ export default {
             }
           }
         ));
+      this.conn.send(JSON.stringify(
+        {
+          event: "chat",
+          room: this.roomInfo.id,
+          nickname: 'system',
+          level: 1,
+          msg: `${this.user.nickname}이 노비문서를 찢었습니다.`
+        }
+      ))
     },
     // 범위 밖으로 나갈 시 경고
     outOfPlayground(location){
@@ -399,6 +407,15 @@ export default {
               others : target,
             }
           }
+      ))
+      this.conn.send(JSON.stringify(
+        {
+          event: 'chat',
+          room: this.roomInfo.id,
+          nickname: 'system',
+          level: 1,
+          msg: `${this.user.nickname}이 ${target.nickname}을 잡았습니다.`
+        }
       ))
     },
   },
