@@ -29,7 +29,12 @@
                     maxZoom: map_zoom,
                 }" class="map_size">
                     <div v-for="(mk, idx) in location_list" :key="idx">
-                        <GMapMarker :icon="me_img" :animation=1 :position="roomcenter" v-if="mk.me == true" />
+                        <div v-if="mk.me == true">
+                            <GMapMarker :icon="chuno_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
+                                v-if="mk.role == 'chuno'" />
+                            <GMapMarker :icon="slave_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
+                                v-else-if="mk.me == 'slave'" />
+                        </div>
                         <div v-else>
                             <GMapMarker :icon="chuno_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
                                 v-if="mk.role == 'chuno'" />
@@ -49,9 +54,10 @@
 </template>
 
 <script>
-import me_img from '@/assets/Notification.svg'
-import chuno_img from '@/assets/Clock.svg'
-import slave_img from '@/assets/Door.svg'
+import chuno_me_img from '@/assets/chuno_me_img.png'
+import slave_me_img from '@/assets/slave_me_img.png'
+import chuno_img from '@/assets/chuno_img.png'
+import slave_img from '@/assets/slave_img.png'
 
 export default {
     data() {
@@ -80,7 +86,8 @@ export default {
                 fillColor: "#0000FF",
                 fillOpacity: 0.15,
             },
-            me_img: me_img,
+            chuno_me_img: chuno_me_img,
+            slave_me_img: slave_me_img,
             chuno_img: chuno_img,
             slave_img: slave_img,
         }
