@@ -100,7 +100,7 @@ export default {
         }
     },
     async created() {
-        this.conn.onmessage = (e) => {
+        this.conn.addEventListener('message', (e) => {
             var content = JSON.parse(e.data);
             if (content.type == 'receivelocation') {
                 this.location_list.push({ "nickname": content.nickname, "role": content.info.role, "lat": content.info.lat, "lng": content.info.lat, "me": (content.nickname == this.nickname) ? (true) : (false) });
@@ -119,7 +119,7 @@ export default {
                     count();
                 }
             }
-        }
+        })
         this.info = JSON.parse(sessionStorage.getItem("info"));
         this.roomradius = this.info.radius;
         this.roomcenter = { lat: this.info.roomlat, lng: this.info.roomlng };

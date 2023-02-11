@@ -230,7 +230,7 @@ export default {
     erollEvent() {
       new Promise((resolve) => {
         console.log("promise at MapView");
-        this.conn.onmessage = async (e) => {
+        this.conn.addEventListener('message', (e) => {
           console.log("message received at MapView", e);
           const content = JSON.parse(e.data);
           if (content.type == "othersLocation") {
@@ -268,6 +268,7 @@ export default {
               console.log(target)
           }
         }
+        )
         resolve();
       }).then(() => {
         this.myLocationInterval();
