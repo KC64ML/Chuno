@@ -298,6 +298,33 @@ public class SocketRoomHandler extends TextWebSocketHandler {
 			for (PlayerDto p : room_map.get(room)) {
 				p.getSession().sendMessage(msg);
 			}
+		}else if(event.equals("useItem")) {
+			HashMap<String, Object> dto = new HashMap<>();
+			dto.put("type", "item4");
+			dto.put("nickname", nickname);
+			dto.put("info", inputDto.getStartData());
+			switch (level) {
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				case 5:
+					break;
+				case 6:
+					break;
+				case 7:
+					break;
+				case 8:
+					break;
+			}
+			TextMessage msg = new TextMessage(mapper.writeValueAsString(dto));
+			for (PlayerDto p : room_map.get(room)) {
+				p.getSession().sendMessage(msg);
+			}
 		}
 	}
 
