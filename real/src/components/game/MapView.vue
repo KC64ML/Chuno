@@ -440,7 +440,7 @@ export default {
       const distance = this.calculateDistance(marker)
       console.log('--------------DISTANCE-----------------')
       console.log(distance)
-      if(user.role == 'chaser' && marker.role == 'runner' && marker.caught == false && distance <= this.catchRadius){
+      if(this.user.role == 'chaser' && marker.role == 'runner' && marker.caught == false && distance <= this.catchRadius){
         console.log('잡을 수 있음' + marker)
         this.catchModal = true
         this.catchTarget = marker
