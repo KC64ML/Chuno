@@ -83,8 +83,10 @@
     </div>
   </transition>
   <SpiningModalVue @spinningEnd="spinningEnd" v-if="spinningModal"></SpiningModalVue>
-  <RoleModalVue v-if="roleModal" @modalAllClose="modalAllClose"></RoleModalVue>
-
+  
+  <transition name="modal-fading">
+    <RoleModalVue v-if="roleModal" @modalAllClose="modalAllClose"></RoleModalVue>
+  </transition>
 </template>
 
 <script>
@@ -472,5 +474,12 @@ $item_modal_confirm_button_height: 60px;
 .toasting-leave-to {
   opacity: 0;
   transform: scale(0) translateY(30px);
+}
+.modal-fading-leave-active {
+  transition: all 0.5s;
+}
+.modal-fading-leave-to {
+  opacity: 0;
+  transition: scale(0) translateY(30px);
 }
 </style>

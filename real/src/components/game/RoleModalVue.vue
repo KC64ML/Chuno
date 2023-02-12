@@ -1,5 +1,4 @@
 <template>
-  <transition name="modal-fading">
   <div id="role_container">
     <div class="centering" style="margin-top: 40px">
       <img src="@/assets/main_logo2.png" alt="" />
@@ -26,7 +25,7 @@
       </div>
     </div>
   </div>
-  </transition>
+  
 </template>
 
 <script>
@@ -96,12 +95,5 @@ $big_text_size: 24px;
 .white {
   margin-bottom: 10px;
   background-color: white;
-}
-.modal-fading-leave-active {
-  transition: all 0.5s;
-}
-.modal-fading-leave-to {
-  opacity: 0;
-  transition: scale(0) translateY(30px);
 }
 </style>
