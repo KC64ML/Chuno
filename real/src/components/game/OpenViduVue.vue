@@ -82,12 +82,10 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 this.session = this.OV.initSession();
                 this.session.on("streamCreated", ({ stream }) => {
                     const otherData = JSON.parse(stream.connection.data);
-                    this.players_state[otherData.nickname] = {
-                        isInked: false,
-                    };
-                    if (otherData.nickname == this.user.nickname) {
+                    if (otherData.user.nickname == this.user.nickname) {
                         return;
                     }
+                    console.log("stream.connection.data : " + otherData);
                     const subscriber = this.session.subscribe(stream);
                     this.subscribers.push(subscriber);
                     console.log("스트림을 발견했어요!")
@@ -97,6 +95,10 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     const { connection } = this.mainStreamManager.stream;
                     console.log("커넥션 데이터에요:", connection.data)
                     const { clientData } = JSON.parse(connection.data);
+                    console.log("clientData : " + clientData);
+                    this.players_state[clientData.user.nickname] = {
+                        isInked: false,
+                    };
                     this.enemy_name = clientData;
                 });
                 this.session.on("streamDestroyed", ({ stream }) => {
