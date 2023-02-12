@@ -11,7 +11,7 @@
     @item-yes="itemYes"
     @item-no="itemNo" 
     @on-modal="OnModal"
-    style="position:absolute; bottom: 60px;"
+    style="position:absolute; z-index: 100; bottom: 60px;"
    />
   <OpenViduVue
     :my_cam_modal="my_cam_modal"
