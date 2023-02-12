@@ -78,7 +78,7 @@
   <transition name="toasting">
     <div class="toast_chat" v-if="chat_toast">
       <div class="flex_center">
-          <div style="text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white; font-size: 20px; padding: 20px; border-radius:10px; background-color: rgb(0,0,0,0.5);">{{ last_chat }}</div>
+          <div style="-webkit-text-stroke: 1px white; font-size: 20px; padding: 20px; border-radius:10px; background-color: rgb(0,0,0,0.5);">{{ last_chat }}</div>
       </div>
     </div>
   </transition>
