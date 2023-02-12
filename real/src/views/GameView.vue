@@ -3,7 +3,7 @@
   <MenuView 
     v-if="menu" 
     @use-item="useItem"
-    style="position:absolute; bottom: 60px;"
+    style="position:absolute; z-index: 100; bottom: 60px;"
   />
   <ItemModal 
     v-if="itemModal" 
