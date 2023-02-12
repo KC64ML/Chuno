@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
