@@ -263,7 +263,8 @@ export default {
               }
             } else if (content.type == "rippedPaper") {
               const content = JSON.parse(e.data);
-              const paper = content.user.paper
+              const paper = content.paper
+              console.log('아까 오류 났던 부분임' + paper)
               console.log(content.nickname + '이 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
               console.log(paper)
               const target = this.papers[paper.id -1]
@@ -303,7 +304,7 @@ export default {
     onRip(ripTarget){
       console.log('얘랑')
       console.log(ripTarget)
-      const target = this.papers[ripTarget.id -1]
+      const target = this.papers[ripTarget.id]
       target.ripped = true
       console.log('얘랑')
       console.log(target)
@@ -455,7 +456,7 @@ export default {
       console.log('--------------TARGET-----------------')
       console.log(target)
       this.catchModal = false
-      this.target.caught = true
+      target.caught = true
       this.conn.send(JSON.stringify(
           {
             event:'catchRunner',
