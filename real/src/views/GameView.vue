@@ -1,7 +1,4 @@
-
 <template> 
-  <!-- <div> -->
-
   <div id="item_menu_modal" v-if="item_menu_modal">
     <div v-if="this.user">
       <div style="margin-bottom: 10px; text-align: center;">아이템</div>
@@ -29,10 +26,9 @@
       </div>
     </div>
   </div>
-
-  <OpenViduVue
+  <!-- <OpenViduVue
     :my_cam_modal="my_cam_modal"
-    :user="user"></OpenViduVue>
+    :user="user"></OpenViduVue> -->
    
   <div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
         <div id="chat_header"
@@ -50,7 +46,7 @@
         </div>
     </div>
   
-  <MapView :user="user" :roomInfo="roomInfo" />
+  <!-- <MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught"/> -->
   <div style="position: absolute; bottom: 0; left: 0;">
     
     <div id="footer_container">
@@ -77,8 +73,8 @@
 </template>
 
 <script>
-import OpenViduVue from '@/components/game/OpenViduVue.vue'
-import MapView from '@/components/game/MapView.vue' // huh
+// import OpenViduVue from '@/components/game/OpenViduVue.vue'
+// import MapView from '@/components/game/MapView.vue' // huh
 import RoleModalVue from '@/components/game/RoleModalVue.vue'
 import ChatCardVue from '@/components/game/ChatCardVue.vue';
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
@@ -89,8 +85,8 @@ export default {
 
   name: 'GameView',
   components: {
-    MapView,
-    OpenViduVue,
+    // MapView,
+    // OpenViduVue,
     SpiningModalVue,
     RoleModalVue,
     ChatCardVue,
@@ -123,6 +119,7 @@ export default {
     const info = JSON.parse(sessionStorage.info);
     this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
     this.player_len = info.teamchuno.length + info.teamslave.length;
+    this.user.caught = false;
     console.log("GameView created complete");
     console.log("-----------------------")
     console.log(this.user);
@@ -135,7 +132,7 @@ export default {
       user: undefined,
       usedItem: [],
       // 개발이 끝나면 true로 고쳐줘요
-      spinningModal: true,
+      spinningModal: false,
       roleModal: false,
       roomInfo: undefined,
 
@@ -212,9 +209,13 @@ export default {
       this.my_cam_modal.active = !this.my_cam_modal.active
       console.log("mycam 눌림");
     },
-
-
-
+    onCaught(){
+      this.user.caught = true
+    },
+    spinningEnd() {
+      this.spinningModal = false;
+      this.roleModal = true;
+    },
     modalAllClose() {
       this.roleModal = false;
     },
@@ -250,11 +251,47 @@ export default {
     },
     async item_confirm_yes(item) {
       console.log(item)
-      if(item.id == 4) {
-        console.log("4번 왔어요");
+      if(item.id == 1){
+        // 천리안: 가장 가까운 추노꾼 위치 표시
+        console.log(1)
+      } else if (item.id == 2){
+        // 위장: 추노꾼의 catch 범위 축소
+        console.log(2)
+      } else if (item.id == 3) {
+        // 확실한 정보통: 진짜 노비 문서 위치 표시
+        console.log(3)
+        this.visibility = true
+        setTimeout(this.visibility = false, 30000)
+      } else if (item.id == 4) {
+        // 먹물탄
+        console.log(4)
+        this.conn.send(JSON.stringify(
+          {
+            event: "useItem",
+            level: 4,
+            nickname:this.user.nickname,
+            room: this.roomInfo.id,
+            startData: {
+              "isStart" : 1,
+            }
+          }
+        ));
+        // 30초 후에 제거
+        setTimeout(
+          this.conn.send(JSON.stringify(
+            {
+              event: "useItem",
+              level: 4,
+              nickname: this.user.nickname,
+              room: this.roomInfo.id,
+              startData: {
+                "isStart" : 0,
+              }
+            }
+          )
+        ), 30000);
       } else if(item.id == 7) {
         console.log("7");
-
       }
     }
   }
