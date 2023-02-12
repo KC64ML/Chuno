@@ -230,9 +230,9 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
         }
 
         this.conn.addEventListener("message", (e) => {
-            console.log("누군가 아이템을 사용하였습니다.");
             const content = JSON.parse(e.data);
             if (content.type == "item4") {
+                console.log("누군가 먹물탄을 사용하였습니다.", content);
                 const nickname = content.nickname;
                 if (nickname == this.user.nickname) {
                     if (content.info.isStart == 1) {
