@@ -53,17 +53,17 @@
       
       <!-- 노비문서 위치 -->
       <div v-if="user.role == runner">
-
         <div
           v-for="m in papers"
           :key="m.id"
-          @click="ripPaper(m)"
           >
+          <!-- @click="ripPaper(m)" -->
           <GMapMarker
           v-if="!m.ripped"
           :icon=paperMarkerImg
           :animation=1
           :position="m.location"
+          @click="ripPaper(m)"
           />
           <!-- @click="openInfoWindow(marker.id)" -->
           <!-- :clickable="true" -->
@@ -348,9 +348,9 @@ export default {
         console.log(this.location.lat)
         console.log(this.location.lng)
         // 내가 노비이면
-        if(this.user.role == 'runner') {
-          this.ripPaper()
-        }
+        // if(this.user.role == 'runner') {
+        //   this.ripPaper()
+        // }
         // 위치 공유
         this.conn.send(JSON.stringify(
           {
@@ -436,7 +436,7 @@ export default {
       const distance = this.calculateDistance(marker)
       console.log('--------------DISTANCE-----------------')
       console.log(distance)
-      if(marker.caught == false && distance <= this.catchRadius){
+      if(marker.role == 'runner' && marker.caught == false && distance <= this.catchRadius){
         console.log('잡을 수 있음' + marker)
         this.catchModal = true
         this.catchTarget = marker
