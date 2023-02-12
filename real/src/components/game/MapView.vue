@@ -264,6 +264,8 @@ export default {
               }
             } else if (content.type == "rippedPaper") {
               const content = JSON.parse(e.data);
+              console.log('여기서 오류 확인하자!!!!!!!!!!!!!!')
+              console.log(content)
               const paper = content.info.paper
               console.log('아까 오류 났던 부분임2' + paper)
               console.log(content.nickname + '이(가) 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
