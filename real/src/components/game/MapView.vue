@@ -31,14 +31,14 @@
         :options="playgroundOptions"
       />
       <!-- 내 위치 -->
-      <div v-if="user.role == 'runner'">
+      <div v-if="user?.role == 'runner'">
         <GMapMarker
           :icon=myRunnerMarkerImg
           :animation=4
           :position=this.location
         />
       </div>
-      <div v-if="user.role == 'chaser'">
+      <div v-if="user?.role == 'chaser'">
         <GMapMarker
           :icon=myChaserMarkerImg
           :animation=4
@@ -52,7 +52,7 @@
       />
       
       <!-- 노비문서 위치 -->
-      <div v-if="user.role == runner">
+      <div v-if="user?.role == runner">
         <div
           v-for="m in papers"
           :key="m.id"
