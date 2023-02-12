@@ -78,7 +78,7 @@
   <transition name="toasting">
     <div class="toast_chat" v-if="chat_toast">
       <div class="flex_center">
-          <div style="-webkit-text-stroke: 1px white; font-size: 20px; padding: 20px; border-radius:10px; background-color: rgb(0,0,0,0.5);">{{ last_chat }}</div>
+          <div style="font-size: 20px; padding: 20px; border-radius: 5px 10px; background-color: rgb(0,0,0,0.6); color: white">{{ last_chat }}</div>
       </div>
     </div>
   </transition>
@@ -480,6 +480,6 @@ $item_modal_confirm_button_height: 60px;
 }
 .modal-fading-leave-to {
   opacity: 0;
-  transform: scale(0) translateY(30px);
+  transform: scale(0) translateY(100%);
 }
 </style>
