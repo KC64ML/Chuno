@@ -284,6 +284,7 @@ export default {
           } else if (content.type == "startGame") {
             console.log("소켓에서 받아왔어요!!!", content);
             this.papers = content.info;
+            
           }
         }
         )

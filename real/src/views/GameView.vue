@@ -67,6 +67,18 @@
       </div>
     </div>
   </div>
+  <div class="toast_chat" v-if="system_toast">
+    <div class="flex_center">
+        <img src="@/assets/system_chat.png" style="height: 60px; width: 90vw;">
+        <div class="image_text">{{ last_chat }}</div>
+    </div>
+  </div>
+  <div class="toast_chat" v-if="chat_toast">
+    <div class="flex_center">
+        <img src="@/assets/system_chat.png" style="height: 60px; width: 90vw;">
+        <div class="image_text">{{ last_chat }}</div>
+    </div>
+  </div>
   <SpiningModalVue @spinningEnd="spinningEnd" v-if="spinningModal"></SpiningModalVue>
   <RoleModalVue v-if="roleModal" @modalAllClose="modalAllClose"></RoleModalVue>
 
@@ -98,7 +110,17 @@ export default {
         console.log({ nickname: content.nickname, msg: content.message })
         this.chat_log.push({ nickname: content.nickname, msg: content.message })
 
-        // 최근 메세지를 토스트로 띄우고 싶어요!!!
+        this.last_chat = content.message
+        if (content.nickname == "system") {
+          this.system_toast = true;
+        } else {
+          this.chat_toast = true;
+        }
+
+        setTimeout(() => {
+          this.system_toast = false;
+          this.chat_toast = false;
+        }, 3000)
       }
     })
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
@@ -136,6 +158,9 @@ export default {
       roleModal: false,
       roomInfo: undefined,
 
+      system_toast: false,
+      chat_toast: false,
+      last_chat:"",
       chat_modal: false,
       chat_data: "",
       chat_log:[],
@@ -422,5 +447,10 @@ $item_modal_confirm_button_height: 60px;
 }
 .modal_confirm_button {
   height: $item_modal_confirm_button_height;
+}
+.toast_chat {
+  z-index: 100100;
+  position: absolute;
+  bottom: $footer-height + 40px; 
 }
 </style>
