@@ -230,17 +230,18 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
         }
 
         this.conn.addEventListener("message", (e) => {
+            console.log("누군가 아이템을 사용하였습니다.");
             const content = JSON.parse(e.data);
             if (content.type == "item4") {
                 const nickname = content.nickname;
                 if (nickname == this.user.nickname) {
-                    if (content.startData.isStart == 1) {
+                    if (content.info.isStart == 1) {
                         this.amIInked = true;
                     } else {
                         this.amIInked = false;
                     }
                 }
-                if (content.startData.isStart == 1) {
+                if (content.info.isStart == 1) {
                     this.players_state[nickname].isInked = true;
                     if (this.clientUser(this.mainStreamManager).nickname == nickname) {
                         this.isInked = true;
