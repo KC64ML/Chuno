@@ -26,7 +26,7 @@
                     mapTypeControl: false,
                     streetViewControl: false,
                     fullscreenControl: false,
-                    minZoom: map_zoom,
+                    minZoom: 1,
                     maxZoom: map_zoom,
                 }" class="map_size">
                     <div v-for="(mk, idx) in location_list" :key="idx">
