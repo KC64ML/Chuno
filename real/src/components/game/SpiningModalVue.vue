@@ -31,17 +31,16 @@
                 }" class="map_size">
                     <div v-for="(mk, idx) in location_list" :key="idx">
                         <div v-if="mk.me == true && mk.role == 'chuno'">
-                            11 {{ mk.position }}
                             <GMapMarker :animation=1 :position="mk.position" />
                         </div>
                         <div v-else-if="mk.me == true && mk.role == 'slave'">
-                            <GMapMarker :icon="slave_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
+                            <GMapMarker :icon="slave_me_img" :animation=1 :position="mk.position" />
                         </div>
                         <div v-else-if="mk.me == false && mk.role == 'chuno'">
-                            <GMapMarker :icon="chuno_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
+                            <GMapMarker :icon="chuno_img" :animation=1 :position="mk.position" />
                         </div>
                         <div v-else-if="mk.me == false && mk.role == 'slave'">
-                            <GMapMarker :icon="slave_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
+                            <GMapMarker :icon="slave_img" :animation=1 :position="mk.position" />
                         </div>
                     </div>
                     <GMapCircle :radius="roomradius" :center="roomcenter" :options="gameCircle" />
@@ -116,7 +115,7 @@ export default {
         this.conn.addEventListener('message', (e) => {
             var content = JSON.parse(e.data);
             if (content.type == 'receivelocation') {
-                this.location_list.push({ "nickname": content.nickname, "role": content.info.role, position:{"lat": content.info.lat, "lng": content.info.lat}, "me": (content.nickname == this.nickname) ? (true) : (false) });
+                this.location_list.push({ "nickname": content.nickname, "role": content.info.role, position:{"lat": content.info.lat, "lng": content.info.lng}, "me": (content.nickname == this.nickname) ? (true) : (false) });
                 this.cnt_len++;
                 this.display_info = this.cnt_len + " / " + this.player_len;
                 if (this.cnt_len == this.player_len) {
