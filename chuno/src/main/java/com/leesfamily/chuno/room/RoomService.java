@@ -336,18 +336,34 @@ public class RoomService {
         double radiusInDegrees = radius / 111000f;
 
         for(int i =0 ;i< requestDto.getListSlaveDocument().size() ; i++){
-            double u = Math.random();
-            double v = Math.random();
-            double w = radiusInDegrees * Math.sqrt(u);
-            double t = 2 * Math.PI * v;
-            double x = w * Math.cos(t);
-            double y = w * Math.sin(t);
+//            double u = Math.random();
+//            double v = Math.random();
+//            double w = radiusInDegrees * Math.sqrt(u);
+//            double t = 2 * Math.PI * v;
+//            double x = w * Math.cos(t);
+//            double y = w * Math.sin(t);
+//
+//            // Adjust the x-coordinate for the shrinking of the east-west distances
+//            double new_x = x / Math.cos(lat);
 
-            // Adjust the x-coordinate for the shrinking of the east-west distances
-            double new_x = x / Math.cos(lat);
+            double d2r = Math.PI / 180;
+            double r2d = 180 / Math.PI;
+            double earth_rad = 6378000f; //지구 반지름 근사값
 
-            if(requestDto.getListSlaveDocument().get(i).isReal()) resList.add(new RoomGameStartSlaveDocumentDto(y + lat, new_x + lng, true));
-            else resList.add(new RoomGameStartSlaveDocumentDto(y + lat, new_x + lng, false));
+            double r = new Random().nextInt((int)radius) + new Random().nextDouble();
+            double rlat = (r / earth_rad) * r2d;
+            double rlng = rlat / Math.cos(lat * d2r);
+
+            double theta = Math.PI * (new Random().nextInt(2) + new Random().nextDouble());
+            double y = lng + (rlng * Math.cos(theta));
+            double x = lat + (rlat * Math.sin(theta));
+
+            if(requestDto.getListSlaveDocument().get(i).isReal()) resList.add(new RoomGameStartSlaveDocumentDto(x, y, true));
+            else resList.add(new RoomGameStartSlaveDocumentDto(x, y, false));
+
+
+//            if(requestDto.getListSlaveDocument().get(i).isReal()) resList.add(new RoomGameStartSlaveDocumentDto(y + lat, new_x + lng, true));
+//            else resList.add(new RoomGameStartSlaveDocumentDto(y + lat, new_x + lng, false));
         }
 
         return resList;
