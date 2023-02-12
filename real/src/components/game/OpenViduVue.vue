@@ -5,7 +5,7 @@
             :stream-manager="mainStreamManager" 
             :class-name="enemy_video">
         <div v-if="isInked" class="ink-bomb">
-            <img src="@/assets/inkBomb.png">
+            <img src="@/assets/inkbomb.png">
         </div>
         </user-video>
         <!-- <div class="camera_name">
@@ -22,7 +22,7 @@
             :stream-manager="myStreamManager"
             :class-name="my_video">
         <div v-if="amIInked" class="ink-bomb-me">
-            <img src="@/assets/inkBomb.png">
+            <img src="@/assets/inkbomb.png">
         </div>
         </user-video>
     </div>
