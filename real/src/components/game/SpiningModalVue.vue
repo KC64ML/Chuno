@@ -31,7 +31,7 @@
                 }" class="map_size">
                     <div v-for="(mk, idx) in location_list" :key="idx">
                         <div v-if="mk.me == true && mk.role == 'chuno'">
-                            <GMapMarker :animation=1 :position="mk.position" />
+                            <GMapMarker :icon="chuno_me_img" :animation=1 :position="mk.position" />
                         </div>
                         <div v-else-if="mk.me == true && mk.role == 'slave'">
                             <GMapMarker :icon="slave_me_img" :animation=1 :position="mk.position" />
