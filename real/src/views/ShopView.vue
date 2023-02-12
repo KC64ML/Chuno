@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <!-- <div> -->
   <HeaderVue
     :title="'상점'"
   ></HeaderVue>
@@ -41,7 +41,7 @@
         </div>
       </div>
     <!-- </div> -->
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -58,13 +58,14 @@
     },
     data() {
       return {
-        selected: {
-          name: ' ',
-          price: ' ',
-          description: ' ',
-          imgPath: ' ',
-          forRunner: ' ',
-        },
+        // selected: {
+        //   name: ' ',
+        //   price: ' ',
+        //   description: ' ',
+        //   imgPath: ' ',
+        //   forRunner: ' ',
+        // },
+        selected:null,
         items:[],
         userInfo: [],
       }

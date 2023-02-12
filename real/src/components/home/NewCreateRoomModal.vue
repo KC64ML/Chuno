@@ -42,7 +42,7 @@
                     </tr>
                     <tr v-if="!is_public">
                         <td>비밀번호</td>
-                        <td><input v-model="password"></td>
+                        <td><input v-model="password" style="padding: 0 20px;" type="password"></td>
                     </tr>
                     <tr>
                         <td>예약</td>
@@ -70,11 +70,11 @@
                                     오후
                                 </div>
                                 <div style="display: flex; align-items: center;">
-                                    <input class="time_input" v-model="hour" type="number">
+                                    <input class="time_input" v-model="hour" type="number" max="23" min="0">
                                     <div style="margin-right: 15px">시</div>
                                 </div>
-                                <div style="display: flex; align-items: center;" type="number">
-                                    <input class="time_input" v-model="minute">
+                                <div style="display: flex; align-items: center;">
+                                    <input class="time_input" v-model="minute" type="number" max="59" min="0">
                                     <div>분</div>
                                 </div>
                             </div>
@@ -142,7 +142,7 @@ export default {
     data() {
         return {
             title: "",
-            max_player: 2,
+            max_player: 4,
             is_public: true,
             password: "",
             is_today: true,
@@ -180,11 +180,11 @@ export default {
         },
         minus() {
             if (this.max_player <= 4) return;
-            this.max_player--;
+            this.max_player-=2;
         },
         plus() {
-            if (this.max_player >= 10) return;
-            this.max_player++;
+            if (this.max_player >= 8) return;
+            this.max_player+=2;
         },
         publicGame() {
             this.is_public = true;
