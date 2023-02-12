@@ -74,6 +74,7 @@
       <div
         v-for="(o, key, idx) in others"
         :key="idx"
+        @click="catchRunner(o)"
       >
         <!-- 내가 노비인데, -->
         <!-- 상대도 노비일 때 -->
@@ -247,9 +248,9 @@ export default {
               caught: other.caught,
             };
             console.log("ohters 받아오는 중 : ", this.others);
-            if(this.user.role == 'chaser') {
-              this.catchRunner(other);
-            }
+            // if(this.user.role == 'chaser') {
+            //   this.catchRunner(other);
+            // }
             
           } else if (content.type == "caughtRunner") {
               const content = JSON.parse(e.data);
@@ -263,13 +264,14 @@ export default {
               }
             } else if (content.type == "rippedPaper") {
               const content = JSON.parse(e.data);
-              const paper = content.paper
-              console.log('아까 오류 났던 부분임' + paper)
-              console.log(content.nickname + '이 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
+              const paper = content.info.paper
+              console.log('아까 오류 났던 부분임2' + paper)
+              console.log(content.nickname + '이(가) 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
               console.log(paper)
+              console.log(target)
               const target = this.papers[paper.id -1]
               target.ripped = true
-              console.log('밑에 찍히는  대로 업뎃했다.')
+              console.log('밑에 찍히는 대로 업뎃했다.')
               console.log(target)
           }
         }
@@ -437,7 +439,7 @@ export default {
       const distance = this.calculateDistance(marker)
       console.log('--------------DISTANCE-----------------')
       console.log(distance)
-      if(marker.role == 'runner' && marker.caught == false && distance <= this.catchRadius){
+      if(user.role == 'chaser' && marker.role == 'runner' && marker.caught == false && distance <= this.catchRadius){
         console.log('잡을 수 있음' + marker)
         this.catchModal = true
         this.catchTarget = marker
