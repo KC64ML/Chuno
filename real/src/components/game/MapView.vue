@@ -265,13 +265,13 @@ export default {
             } else if (content.type == "rippedPaper") {
               const content = JSON.parse(e.data);
               console.log('여기서 오류 확인하자!!!!!!!!!!!!!!')
-              console.log(content)
+              // console.log(content)
               const paper = content.info.paper
               console.log('아까 오류 났던 부분임2' + paper)
               console.log(content.nickname + '이(가) 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
-              console.log(paper)
-              console.log(target)
+              // console.log(paper)
               const target = this.papers[paper.id -1]
+              console.log(target)
               target.ripped = true
               console.log('밑에 찍히는 대로 업뎃했다.')
               console.log(target)
@@ -333,6 +333,7 @@ export default {
           msg: `${this.user.nickname}이 노비문서를 찢었습니다.`
         }
       ))
+      this.ripModal = false
     },
     // 범위 밖으로 나갈 시 경고
     outOfPlayground(location){
