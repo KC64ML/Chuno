@@ -31,8 +31,9 @@
                 }" class="map_size">
                     <div v-for="(mk, idx) in location_list" :key="idx">
                         {{ mk.nickname }} {{ mk.me }} {{ mk.role }} {{ { lat: mk.lat, lng: mk.lng } }}
+                        {{ mk.me == true }} {{ mk.role == 'chuno' }}
                         <div v-if="mk.me == true && mk.role == 'chuno'">
-                            11
+                            111
                             <GMapMarker :icon="chuno_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
                         </div>
                         <div v-else-if="mk.me == true && mk.role == 'slave'">
