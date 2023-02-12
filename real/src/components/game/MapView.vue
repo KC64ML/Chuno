@@ -281,6 +281,9 @@ export default {
               target.ripped = true
               console.log('밑에 찍히는 대로 업뎃했다.')
               console.log(target)
+          } else if (content.type == "startGame") {
+            console.log("소켓에서 받아왔어요!!!", content);
+            this.papers = content.info;
           }
         }
         )
@@ -534,6 +537,11 @@ export default {
         return_paper.push({id: new_pp+new_papers.length, location: ripped_list[new_pp].location, real: ripped_list[new_pp].real, ripped: ripped_list[new_pp].ripped});
       }
       this.papers = return_paper;
+      this.conn.send(JSON.stringify({
+        "event": "startGame",
+        "room": this.roomId,
+        "startData": this.papers,
+      }))
     }
   },
 };
