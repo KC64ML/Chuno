@@ -351,7 +351,7 @@ $item_modal_confirm_button_height: 60px;
 }
 
 #chat_container {
-    z-index: 1010;
+    z-index: 1011;
     position: absolute;
     bottom: $footer-height;
     background-image: url("@/assets/main_back_horizon.png");

@@ -232,9 +232,6 @@ export default {
         })
       }
         console.log("노비문서 받는 중", this.papers);
-      
-      //임시
-      this.papers = [{id: 1, location: {lat: 0, lng: 0}, real: true, ripped: false}, {id: 1, location: {lat: 0, lng: 0}, real: true, ripped: true}]
     },
     erollEvent() {
       new Promise((resolve) => {
@@ -514,6 +511,7 @@ export default {
       console.log(this.roomInfo);
     },
     async item_used() {
+      console.log("새로운 메서드를 추가했어요!!!!!!!!!")
       var temp_list = [];
       var ripped_list = [];
       for (var i of this.papers) {
