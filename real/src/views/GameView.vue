@@ -33,7 +33,12 @@
         </div>
     </div>
   
-  <MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught"/>
+  <MapView 
+    :user="user" 
+    :roomInfo="roomInfo" 
+    :item_used="item_used"
+    @on-caught="onCaught"
+  />
   <div style="position: absolute; bottom: 0; left: 0;">
 
     <!-- 아이템 사용 -->

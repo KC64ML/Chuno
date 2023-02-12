@@ -141,6 +141,7 @@ export default {
         }
       }
     },
+    item_used: Number,
   },
   components: {
     CatchModal,
@@ -503,6 +504,9 @@ export default {
     roomInfo() {
       console.log("roomInfo at MapView");
       console.log(this.roomInfo);
+    },
+    item_used(){
+      console.log('item_used watch 중..')
     }
   },
 };
