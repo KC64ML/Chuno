@@ -32,15 +32,19 @@
                     <div v-for="(mk, idx) in location_list" :key="idx">
                         {{ mk.nickname }} {{ mk.me }} {{ mk.role }} {{ { lat: mk.lat, lng: mk.lng } }}
                         <div v-if="mk.me == true && mk.role == 'chuno'">
+                            11
                             <GMapMarker :icon="chuno_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
                         </div>
                         <div v-else-if="mk.me == true && mk.role == 'slave'">
+                            22
                             <GMapMarker :icon="slave_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
                         </div>
                         <div v-else-if="mk.me == false && mk.role == 'chuno'">
+                            33
                             <GMapMarker :icon="chuno_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
                         </div>
                         <div v-else-if="mk.me == false && mk.role == 'slave'">
+                            44
                             <GMapMarker :icon="slave_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
                         </div>
                     </div>
