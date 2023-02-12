@@ -82,7 +82,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 this.session = this.OV.initSession();
                 this.session.on("streamCreated", ({ stream }) => {
                     const otherData = JSON.parse(stream.connection.data);
-                    if (otherData.user.nickname == this.user.nickname) {
+                    if (otherData.nickname == this.user.nickname) {
                         return;
                     }
                     console.log("stream.connection.data : " + otherData);
