@@ -31,16 +31,16 @@
                 }" class="map_size">
                     <div v-for="(mk, idx) in location_list" :key="idx">
                         {{ mk.nickname }} {{ mk.me }} {{ mk.role }} {{ { lat: mk.lat, lng: mk.lng } }}
-                        <div v-if="mk.me == true && mk.role=='chuno'">
+                        <div v-if="mk.me == true && mk.role == 'chuno'">
                             <GMapMarker :icon="chuno_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
                         </div>
-                        <div v-else-if="mk.me == true && mk.role=='slave'">
+                        <div v-else-if="mk.me == true && mk.role == 'slave'">
                             <GMapMarker :icon="slave_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
                         </div>
-                        <div v-else-if="mk.me == false && mk.role=='chuno'">
+                        <div v-else-if="mk.me == false && mk.role == 'chuno'">
                             <GMapMarker :icon="chuno_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
                         </div>
-                        <div v-else-if="mk.me == false && mk.role=='slave'">
+                        <div v-else-if="mk.me == false && mk.role == 'slave'">
                             <GMapMarker :icon="slave_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
                         </div>
                     </div>
@@ -48,7 +48,8 @@
                 </GMapMap>
                 <!-- <div class="map_size mak" @click="noTouch"></div> -->
             </div>
-            <div :class="{div_hidden : !count_down_start}" style="text-align: center; font-size: 25px; margin-top: 20px;">
+            <div :class="{ div_hidden: !count_down_start }"
+                style="text-align: center; font-size: 25px; margin-top: 20px;">
                 {{ count_down }}초 후에 게임이 시작되요!
             </div>
         </div>
@@ -65,7 +66,7 @@ export default {
     data() {
         return {
             count_down_start: false,
-            count_down : 20,
+            count_down: 20,
             room_id: this.$route.params.roomId,
             nickname: "",
             lat: 0,
@@ -88,10 +89,22 @@ export default {
                 fillColor: "#0000FF",
                 fillOpacity: 0.15,
             },
-            chuno_me_img: chuno_me_img,
-            slave_me_img: slave_me_img,
-            chuno_img: chuno_img,
-            slave_img: slave_img,
+            chuno_me_img: {
+                url: chuno_me_img,
+                scaledSize: { width: 40, height: 40 }
+            },
+            slave_me_img: {
+                url: slave_me_img,
+                scaledSize: { width: 40, height: 40 }
+            },
+            chuno_img: {
+                url: chuno_img,
+                scaledSize: { width: 40, height: 40 }
+            },
+            slave_img: {
+                url: slave_img,
+                scaledSize: { width: 40, height: 40 }
+            },
         }
     },
     computed: {
@@ -164,6 +177,7 @@ $map_height: $map_width;
 .div_hidden {
     visibility: hidden;
 }
+
 .map_size {
     height: $map_height;
     width: $map_height;
@@ -173,6 +187,7 @@ $map_height: $map_width;
     position: absolute;
     // background-color: rgb(100, 0, 0, 0.5);
 }
+
 #spining_container {
     position: absolute;
     z-index: 100001;
