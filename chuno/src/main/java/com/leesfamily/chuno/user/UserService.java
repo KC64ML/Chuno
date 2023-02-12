@@ -175,7 +175,7 @@ public class UserService {
         if(img == null) {
             // 만약 null인 경우 기본 이미지 넣어주기
             // profile/14/1f5b0f6d-b51a-42a6-a354-ac965fa5f86f.png
-            String defaultPng = "1f5b0f6d-b51a-42a6-a354-ac965fa5f86f.png";
+            String defaultPng = "profileimage.png";
             String target = "profile/"+userId;
             String path = target + "/" + defaultPng;
 
