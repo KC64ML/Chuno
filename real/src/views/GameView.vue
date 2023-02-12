@@ -26,9 +26,9 @@
       </div>
     </div>
   </div>
-  <!-- <OpenViduVue
+  <OpenViduVue
     :my_cam_modal="my_cam_modal"
-    :user="user"></OpenViduVue> -->
+    :user="user"></OpenViduVue>
    
   <div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
         <div id="chat_header"
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-// import OpenViduVue from '@/components/game/OpenViduVue.vue'
+import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue' // huh
 import RoleModalVue from '@/components/game/RoleModalVue.vue'
 import ChatCardVue from '@/components/game/ChatCardVue.vue';
@@ -86,7 +86,7 @@ export default {
   name: 'GameView',
   components: {
     MapView,
-    // OpenViduVue,
+    OpenViduVue,
     SpiningModalVue,
     RoleModalVue,
     ChatCardVue,
@@ -263,7 +263,7 @@ export default {
         setTimeout(this.visibility = false, 30000)
       } else if (item.id == 4) {
         // 먹물탄
-        console.log(4)
+        console.log("먹물탄 사용 : ", 4);
         this.conn.send(JSON.stringify(
           {
             event: "useItem",

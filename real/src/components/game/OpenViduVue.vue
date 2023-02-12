@@ -218,21 +218,6 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             }
         },
     async created() {
-        await this.openMediaDevices({
-        video: true,
-        audio: true,
-        }).then((stream) => {
-            console.log('created stream');
-            console.log(stream);
-            this.myVideoStream = stream;
-        });
-        
-        console.log("--------------ffff--------------");
-        console.log(this.subscribers.length + "명의 사람이 있어요");
-        for (var sub of this.subscribers) {
-            console.log("---", sub);
-        }
-
         this.conn.addEventListener("message", (e) => {
             const content = JSON.parse(e.data);
             console.log("받은 메세지 : ", content);
@@ -259,6 +244,24 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 }
             }
         })
+
+
+        await this.openMediaDevices({
+        video: true,
+        audio: true,
+        }).then((stream) => {
+            console.log('created stream');
+            console.log(stream);
+            this.myVideoStream = stream;
+        });
+        
+        console.log("--------------ffff--------------");
+        console.log(this.subscribers.length + "명의 사람이 있어요");
+        for (var sub of this.subscribers) {
+            console.log("---", sub);
+        }
+
+        
 
         this.init();
     },
