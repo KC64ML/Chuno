@@ -56,11 +56,17 @@ export default {
       // editProfileModal: false,
     }
   },
+
   methods: {
     onModal() {
       this.modal = !this.modal
       console.log("테스트 실행")
       console.log(this.modal)
+      // const token = sessionStorage.token
+      // this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
+      // .then((res) =>{
+      //   console.log("userImgTest : " + res.data.result.profile.path);
+      // })
     },
     // 친구 추가
     addFriend(yourUid) {
@@ -141,6 +147,7 @@ export default {
   height: 70px;
   border-radius: 50%;
 }
+
 
 .container-row {
   display: flex;
