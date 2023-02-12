@@ -26,9 +26,9 @@
       </div>
     </div>
   </div>
-  <OpenViduVue
+  <!-- <OpenViduVue
     :my_cam_modal="my_cam_modal"
-    :user="user"></OpenViduVue>
+    :user="user"></OpenViduVue> -->
    
   <div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
         <div id="chat_header"
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import OpenViduVue from '@/components/game/OpenViduVue.vue'
+// import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue' // huh
 import RoleModalVue from '@/components/game/RoleModalVue.vue'
 import ChatCardVue from '@/components/game/ChatCardVue.vue';
@@ -86,7 +86,7 @@ export default {
   name: 'GameView',
   components: {
     MapView,
-    OpenViduVue,
+    // OpenViduVue,
     SpiningModalVue,
     RoleModalVue,
     ChatCardVue,
@@ -132,7 +132,7 @@ export default {
       user: undefined,
       usedItem: [],
       // 개발이 끝나면 true로 고쳐줘요
-      spinningModal: true,
+      spinningModal: false,
       roleModal: false,
       roomInfo: undefined,
 
@@ -383,6 +383,7 @@ $item_modal_confirm_button_height: 60px;
   animation-duration: 0.2s;
   animation-iteration-count: 1;
   box-shadow: 0 5px 5px rgb(0, 0, 0, 0.3);
+  z-index: 100;
 }
 @keyframes item_menu_modal {
   0% {

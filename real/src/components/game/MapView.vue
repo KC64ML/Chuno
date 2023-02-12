@@ -505,8 +505,8 @@ export default {
       console.log("roomInfo at MapView");
       console.log(this.roomInfo);
     },
-    item_used(){
-      console.log('item_used watch 중..')
+    item_used: function() {
+      console.log("왔어요11!!!")
     }
   },
 };
