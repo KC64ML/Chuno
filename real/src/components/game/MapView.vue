@@ -74,7 +74,6 @@
       <div
         v-for="(o, key, idx) in others"
         :key="idx"
-        @click="catchRunner(o)"
       >
         <!-- 내가 노비인데, -->
         <!-- 상대도 노비일 때 -->
@@ -83,6 +82,7 @@
             :icon=otherRunnerMarkerImg
             :position="o.location"
             :clickable="true"
+            @click="catchRunner(o)"
           />
         </div>
         <!-- 상대가 추노일 때 -->
@@ -92,6 +92,7 @@
             :icon=otherChaserMarkerImg
             :position="o.location"
             :clickable="true"
+            @click="catchRunner(o)"
           />
         </div>
 
@@ -102,6 +103,7 @@
             :icon=otherChaserMarkerImg
             :position="o.location"
             :clickable="true"
+            @click="catchRunner(o)"
           />
         </div>
         <!-- 상대가 노비일 때 -->
@@ -111,6 +113,7 @@
             :icon=otherRunnerMarkerImg
             :position="o.location"
             :clickable="true"
+            @click="catchRunner(o)"
           />
         </div>
       </div>
@@ -276,7 +279,7 @@ export default {
               console.log('아까 오류 났던 부분임2' + paper)
               console.log(content.nickname + '이(가) 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
               // console.log(paper)
-              const target = this.papers[paper.id -1]
+              const target = this.papers[paper.id ]
               console.log(target)
               target.ripped = true
               console.log('밑에 찍히는 대로 업뎃했다.')
