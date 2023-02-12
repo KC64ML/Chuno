@@ -46,7 +46,7 @@
         </div>
     </div>
   
-  <MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught"/>
+  <MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught" :item_used="item_used[7]"/>
   <div style="position: absolute; bottom: 0; left: 0;">
     
     <div id="footer_container">
@@ -183,7 +183,7 @@ export default {
           },
         ]
       },
-      item_used: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0,},
+      item_used: [0, 0, 0, 0, 0, 0, 0, 0, 0,],
     }
   },
   methods: {
@@ -291,7 +291,7 @@ export default {
           )
         ), 30000);
       } else if(item.id == 7) {
-        console.log("7");
+        this.item_used[7]++;
       }
     }
   }
@@ -415,8 +415,8 @@ $item_modal_confirm_button_height: 60px;
 }
 @keyframes item_description_modal_container {
   0% {transform: translate(-50%, -50%) scale(0);}
-  75% {transform: translate(-50%, -50%) scale(1.3);}
-  88% {transform: translate(-50%, -50%) scale(0.8);}
+  70% {transform: translate(-50%, -50%) scale(1.3);}
+  85% {transform: translate(-50%, -50%) scale(0.8);}
   95% {transform: translate(-50%, -50%) scale(1.1);}
 }
 .modal_confirm_button {
