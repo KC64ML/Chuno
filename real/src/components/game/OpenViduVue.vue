@@ -4,13 +4,13 @@
         <user-video 
             :stream-manager="mainStreamManager" 
             :class-name="enemy_video">
-        <div v-if="isInked" class="ink-bomb">
-            <img src="@/assets/inkbomb.png">
-        </div>
         </user-video>
         <!-- <div class="camera_name">
             임시이름 {{ enemy_name }}
         </div> -->
+        <div v-if="isInked" class="ink-bomb">
+            <img src="@/assets/inkbomb.png">
+        </div>
         <img class="camera_arrow left_arrow" src="@/assets/camera_left.svg" alt="">
         <img class="camera_arrow right_arrow" src="@/assets/camera_right.svg" alt="">
         <div class="arrow_box right_box" @click="rightArrow"></div>  
@@ -21,10 +21,10 @@
         <user-video 
             :stream-manager="myStreamManager"
             :class-name="my_video">
+        </user-video>
         <div v-if="amIInked" class="ink-bomb-me">
             <img src="@/assets/inkbomb.png">
         </div>
-        </user-video>
     </div>
 </template>
 
