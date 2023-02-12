@@ -158,7 +158,7 @@ export default {
       user: undefined,
       usedItem: [],
       // 개발이 끝나면 true로 고쳐줘요
-      spinningModal: false,
+      spinningModal: true,
       roleModal: false,
       roomInfo: undefined,
 
