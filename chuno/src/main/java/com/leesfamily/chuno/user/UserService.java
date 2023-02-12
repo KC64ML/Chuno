@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -152,6 +153,7 @@ public class UserService {
     }
 
     public UserEntity putMyProfileImg( Long userId, MultipartFile img, String nickname, String phone) {
+        log.info("userId : " + userId);
         Optional<UserEntity> option = userRepository.findById(userId);
         UserEntity userEntity = option.get();
         if(userEntity.getProfile() == null) {
