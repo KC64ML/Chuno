@@ -467,5 +467,4 @@ $item_modal_confirm_button_height: 60px;
 .toast-enter {
   transform: translateY(100%);
 }
-}
 </style>
