@@ -7,30 +7,21 @@
             <div class="image_text">시작해요</div>
         </div>
         <br>
-        <div @click="play()">audioPlayer</div>
     </div>
 </template>
 
 <script>
-import bgm from '@/assets/bgm.mp3'
   export default {
     methods: {
       start() {
           this.$router.push("/login")
       },
-      play() {
-          var audio = new Audio(this.bgm);
-          audio.play();
-        }
     },
 
     data(){
       return {
-        bgm,
       }
     },
-    
-
   }
 </script>
 
