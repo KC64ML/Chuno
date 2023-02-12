@@ -1,4 +1,3 @@
-
 <template> 
   <!-- <div> -->
   <MenuView 
@@ -34,7 +33,7 @@
         </div>
     </div>
   
-  <MapView :user="user" :roomInfo="roomInfo" />
+  <MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught"/>
   <div style="position: absolute; bottom: 0; left: 0;">
 
     <!-- 아이템 사용 -->
@@ -112,6 +111,7 @@ export default {
       })
     const info = JSON.parse(sessionStorage.info);
     this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
+    this.user.caught = false;
     console.log("GameView created complete");
     console.log("-----------------------")
     console.log(this.user);
@@ -218,11 +218,12 @@ export default {
         // 연막탄
         console.log(item);
       }
-
-
     },
     itemNo() {
       this.itemModal = false
+    },
+    onCaught(){
+      this.user.caught = true
     },
     spinningEnd() {
       this.spinningModal = false;

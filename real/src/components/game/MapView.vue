@@ -64,8 +64,8 @@
           :icon=paperMarkerImg
           :animation=1
           :position="m.location"
-          @click="openInfoWindow(marker.id)"
           />
+          <!-- @click="openInfoWindow(marker.id)" -->
           <!-- :clickable="true" -->
         </div>
       </div>
@@ -75,7 +75,6 @@
         v-for="(o, key, idx) in others"
         :key="idx"
       >
-        <!-- @click="ripPaper(o)" -->
         <!-- 내가 노비인데, -->
         <!-- 상대도 노비일 때 -->
         <div v-if="o.role == 'runner' && user.role == 'runner'">
@@ -86,7 +85,7 @@
           />
         </div>
         <!-- 상대가 추노일 때 -->
-        <div v-if="o.role == 'chasere' && user.role == 'runner'">
+        <div v-if="o.role == 'chaser' && user.role == 'runner'">
           <GMapMarker
             v-if="o.myMarker"
             :icon=otherChaserMarkerImg
@@ -244,18 +243,23 @@ export default {
               nickname: other.nickname,
               role: other.role,
               location: other.location,
-              myMarker: other.myMarker
+              myMarker: other.myMarker,
+              caught: other.caught,
             };
             console.log("ohters 받아오는 중 : ", this.others);
-            this.catchRunner(other);
+            if(this.user.role == 'chaser') {
+              this.catchRunner(other);
+            }
             
           } else if (content.type == "caughtRunner") {
               const content = JSON.parse(e.data);
               const target = content.info.others;
-              if(target.nickname == this.user.nickname) {
-                console.log(target.nickname + '님이 잡혀버렸다...')
-              } else {
+              if(target.nickname == this.user.nickname) { // 내가 잡혔을 때 내 상태 업뎃
+                this.$emit('on-caught')
+                console.log('나(' + target.nickname + ')는 잡혀버렸다...')
+              } else {  // 다른 사람이 잡혔을 때 다른 사람 상태 업뎃
                 console.log(target.nickname + '님이' + content.nickname + '님한테 잡혔다...')
+                this.others[target.nickname].caught = true
               }
             } else if (content.type == "rippedPaper") {
               const content = JSON.parse(e.data);
@@ -281,6 +285,9 @@ export default {
 
     // 노비문서 찢기 모달
     ripPaper(marker){
+      if(this.user.role == 'chaser'){
+        return
+      }
       console.log('3. ripPaper 함수 실행')
       console.log(marker)
       const distance = this.calculateDistance(marker)
@@ -340,13 +347,10 @@ export default {
         this.location.lng = coordinates.lng
         console.log(this.location.lat)
         console.log(this.location.lng)
-        // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
-        // this.catch()
-        // this.ripPaper()
-        // const roomCenter = { position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} }
-        // console.log('---------------------')
-        // console.log(roomCenter)
-        // this.outOfPlayground({ position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} })
+        // 내가 노비이면
+        if(this.user.role == 'runner') {
+          this.ripPaper()
+        }
         // 위치 공유
         this.conn.send(JSON.stringify(
           {
@@ -358,14 +362,10 @@ export default {
               role: this.user.role,
               location: this.location,
               myMarker: this.myMarker,
+              caught: this.user.caught,
             }
           }
         ));
-        // this.session.on("streamCreated", function (event) {
-        //   this.session.subscribe(event.stream, "subscriber");
-        //   // const USER_DATA = {}
-        //   console.log("USER DATA: " + event.stream.connection.data);
-        // });
       })
       .catch((error) => {
         console.log(error)
@@ -408,8 +408,8 @@ export default {
       } else {
         this.myMarker = false
       }
-      // console.log(window)
     },
+
     // 나와 marker의 거리 계산
     calculateDistance(marker){
       console.log('!!calculateDistance 함수 실행됨')
@@ -427,6 +427,7 @@ export default {
       const distance = Math.round(d*1000);
       return distance
     },
+
     // 노비 잡기
     catchRunner(marker){
       console.log('!! catchRunner 함수 실행되기는 함')
@@ -435,7 +436,7 @@ export default {
       const distance = this.calculateDistance(marker)
       console.log('--------------DISTANCE-----------------')
       console.log(distance)
-      if(distance <= this.catchRadius){
+      if(marker.caught == true && distance <= this.catchRadius){
         console.log('잡을 수 있음' + marker)
         this.catchModal = true
         this.catchTarget = marker
@@ -455,6 +456,7 @@ export default {
       console.log('--------------TARGET-----------------')
       console.log(target)
       this.catchModal = false
+      this.target.caught = true
       this.conn.send(JSON.stringify(
           {
             event:'catchRunner',
@@ -478,24 +480,13 @@ export default {
   },
   created() {
     console.log("MapView created start");
-    // 내 위치
-    // this.myLocation()
-    // setInterval(this.myLocation(),1000) */
     this.init();
     setTimeout(() => {
       this.erollEvent();
     }, 5000);
-    
-    // this.catch()
-
-
-    // this.generatePlayer()
-
   },
   mounted() {
-    // this.ripPaper()
     this.outOfPlayground({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}})
-    // this.catch()
 
   },
   computed: {
@@ -504,20 +495,6 @@ export default {
     }
   },
   watch: {
-    // player(){
-    //   // 위치가 변할 때 마다 노비를 잡을 수 있는지, 노비문서를 찢을 수 있는지, 플레이 범위 안인지 확인
-    //   this.catch()
-    //   this.ripPaper()
-    //   const roomCenter = { position: {lat: this.roomInfo.lat, lng: this.roomInfo.lng} }
-    //   console.log(roomCenter)
-    //   this.outOfPlayground(roomCenter)
-    //   // 위치 공유
-    //   this.session.on("streamCreated", function (event) {
-    //     this.session.subscribe(event.stream, "subscriber");
-    //     // const USER_DATA = {}
-    //     console.log("USER DATA: " + event.stream.connection.data);
-    //   });
-    // }
     roomInfo() {
       console.log("roomInfo at MapView");
       console.log(this.roomInfo);
