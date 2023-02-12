@@ -52,7 +52,7 @@
       />
       
       <!-- 노비문서 위치 -->
-      <div v-if="user?.role == runner">
+      <div v-if="user?.role == 'runner'">
         <div
           v-for="m in papers"
           :key="m.id"
