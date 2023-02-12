@@ -2,7 +2,7 @@
   <div id="inventory">
     <img :src="URL + 'resources/images?path=' + item.imgPath" alt="item">
     <div v-for="i in 8"
-      :key="i"  
+      :key="i"
     >
       <div v-if="i == item.id" class="invenCnt">
         {{ userInfo.items[i-1] }}
