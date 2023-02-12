@@ -6,16 +6,16 @@
     </div>
     <div style="height: 80%; overflow: scroll;" class="scroll">
         <!-- <div style="text-align: center">저잣거리</div> -->
-        <room-card v-for="(room, idx) in roomList" :key="idx" v-bind:room="room"></room-card>
+        <!-- <room-card v-for="(room, idx) in roomList" :key="idx" v-bind:room="room"></room-card> -->
     </div>
 </template>
 
 <script>
-import RoomCard from "@/components/RoomCard.vue"
+// import RoomCard from "@/components/RoomCard.vue"
 
 export default {
     components: {
-        RoomCard
+        // RoomCard
     },
     data() {
         return {
