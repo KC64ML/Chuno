@@ -81,10 +81,11 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 this.OV = new OpenVidu();
                 this.session = this.OV.initSession();
                 this.session.on("streamCreated", ({ stream }) => {
-                    this.players_state[stream.connection.data.nickname] = {
+                    const otherData = JSON.parse(stream.connection.data);
+                    this.players_state[otherData.nickname] = {
                         isInked: false,
                     };
-                    if (stream.connection.data.nickname == this.user.nickname) {
+                    if (otherData.nickname == this.user.nickname) {
                         return;
                     }
                     const subscriber = this.session.subscribe(stream);
@@ -203,6 +204,9 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 return clientData.user;
             },
             inkedCheck() {
+                console.log("==============inked check=============");
+                console.log(this.clientUser(this.mainStreamManager).nickname);
+                console.log(this.players_state[this.clientUser(this.mainStreamManager).nickname]);
                 if (this.players_state[this.clientUser(this.mainStreamManager).nickname].isInked) {
                     this.isInked = true;
                 } else {
@@ -231,6 +235,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
         this.conn.addEventListener("message", (e) => {
             const content = JSON.parse(e.data);
+            console.log("받은 메세지 : ", content);
             if (content.type == "item4") {
                 console.log("누군가 먹물탄을 사용하였습니다.", content);
                 const nickname = content.nickname;
