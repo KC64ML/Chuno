@@ -67,17 +67,18 @@
       </div>
     </div>
   </div>
-  <div class="toast_chat" v-if="system_toast">
-    <div class="flex_center">
-        <img src="@/assets/system_chat.png" style="height: 60px; width: 90vw;">
-        <div class="image_text">{{ last_chat }}</div>
-    </div>
-  </div>
   <transition name="toasting">
-    <div class="toast_chat" v-if="chat_toast">
+    <div class="toast_chat" v-if="system_toast">
       <div class="flex_center">
           <img src="@/assets/system_chat.png" style="height: 60px; width: 90vw;">
           <div class="image_text">{{ last_chat }}</div>
+      </div>
+    </div>
+  </transition>
+  <transition name="toasting">
+    <div class="toast_chat" v-if="chat_toast">
+      <div class="flex_center">
+          <div style="text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; font-size: 20px;">{{ last_chat }}</div>
       </div>
     </div>
   </transition>
@@ -112,10 +113,11 @@ export default {
         console.log({ nickname: content.nickname, msg: content.message })
         this.chat_log.push({ nickname: content.nickname, msg: content.message })
 
-        this.last_chat = content.message
         if (content.nickname == "system") {
+          this.last_chat = content.message;
           this.system_toast = true;
         } else {
+          this.last_chat = content.nickname + " : " + content.message;
           this.chat_toast = true;
         }
 
@@ -454,17 +456,21 @@ $item_modal_confirm_button_height: 60px;
   z-index: 100100;
   position: absolute;
   bottom: $footer-height + 40px; 
+  animation-name: toasting;
+  animation-duration: 0.25s;
+  animation-iteration-count: 1;
 }
-.toasting {
+@keyframes toasting {
+  0% {
+    opacity: 0;
+    transform: scale(0) translateY(30px);
+  }
+}
+.toasting-leave-active {
   transition: all 0.25s;
 }
-.toast-enter-active {
-  transition: all 0.25s;
-}
-.toast-enter-active {
-  transition: all 0.25s;
-}
-.toast-enter {
-  transform: translateY(100%);
+.toasting-leave-to {
+  opacity: 0;
+  transform: scale(0) translateY(30px);
 }
 </style>
