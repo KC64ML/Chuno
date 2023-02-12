@@ -30,18 +30,18 @@
                     maxZoom: map_zoom,
                 }" class="map_size">
                     <div v-for="(mk, idx) in location_list" :key="idx">
-                        {{ mk.nickname }}
-                        <div v-if="mk.me == true">
-                            <GMapMarker :icon="chuno_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
-                                v-if="mk.role == 'chuno'" />
-                            <GMapMarker :icon="slave_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
-                                v-else-if="mk.me == 'slave'" />
+                        {{ mk.nickname }} {{ mk.me }} {{ mk.role }} {{ { lat: mk.lat, lng: mk.lng } }}
+                        <div v-if="mk.me == true && mk.role=='chuno'">
+                            <GMapMarker :icon="chuno_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
                         </div>
-                        <div v-else>
-                            <GMapMarker :icon="chuno_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
-                                v-if="mk.role == 'chuno'" /> 
-                            <GMapMarker :icon="slave_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
-                                v-else-if="mk.me == 'slave'" />
+                        <div v-else-if="mk.me == true && mk.role=='slave'">
+                            <GMapMarker :icon="slave_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
+                        </div>
+                        <div v-else-if="mk.me == false && mk.role=='chuno'">
+                            <GMapMarker :icon="chuno_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
+                        </div>
+                        <div v-else-if="mk.me == false && mk.role=='slave'">
+                            <GMapMarker :icon="slave_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
                         </div>
                     </div>
                     <GMapCircle :radius="roomradius" :center="roomcenter" :options="gameCircle" />
