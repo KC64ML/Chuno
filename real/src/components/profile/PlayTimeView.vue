@@ -2,25 +2,28 @@
   <div id="record">
     <div id="container">
       <!-- <div> -->
-        <img src="@/assets/WallClock.svg" alt="record" id="iconBg">
+      <img src="@/assets/WallClock.svg" alt="record" id="iconBg" />
       <!-- </div> -->
       <div class="container-col">
         <div>플레이</div>
         <div>타임</div>
       </div>
     </div>
+    <br />
     <div>
       <div>
         <div>플레이한 게임</div>
-        <div>{{ totalPlay }}회</div>
+        <div id="cnt">{{ totalPlay }}회</div>
       </div>
+      <br />
       <div>
         <div>추노꾼 플레이</div>
-        <div>{{ userInfo.chaserPlayCount }}회</div>
+        <div id="cnt">{{ userInfo.chaserPlayCount }}회</div>
       </div>
+      <br />
       <div>
         <div>노비 플레이</div>
-        <div>{{ userInfo.runnerPlayCount }}회</div>
+        <div id="cnt">{{ userInfo.runnerPlayCount }}회</div>
       </div>
     </div>
   </div>
@@ -28,28 +31,29 @@
 
 <script>
 export default {
-  name: 'PlayTimeView',
+  name: "PlayTimeView",
   props: {
     userInfo: Object,
   },
   data() {
     // playTime: null,
   },
-  computed:{
-    totalPlay(){
-      return this.userInfo.chaserPlayCount + this.userInfo.runnerPlayCount
-    }
-  }
-}
+  computed: {
+    totalPlay() {
+      return this.userInfo.chaserPlayCount + this.userInfo.runnerPlayCount;
+    },
+  },
+};
 </script>
 
 <style scoped>
-#record{
+#record {
   display: flex;
   flex-direction: column;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   width: 50%;
   border-radius: 10%;
+  padding: 15px;
 }
 
 #record div p {
@@ -59,7 +63,7 @@ export default {
   background-color: black;
   border-radius: 10%;
 }
-#container{
+#container {
   display: flex;
   flex-direction: row;
   /* text-align: left; */
@@ -68,13 +72,18 @@ export default {
 }
 #container div {
   padding: 5%;
-  margin: 3%;
+  /* margin: 3%; */
+  align-items: center;
 }
 #container img {
-  width: 30px;
+  width: 50px;
+  padding: 5px;
 }
-.container-col div{
+.container-col div {
   width: 50px;
   text-align: left;
+}
+#cnt {
+  font-size: 22px;
 }
 </style>

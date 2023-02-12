@@ -1,7 +1,6 @@
 <template>
     <div id="spining_container" class="flex_center">
         <div>
-            {{ location_list }}
             <div style="width: 100vw; margin-bottom: 40px; font-size: 20px; text-align: center">
                 열심히 정보를 가져오는 중이에요
             </div>
@@ -26,29 +25,29 @@
                     mapTypeControl: false,
                     streetViewControl: false,
                     fullscreenControl: false,
-                    minZoom: map_zoom,
+                    minZoom: 1,
                     maxZoom: map_zoom,
                 }" class="map_size">
                     <div v-for="(mk, idx) in location_list" :key="idx">
-                        {{ mk.nickname }}
-                        <div v-if="mk.me == true">
-                            <GMapMarker :icon="chuno_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
-                                v-if="mk.role == 'chuno'" />
-                            <GMapMarker :icon="slave_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
-                                v-else-if="mk.me == 'slave'" />
+                        <div v-if="mk.me == true && mk.role == 'chuno'">
+                            <GMapMarker :icon="chuno_me_img" :animation=1 :position="mk.position" />
                         </div>
-                        <div v-else>
-                            <GMapMarker :icon="chuno_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
-                                v-if="mk.role == 'chuno'" /> 
-                            <GMapMarker :icon="slave_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
-                                v-else-if="mk.me == 'slave'" />
+                        <div v-else-if="mk.me == true && mk.role == 'slave'">
+                            <GMapMarker :icon="slave_me_img" :animation=1 :position="mk.position" />
+                        </div>
+                        <div v-else-if="mk.me == false && mk.role == 'chuno'">
+                            <GMapMarker :icon="chuno_img" :animation=1 :position="mk.position" />
+                        </div>
+                        <div v-else-if="mk.me == false && mk.role == 'slave'">
+                            <GMapMarker :icon="slave_img" :animation=1 :position="mk.position" />
                         </div>
                     </div>
                     <GMapCircle :radius="roomradius" :center="roomcenter" :options="gameCircle" />
                 </GMapMap>
                 <!-- <div class="map_size mak" @click="noTouch"></div> -->
             </div>
-            <div :class="{div_hidden : !count_down_start}" style="text-align: center; font-size: 25px; margin-top: 20px;">
+            <div :class="{ div_hidden: !count_down_start }"
+                style="text-align: center; font-size: 25px; margin-top: 20px;">
                 {{ count_down }}초 후에 게임이 시작되요!
             </div>
         </div>
@@ -65,7 +64,7 @@ export default {
     data() {
         return {
             count_down_start: false,
-            count_down : 20,
+            count_down: 5,
             room_id: this.$route.params.roomId,
             nickname: "",
             lat: 0,
@@ -88,10 +87,22 @@ export default {
                 fillColor: "#0000FF",
                 fillOpacity: 0.15,
             },
-            chuno_me_img: chuno_me_img,
-            slave_me_img: slave_me_img,
-            chuno_img: chuno_img,
-            slave_img: slave_img,
+            chuno_me_img: {
+                url: chuno_me_img,
+                scaledSize: { width: 40, height: 40 }
+            },
+            slave_me_img: {
+                url: slave_me_img,
+                scaledSize: { width: 40, height: 40 }
+            },
+            chuno_img: {
+                url: chuno_img,
+                scaledSize: { width: 40, height: 40 }
+            },
+            slave_img: {
+                url: slave_img,
+                scaledSize: { width: 40, height: 40 }
+            },
         }
     },
     computed: {
@@ -103,7 +114,7 @@ export default {
         this.conn.addEventListener('message', (e) => {
             var content = JSON.parse(e.data);
             if (content.type == 'receivelocation') {
-                this.location_list.push({ "nickname": content.nickname, "role": content.info.role, "lat": content.info.lat, "lng": content.info.lat, "me": (content.nickname == this.nickname) ? (true) : (false) });
+                this.location_list.push({ "nickname": content.nickname, "role": content.info.role, position:{"lat": content.info.lat, "lng": content.info.lng}, "me": (content.nickname == this.nickname) ? (true) : (false) });
                 this.cnt_len++;
                 this.display_info = this.cnt_len + " / " + this.player_len;
                 if (this.cnt_len == this.player_len) {
@@ -164,6 +175,7 @@ $map_height: $map_width;
 .div_hidden {
     visibility: hidden;
 }
+
 .map_size {
     height: $map_height;
     width: $map_height;
@@ -173,6 +185,7 @@ $map_height: $map_width;
     position: absolute;
     // background-color: rgb(100, 0, 0, 0.5);
 }
+
 #spining_container {
     position: absolute;
     z-index: 100001;

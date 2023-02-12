@@ -229,14 +229,14 @@ export default {
     },
     erollEvent() {
       new Promise((resolve) => {
-        console.log("promise at MapView");
+        // console.log("promise at MapView");
         this.conn.addEventListener('message', (e) => {
-          console.log("message received at MapView", e);
+          // console.log("message received at MapView", e);
           const content = JSON.parse(e.data);
           if (content.type == "othersLocation") {
             const other = content.info; // startData가 여기 담겨잇다.
-            console.log('내 닉네임!!!!!!!!')
-            console.log(this.user.nickname)
+            // console.log('내 닉네임!!!!!!!!')
+            // console.log(this.user.nickname)
             if (other.nickname == this.user.nickname) {
               return;
             }
@@ -345,13 +345,12 @@ export default {
     },
     // 내 위치
     myLocation() {
-      console.log('1. myLocation 함수 실행')
       this.$getLocation({enableHighAccuracy: true})
       .then((coordinates) => {
         this.location.lat = coordinates.lat
         this.location.lng = coordinates.lng
-        console.log(this.location.lat)
-        console.log(this.location.lng)
+        // console.log(this.location.lat)
+        // console.log(this.location.lng)
         // 내가 노비이면
         // if(this.user.role == 'runner') {
         //   this.ripPaper()
