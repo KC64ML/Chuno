@@ -8,14 +8,6 @@
         v-bind:src="`${audio.isPlaying ? soundOn : soundOff}`"
       />
     </div>
-    <div>
-      <img
-        class="music"
-        :v-if="!audio.isPlaying"
-        @click="audio.isPlaying ? pause(audio) : play(audio)"
-        src="@/assets/sound_off.png"
-      />
-    </div>
   </div>
 </template>
 

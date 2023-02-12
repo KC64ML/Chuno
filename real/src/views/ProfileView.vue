@@ -21,7 +21,7 @@
       @get-user="getUser"
     />
     <div><br></div>
-    <p>노비용</p>
+    <p class="inventory-text">노비용</p>
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; background-color: #1D182C; border-radius: 10%; justify-items: center;">
       <InventoryView
         :userInfo="userInfo"
@@ -31,7 +31,7 @@
       />
     </div>
     <div><br></div>
-    <p>추노꾼용</p>
+    <p class="inventory-text">추노꾼용</p>
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; background-color: #1D182C; border-radius: 10%; justify-items: center;">
       <InventoryView
         :userInfo="userInfo"
@@ -42,7 +42,7 @@
     </div>
     <div><br></div>
     <div class="container">
-      <PlayTimeView
+      <PlayTimeView style="margin-right:20px;"
         :userInfo="userInfo"
       />
       <RecordView
@@ -182,5 +182,8 @@ export default {
   display: gird;
   background-color: #1D182C;
 } */
+.inventory-text{
+  font-size: 18px;
+}
 
 </style>
