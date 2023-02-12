@@ -1,5 +1,5 @@
 <template>
-    <div id="main_vedio_container" style="z-index: 1000">
+    <div id="main_vedio_container" style="z-index: 10000;">
         <!-- <video autoplay ref="video" class="enemy_video"></video> -->
         <user-video 
             :stream-manager="mainStreamManager" 
@@ -13,7 +13,7 @@
         <div class="arrow_box right_box" @click="rightArrow"></div>  
         <div class="arrow_box left_box" @click="leftArrow"></div>
     </div>
-    <div class="my_video_box" :class="{hidden_modal:!my_cam_modal.active}">
+    <div class="my_video_box" :class="{hidden_modal:!my_cam_modal.active}" style="z-index: 100000">
         <!-- <video autoplay ref="my_video" class="my_video"></video> -->
         <user-video 
             :stream-manager="myStreamManager"
@@ -274,6 +274,9 @@ $my_video_margin: 20px;
     margin: 10px;
     z-index: 100;
     width: 200px;
+
+    min-height: 100px;
+    border: dashed;
 }
 
 .hidden_modal{

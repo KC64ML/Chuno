@@ -1,6 +1,6 @@
 <template>
     <NewCreateRoomModal v-if="modal_show" @modal_off="modalOff()" :player="{ 'lat': lat, 'lng': lng }" />
-    <HeaderVue :title="'홈'"></HeaderVue>
+    <HeaderVue :title="'저잣거리'"></HeaderVue>
     <div id="room_box" style="height: 80%; overflow: scroll;">
         <room-card v-for="(room, idx) in roomList" :key="idx" v-bind:room_info="room"></room-card>
     </div>
@@ -123,6 +123,14 @@ export default {
     text-align: center;
     font-weight: bold;
     font-size: 30px;
+    animation-name: plus_button;
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
+}
+@keyframes plus_button {
+    50% {
+        transform: translateY(-50%);
+    }
 }
 
 

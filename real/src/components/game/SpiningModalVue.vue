@@ -1,6 +1,7 @@
 <template>
     <div id="spining_container" class="flex_center">
         <div>
+            {{ location_list }}
             <div style="width: 100vw; margin-bottom: 40px; font-size: 20px; text-align: center">
                 열심히 정보를 가져오는 중이에요
             </div>
@@ -25,23 +26,29 @@
                     mapTypeControl: false,
                     streetViewControl: false,
                     fullscreenControl: false,
-                    minZoom: map_zoom,
+                    minZoom: 1,
                     maxZoom: map_zoom,
                 }" class="map_size">
                     <div v-for="(mk, idx) in location_list" :key="idx">
-                        <GMapMarker :icon="me_img" :animation=1 :position="roomcenter" v-if="mk.me == true" />
-                        <div v-else>
-                            <GMapMarker :icon="chuno_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
-                                v-if="mk.role == 'chuno'" />
-                            <GMapMarker :icon="slave_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }"
-                                v-else-if="mk.me == 'slave'" />
+                        <div v-if="mk.me == true && mk.role == 'chuno'">
+                            <GMapMarker :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
+                        </div>
+                        <div v-else-if="mk.me == true && mk.role == 'slave'">
+                            <GMapMarker :icon="slave_me_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
+                        </div>
+                        <div v-else-if="mk.me == false && mk.role == 'chuno'">
+                            <GMapMarker :icon="chuno_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
+                        </div>
+                        <div v-else-if="mk.me == false && mk.role == 'slave'">
+                            <GMapMarker :icon="slave_img" :animation=1 :position="{ lat: mk.lat, lng: mk.lng }" />
                         </div>
                     </div>
                     <GMapCircle :radius="roomradius" :center="roomcenter" :options="gameCircle" />
                 </GMapMap>
-                <div class="map_size mak" @click="noTouch"></div>
+                <!-- <div class="map_size mak" @click="noTouch"></div> -->
             </div>
-            <div :class="{div_hidden : !count_down_start}" style="text-align: center; font-size: 25px; margin-top: 20px;">
+            <div :class="{ div_hidden: !count_down_start }"
+                style="text-align: center; font-size: 25px; margin-top: 20px;">
                 {{ count_down }}초 후에 게임이 시작되요!
             </div>
         </div>
@@ -49,15 +56,16 @@
 </template>
 
 <script>
-import me_img from '@/assets/runner.png'
-import chuno_img from '@/assets/Clock.svg'
-import slave_img from '@/assets/Door.svg'
+import chuno_me_img from '@/assets/chuno_me_img.png'
+import slave_me_img from '@/assets/slave_me_img.png'
+import chuno_img from '@/assets/chuno_img.png'
+import slave_img from '@/assets/slave_img.png'
 
 export default {
     data() {
         return {
             count_down_start: false,
-            count_down : 5,
+            count_down: 20,
             room_id: this.$route.params.roomId,
             nickname: "",
             lat: 0,
@@ -80,9 +88,22 @@ export default {
                 fillColor: "#0000FF",
                 fillOpacity: 0.15,
             },
-            me_img: me_img,
-            chuno_img: chuno_img,
-            slave_img: slave_img,
+            chuno_me_img: {
+                url: chuno_me_img,
+                scaledSize: { width: 40, height: 40 }
+            },
+            slave_me_img: {
+                url: slave_me_img,
+                scaledSize: { width: 40, height: 40 }
+            },
+            chuno_img: {
+                url: chuno_img,
+                scaledSize: { width: 40, height: 40 }
+            },
+            slave_img: {
+                url: slave_img,
+                scaledSize: { width: 40, height: 40 }
+            },
         }
     },
     computed: {
@@ -91,7 +112,7 @@ export default {
         }
     },
     async created() {
-        this.conn.onmessage = (e) => {
+        this.conn.addEventListener('message', (e) => {
             var content = JSON.parse(e.data);
             if (content.type == 'receivelocation') {
                 this.location_list.push({ "nickname": content.nickname, "role": content.info.role, "lat": content.info.lat, "lng": content.info.lat, "me": (content.nickname == this.nickname) ? (true) : (false) });
@@ -110,7 +131,7 @@ export default {
                     count();
                 }
             }
-        }
+        })
         this.info = JSON.parse(sessionStorage.getItem("info"));
         this.roomradius = this.info.radius;
         this.roomcenter = { lat: this.info.roomlat, lng: this.info.roomlng };
@@ -155,6 +176,7 @@ $map_height: $map_width;
 .div_hidden {
     visibility: hidden;
 }
+
 .map_size {
     height: $map_height;
     width: $map_height;
@@ -164,9 +186,10 @@ $map_height: $map_width;
     position: absolute;
     // background-color: rgb(100, 0, 0, 0.5);
 }
+
 #spining_container {
     position: absolute;
-    z-index: 10000;
+    z-index: 100001;
     width: 100vw;
     height: 100%;
     background-image: url("@/assets/main_back.png");

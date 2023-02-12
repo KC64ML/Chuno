@@ -1,4 +1,16 @@
 <template>
+  <div id="map_modal_container" style="z-index: 99">
+    <CatchModal
+      v-if="catchModal"
+      :catchTarget="catchTarget"
+      @on-no-catch="onNoCatch"
+      @on-yes-catch="onYesCatch"
+    />
+    <RipModal
+      v-if="ripModal"
+      :ripTarget="ripTarget"
+      @on-rip="onRip"
+    />
     <GMapMap
       :center="location"
       :zoom="18"
@@ -10,7 +22,7 @@
         minZoom: 11,
         maxZoom: 18,
       }"
-      style="width: 100vw; height: 25rem"
+      class="gmap"
     >
       <!-- 플레이 영역 표시 -->
       <GMapCircle
@@ -19,24 +31,35 @@
         :options="playgroundOptions"
       />
       <!-- 내 위치 -->
-      <div v-if="myMarker">
+      <div v-if="user.role == 'runner'">
         <GMapMarker
+          :icon=myRunnerMarkerImg
           :animation=4
           :position=this.location
         />
-        <GMapCircle
-          :radius="catchRadius"
-          :center="location"
-          :options="circleOptions"
+      </div>
+      <div v-if="user.role == 'chaser'">
+        <GMapMarker
+          :icon=myChaserMarkerImg
+          :animation=4
+          :position=this.location
         />
       </div>
+      <GMapCircle
+        :radius="catchRadius"
+        :center="location"
+        :options="circleOptions"
+      />
+      
       <!-- 노비문서 위치 -->
-      <div
-        v-for="m in papers"
-        :key="m.id"
-        @click="ripPaper(m)"
-      >
-        <GMapMarker
+      <div v-if="user.role == runner">
+
+        <div
+          v-for="m in papers"
+          :key="m.id"
+          @click="ripPaper(m)"
+          >
+          <GMapMarker
           v-if="!m.ripped"
           :icon=paperMarkerImg
           :animation=1
@@ -44,38 +67,71 @@
           @click="openInfoWindow(marker.id)"
           />
           <!-- :clickable="true" -->
+        </div>
       </div>
+
       <!-- 다른 플레이어 위치 -->
       <div
-        v-for="m in others"
-        :key="m.nickname"
-        @click="ripPaper(m)"
+        v-for="(o, key, idx) in others"
+        :key="idx"
       >
-        <GMapMarker
-          v-if="!m.myMarker"
-          :icon=othersMarkerImg
-          :position="m.location"
-          :clickable="true"
-        />
+        <!-- @click="ripPaper(o)" -->
+        <!-- 내가 노비인데, -->
+        <!-- 상대도 노비일 때 -->
+        <div v-if="o.role == 'runner' && user.role == 'runner'">
+          <GMapMarker
+            :icon=otherRunnerMarkerImg
+            :position="o.location"
+            :clickable="true"
+          />
+        </div>
+        <!-- 상대가 추노일 때 -->
+        <div v-if="o.role == 'chasere' && user.role == 'runner'">
+          <GMapMarker
+            v-if="o.myMarker"
+            :icon=otherChaserMarkerImg
+            :position="o.location"
+            :clickable="true"
+          />
+        </div>
+
+        <!-- 내가 추노인데, -->
+        <!-- 상대도 추노일 때 -->
+        <div v-if="o.role == 'chaser' && user.role == 'chaser'">
+          <GMapMarker
+            :icon=otherChaserMarkerImg
+            :position="o.location"
+            :clickable="true"
+          />
+        </div>
+        <!-- 상대가 노비일 때 -->
+        <div v-if="o.role == 'runner' && user.role == 'chaser'">
+          <GMapMarker
+            v-if="o.myMarker"
+            :icon=otherRunnerMarkerImg
+            :position="o.location"
+            :clickable="true"
+          />
+        </div>
       </div>
     </GMapMap>
+  </div>
 </template>
 
 <script>
-// import { OpenVidu } from "openvidu-browser";
-// const APPLICATION_SERVER_URL = process.env.RTC;
-
 import truePaper from '@/assets/TruePaper.png'
-import othersMarker from '@/assets/runner.png'
-import randomLocation from 'random-location'
+import RunnerMarker from '@/assets/slave_img.png'
+import ChaserMarker from '@/assets/chuno_img.png'
+import MyRunnerMarker from '@/assets/slave_me_img.png'
+import MyChaserMarker from '@/assets/chuno_me_img.png'
+import CatchModal from './CatchModal.vue';
+import RipModal from './RipModal.vue';
 
 export default {
   name: 'MapView',
   props:{
-    // papers: Object, // 노비 문서 정보
-    // others: Object, // 다른 플레이어 위치 정보
     user: Object, // 내 정보
-    roomInfo: {
+    roomInfo: {   // 방 정보
       type: Object,
       default() {
         return {
@@ -84,7 +140,11 @@ export default {
           radius: 0,
         }
       }
-    }, // 방 정보
+    },
+  },
+  components: {
+    CatchModal,
+    RipModal,
   },
   data() {
     return {
@@ -101,6 +161,14 @@ export default {
         fillColor: "#0000FF",
         fillOpacity: 0.15,
       },
+      myRunnerMarkerImg: {
+        url: MyRunnerMarker,
+        scaledSize: { width: 40, height: 40 }
+      },
+      myChaserMarkerImg: {
+        url: MyChaserMarker,
+        scaledSize: { width: 40, height: 40 }
+      },
       // 노비 문서 관련 정보
       papers: [], // props로
       paperMarkerImg: {
@@ -109,8 +177,12 @@ export default {
       },
       // 다른 플레이어 관련 정보
       others: {}, //props로
-      othersMarkerImg: {
-        url: othersMarker,
+      otherRunnerMarkerImg: {
+        url: RunnerMarker,
+        scaledSize: { width: 40, height: 40 }
+      },
+      otherChaserMarkerImg: {
+        url: ChaserMarker,
         scaledSize: { width: 40, height: 40 }
       },
 
@@ -122,62 +194,22 @@ export default {
         fillColor: "#FFFFFF",
         fillOpacity: 0,
       },
-      // roomInfo: {
-      //   room_id: 1,
-      //   title: "방이름1",
-      //   is_public: true,
-      //   password: null,
-      //   lat: 36.119485,
-      //   lng: 128.3445734,
-      //   radius: 1000,
-      //   host_id: "gogo",
-      //   room_start_time: new Date(2023, 1, 1, 13, 20, 0)
-      //   },
+      
+      // 노비 잡는 모달
+      catchModal: false,
+      // 노비 문서 찢는 모달
+      ripModal: false,
+      catchTrarget: {},
+      locationInterval: null,
     };
   },
+  beforeUnmount(to, from, next) {
+    clearInterval(this.locationInterval);
+    next();
+  },
   methods: {                  
-    enrollEvent() {
-      console.log("enrollEvent at MapView");
-      new Promise((resolve) => {
-        console.log("promise at MapView");
-        this.conn.onmessage = async (e) => {
-          console.log("message received at MapView", e);
-          const content = JSON.parse(e.data);
-          if (content.type == "othersLocation") {
-            const other = content.info; // startData가 여기 담겨잇다.
-            this.others[other.nickname] = {
-              nickname: other.nickname,
-              role: other.role,
-              location: other.location,
-              myMarker: other.myMarker
-            };
-            console.log("ohters 받아오는 중 : ", this.others);
-            this.catch(other);
-            
-          } else if (content.type == "") {
-            /* 뭔가 하자 */
-          }
-        }
-        resolve();
-      }).then(() => {
-        this.init();
-      })
-    },
     init() {
-      // 자이로스코프 인식
-      window.addEventListener('deviceorientation', this.handleOrientation)
-      
-      var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
-
-      if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
-          //IOS
-          console.log('iOS')
-          this.onGyro()
-      }
-
-      // 내 위치
-      setInterval(() => {this.myLocation()}, 3000);
-      // this.myLocation()
+      this.GyroAllow();
       // 노비 문서 위치
       console.log('노비 문서 가져오기')
       const info = JSON.parse(sessionStorage.info)
@@ -191,38 +223,104 @@ export default {
               real: papers[i].real,
               ripped: false,
         })
+      }
         console.log("노비문서 받는 중", this.papers);
-      }
+      
     },
-    generatePlayer(){
-      console.log('2. generatePapers 함수 실행')
-
-      for(let i = 0; i < 10; i++) {
-        const randomPoint = randomLocation.randomCirclePoint({latitude: this.roomInfo.lat, longitude: this.roomInfo.lng}, this.roomInfo.radius*0.9)
-        let real
-        if(i < 5){
-          real = true
-        } else {
-          real = false
+    erollEvent() {
+      new Promise((resolve) => {
+        console.log("promise at MapView");
+        this.conn.addEventListener('message', (e) => {
+          console.log("message received at MapView", e);
+          const content = JSON.parse(e.data);
+          if (content.type == "othersLocation") {
+            const other = content.info; // startData가 여기 담겨잇다.
+            console.log('내 닉네임!!!!!!!!')
+            console.log(this.user.nickname)
+            if (other.nickname == this.user.nickname) {
+              return;
+            }
+            this.others[other.nickname] = {
+              nickname: other.nickname,
+              role: other.role,
+              location: other.location,
+              myMarker: other.myMarker
+            };
+            console.log("ohters 받아오는 중 : ", this.others);
+            this.catchRunner(other);
+            
+          } else if (content.type == "caughtRunner") {
+              const content = JSON.parse(e.data);
+              const target = content.info.others;
+              if(target.nickname == this.user.nickname) {
+                console.log(target.nickname + '님이 잡혀버렸다...')
+              } else {
+                console.log(target.nickname + '님이' + content.nickname + '님한테 잡혔다...')
+              }
+            } else if (content.type == "rippedPaper") {
+              const content = JSON.parse(e.data);
+              const paper = content.user.paper
+              console.log(content.nickname + '이 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
+              console.log(paper)
+              const target = this.papers[paper.id -1]
+              target.ripped = true
+              console.log('밑에 찍히는  대로 업뎃했다.')
+              console.log(target)
+          }
         }
-        this.others.push({ 
-          id: i,
-          location: { lat: randomPoint.latitude, lng: randomPoint.longitude } ,
-          real: real,
-          ripped: false,
-        })
-      }
-      console.log(this.papers)
+        )
+        resolve();
+      }).then(() => {
+        this.myLocationInterval();
+      })
+    },
+    myLocationInterval() {
+      // 내 위치
+      this.locationInterval = setInterval(() => {this.myLocation()}, 1000);
     },
 
-    // 노비문서 찢기
+    // 노비문서 찢기 모달
     ripPaper(marker){
       console.log('3. ripPaper 함수 실행')
+      console.log(marker)
       const distance = this.calculateDistance(marker)
-      if(distance > this.catchRadius) {
-        console.log('노비문서를 확인하시겠습니까?')
-        alert('노비문서를 확인하시겠습니까?')
+      if(distance < this.catchRadius) {
+        console.log('해당 노비문서를 잡을 수 있습니다.')
+        this.ripTarget = marker
+        this.ripModal = true
+      } else {
+        console.log('해당 노비문서가 너무 멀리 있습니다.')
       }
+    },
+    // 노비문서를 확인하고 나서
+    onRip(ripTarget){
+      console.log('얘랑')
+      console.log(ripTarget)
+      const target = this.papers[ripTarget.id -1]
+      target.ripped = true
+      console.log('얘랑')
+      console.log(target)
+      console.log('같아야함')
+
+      this.conn.send(JSON.stringify(
+          {
+            event:"ripPaper",
+            nickname: this.user.nickname,
+            room: this.roomInfo.id,
+            startData: {
+              paper: target,
+            }
+          }
+        ));
+      this.conn.send(JSON.stringify(
+        {
+          event: "chat",
+          room: this.roomInfo.id,
+          nickname: 'system',
+          level: 1,
+          msg: `${this.user.nickname}이 노비문서를 찢었습니다.`
+        }
+      ))
     },
     // 범위 밖으로 나갈 시 경고
     outOfPlayground(location){
@@ -273,11 +371,23 @@ export default {
         console.log(error)
       })
     },
+    GyroAllow() {
+      // 자이로스코프 인식
+      window.addEventListener('deviceorientation', this.handleOrientation)
+      
+      var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+
+      if ( varUA.indexOf("iphone") > -1||varUA.indexOf("ipad") > -1||varUA.indexOf("ipod") > -1 ) {
+          //IOS
+          console.log('iOS')
+          this.onGyro()
+      }
+    },
     // 자이로 센서 허용
     onGyro() {
       if (typeof DeviceMotionEvent.requestPermission === 'function') {
         // Handle iOS 13+ devices.
-        alert('아이폰의 경우 동장 및 방향 사용에 허가가 필요합니다.')
+        alert('아이폰의 경우 동작 및 방향 사용에 허가가 필요합니다.')
         DeviceMotionEvent.requestPermission()
           .then((state) => {
             if (state === 'granted') {
@@ -318,25 +428,52 @@ export default {
       return distance
     },
     // 노비 잡기
-    catch(marker){
-      console.log('!! catch 함수 실행되기는 함')
+    catchRunner(marker){
+      console.log('!! catchRunner 함수 실행되기는 함')
+      console.log('--------------MARKER-----------------')
+      console.log(marker)
       const distance = this.calculateDistance(marker)
+      console.log('--------------DISTANCE-----------------')
+      console.log(distance)
       if(distance <= this.catchRadius){
-        alert('잡으세요.')
-        // console.log('잡을 수 있음')
-        this.conn.send(JSON.stringify(
-          {
-            event:'catch',
-            // nickname:(선택),
-            room: this.roomInfo.id,
-            startData: {
-              others : marker,
-            }
-          }
-        ));
+        console.log('잡을 수 있음' + marker)
+        this.catchModal = true
+        this.catchTarget = marker
+        
       } else {
         console.log('잡을 수 없음')
       }
+    },
+    // 노비 잡지 않기
+    onNoCatch(){
+      this.catchModal = false
+      console.log('노비 안잡을래..')
+    },
+    // 노비 잡기
+    onYesCatch(target){
+      console.log('노비 잡을래!!!')
+      console.log('--------------TARGET-----------------')
+      console.log(target)
+      this.catchModal = false
+      this.conn.send(JSON.stringify(
+          {
+            event:'catchRunner',
+            nickname: this.user.nickname,
+            room: this.roomInfo.id,
+            startData: {
+              others : target,
+            }
+          }
+      ))
+      this.conn.send(JSON.stringify(
+        {
+          event: 'chat',
+          room: this.roomInfo.id,
+          nickname: 'system',
+          level: 1,
+          msg: `${this.user.nickname}이 ${target.nickname}을 잡았습니다.`
+        }
+      ))
     },
   },
   created() {
@@ -344,9 +481,10 @@ export default {
     // 내 위치
     // this.myLocation()
     // setInterval(this.myLocation(),1000) */
+    this.init();
     setTimeout(() => {
-      this.enrollEvent();
-    }, 5500);
+      this.erollEvent();
+    }, 5000);
     
     // this.catch()
 
@@ -388,8 +526,20 @@ export default {
 };
 </script>
 
-<style>
-body {
-  margin: 0;
-}
+<style lang="scss" scoped>
+@import "@/assets/scss/variable.scss";
+  #map_modal_container {
+    position: absolute;
+    bottom: $footer-height;
+    top: $video-height;
+    width: 100vw;
+  }
+  #map_modal_container > div {
+    height: 100%
+  }
+  .gmap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
 </style>

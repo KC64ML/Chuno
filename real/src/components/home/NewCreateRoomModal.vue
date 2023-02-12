@@ -261,6 +261,9 @@ $plma_size: 30px;
     transform: translate(-50%, -50%);
     font-size: 18px;
     border-radius: 10px;
+    animation-name: modal_appearance;
+    animation-iteration-count: 1;
+    animation-duration: 0.8s;
 }
 
 #close_button {
@@ -341,5 +344,12 @@ td:nth-child(2)>div {
 
 .unselected {
     background-color: rgb(67, 64, 57, 0.3);
+}
+
+@keyframes modal_appearance {
+    0% {transform: translate(-50%, -50%) scale(0);}
+    70% {transform: translate(-50%, -50%) scale(1.2);}
+    85% {transform: translate(-50%, -50%) scale(0.9);}
+    95% {transform: translate(-50%, -50%) scale(1.05);}
 }
 </style>

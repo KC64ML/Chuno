@@ -205,6 +205,21 @@ input:focus {
 .scroll::-webkit-scrollbar {
   display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
+.sliding_down_appearance {
+    animation-name:sliding_down_appearance;
+    animation-iteration-count: 1;
+    animation-duration: 1s;
+}
+@keyframes sliding_down_appearance {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% {
+        opacity: 100;
+        transform: translateX(0);
+    }
+}
 </style>
 
 <style lang="scss" scoped>

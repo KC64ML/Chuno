@@ -8,6 +8,8 @@ import GameView from '@/views/GameView.vue'
 
 import module from '@/router/module.js'
 
+
+
 const routes = [
   {
     path: "/",
@@ -68,6 +70,11 @@ const routes = [
     path: '/whatthefuck',
     name: 'Openvidutest',
     component: () => import("@/views/OpenViduTestView.vue")
+  },
+  {
+    path: '/door',
+    name: 'Door',
+    component: () => import('@/components/game/DoorView.vue')
   },
 
   ...module

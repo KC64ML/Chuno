@@ -14,24 +14,42 @@
     @on-modal="OnModal"
     style="position:absolute; bottom: 60px;"
    />
-  <div>
-    
-    <OpenViduVue
+  <OpenViduVue
     :my_cam_modal="my_cam_modal"
     :user="user"></OpenViduVue>
-    <MapView :user="user" :roomInfo="roomInfo" />
+   
+  <div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
+        <div id="chat_header"
+            style="display: flex; align-items:center; justify-content: space-between; margin-bottom: 10px;">
+            <div>
+                <img src="@/assets/main_logo2.png" alt="" style="width: 50px; height: 50px; margin-left: 20px;">
+            </div>
+            <div style="font-size: 30px">
+                전언
+            </div>
+            <div style="font-size: 25px; margin-right: 20px;" @click="close_chat_modal">X</div>
+        </div>
+        <div v-for="(e, idx) in chat_log" :key="idx">
+            <ChatCardVue :chat_dto="e" :my_nickname="user.nickname"></ChatCardVue>
+        </div>
+    </div>
+  
+  <MapView :user="user" :roomInfo="roomInfo" />
+  <div style="position: absolute; bottom: 0; left: 0;">
 
     <!-- 아이템 사용 -->
     <!-- <div v-if="this.$store.state.itemModal"> -->
     <!-- </div> -->
     
     <div id="footer_container">
-      <div class="menu_box flex_center" @click="this.$router.push('/home')">
+      <div class="menu_box flex_center" @click="open_chat_modal">
         <img class="menu" src="@/assets/game_chat.png">
       </div>
       <div>
-        <!-- 채팅창 수정 필요 -->
-        <input class="map_search" type="text" placeholder="채팅을 입력해 주세요">
+        <input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data">
+      </div>
+      <div class="menu_box" @click="transmit_chat">
+          <img src="@/assets/paper_plane.svg" alt="">
       </div>
       <div class="menu_box" @click="myCam">
         <img class="menu" src="@/assets/game_myCam.png">
@@ -48,10 +66,11 @@
 
 <script>
 import OpenViduVue from '@/components/game/OpenViduVue.vue'
-import MapView from '@/components/game/MapView.vue'
+import MapView from '@/components/game/MapView.vue' // huh
 import MenuView from '@/components/game/MenuView.vue'
 import ItemModal from '@/components/game/ItemModal.vue'
 import RoleModalVue from '@/components/game/RoleModalVue.vue'
+import ChatCardVue from '@/components/game/ChatCardVue.vue';
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
@@ -66,8 +85,16 @@ export default {
     ItemModal,
     SpiningModalVue,
     RoleModalVue,
+    ChatCardVue,
   },
   async created() {
+    this.conn.addEventListener('message', (e)  => {
+      var content = JSON.parse(e.data);
+      if (content.type == 'chat') {
+        console.log({ nickname: content.nickname, msg: content.message })
+        this.chat_log.push({ nickname: content.nickname, msg: content.message })
+      }
+    })
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
           {
               headers: { Authorization: sessionStorage.token }
@@ -86,10 +113,13 @@ export default {
     const info = JSON.parse(sessionStorage.info);
     this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
     console.log("GameView created complete");
+    console.log("-----------------------")
+    console.log(this.user);
+    console.log(this.roomInfo);
   },
   data() {
     return {
-      my_cam_modal: { active: false },
+      my_cam_modal: { active: true },
       menu: false,
       itemModal: false,
       user: undefined,
@@ -97,6 +127,10 @@ export default {
       spinningModal: true,
       roleModal: false,
       roomInfo: undefined,
+
+      chat_modal: false,
+      chat_data: "",
+      chat_log:[],
     }
   },
   methods: {
@@ -138,13 +172,11 @@ export default {
       } else if (item.id == 2){
         // 위장: 추노꾼의 catch 범위 축소
         console.log(item)
-
       } else if (item.id == 3) {
         // 확실한 정보통: 진짜 노비 문서 위치 표시
         console.log(item)
         this.visibility = true
-        setTimeout(this.visibility = true, 30000)
-
+        setTimeout(this.visibility = false, 30000)
       } else if (item.id == 4) {
         // 먹물탄
         console.log(item)
@@ -169,8 +201,27 @@ export default {
       this.roleModal = true;
     },
     modalAllClose() {
-      console.log("-------------왔나요?????--------------");
       this.roleModal = false;
+    },
+
+    open_chat_modal() {
+      this.chat_modal = !this.chat_modal;
+    },
+    close_chat_modal() {
+      this.chat_modal = false;
+    },
+    transmit_chat() {
+      this.conn.send(JSON.stringify({
+        "event": "chat",
+        "room": this.roomInfo.id,
+        "nickname": this.user.nickname,
+        "level": this.user.level,
+        "msg": this.chat_data,
+      }))
+      this.chat_data = "";
+    },
+    clearChatData() {
+      this.chat_data = "";
     }
   }
 }
@@ -179,7 +230,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/variable.scss";
-$button_width: 60px;
+$button_width: 50px;
 
 #footer_container {
   position: absolute;
@@ -188,7 +239,7 @@ $button_width: 60px;
   height: $footer_height;
   width: 100vw;
   display: grid;
-  grid-template-columns: $button_width 1fr $button_width $button_width;
+  grid-template-columns: $button_width 1fr $button_width $button_width $button_width;
   justify-content: space-around;
   align-items: center;
 }
@@ -224,5 +275,17 @@ $button_width: 60px;
 
 .map_search::placeholder {
   color: rgba(255, 255, 255, 0.56)
+}
+
+#chat_container {
+    z-index: 1010;
+    position: absolute;
+    bottom: $footer-height;
+    background-image: url("@/assets/main_back_horizon.png");
+    background-size: cover;
+    width: 100vw;
+    max-height: 60%;
+    min-height: 200px;
+    overflow-y: scroll;
 }
 </style>
