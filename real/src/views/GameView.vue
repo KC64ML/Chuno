@@ -26,9 +26,9 @@
       </div>
     </div>
   </div>
-  <!-- <OpenViduVue
+  <OpenViduVue
     :my_cam_modal="my_cam_modal"
-    :user="user"></OpenViduVue> -->
+    :user="user"></OpenViduVue>
    
   <div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
         <div id="chat_header"
@@ -46,7 +46,7 @@
         </div>
     </div>
   
-  <!-- <MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught"/> -->
+  <MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught"/>
   <div style="position: absolute; bottom: 0; left: 0;">
     
     <div id="footer_container">
@@ -73,8 +73,8 @@
 </template>
 
 <script>
-// import OpenViduVue from '@/components/game/OpenViduVue.vue'
-// import MapView from '@/components/game/MapView.vue' // huh
+import OpenViduVue from '@/components/game/OpenViduVue.vue'
+import MapView from '@/components/game/MapView.vue' // huh
 import RoleModalVue from '@/components/game/RoleModalVue.vue'
 import ChatCardVue from '@/components/game/ChatCardVue.vue';
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
@@ -85,8 +85,8 @@ export default {
 
   name: 'GameView',
   components: {
-    // MapView,
-    // OpenViduVue,
+    MapView,
+    OpenViduVue,
     SpiningModalVue,
     RoleModalVue,
     ChatCardVue,
@@ -132,7 +132,7 @@ export default {
       user: undefined,
       usedItem: [],
       // 개발이 끝나면 true로 고쳐줘요
-      spinningModal: false,
+      spinningModal: true,
       roleModal: false,
       roomInfo: undefined,
 
