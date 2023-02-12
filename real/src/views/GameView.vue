@@ -480,6 +480,6 @@ $item_modal_confirm_button_height: 60px;
 }
 .modal-fading-leave-to {
   opacity: 0;
-  transition: scale(0) translateY(30px);
+  transform: scale(0) translateY(30px);
 }
 </style>
