@@ -1,7 +1,6 @@
 <template>
     <div id="spining_container" class="flex_center">
         <div>
-            {{ location_list }}
             <div style="width: 100vw; margin-bottom: 40px; font-size: 20px; text-align: center">
                 열심히 정보를 가져오는 중이에요
             </div>
@@ -65,7 +64,7 @@ export default {
     data() {
         return {
             count_down_start: false,
-            count_down: 20,
+            count_down: 5,
             room_id: this.$route.params.roomId,
             nickname: "",
             lat: 0,
