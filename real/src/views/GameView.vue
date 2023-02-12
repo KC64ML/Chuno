@@ -78,7 +78,7 @@
   <transition name="toasting">
     <div class="toast_chat" v-if="chat_toast">
       <div class="flex_center">
-          <div style="text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white; font-size: 20px;">{{ last_chat }}</div>
+          <div style="text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white; font-size: 20px; padding: 20px; border-radius:10px; background-color: rgb(0,0,0,0.5);">{{ last_chat }}</div>
       </div>
     </div>
   </transition>
@@ -155,8 +155,8 @@ export default {
   },
   data() {
     return {
-      my_cam_modal: { active: true },
-      item_menu_modal: true,
+      my_cam_modal: { active: false },
+      item_menu_modal: false,
       user: undefined,
       usedItem: [],
       // 개발이 끝나면 true로 고쳐줘요
