@@ -1,18 +1,31 @@
 <template> 
-  <!-- <div> -->
-  <MenuView 
-    v-if="menu" 
-    @use-item="useItem"
-    style="position:absolute; z-index: 100; bottom: 60px;"
-  />
-  <ItemModal 
-    v-if="itemModal" 
-    :usedItem="usedItem" 
-    @item-yes="itemYes"
-    @item-no="itemNo" 
-    @on-modal="OnModal"
-    style="position:absolute; z-index: 100; bottom: 60px;"
-   />
+  <div id="item_menu_modal" v-if="item_menu_modal">
+    <div v-if="this.user">
+      <div style="margin-bottom: 10px; text-align: center;">아이템</div>
+      <div v-for="(e, idx) in item_list[this.user.role]" :key="idx" style="display: flex; align-items: center;" @click="item_select(e)">
+        <img :src="e.path" alt="" style="margin-right: 5px;">
+        <div>{{ e.name }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div v-if="item_description_modal" id="item_description_modal" @click="close_item_description_modal">
+    <div id="item_description_modal_container" @click="stopingPropagation">
+      <div style="text-align: center; font-size:25px; margin-bottom: 10px;">{{ selected_item.name }}</div>
+      <div style="text-align: center; margin-bottom: 20px;">{{ selected_item.description }}</div>
+      <div style="text-align: center; font-size: 25px; margin-bottom: 10px;">사용하실래요?</div>
+      <div style="display: flex; justify-content: space-around;">
+        <div class="flex_center">
+            <img src="@/assets/main_button1.png" class="modal_confirm_button">
+            <div class="image_text" @click="[stopingPropagation, item_confirm_yes({id: selected_item.id, is_implemented: selected_item.is_implemented})]">네</div>
+        </div>
+        <div class="flex_center">
+            <img src="@/assets/main_button1.png" class="modal_confirm_button">
+            <div class="image_text" @click="close_item_description_modal">아니요</div>
+        </div>
+      </div>
+    </div>
+  </div>
   <OpenViduVue
     :my_cam_modal="my_cam_modal"
     :user="user"></OpenViduVue>
@@ -33,17 +46,8 @@
         </div>
     </div>
   
-  <MapView 
-    :user="user" 
-    :roomInfo="roomInfo" 
-    :item_used="item_used"
-    @on-caught="onCaught"
-  />
+  <MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught" :item_used="item_used[7]"/>
   <div style="position: absolute; bottom: 0; left: 0;">
-
-    <!-- 아이템 사용 -->
-    <!-- <div v-if="this.$store.state.itemModal"> -->
-    <!-- </div> -->
     
     <div id="footer_container">
       <div class="menu_box flex_center" @click="open_chat_modal">
@@ -71,8 +75,6 @@
 <script>
 import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue' // huh
-import MenuView from '@/components/game/MenuView.vue'
-import ItemModal from '@/components/game/ItemModal.vue'
 import RoleModalVue from '@/components/game/RoleModalVue.vue'
 import ChatCardVue from '@/components/game/ChatCardVue.vue';
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
@@ -85,8 +87,6 @@ export default {
   components: {
     MapView,
     OpenViduVue,
-    MenuView,
-    ItemModal,
     SpiningModalVue,
     RoleModalVue,
     ChatCardVue,
@@ -97,6 +97,8 @@ export default {
       if (content.type == 'chat') {
         console.log({ nickname: content.nickname, msg: content.message })
         this.chat_log.push({ nickname: content.nickname, msg: content.message })
+
+        // 최근 메세지를 토스트로 띄우고 싶어요!!!
       }
     })
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
@@ -116,6 +118,7 @@ export default {
       })
     const info = JSON.parse(sessionStorage.info);
     this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
+    this.player_len = info.teamchuno.length + info.teamslave.length;
     this.user.caught = false;
     console.log("GameView created complete");
     console.log("-----------------------")
@@ -125,10 +128,10 @@ export default {
   data() {
     return {
       my_cam_modal: { active: true },
-      menu: false,
-      itemModal: false,
+      item_menu_modal: true,
       user: undefined,
       usedItem: [],
+      // 개발이 끝나면 true로 고쳐줘요
       spinningModal: true,
       roleModal: false,
       roomInfo: undefined,
@@ -136,13 +139,59 @@ export default {
       chat_modal: false,
       chat_data: "",
       chat_log:[],
+
+      // 노비문서 셔플을 위한 변수에요
+      player_len: 0,
+
+      item_description_modal: false,
+      selected_item: {},
+      item_list: {
+        "runner": [
+          {
+            id: 1, name: "천리안", path: require('@/assets/item1.png'), is_implemented: false,
+            description: "자신의 위치를 드러내지 않고 가장 가까운 추노꾼의 위치를 확인할 수 있다."
+          },
+          {
+            id: 2, name: "위장", path: require('@/assets/item2.png'), is_implemented: false,
+            description: "추노꾼이 자신을 잡을 수 있는 범위를 축소한다."
+          },
+          {
+            id: 3, name: "확실한 정보통", path: require('@/assets/item3.png'), is_implemented: false,
+            description: "진짜 노비문서의 위치를 확인할 수 있다."
+          },
+          {
+            id: 4, name: "먹물탄", path: require('@/assets/item4.png'), is_implemented: true,
+            description: "먹물을 뿌려 내 화면을 가릴 수 있다.",
+          },
+        ],
+        "chaser": [
+        {
+            id: 5, name: "조명탄", path: require('@/assets/item5.png'), is_implemented: false,
+            description: "30초간 노비의 위치를 지도에 표시할 수 있다."
+          },
+          {
+            id: 6, name: "긴 오랏줄", path: require('@/assets/item6.png'), is_implemented: false,
+            description: "자신이 노비를 잡을 수 있는 범위를 확대할 수 있다."
+          },
+          {
+            id: 7, name: "거짓 정보통", path: require('@/assets/item7.png'), is_implemented: true,
+            description: "노비 문서의 위치를 셔플할 수 있다."
+          },
+          {
+            id: 8, name: "연막탄", path: require('@/assets/item8.png'), is_implemented: false,
+            description: "연기를 피워 내 화면을 가릴 수 있다.",
+          },
+        ]
+      },
+      item_used: [0, 0, 0, 0, 0, 0, 0, 0, 0,],
     }
   },
   methods: {
+    stopingPropagation(e) {
+      e.stopPropagation();
+    },
     onMenu() {
-      console.log('menu clicked')
-      this.menu = !this.menu
-      console.log(this.menu)
+      this.item_menu_modal = !this.item_menu_modal
     },
     getMyRole(teamslave, teamchuno, nickname) {
       for (let i = 0; i < teamslave.length; i++) {
@@ -159,73 +208,6 @@ export default {
     myCam() {
       this.my_cam_modal.active = !this.my_cam_modal.active
       console.log("mycam 눌림");
-    },
-    useItem(item){
-      console.log('게임뷰임. 사용한 아이템표시')
-      console.log(item)
-      this.usedItem = item
-      this.itemModal = true
-      console.log(this.itemModal)
-      console.log('아이템 사용')
-    },
-    itemYes(item) {
-      this.itemModal = false
-      //아이템 사용
-      if(item.id == 1){
-        // 천리안: 가장 가까운 추노꾼 위치 표시
-        console.log(item)
-      } else if (item.id == 2){
-        // 위장: 추노꾼의 catch 범위 축소
-        console.log(item)
-      } else if (item.id == 3) {
-        // 확실한 정보통: 진짜 노비 문서 위치 표시
-        console.log(item)
-        this.visibility = true
-        setTimeout(this.visibility = false, 30000)
-      } else if (item.id == 4) {
-        // 먹물탄
-        console.log(item)
-        this.conn.send(JSON.stringify(
-          {
-            event: "useItem",
-            level: 4,
-            nickname:this.user.nickname,
-            room: this.roomInfo.id,
-            startData: {
-              "isStart" : 1,
-            }
-          }
-        ));
-        // 30초 후에 제거
-        setTimeout(
-          this.conn.send(JSON.stringify(
-            {
-              event: "useItem",
-              level: 4,
-              nickname: this.user.nickname,
-              room: this.roomInfo.id,
-              startData: {
-                "isStart" : 0,
-              }
-            }
-          )
-        ), 30000);
-      } else if (item.id == 5){
-        // 조명탄: 30초간 노비 위치 표시
-        console.log(item)
-      } else if (item.id == 6){
-        // 긴 오랏줄: 노비 catch 범위 확대
-        console.log(item)
-      } else if (item.is == 7) {
-        // 거짓 정보통
-        console.log(item)
-      } else {
-        // 연막탄
-        console.log(item);
-      }
-    },
-    itemNo() {
-      this.itemModal = false
     },
     onCaught(){
       this.user.caught = true
@@ -256,6 +238,61 @@ export default {
     },
     clearChatData() {
       this.chat_data = "";
+    },
+
+    item_select(e) {
+      this.selected_item = e;
+      this.item_description_modal = true;
+    },
+    close_item_description_modal() {
+      this.selected_item = {};
+      this.item_description_modal = false;
+      this.item_menu_modal = false;
+    },
+    async item_confirm_yes(item) {
+      console.log(item)
+      if(item.id == 1){
+        // 천리안: 가장 가까운 추노꾼 위치 표시
+        console.log(1)
+      } else if (item.id == 2){
+        // 위장: 추노꾼의 catch 범위 축소
+        console.log(2)
+      } else if (item.id == 3) {
+        // 확실한 정보통: 진짜 노비 문서 위치 표시
+        console.log(3)
+        this.visibility = true
+        setTimeout(this.visibility = false, 30000)
+      } else if (item.id == 4) {
+        // 먹물탄
+        console.log(4)
+        this.conn.send(JSON.stringify(
+          {
+            event: "useItem",
+            level: 4,
+            nickname:this.user.nickname,
+            room: this.roomInfo.id,
+            startData: {
+              "isStart" : 1,
+            }
+          }
+        ));
+        // 30초 후에 제거
+        setTimeout(
+          this.conn.send(JSON.stringify(
+            {
+              event: "useItem",
+              level: 4,
+              nickname: this.user.nickname,
+              room: this.roomInfo.id,
+              startData: {
+                "isStart" : 0,
+              }
+            }
+          )
+        ), 30000);
+      } else if(item.id == 7) {
+        this.item_used[7]++;
+      }
     }
   }
 }
@@ -265,8 +302,10 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/variable.scss";
 $button_width: 50px;
+$item_modal_confirm_button_height: 60px; 
 
 #footer_container {
+  z-index: 1012;
   position: absolute;
   bottom: 0;
   background-color: black;
@@ -321,5 +360,66 @@ $button_width: 50px;
     max-height: 60%;
     min-height: 200px;
     overflow-y: scroll;
+    animation-name: chat_container;
+    animation-duration: 0.4s;
+    animation-iteration-count: 1;
+}
+@keyframes chat_container {
+  0% {
+    transform: translateY(100%);
+  }
+}
+
+
+#item_menu_modal {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background-color: rgb(0,0,0,0.3);
+  color: white;
+  position: absolute;
+  bottom: $footer-height + 10px;
+  right: 10px;
+  animation-name: item_menu_modal;
+  animation-duration: 0.2s;
+  animation-iteration-count: 1;
+  box-shadow: 0 5px 5px rgb(0, 0, 0, 0.3);
+}
+@keyframes item_menu_modal {
+  0% {
+    transform: translateY(100%)
+  }
+}
+
+#item_description_modal {
+  z-index: 100010;
+  background-color: rgb(0,0,0,0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+}
+#item_description_modal_container {
+  background-color: #F2F2F2;
+  width: 100vw * 0.85;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 20px;
+  padding: 20px;
+  word-break:break-all;
+  animation-name: item_description_modal_container;
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+}
+@keyframes item_description_modal_container {
+  0% {transform: translate(-50%, -50%) scale(0);}
+  70% {transform: translate(-50%, -50%) scale(1.3);}
+  85% {transform: translate(-50%, -50%) scale(0.8);}
+  95% {transform: translate(-50%, -50%) scale(1.1);}
+}
+.modal_confirm_button {
+  height: $item_modal_confirm_button_height;
 }
 </style>
