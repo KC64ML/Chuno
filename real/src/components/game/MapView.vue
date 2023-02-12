@@ -202,6 +202,8 @@ export default {
       ripModal: false,
       catchTrarget: {},
       locationInterval: null,
+
+      roomId: 0,
     };
   },
   beforeUnmount(to, from, next) {
@@ -213,8 +215,9 @@ export default {
       this.GyroAllow();
       // 노비 문서 위치
       console.log('노비 문서 가져오기')
-      const info = JSON.parse(sessionStorage.info)
-      const papers = info.slavepaper
+      const info = JSON.parse(sessionStorage.info);
+      this.roomId = this.$route.params.roomId;
+      const papers = info.slavepaper;
       console.log("받아온 노비문서", papers);
       for (let i = 0; i < papers.length; i++){
         console.log(i)
@@ -227,6 +230,8 @@ export default {
       }
         console.log("노비문서 받는 중", this.papers);
       
+      //임시
+      this.papers = [{id: 1, location: {lat: 0, lng: 0}, real: true, ripped: false}, {id: 1, location: {lat: 0, lng: 0}, real: true, ripped: true}]
     },
     erollEvent() {
       new Promise((resolve) => {
@@ -505,8 +510,29 @@ export default {
       console.log("roomInfo at MapView");
       console.log(this.roomInfo);
     },
-    item_used: function() {
-      console.log("왔어요11!!!")
+    async item_used() {
+      var temp_list = [];
+      var ripped_list = [];
+      for (var i of this.papers) {
+        if (i.ripped == true) {
+          ripped_list.push(i);
+          continue;
+        }
+        temp_list.push({"lat": i.location.lat, "lng": i.location.lng, "real": i.real});
+      }
+      var new_papers = await this.axios.post(process.env.VUE_APP_SPRING + "room/resladoc", {
+        "id": this.roomId,
+        "listSlaveDocument": temp_list
+      }).then(res => res.data);
+      var return_paper = [];
+      for (var new_p = 0; new_p < new_papers.length; new_p++) {
+        console.log('1')
+        return_paper.push({id: new_p+1, location: {lat: new_papers[new_p].lat, lng: new_papers[new_p].lng}, real: new_papers[new_p].real, ripped: false});
+      }
+      for (var new_pp = 0; new_pp < ripped_list.length; new_pp++) {
+        return_paper.push({id: new_pp+new_papers.length, location: ripped_list[new_pp].location, real: ripped_list[new_pp].real, ripped: ripped_list[new_pp].ripped});
+      }
+      this.papers = return_paper;
     }
   },
 };

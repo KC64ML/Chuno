@@ -15,13 +15,13 @@
       <div style="text-align: center; margin-bottom: 20px;">{{ selected_item.description }}</div>
       <div style="text-align: center; font-size: 25px; margin-bottom: 10px;">사용하실래요?</div>
       <div style="display: flex; justify-content: space-around;">
-        <div class="flex_center">
+        <div class="flex_center" @click="[stopingPropagation, item_confirm_yes({id: selected_item.id, is_implemented: selected_item.is_implemented})]">
             <img src="@/assets/main_button1.png" class="modal_confirm_button">
-            <div class="image_text" @click="[stopingPropagation, item_confirm_yes({id: selected_item.id, is_implemented: selected_item.is_implemented})]">네</div>
+            <div class="image_text">네</div>
         </div>
-        <div class="flex_center">
+        <div class="flex_center" @click="close_item_description_modal">
             <img src="@/assets/main_button1.png" class="modal_confirm_button">
-            <div class="image_text" @click="close_item_description_modal">아니요</div>
+            <div class="image_text">아니요</div>
         </div>
       </div>
     </div>
@@ -250,7 +250,6 @@ export default {
       this.item_menu_modal = false;
     },
     async item_confirm_yes(item) {
-      console.log(item)
       if(item.id == 1){
         // 천리안: 가장 가까운 추노꾼 위치 표시
         console.log(1)
@@ -292,6 +291,7 @@ export default {
         ), 30000);
       } else if(item.id == 7) {
         this.item_used[7]++;
+        this.close_item_description_modal();
       }
     }
   }
