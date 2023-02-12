@@ -180,15 +180,43 @@ export default {
       } else if (item.id == 4) {
         // 먹물탄
         console.log(item)
+        this.conn.send(JSON.stringify(
+          {
+            event: "useItem",
+            level: 4,
+            nickname:this.user.nickname,
+            room: this.roomInfo.id,
+            startData: {
+              "isStart" : 1,
+            }
+          }
+        ));
+        // 30초 후에 제거
+        setTimeout(
+          this.conn.send(JSON.stringify(
+            {
+              event: "useItem",
+              level: 4,
+              nickname: this.user.nickname,
+              room: this.roomInfo.id,
+              startData: {
+                "isStart" : 0,
+              }
+            }
+          )
+        ), 30000);
       } else if (item.id == 5){
         // 조명탄: 30초간 노비 위치 표시
         console.log(item)
       } else if (item.id == 6){
         // 긴 오랏줄: 노비 catch 범위 확대
         console.log(item)
+      } else if (item.is == 7) {
+        // 거짓 정보통
+        console.log(item)
       } else {
         // 연막탄
-        console.log(item)
+        console.log(item);
       }
 
 

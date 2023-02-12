@@ -4,6 +4,9 @@
         <user-video 
             :stream-manager="mainStreamManager" 
             :class-name="enemy_video">
+        <div v-if="isInked" class="ink-bomb">
+            <img src="@/assets/inkBomb.png">
+        </div>
         </user-video>
         <!-- <div class="camera_name">
             임시이름 {{ enemy_name }}
@@ -18,6 +21,9 @@
         <user-video 
             :stream-manager="myStreamManager"
             :class-name="my_video">
+        <div v-if="amIInked" class="ink-bomb-me">
+            <img src="@/assets/inkBomb.png">
+        </div>
         </user-video>
     </div>
 </template>
@@ -55,6 +61,11 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 my_video: "my_video",
                 enemy_video: "enemy_video",
 
+                /* for item */
+                players_state: {},
+                isInked: false,
+                amIInked: false,
+
                 // Join form
                 mySessionId: this.$route.params.roomId,
             };
@@ -70,6 +81,9 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 this.OV = new OpenVidu();
                 this.session = this.OV.initSession();
                 this.session.on("streamCreated", ({ stream }) => {
+                    this.players_state[stream.connection.data.nickname] = {
+                        isInked: false,
+                    };
                     if (stream.connection.data.nickname == this.user.nickname) {
                         return;
                     }
@@ -171,6 +185,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     idx = len - 1;
                 }
                 this.updateMainVideoStreamManager(this.subscribers[idx]);
+                this.inkedCheck();
             },
             rightArrow() {
                 let idx = this.subscribers.indexOf(this.mainStreamManager);
@@ -180,6 +195,19 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     idx = 0;
                 }
                 this.updateMainVideoStreamManager(this.subscribers[idx]);
+                this.inkedCheck();
+            },
+            clientUser (streamManager)  {
+                const { connection } = streamManager.stream;
+                const { clientData } = JSON.parse(connection.data);
+                return clientData.user;
+            },
+            inkedCheck() {
+                if (this.players_state[this.clientUser(this.mainStreamManager).nickname].isInked) {
+                    this.isInked = true;
+                } else {
+                    this.isInked = false;
+                }
             },
             async openMediaDevices(constraints) {
                 return await navigator.mediaDevices.getUserMedia(constraints);
@@ -200,6 +228,32 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
         for (var sub of this.subscribers) {
             console.log("---", sub);
         }
+
+        this.conn.addEventListener("message", (e) => {
+            const content = JSON.parse(e.data);
+            if (content.type == "item4") {
+                const nickname = content.nickname;
+                if (nickname == this.user.nickname) {
+                    if (content.startData.isStart == 1) {
+                        this.amIInked = true;
+                    } else {
+                        this.amIInked = false;
+                    }
+                }
+                if (content.startData.isStart == 1) {
+                    this.players_state[nickname].isInked = true;
+                    if (this.clientUser(this.mainStreamManager).nickname == nickname) {
+                        this.isInked = true;
+                    }
+                } else {
+                    this.players_state[nickname].isInked = false;
+                    if (this.clientUser(this.mainStreamManager).nickname == nickname) {
+                        this.isInked = false;
+                    }
+                }
+            }
+        })
+
         this.init();
     },
     computed: {
@@ -278,7 +332,10 @@ $my_video_margin: 20px;
     min-height: 100px;
     border: dashed;
 }
-
+.ink-bomb {
+    width: 100%;
+    height: 100%;
+}
 .hidden_modal{
     visibility: hidden;
 }
