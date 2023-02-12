@@ -73,12 +73,14 @@
         <div class="image_text">{{ last_chat }}</div>
     </div>
   </div>
-  <div class="toast_chat" v-if="chat_toast">
-    <div class="flex_center">
-        <img src="@/assets/system_chat.png" style="height: 60px; width: 90vw;">
-        <div class="image_text">{{ last_chat }}</div>
+  <transition name="toasting">
+    <div class="toast_chat" v-if="chat_toast">
+      <div class="flex_center">
+          <img src="@/assets/system_chat.png" style="height: 60px; width: 90vw;">
+          <div class="image_text">{{ last_chat }}</div>
+      </div>
     </div>
-  </div>
+  </transition>
   <SpiningModalVue @spinningEnd="spinningEnd" v-if="spinningModal"></SpiningModalVue>
   <RoleModalVue v-if="roleModal" @modalAllClose="modalAllClose"></RoleModalVue>
 
@@ -452,5 +454,18 @@ $item_modal_confirm_button_height: 60px;
   z-index: 100100;
   position: absolute;
   bottom: $footer-height + 40px; 
+}
+.toasting {
+  transition: all 0.25s;
+}
+.toast-enter-active {
+  transition: all 0.25s;
+}
+.toast-enter-active {
+  transition: all 0.25s;
+}
+.toast-enter {
+  transform: translateY(100%);
+}
 }
 </style>
