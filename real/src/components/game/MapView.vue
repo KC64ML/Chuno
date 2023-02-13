@@ -326,7 +326,7 @@ export default {
       console.log('얘랑')
       console.log(target)
       console.log('같아야함')
-
+      this.$emit("myRippedPaper")
       this.conn.send(JSON.stringify(
           {
             event:"ripPaper",
@@ -493,6 +493,7 @@ export default {
       console.log(target)
       this.catchModal = false
       target.caught = true
+      this.$emit("myArrestSlave")
       this.conn.send(JSON.stringify(
           {
             event:'catchRunner',
