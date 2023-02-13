@@ -235,7 +235,7 @@ export default {
       ripped_paper: 0,
 
       item_description_modal: false,
-      selected_item: {},
+      selected_item: {},//
       item_list: {
         "runner": [
           {
