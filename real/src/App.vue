@@ -1,11 +1,13 @@
 <template>
   <div class="main_back flex_center">
-    <router-view :key="$route.fullPath"></router-view>
+    <router-view :key="$route.fullPath" @playMusic="play"></router-view>
   </div>
   <MusicPlayVue
     class="player"
     v-show="musicControll()"
     :isPlay="isPlay"
+    :start="start"
+    @offStart="offStart"
   ></MusicPlayVue>
   <FooterVue
     class="footer_fix"
@@ -37,19 +39,27 @@ export default {
       });
     },
     musicControll() {
-      if (this.$route.name == "friends" || this.$route.name == "search") {
+      if (
+        this.$route.name == "friends" ||
+        this.$route.name == "search" ||
+        this.$route.name == "waitingRoom"
+      ) {
         this.isPlay = true;
         return false;
-      } else if (
-        this.$route.name != "waitingRoom" &&
-        this.$route.name != "game"
-      ) {
+      } else if (this.$route.name != "game") {
         this.isPlay = true;
         return true;
       } else {
         this.isPlay = false;
         return false;
       }
+    },
+    play() {
+      this.start = true;
+      this.startButton = true;
+    },
+    offStart() {
+      this.start = false;
     },
   },
   created() {
@@ -58,6 +68,7 @@ export default {
   data() {
     return {
       isPlay: true,
+      start: false,
     };
   },
 };

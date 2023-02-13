@@ -15,6 +15,7 @@
     methods: {
       start() {
           this.$router.push("/login")
+          this.$emit("playMusic")
       },
     },
 
