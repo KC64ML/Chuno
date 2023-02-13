@@ -80,6 +80,7 @@ public class RoomService {
                 .lng(room.getLng())
                 .lat(room.getLat())
                 .title(room.getTitle())
+                .maxPlayers(room.getMaxPlayers())
                 .isPublic(room.isPublic())
                 .radius(room.getRadius())
                 .password(room.getPassword())
