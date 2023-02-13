@@ -115,7 +115,7 @@
 				<img class="menu" src="@/assets/game_chat.png">
 			</div>
 			<div>
-				<input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data">
+				<input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data" @keyup.enter="transmit_chat">
 			</div>
 			<div class="menu_box" @click="transmit_chat">
 				<img src="@/assets/paper_plane.svg" alt="">
