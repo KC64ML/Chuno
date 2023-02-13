@@ -53,7 +53,7 @@
 	</transition>
 
 	<div id="status_bar" style="display: flex; justify-content: space-between">
-		<div>남은 시간 : </div>
+		<div>남은 시간 : {{ game_timer_minute }}분 {{ game_timer_second }}초</div>
 		<div @click="status_open" class="for_trans" :class="{'trans':status_specific_modal}">▼</div>
 	</div>
   <transition name="close_specific">
@@ -111,9 +111,9 @@
 </template>
 
 <script>
-import OpenViduVue from '@/components/game/OpenViduVue.vue'
-import MapView from '@/components/game/MapView.vue' // huh
-import RoleModalVue from '@/components/game/RoleModalVue.vue'
+import OpenViduVue from '@/components/game/OpenViduVue.vue';
+import MapView from '@/components/game/MapView.vue'; // huh
+import RoleModalVue from '@/components/game/RoleModalVue.vue';
 import ChatCardVue from '@/components/game/ChatCardVue.vue';
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
@@ -176,6 +176,11 @@ export default {
     console.log("-----------------------")
     console.log(this.user);
     console.log(this.roomInfo);
+
+    /* 게임 시간 카운트 로직 */
+    setInterval(() => {
+      this.game_timer--;
+    }, 1000);
   },
   data() {
     return {
@@ -249,6 +254,14 @@ export default {
         ]
       },
       item_used: [0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    }
+  },
+  computed: {
+    game_timer_minute() {
+      return parseInt(this.game_timer / 60)
+    },
+    game_timer_second() {
+      return this.game_timer % 60;
     }
   },
   methods: {
