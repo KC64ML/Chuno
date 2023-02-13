@@ -1,6 +1,7 @@
 <template>
 
-  <NewEditProfileModal v-if="modal" @on-modal="onModal" :userInfo="userInfo" />
+  
+
   <div>
     <div class="container-col" id="myProfile">
       <div class="container-row">
@@ -36,11 +37,9 @@
 <script>
 import defaultProfile from '@/assets/profile_default.svg'
 // import EditProfileModal from '@/components/profile/EditProfileModal.vue'
-import NewEditProfileModal from './NewEditProfileModal.vue'
 export default {
   name: 'MyProfile',
   components: {
-    NewEditProfileModal,
     // EditProfileModal,
   },
   props: {
@@ -59,7 +58,6 @@ export default {
 
   methods: {
     onModal() {
-      this.modal = !this.modal
       console.log("테스트 실행")
       console.log(this.modal)
       // const token = sessionStorage.token
@@ -67,6 +65,7 @@ export default {
       // .then((res) =>{
       //   console.log("userImgTest : " + res.data.result.profile.path);
       // })
+      this.$emit('openEditModal');
     },
     // 친구 추가
     addFriend(yourUid) {

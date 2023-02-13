@@ -2,7 +2,8 @@
   <!-- 모달 -->
   <LogoutModal v-if="logoutModal" @on-logout="onLogout"/>
   <DeleteAccountModal v-if="deleteAccountModal" @on-delete="onDelete"/>
-  
+  <NewEditProfileModal v-if="profileEditModal" :userInfo="userInfo" />
+
   <HeaderVue
     v-if="me"
     :title="'프로필'"
@@ -14,6 +15,7 @@
 
   <div style="height: 80%; width:300px; overflow: scroll;" class="scroll">
     <MyProfileView 
+      @openEditModal="openEditModal"
       @on-edit="onEdit"
       :me="me"
       :userInfo="userInfo"
@@ -68,6 +70,7 @@ import RecordView from '@/components/profile/RecordView.vue'
 import InventoryView from '@/components/profile/InventoryView.vue'
 
 import LogoutModal from '@/components/profile/LogoutModal.vue'
+import NewEditProfileModal from '@/components/profile/NewEditProfileModal.vue'
 import DeleteAccountModal from '@/components/profile/DeleteAccountModal.vue'
 
 export default {
@@ -80,11 +83,13 @@ export default {
     RecordView,
     LogoutModal,
     DeleteAccountModal,
+    NewEditProfileModal,
   },
   data() {
     return {
       logoutModal: false,
       deleteAccountModal: false,
+      profileEditModal: false,
       me: true,
       friend: false,
       userInfo: [],
@@ -109,7 +114,7 @@ export default {
               path: 'profile/default.svg'
             };
           }
-          // console.log("path : " + res.data.result.profile.path);
+          console.log("path : " + res.data.result.profile.path);
           if (code) {
             if(res.data.result.id == uid){ // 내 프로필이면 
               this.userInfo = res.data.result
@@ -167,6 +172,9 @@ export default {
     onDelete() {
       this.deleteAccountModal = !this.deleteAccountModal
     },
+    openEditModal() {
+      this.profileEditModal = !this.profileEditModal
+    }
   },
   created(){
     this.getItems()
