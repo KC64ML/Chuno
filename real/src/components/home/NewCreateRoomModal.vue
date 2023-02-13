@@ -249,7 +249,7 @@ $plma_size: 30px;
     width: 100vw;
     height: 100%;
     background: rgb(0, 0, 0, 0.6);
-    z-index: 1;
+    z-index: 5;
 }
 
 #make_room_modal {

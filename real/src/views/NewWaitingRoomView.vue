@@ -36,7 +36,7 @@
     <div id="waiting_room_footer">
         <div id="waiting_inner_footer">
             <div class="waiting_footer_input" style="height: 90%; flex: 1">
-                <input id="input_el" v-model="chat_data">
+                <input id="input_el" v-model="chat_data" @keyup.enter="transform_chat">
             </div>
             <div style="display: flex; align-items: center" @click="transform_chat">
                 <img src="@/assets/paper_plane.svg" alt="">

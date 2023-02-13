@@ -288,9 +288,18 @@ export default {
             console.log("소켓에서 받아왔어요!!!", content);
             this.papers = content.info;
             
-          } else if (content.type == 'leave') {
-            const content = JSON.parse(e.data);
+          } else if (content.type == 'me') {
+            console.log('me를 받아오긴함')
+            // present 현재방 넘버
+            // players 배열 nickname
+            // console.log(content.nickname + '님이 떠나갔어요...')
             console.log(content)
+            for (let i = 0; i < this.others.length; i++) {
+              if (this.others[i].nickname == content.nickname) {
+                const playerleaved = this.others.splice(i, 1)
+                console.log(playerleaved)
+              }
+            }
           }
         }
         )

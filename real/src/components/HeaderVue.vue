@@ -8,13 +8,20 @@
 </template>
 
 <script>
+import tak from "@/assets/audio/tak.mp3";
+
   export default {
       props: {
           title: undefined
       },
       data() {
           return {
-              here: undefined
+              here: undefined,
+              audio: {
+                id: "music-home",
+                name: "MusicHome",
+                file: new Audio(tak),
+            },
           }
       },
       created() {
@@ -23,7 +30,11 @@
       methods: {
           goHome() {
               this.$router.push("/home");
-          }
+              this.play(this.audio);
+          },
+          play(audio) {
+            audio.file.play();
+    },
       }
   }
 </script>

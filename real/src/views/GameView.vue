@@ -1,10 +1,5 @@
 <template>
-	<!-- <LeaveModal
-		v-if="leaveModal"
-		@on-no-leave="onNoLeave"
-		@on-yes-leave="onYesLeave"
-	/> -->
-
+	<!-- 나가기 모달 시작 -->
 	<div v-if="leaveModal" id="item_description_modal" @click="close_item_description_modal">
 		<div id="item_description_modal_container" @click="stopingPropagation">
 			<div style="text-align: center; font-size: 25px; margin-bottom: 10px;">정말로 나가시겠소?</div>
@@ -21,6 +16,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- 나가기 모달 끝 -->
 
 	<transition name="menu-retreat">
 		<div id="item_menu_modal" v-if="item_menu_modal">
@@ -119,7 +115,7 @@
 				<img class="menu" src="@/assets/game_chat.png">
 			</div>
 			<div>
-				<input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data">
+				<input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data" @keyup.enter="transmit_chat">
 			</div>
 			<div class="menu_box" @click="transmit_chat">
 				<img src="@/assets/paper_plane.svg" alt="">
@@ -165,6 +161,8 @@ import ChatCardVue from '@/components/game/ChatCardVue.vue';
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
+
+import jing from "@/assets/audio/jing.wav";
 
 export default {
 
@@ -339,6 +337,12 @@ export default {
         ]
       },
       item_used: [0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      audio: {
+            id: "music-game",
+            name: "MusicGame",
+            file: new Audio(jing),
+            isPlaying: false,
+          },
     }
   },
   computed: {
@@ -381,6 +385,23 @@ export default {
 	onYesLeave(){
 		console.log('진짜로 나간다!!!!!')
 		this.leaveModal = false
+		this.conn.send(JSON.stringify(
+          {
+            event:"leave",
+            nickname: this.user.nickname,
+			level: 1,
+            room: this.roomInfo.id,
+          }
+        ));
+		this.conn.send(JSON.stringify(
+        {
+          event: "chat",
+          room: this.roomInfo.id,
+          nickname: 'system',
+          level: 1,
+          msg: `${this.user.nickname}이 방을 나갔습니다.`
+        }
+      ))
 		this.$router.push({ name: 'home' })
 	},
 	onNoLeave(){
@@ -422,6 +443,8 @@ export default {
     },
     modalAllClose() {
       this.roleModal = false;
+      this.play(this.audio);
+      console.log("jing 들려요?");
     },
 
     open_chat_modal() {
@@ -542,7 +565,11 @@ export default {
         if (a == 'chaser') this.chaserWin = 1;
         else if (a == 'runner') this.runnerWin = 1;
       }
-    }
+    },
+	play(audio) {
+		audio.isPlaying = true;
+		audio.file.play();
+		},
 	}
 }
 

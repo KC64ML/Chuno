@@ -1,5 +1,5 @@
 <template>
-  <div id="modal_back">
+  <div id="modal_back" style="z-index: 5">
     <div id="make_room_modal">
       <div id="close_button" @click="offing">x</div>
       <div id="modal_title" style="font-size: 24px">방 정보</div>

@@ -11,14 +11,15 @@
   />
   <HeaderVue :title="'저잣거리'"></HeaderVue>
   <div id="room_box" style="height: 80%; overflow: scroll">
-    <room-card
+    <RoomCard
       v-for="(room, idx) in roomList"
       :key="idx"
       v-bind:room_info="room"
+      @click="play(this.door)"
       @info_show="showRoomInfo"
       @room_info="setRoomInfo"
       @info_close="closeRoomInfo"
-    ></room-card>
+    ></RoomCard>
   </div>
   <div id="plus_button" @click="createRoom">+</div>
 </template>
@@ -28,6 +29,9 @@ import NewCreateRoomModal from "@/components/home/NewCreateRoomModal.vue";
 import HeaderVue from "@/components/HeaderVue.vue";
 import RoomCard from "@/components/RoomCard.vue";
 import RoomInfoModal from "@/components/home/RoomInfoModal.vue";
+
+import door from "@/assets/audio/wood_door.mp3";
+import tak from "@/assets/audio/tak.mp3";
 
 export default {
   components: {
@@ -44,6 +48,7 @@ export default {
       lng: 0,
       roomList: [],
       roomInfo: {},
+      door,
     };
   },
   async created() {
@@ -123,6 +128,7 @@ export default {
     },
     createRoom() {
       this.modal_show = true;
+      this.play(tak);
     },
     modalOff() {
       this.modal_show = false;
@@ -139,6 +145,12 @@ export default {
       console.log("data", data);
       this.roomInfo = data;
       console.log("this.roomInfo", this.roomInfo);
+    },
+    play(audiofile) {
+      var audio = {
+        file: new Audio(audiofile),
+      };
+      audio.file.play();
     },
   },
 };
@@ -164,6 +176,7 @@ export default {
   animation-name: plus_button;
   animation-iteration-count: infinite;
   animation-duration: 1s;
+  z-index: 2;
 }
 @keyframes plus_button {
   50% {

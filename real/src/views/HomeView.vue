@@ -101,6 +101,7 @@ export default {
   animation-name: plus_button;
   animation-iteration-count: infinite;
   animation-duration: 1s;
+  z-index: 2;
 }
 @keyframes plus_button {
   50% {
@@ -131,8 +132,3 @@ export default {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
-#room_box::-webkit-scrollbar {
-  display: none;
-}
-</style>

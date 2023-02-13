@@ -1,10 +1,15 @@
 <template>
-  <div id="container" @click="goWaitingRoom">
-    <div style="display: flex; align-items: center">
+  <div id="container">
+  <div class="wooden-sign">
+    <img src="@/assets/wooden_sign.png"/>
+  </div>
+  <div class="room-content" @click="goWaitingRoom">
+    <div style="display: flex; align-items: center;">
       <img src="@/assets/Lock.svg" v-if="room.password" />
       <img src="@/assets/Unlock.svg" v-else />
-      <div style="margin-left: 10px"></div>
-      {{ room.title }}({{ room_info.playercnt }})
+      <div style="margin-left: 10px" class="room-title">
+        {{ room.title }}({{ room_info.playercnt }})
+      </div>
     </div>
     <div style="margin-top: 10px"></div>
     <!-- stretch는 위아래로 모든 div의 높이를 같게 해줘요 -->
@@ -32,6 +37,7 @@
         <img src="@/assets/Info.svg" />
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -97,32 +103,59 @@ export default {
 
 #container {
   margin: $card_vertical_margin 0;
-  background: #f2f2f2;
+  // background: #f2f2f2;
+  // background-image: url('@/assets/wooden_sign.png');
+  // background-size: cover;
   height: 120px;
-  width: 350px;
+  width: 397px;
   border-radius: 15px;
-  padding: 20px;
+  padding: 20px 60px;
   box-shadow: 0px 10px 20px -10px rgb(0, 0, 0, 0.7);
   animation-name: room_card_appear;
   animation-duration: 0.5s;
   animation-iteration-count: 1;
+  position: relative;
+}
+.room-title {
+  color: rgb(255, 251, 226);
+  text-shadow: 1px 1px 0px rgb(49, 49, 49), -1px -1px 0px rgb(57, 57, 57);
+  font-size: 1.4rem;
+}
+.room-content {
+  position: relative;
+  cursor: pointer;
+  z-index: 1;
+}
+.wooden-sign {
+  position: absolute;
+  z-index: 0;
+  top: -75px;
+  width: 400px;
+  height: 234px;
+  left: 0px;
+}
+.wooden-sign img {
+  width: 100%;
+  height: 100%;
 }
 @keyframes room_card_appear {
   0% {
     opacity: 0;
-    transform: translateX(50px);
+    transform: translateY(-50px);
   }
 }
 .card_menu {
   padding: 10px;
   border-radius: 5px;
-  background-color: black;
+  background-color: #291d00e8;
+  text-shadow: 1px 1px 0 #6a5c00, -1px -1px 0 #4e4300;
+  box-shadow: 1px 1px 0 #746000, -1px -1px 0 rgb(204 181 96 / 78%);
 }
 .card_margin {
   margin-left: $card_margin;
 }
 .start_time {
-  width: 120px;
+  width: 130px;
   text-align: center;
 }
 </style>
