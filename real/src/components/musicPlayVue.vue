@@ -29,7 +29,6 @@ export default {
         id: "music-opening",
         name: "MuscicOpening",
         file: new Audio(bgm),
-        loop: true,
         isPlaying: false,
       },
     };
@@ -47,6 +46,8 @@ export default {
     play(audio) {
       audio.isPlaying = true;
       audio.file.play();
+      audio.loop = true;
+      audio.autoplay = true;
     },
 
     pause(audio) {

@@ -82,12 +82,10 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 this.session = this.OV.initSession();
                 this.session.on("streamCreated", ({ stream }) => {
                     const otherData = JSON.parse(stream.connection.data);
-                    this.players_state[otherData.nickname] = {
-                        isInked: false,
-                    };
                     if (otherData.nickname == this.user.nickname) {
                         return;
                     }
+                    console.log("stream.connection.data : " + otherData);
                     const subscriber = this.session.subscribe(stream);
                     this.subscribers.push(subscriber);
                     console.log("스트림을 발견했어요!")
@@ -97,6 +95,10 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     const { connection } = this.mainStreamManager.stream;
                     console.log("커넥션 데이터에요:", connection.data)
                     const { clientData } = JSON.parse(connection.data);
+                    console.log("clientData : " + clientData);
+                    this.players_state[clientData.user.nickname] = {
+                        isInked: false,
+                    };
                     this.enemy_name = clientData;
                 });
                 this.session.on("streamDestroyed", ({ stream }) => {
@@ -218,6 +220,35 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             }
         },
     async created() {
+        this.conn.addEventListener("message", (e) => {
+            const content = JSON.parse(e.data);
+            console.log("받은 메세지 : ");
+            console.log(content);
+            if (content.type == "item4") {
+                console.log("누군가 먹물탄을 사용하였습니다.", content);
+                const nickname = content.nickname;
+                if (nickname == this.user.nickname) {
+                    if (content.info.isStart == 1) {
+                        this.amIInked = true;
+                    } else {
+                        this.amIInked = false;
+                    }
+                }else if (content.info.isStart == 1) {
+                    this.players_state[nickname].isInked = true; // undefined
+                    if (this.clientUser(this.mainStreamManager).nickname == nickname) {
+                        this.isInked = true;
+                        console.log("this.isInked : " + this.isInked);
+                    }
+                } else {
+                    this.players_state[nickname].isInked = false;
+                    if (this.clientUser(this.mainStreamManager).nickname == nickname) {
+                        this.isInked = false;
+                    }
+                }
+            }
+        })
+
+
         await this.openMediaDevices({
         video: true,
         audio: true,
@@ -233,32 +264,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             console.log("---", sub);
         }
 
-        this.conn.addEventListener("message", (e) => {
-            const content = JSON.parse(e.data);
-            console.log("받은 메세지 : ", content);
-            if (content.type == "item4") {
-                console.log("누군가 먹물탄을 사용하였습니다.", content);
-                const nickname = content.nickname;
-                if (nickname == this.user.nickname) {
-                    if (content.info.isStart == 1) {
-                        this.amIInked = true;
-                    } else {
-                        this.amIInked = false;
-                    }
-                }
-                if (content.info.isStart == 1) {
-                    this.players_state[nickname].isInked = true;
-                    if (this.clientUser(this.mainStreamManager).nickname == nickname) {
-                        this.isInked = true;
-                    }
-                } else {
-                    this.players_state[nickname].isInked = false;
-                    if (this.clientUser(this.mainStreamManager).nickname == nickname) {
-                        this.isInked = false;
-                    }
-                }
-            }
-        })
+        
 
         this.init();
     },
@@ -337,12 +343,23 @@ $my_video_margin: 20px;
 
     min-height: 100px;
     border: dashed;
+
+    transition: all 0.5s
 }
 .ink-bomb {
+    position: inherit;
     width: 100%;
     height: 100%;
 }
+.ink-bomb-me {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+}
 .hidden_modal{
+    opacity: 0;
+    transform: translateY(50%);
     visibility: hidden;
 }
 </style>

@@ -1,75 +1,100 @@
-<template> 
-  <div id="item_menu_modal" v-if="item_menu_modal">
-    <div v-if="this.user">
-      <div style="margin-bottom: 10px; text-align: center;">아이템</div>
-      <div v-for="(e, idx) in item_list[this.user.role]" :key="idx" style="display: flex; align-items: center;" @click="item_select(e)">
-        <img :src="e.path" alt="" style="margin-right: 5px;">
-        <div>{{ e.name }}</div>
-      </div>
-    </div>
-  </div>
+<template>
+	<transition name="menu-retreat">
+		<div id="item_menu_modal" v-if="item_menu_modal">
+			<div v-if="this.user">
+				<div style="margin-bottom: 10px; text-align: center;">아이템</div>
+				<div v-for="(e, idx) in item_list[this.user.role]" :key="idx"
+					style="display: flex; align-items: center;" @click="item_select(e)">
+					<img :src="e.path" alt="" style="margin-right: 5px;">
+					<div>{{ e.name }}</div>
+				</div>
+			</div>
+		</div>
+	</transition>
 
-  <div v-if="item_description_modal" id="item_description_modal" @click="close_item_description_modal">
-    <div id="item_description_modal_container" @click="stopingPropagation">
-      <div style="text-align: center; font-size:25px; margin-bottom: 10px;">{{ selected_item.name }}</div>
-      <div style="text-align: center; margin-bottom: 20px;">{{ selected_item.description }}</div>
-      <div style="text-align: center; font-size: 25px; margin-bottom: 10px;">사용하실래요?</div>
-      <div style="display: flex; justify-content: space-around;">
-        <div class="flex_center">
-            <img src="@/assets/main_button1.png" class="modal_confirm_button">
-            <div class="image_text" @click="[stopingPropagation, item_confirm_yes({id: selected_item.id, is_implemented: selected_item.is_implemented})]">네</div>
-        </div>
-        <div class="flex_center">
-            <img src="@/assets/main_button1.png" class="modal_confirm_button">
-            <div class="image_text" @click="close_item_description_modal">아니요</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <OpenViduVue
+	<div v-if="item_description_modal" id="item_description_modal" @click="close_item_description_modal">
+		<div id="item_description_modal_container" @click="stopingPropagation">
+			<div style="text-align: center; font-size:25px; margin-bottom: 10px;">{{ selected_item.name }}</div>
+			<div style="text-align: center; margin-bottom: 20px;">{{ selected_item.description }}</div>
+			<div style="text-align: center; font-size: 25px; margin-bottom: 10px;">사용하실래요?</div>
+			<div style="display: flex; justify-content: space-around;">
+				<div class="flex_center"
+					@click="[stopingPropagation, item_confirm_yes({ id: selected_item.id, is_implemented: selected_item.is_implemented })]">
+					<img src="@/assets/main_button1.png" class="modal_confirm_button">
+					<div class="image_text">네</div>
+				</div>
+				<div class="flex_center" @click="close_item_description_modal">
+					<img src="@/assets/main_button1.png" class="modal_confirm_button">
+					<div class="image_text">아니요</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<OpenViduVue
     :my_cam_modal="my_cam_modal"
     :user="user"></OpenViduVue>
-   
-  <div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
-        <div id="chat_header"
-            style="display: flex; align-items:center; justify-content: space-between; margin-bottom: 10px;">
-            <div>
-                <img src="@/assets/main_logo2.png" alt="" style="width: 50px; height: 50px; margin-left: 20px;">
-            </div>
-            <div style="font-size: 30px">
-                전언
-            </div>
-            <div style="font-size: 25px; margin-right: 20px;" @click="close_chat_modal">X</div>
-        </div>
-        <div v-for="(e, idx) in chat_log" :key="idx">
-            <ChatCardVue :chat_dto="e" :my_nickname="user.nickname"></ChatCardVue>
-        </div>
-    </div>
-  
-  <MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught" :item_used="item_used[7]"/>
-  <div style="position: absolute; bottom: 0; left: 0;">
-    
-    <div id="footer_container">
-      <div class="menu_box flex_center" @click="open_chat_modal">
-        <img class="menu" src="@/assets/game_chat.png">
-      </div>
-      <div>
-        <input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data">
-      </div>
-      <div class="menu_box" @click="transmit_chat">
-          <img src="@/assets/paper_plane.svg" alt="">
-      </div>
-      <div class="menu_box" @click="myCam">
-        <img class="menu" src="@/assets/game_myCam.png">
-      </div>
-      <div class="menu_box" @click="onMenu">
-        <img class="menu" src="@/assets/game_menu.png">
-      </div>
-    </div>
-  </div>
-  <SpiningModalVue @spinningEnd="spinningEnd" v-if="spinningModal"></SpiningModalVue>
-  <RoleModalVue v-if="roleModal" @modalAllClose="modalAllClose"></RoleModalVue>
 
+	<transition name="chat-retreat">
+		<div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
+			<div id="chat_header"
+				style="display: flex; align-items:center; justify-content: space-between; margin-bottom: 10px;">
+				<div>
+					<img src="@/assets/main_logo2.png" alt="" style="width: 50px; height: 50px; margin-left: 20px;">
+				</div>
+				<div style="font-size: 30px">
+					전언
+				</div>
+				<div style="font-size: 25px; margin-right: 20px;" @click="close_chat_modal">X</div>
+			</div>
+			<div v-for="(e, idx) in chat_log" :key="idx">
+				<ChatCardVue :chat_dto="e" :my_nickname="user.nickname"></ChatCardVue>
+			</div>
+		</div>
+	</transition>
+
+	<MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught" :item_used="item_used[7]"/>
+	<div style="position: absolute; bottom: 0; left: 0;">
+
+		<div id="footer_container">
+			<div class="menu_box flex_center" @click="open_chat_modal">
+				<img class="menu" src="@/assets/game_chat.png">
+			</div>
+			<div>
+				<input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data">
+			</div>
+			<div class="menu_box" @click="transmit_chat">
+				<img src="@/assets/paper_plane.svg" alt="">
+			</div>
+			<div class="menu_box" @click="myCam">
+				<img class="menu" src="@/assets/game_myCam.png">
+			</div>
+			<div class="menu_box" @click="onMenu">
+				<img class="menu" src="@/assets/game_menu.png">
+			</div>
+		</div>
+	</div>
+	<transition name="toasting">
+		<div class="toast_chat" v-if="system_toast">
+			<div class="flex_center">
+				<img src="@/assets/system_chat.png" style="height: 60px; width: 90vw;">
+				<div class="image_text" style="word-break:break-all;">{{ last_chat }}</div>
+			</div>
+		</div>
+	</transition>
+	<transition name="toasting">
+		<div class="toast_chat" v-if="chat_toast">
+			<div class="flex_center">
+				<div
+					style="font-size: 20px; word-break:break-all; padding: 10px 20px; border-radius: 10px; background-color: rgb(0,0,0,0.6); color: white; width: 90vw;">
+					{{ last_chat }}</div>
+			</div>
+		</div>
+	</transition>
+	<SpiningModalVue @spinningEnd="spinningEnd" v-if="spinningModal"></SpiningModalVue>
+
+	<transition name="modal-fading">
+		<RoleModalVue v-if="roleModal" @modalAllClose="modalAllClose"></RoleModalVue>
+	</transition>
 </template>
 
 <script>
@@ -302,124 +327,193 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/variable.scss";
 $button_width: 50px;
-$item_modal_confirm_button_height: 60px; 
+$item_modal_confirm_button_height: 60px;
 
 #footer_container {
-  z-index: 1012;
-  position: absolute;
-  bottom: 0;
-  background-color: black;
-  height: $footer_height;
-  width: 100vw;
-  display: grid;
-  grid-template-columns: $button_width 1fr $button_width $button_width $button_width;
-  justify-content: space-around;
-  align-items: center;
+	z-index: 1012;
+	position: absolute;
+	bottom: 0;
+	background-color: black;
+	height: $footer_height;
+	width: 100vw;
+	display: grid;
+	grid-template-columns: $button_width 1fr $button_width $button_width $button_width;
+	justify-content: space-around;
+	align-items: center;
 }
 
 #footer_container>div {
-  width: 100%;
+	width: 100%;
 }
 
 .menu-window {
-  float: right;
-  position: absolute;
-  bottom: 60px;
+	float: right;
+	position: absolute;
+	bottom: 60px;
 }
 
 .menu_box {
-  width: 20%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+	width: 20%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .map_search {
-  display: block;
-  margin: 0 auto;
-  width: 95%;
-  height: 40px;
-  background-color: #F1F1F180;
-  color: white;
-  padding: 0 10px;
-  border-radius: 15px;
-  font-size: 20px;
+	display: block;
+	margin: 0 auto;
+	width: 95%;
+	height: 40px;
+	background-color: #F1F1F180;
+	color: white;
+	padding: 0 10px;
+	border-radius: 15px;
+	font-size: 20px;
 }
 
 .map_search::placeholder {
-  color: rgba(255, 255, 255, 0.56)
+	color: rgba(255, 255, 255, 0.56)
 }
 
 #chat_container {
-    z-index: 1010;
-    position: absolute;
-    bottom: $footer-height;
-    background-image: url("@/assets/main_back_horizon.png");
-    background-size: cover;
-    width: 100vw;
-    max-height: 60%;
-    min-height: 200px;
-    overflow-y: scroll;
-    animation-name: chat_container;
-    animation-duration: 0.4s;
-    animation-iteration-count: 1;
+	z-index: 1011;
+	position: absolute;
+	bottom: $footer-height;
+	background-image: url("@/assets/main_back_horizon.png");
+	background-size: cover;
+	width: 100vw;
+	max-height: 60%;
+	min-height: 200px;
+	overflow-y: scroll;
+	animation-name: chat_container;
+	animation-duration: 0.4s;
+	animation-iteration-count: 1;
 }
+
 @keyframes chat_container {
-  0% {
-    transform: translateY(100%);
-  }
+	0% {
+		opacity: 0;
+		transform: translateY(100%);
+	}
 }
 
 
 #item_menu_modal {
-  padding: 10px 20px;
-  border-radius: 20px;
-  background-color: rgb(0,0,0,0.3);
-  color: white;
-  position: absolute;
-  bottom: $footer-height + 10px;
-  right: 10px;
-  animation-name: item_menu_modal;
-  animation-duration: 0.2s;
-  animation-iteration-count: 1;
-  box-shadow: 0 5px 5px rgb(0, 0, 0, 0.3);
+	padding: 10px 20px;
+	border-radius: 20px;
+	background-color: rgb(0, 0, 0, 0.3);
+	color: white;
+	position: absolute;
+	bottom: $footer-height + 10px;
+	right: 10px;
+	animation-name: item_menu_modal;
+	animation-duration: 0.5s;
+	animation-iteration-count: 1;
+	box-shadow: 0 5px 5px rgb(0, 0, 0, 0.3);
+	z-index: 100;
 }
+
 @keyframes item_menu_modal {
-  0% {
-    transform: translateY(100%)
-  }
+	0% {
+		opacity: 0;
+		transform: translateY(100%)
+	}
 }
 
 #item_description_modal {
-  z-index: 100010;
-  background-color: rgb(0,0,0,0.5);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100%;
+	z-index: 100010;
+	background-color: rgb(0, 0, 0, 0.5);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100%;
 }
+
 #item_description_modal_container {
-  background-color: #F2F2F2;
-  width: 100vw * 0.85;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 20px;
-  padding: 20px;
-  word-break:break-all;
-  animation-name: item_description_modal_container;
-  animation-duration: 0.5s;
-  animation-iteration-count: 1;
+	background-color: #F2F2F2;
+	width: 100vw * 0.85;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border-radius: 20px;
+	padding: 20px;
+	word-break: break-all;
+	animation-name: item_description_modal_container;
+	animation-duration: 0.5s;
+	animation-iteration-count: 1;
 }
+
 @keyframes item_description_modal_container {
-  0% {transform: translate(-50%, -50%) scale(0);}
-  70% {transform: translate(-50%, -50%) scale(1.3);}
-  85% {transform: translate(-50%, -50%) scale(0.8);}
-  95% {transform: translate(-50%, -50%) scale(1.1);}
+	0% {
+		transform: translate(-50%, -50%) scale(0);
+	}
+
+	70% {
+		transform: translate(-50%, -50%) scale(1.3);
+	}
+
+	85% {
+		transform: translate(-50%, -50%) scale(0.8);
+	}
+
+	95% {
+		transform: translate(-50%, -50%) scale(1.1);
+	}
 }
+
 .modal_confirm_button {
-  height: $item_modal_confirm_button_height;
+	height: $item_modal_confirm_button_height;
+}
+
+.toast_chat {
+	z-index: 100100;
+	position: absolute;
+	bottom: $footer-height + 40px;
+	animation-name: toasting;
+	animation-duration: 0.25s;
+	animation-iteration-count: 1;
+}
+
+@keyframes toasting {
+	0% {
+		opacity: 0;
+		transform: scale(0) translateY(30px);
+	}
+}
+
+.toasting-leave-active {
+	transition: all 0.25s;
+}
+
+.toasting-leave-to {
+	opacity: 0;
+	transform: scale(0) translateY(30px);
+}
+
+.modal-fading-leave-active {
+	transition: all 0.5s;
+}
+
+.modal-fading-leave-to {
+	opacity: 0;
+	transform: scale(0) translateY(100%);
+}
+
+.menu-retreat-leave-active {
+	transition: all 0.5s;
+}
+
+.menu-retreat-leave-to {
+	opacity: 0;
+	transform: translateY(100%);
+}
+.chat-retreat-leave-active {
+	transition: all 0.5s;
+}
+.chat-retreat-leave-to {
+	opacity: 0;
+	transform: translateY(100%);
 }
 </style>
