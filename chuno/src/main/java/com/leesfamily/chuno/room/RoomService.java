@@ -199,6 +199,23 @@ public class RoomService {
     }
 
     public RoomGameEndResponseDto endRoom(RoomGameEndRequestDto roomGameEndRequestDto, Long userId) {
+        int isWin = roomGameEndRequestDto.getRunnerWin() + roomGameEndRequestDto.getChaserWin();
+        int exp = 50;
+        int money = 500;
+        int catchCount = roomGameEndRequestDto.getCatchCount();
+        int paperCount = roomGameEndRequestDto.getPaperCount();
+        int totalCount = catchCount + paperCount;
+        if(isWin == 1) {
+            exp += 150;
+            money += 500;
+            exp += totalCount * 200;
+            money += totalCount * 400;
+        }else {
+            exp += totalCount * 80;
+            money += totalCount * 100;
+        }
+        roomGameEndRequestDto.setExp(exp);
+        roomGameEndRequestDto.setMoney(money);
         return roomRepository.endRoom(roomGameEndRequestDto, userId);
     }
 

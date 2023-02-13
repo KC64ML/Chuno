@@ -27,6 +27,10 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom{
                 .set(userEntity.runnerPlayCount, userEntity.runnerPlayCount.add(roomGameEndRequestDto.getRunnerCnt()))
                 .set(userEntity.chaserWinCount, userEntity.chaserWinCount.add(roomGameEndRequestDto.getChaserWin()))
                 .set(userEntity.runnerWinCount, userEntity.runnerWinCount.add(roomGameEndRequestDto.getRunnerWin()))
+                .set(userEntity.catchCount, userEntity.catchCount.add(roomGameEndRequestDto.getCatchCount()))
+                .set(userEntity.paperCount, userEntity.paperCount.add(roomGameEndRequestDto.getPaperCount()))
+                .set(userEntity.exp, userEntity.exp.add(roomGameEndRequestDto.getExp()))
+                .set(userEntity.money, userEntity.money.add(roomGameEndRequestDto.getMoney()))
                 .where(userEntity.id.eq(userId))
                 .execute();
 
