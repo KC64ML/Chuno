@@ -21,10 +21,7 @@
 
 <script>
 export default {
-  name: "DeleteAccountModal",
-  props: {
-      catchTarget: Object,
-  },
+  name: "OutOfPlaygroundModal",
   methods: {
       onYes() {
       this.$emit('off-out-of-playground');
