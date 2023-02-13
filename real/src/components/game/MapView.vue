@@ -349,20 +349,23 @@ export default {
     },
     reOutOfPlayground(){
       if(this.calculateDistance({lat: this.roomInfo.lat, lng: this.roomInfo.lng}) >= this.roomInfo.radius){
-        this.outOfPlayground(this.location)
+        // 아웃
+        // this.outOfPlayground(this.location)
+      } else {
+        // ㄱㅊ
       }
     },
     // 범위 밖으로 나갈 시 경고
-    outOfPlayground(location){
+    outOfPlayground(){
       console.log('outOfPlayground 함수 실행')
-      if(this.user.caught == false && this.calculateDistance(location) >= this.roomInfo.radius){
+      // if(this.user.caught == false && this.calculateDistance(location) >= this.roomInfo.radius){
         console.log('범위밖으로 나왔습니다!! 플레이 범위 안으로 돌아가세요')
         this.onOutOfPlayground == true
         console.log('복귀 카운트 다운 시작')
         setTimeout(function() {
           this.reOutOfPlayground()
         }, 60000)
-      }
+      // }
     },
     offOutOfPlayGround(){
       this.onOutOfPlayground == false
@@ -374,7 +377,9 @@ export default {
       .then((coordinates) => {
         this.location.lat = coordinates.lat
         this.location.lng = coordinates.lng
-        this.outOfPlayground(this.location)
+        if(this.user.caught == false && this.calculateDistance(location) >= this.roomInfo.radius){
+          this.outOfPlayground()
+        }
         this.conn.send(JSON.stringify(
           {
             event:"playerLocation",
