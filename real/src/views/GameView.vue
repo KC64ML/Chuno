@@ -60,7 +60,7 @@
     <div id="status_specific" v-if="status_specific_modal">
       <div>
         <div>잡은 노비 수 : {{ arrested_slave }}명 / {{ total_slave }}명</div>
-        <div>찾은 노비 문서 수 : {{ ripped_paper }}명 / {{ total_paper }}명</div>
+        <div>찾은 노비 문서 수 : {{ ripped_paper }}장 / {{ total_paper }}장</div>
       </div>
     </div>
   </transition>
@@ -228,7 +228,7 @@ export default {
       player_len: 0,
 
       // 게임 종료를 위한 변수에요
-      game_timer: 1800,
+      game_timer: 30,
       total_slave: 0,
       arrested_slave: 0,
       total_paper: 0,
