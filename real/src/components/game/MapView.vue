@@ -292,7 +292,7 @@ export default {
             console.log('me를 받아오긴함')
             // present 현재방 넘버
             // players 배열 nickname
-            const content = JSON.parse(e);
+            // const content = JSON.parse(e.data);
             // console.log(content.nickname + '님이 떠나갔어요...')
             console.log(content)
             for (let i = 0; i < this.others.length; i++) {
@@ -424,6 +424,7 @@ export default {
       .catch((error) => {
         console.log(error)
       })
+      this.catchRunner()
     },
     GyroAllow() {
       // 자이로스코프 인식
