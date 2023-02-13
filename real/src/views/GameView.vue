@@ -178,7 +178,7 @@ export default {
   data() {
     return {
       my_cam_modal: { active: true },
-      item_menu_modal: true,
+      item_menu_modal: false,
       user: undefined,
       usedItem: [],
       // 개발이 끝나면 true로 고쳐줘요
