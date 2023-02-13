@@ -1,20 +1,58 @@
 <template>
     <HeaderVue :title="'결과'"></HeaderVue>
-    <div id="container">
-        <div v-if="user_win">
-            승리!
-            <div v-if="user_role == 'runner'" style="display: flex;">
-                <div>노비 점수</div><div class="up_arrow">▲</div>
-            </div>
-            <div v-else style="display: flex;">
-                <div>추노 점수</div><div class="up_arrow">▲</div>
-            </div>
-        </div>
-        <div v-else>패배!</div>
+    
+    
+
+    <!-- <div id="container">
         원래레벨{{ user_level_from }} 지금레벨 {{ user_level_to }}<br>
         원래경험치{{ user.exp - user_exp }} 현재경험치 {{ user.exp }}<br>
         원래돈{{ user.money - user_money }} 현재돈{{ user.money }}
 
+    </div> -->
+    <div style="height: 70%; width: 100vw; background-color: red; overflow: scroll; ">
+        <div style="text-align: center; margin-top: 30px;">
+            <img src="@/assets/main_logo2.png">
+        </div>
+        <div style="display:flex; justify-content: center; align-items: center; margin-top: 50px;">
+            <img src="@/assets/leaf_crown.png" alt="" style="height: 100px">
+            <div class="winDiv" v-if="user_win == 1">승리!</div>
+            <div class="winDiv" v-else>패배ㅠㅠ</div>
+        </div>
+        <div style="display: flex; align-items: center; width: 100vw;">
+            <div style="width: 70%; background: blue;">
+                <div style="width: 90%; height: 30px; background-color: purple; margin: 0 auto;">
+                    <div style="width: 10%; background-color: white; height: 100%; display: flex; align-items: center; justify-content: center;">
+                        <div>{{ 123 }}</div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; width: 95%; margin: 0 auto; color: white; background-color: black;">
+                    <div>Lv.{{ user_level_from }}</div>
+                    <div>Lv.{{ user_level_to }}</div>
+                </div>
+            </div>
+            <div style="width: 30%; background-color: green;">
+                <!-- 원래경험치{{ user.exp - user_exp }} 현재경험치 {{ user.exp }}<br> -->
+                <div>exp</div>
+                <div style="display: flex;">
+                    <div>123</div>
+                    <div class="up_arrow">▲</div>
+                </div>
+                <div>(+{{ user_exp }})</div>
+            </div>
+        </div>
+        <div style="display: flex">
+            <!-- 원래돈{{ user.money - user_money }} 현재돈{{ user.money }} -->
+            <img src="@/assets/money_img.png" style="height: 80px;">
+            <div>
+                <div>내 엽전</div>
+                <div style="display: flex;">
+                    <div>{{ 1234 }}</div>
+                    <div class="up_arrow">▲</div>
+                </div>
+                
+                <div>(+{{ user_money }})</div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -89,5 +127,10 @@ export default {
         opacity: 0;
         transform: translateY(-50%);
     }
+}
+.winDiv {
+    position: absolute;
+    font-size: 30px;
+    transform: translateY(-10px)
 }
 </style>
