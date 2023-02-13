@@ -525,10 +525,10 @@ export default {
         this.game_end_display_sub = "인생엔 승리도 패배도 없는 것인가 봐요"
       } else if (this.user.role == e) {
         this.game_end_display = this.message_victory;
-        this.game_end_display_sub = this.line_zip[Math.floor(Math.ramdom() * this.line_zip.length)];
+        this.game_end_display_sub = this.line_zip[Math.floor(Math.random() * this.line_zip.length)];
       } else {
         this.game_end_display = this.message_lose;
-        this.game_end_display_sub = this.line_zip[Math.floor(Math.ramdom() * this.line_zip.length)];
+        this.game_end_display_sub = this.line_zip[Math.floor(Math.random() * this.line_zip.length)];
       }
     }
 	}
