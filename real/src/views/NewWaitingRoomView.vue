@@ -326,13 +326,14 @@ $ready_button_height: 50px;
     width: 100vw;
     position: absolute;
     bottom: $footer_height + 20px;
-    left: 20px;
+    left: 0;
     max-height: 50%;
     font-size: 20px;
     overflow-y: scroll;
+    word-break: break-all;
 }
 #chat_log > div {
-    margin: 10px 0;
+    padding: 10px 20px;
 }
 </style>
 
