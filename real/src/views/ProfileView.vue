@@ -103,9 +103,11 @@ export default {
           console.log(res)
           const code = res.data.code
           console.log(token)
-          if(res.data.result.profile.path == null) {
+          
+          if(res.data.result.profile.path == '') {
             res.data.result.profile.path = 'profile/default.png';
           }
+          // console.log("path : " + res.data.result.profile.path);
           if (code) {
             if(res.data.result.id == uid){ // 내 프로필이면 
               this.userInfo = res.data.result
