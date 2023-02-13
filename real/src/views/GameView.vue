@@ -59,8 +59,8 @@
   <transition name="close_specific">
     <div id="status_specific" v-if="status_specific_modal">
       <div>
-        <div>잡은 노비 수 : 4 / 5</div>
-        <div>찾은 노비 문서 수 : 3 / 5</div>
+        <div>잡은 노비 수 : {{ arrested_salve }} / {{ total_slave }}</div>
+        <div>찾은 노비 문서 수 : {{ ripped_paper }} / {{ total_paper }}</div>
       </div>
     </div>
   </transition>
@@ -149,6 +149,8 @@ export default {
 					this.system_toast = false;
 					this.chat_toast = false;
 				}, 3000)
+      } else if (content.type == 'caughtRunner') {
+        console.log("게임뷰에서 실행되었어요!!!!!!!!", content)
       }
     })
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
