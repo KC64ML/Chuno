@@ -1,4 +1,27 @@
 <template>
+	<!-- <LeaveModal
+		v-if="leaveModal"
+		@on-no-leave="onNoLeave"
+		@on-yes-leave="onYesLeave"
+	/> -->
+
+	<div v-if="leaveModal" id="item_description_modal" @click="close_item_description_modal">
+		<div id="item_description_modal_container" @click="stopingPropagation">
+			<div style="text-align: center; font-size: 25px; margin-bottom: 10px;">정말로 나가시겠소?</div>
+			<div style="display: flex; justify-content: space-around;">
+				<div class="flex_center"
+					@click="onYesLeave">
+					<img src="@/assets/main_button1.png" class="modal_confirm_button">
+					<div class="image_text">네</div>
+				</div>
+				<div class="flex_center" @click="onNoLeave">
+					<img src="@/assets/main_button1.png" class="modal_confirm_button">
+					<div class="image_text">아니요</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<transition name="menu-retreat">
 		<div id="item_menu_modal" v-if="item_menu_modal">
 			<div v-if="this.user">
@@ -7,6 +30,17 @@
 					style="display: flex; align-items: center;" @click="item_select(e)">
 					<img :src="e.path" alt="" style="margin-right: 5px;">
 					<div>{{ e.name }}</div>
+				</div>
+			</div>
+			<br>
+			<div v-if="this.user">
+				<div style="margin-bottom: 10px; text-align: center;">메뉴</div>
+				<div 
+					@click="onLeave"
+					style="display: flex; align-items: center;"
+				>
+					<img src="@/assets/leave.png" alt="" style="margin-right: 5px;">
+					<div style="color:#A03A2C;">나가기</div>
 				</div>
 			</div>
 		</div>
@@ -127,6 +161,7 @@ import OpenViduVue from '@/components/game/OpenViduVue.vue';
 import MapView from '@/components/game/MapView.vue'; // huh
 import RoleModalVue from '@/components/game/RoleModalVue.vue';
 import ChatCardVue from '@/components/game/ChatCardVue.vue';
+// import LeaveModal from '@/components/game/LeaveModal.vue';
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
@@ -140,6 +175,7 @@ export default {
     SpiningModalVue,
     RoleModalVue,
     ChatCardVue,
+	// LeaveModal,
   },
   async created() {
     this.conn.addEventListener('message', (e)  => {
@@ -334,6 +370,19 @@ export default {
       clearInterval(this.game_interval);
       this.game_end = true;
     },
+	onYesLeave(){
+		console.log('진짜로 나간다!!!!!')
+		this.leaveModal = false
+		this.$router.push({ name: 'home' })
+	},
+	onNoLeave(){
+		console.log('안나갈건데')
+		this.leaveModal = false
+	},
+	onLeave(){
+		this.leaveModal = true
+		console.log(this.leaveModal)
+	},
     stopingPropagation(e) {
       e.stopPropagation();
     },
