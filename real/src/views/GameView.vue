@@ -541,7 +541,6 @@ export default {
         "runnerWin": this.runnerWin,
         "runnerCnt": this.my_ripped_paper
       }, { headers: { Authorization: sessionStorage.getItem("token") } }).then(res => res.data);
-      alert(result.successOrFailure);
       this.$router.push({ name: "gameResult", params: { role: this.user.role, win: (this.chaserWin+this.runnerWin), exp: result.exp, money: result.money } });
     },
     makeDisplay(e) {

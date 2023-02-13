@@ -21,18 +21,23 @@
     "
   >
   </FooterVue>
+  <KeepConnectionVue v-if="this.$route.name != 'game'"></KeepConnectionVue>
+  
 </template>
 
 <script>
 import FooterVue from "@/components/FooterVue.vue";
 import MusicPlayVue from "@/components/musicPlayVue.vue";
+import KeepConnectionVue from "@/views/KeepConnectionVue.vue"
 
 export default {
   components: {
     FooterVue,
     MusicPlayVue,
+    KeepConnectionVue,
   },
   methods: {
+    
     test() {
       this.conn.send({
         event: "reset",
