@@ -162,6 +162,8 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
 
+import jing from "@/assets/audio/jing.wav";
+
 export default {
 
   name: 'GameView',
@@ -332,6 +334,12 @@ export default {
         ]
       },
       item_used: [0, 0, 0, 0, 0, 0, 0, 0, 0,],
+	audio: {
+        id: "music-game",
+        name: "MusicGame",
+        file: new Audio(jing),
+        isPlaying: false,
+      },
     }
   },
   computed: {
@@ -543,7 +551,12 @@ export default {
         this.game_end_display = this.message_lose;
         this.game_end_display_sub = this.line_zip[Math.floor(Math.random() * this.line_zip.length)];
       }
-    }
+    
+		},
+	play(audio) {
+		audio.isPlaying = true;
+		audio.file.play();
+		},
 	}
 }
 

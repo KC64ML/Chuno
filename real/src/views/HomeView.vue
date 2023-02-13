@@ -132,8 +132,3 @@ export default {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
-#room_box::-webkit-scrollbar {
-  display: none;
-}
-</style>

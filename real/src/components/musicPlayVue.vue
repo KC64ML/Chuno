@@ -19,6 +19,7 @@ import soundOff from "@/assets/sound_off.png";
 export default {
   props: {
     isPlay: Boolean,
+    start: Boolean,
   },
 
   data() {
@@ -28,7 +29,7 @@ export default {
       soundOff,
       audio: {
         id: "music-opening",
-        name: "MuscicOpening",
+        name: "MusicOpening",
         file: new Audio(bgm),
         isPlaying: false,
       },
@@ -45,9 +46,12 @@ export default {
 
   updated() {
     if (!this.isPlay) {
-      this.audio.isPlaying = false;
-      this.audio.file.pause();
+      this.pause(this.audio);
       this.audio.file.currentTime = 0;
+    }
+    if (this.start) {
+      this.play(this.audio);
+      this.$emit("offStart");
     }
   },
 
