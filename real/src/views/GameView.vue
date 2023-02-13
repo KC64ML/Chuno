@@ -190,7 +190,7 @@ export default {
     console.log(this.roomInfo);
 
     /* 게임 시간 카운트 로직 */
-    setInterval(() => {
+    var game_interval = setInterval(() => {
       this.game_timer--;
       if (this.game_timer == 0) {
         if (this.ripped_paper > this.arrested_slave) {
@@ -202,6 +202,7 @@ export default {
         }
       }
     }, 1000);
+    game_interval();
   },
   data() {
     return {
