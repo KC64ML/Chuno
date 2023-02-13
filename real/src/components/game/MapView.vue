@@ -288,6 +288,9 @@ export default {
             console.log("소켓에서 받아왔어요!!!", content);
             this.papers = content.info;
             
+          } else if (content.type == 'leave') {
+            const content = JSON.parse(e.data);
+            console.log(content)
           }
         }
         )
