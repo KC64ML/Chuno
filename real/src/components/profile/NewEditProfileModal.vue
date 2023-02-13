@@ -318,7 +318,7 @@ td:nth-child(2)>div {
   height: 80vh;
   margin-top: 200px;
   width: 100%;
-  // background: rgb(0, 0, 0, 0.6);
+  background: rgb(0, 0, 0, 0.6);
 }
 
 
