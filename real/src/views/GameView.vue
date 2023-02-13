@@ -150,7 +150,7 @@ export default {
 					this.chat_toast = false;
 				}, 3000)
       } else if (content.type == 'caughtRunner') {
-        console.log("게임뷰에서 실행되었어요!!!!!!!!", content)
+        alert("게임뷰에서 실행되었어요!!!!!!");
       }
     })
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
