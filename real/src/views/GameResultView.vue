@@ -11,14 +11,16 @@
         <!-- <div style="text-align: center; margin-top: 30px;">
             <img src="@/assets/main_logo2.png">
         </div> -->
-        <div class="display_win display_win_appear" :class="{'win_true': user_win}">
-            <img src="@/assets/leaf_crown.png" alt="" style="height: 100px">
-            <div class="winDiv" v-if="user_win == 1">승리!</div>
-            <div class="winDiv" v-else>패배ㅠㅠ</div>
-        </div>
-        <div style="text-align: center; margin-bottom: 80px;">
-            <div v-if="user_win">신난닭! 오늘 저녁은 치킨이닭!</div>
-            <div v-else>괜찮아.. 그런날도 있는거지 뭐..</div>
+        <div class="display_win_appear">
+            <div class="display_win" :class="{'win_true': user_win}">
+                <img src="@/assets/leaf_crown.png" alt="" style="height: 100px">
+                <div class="winDiv" v-if="user_win == 1">승리!</div>
+                <div class="winDiv" v-else>패배ㅠㅠ</div>
+            </div>
+            <div style="text-align: center; margin-bottom: 80px;">
+                <div v-if="user_win">신난닭! 오늘 저녁은 치킨이닭!</div>
+                <div v-else>괜찮아.. 그런날도 있는거지 뭐..</div>
+            </div>
         </div>
         <div style="display: flex; align-items: center; width: 100vw; margin-bottom: 60px;">
             <div style="width: 100%;">
@@ -38,7 +40,6 @@
                     </div>
                 </div>
             </div>
-            
         </div>
         <div style="display: flex; justify-content: space-evenly; align-items: center; font-size: 20px;">
             <!-- 원래돈{{ user.money - user_money }} 현재돈{{ user.money }} -->
@@ -187,6 +188,12 @@ export default {
     animation-name: display_win_appear;
     animation-duration: 1s;
     animation-iteration-count: 1;
+}
+@keyframes display_win_appear {
+    0% {
+        transform: translateY(-80px);
+        opacity: 0;
+    }
 }
 .win_true{
     animation-name: display_win;
