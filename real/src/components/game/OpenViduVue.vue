@@ -353,9 +353,11 @@ $my_video_margin: 20px;
 }
 .ink-bomb-me {
     position: absolute;
+    top: 0;
     width: 100%;
     height: 100%;
     opacity: 0.5;
+    overflow: hidden;
 }
 .hidden_modal{
     transform: translateY(50%);
