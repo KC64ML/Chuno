@@ -228,7 +228,7 @@ export default {
       player_len: 0,
 
       // 게임 종료를 위한 변수에요
-      game_timer: 30,
+      game_timer: 1800,
       total_slave: 0,
       arrested_slave: 0,
       total_paper: 0,
