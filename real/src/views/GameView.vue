@@ -368,6 +368,7 @@ export default {
       }, 1000);
     },
     game_ending() {
+      console.log("게임엔딩에 왓어요!")
       clearInterval(this.game_interval);
       this.game_end = true;
     },
@@ -518,6 +519,7 @@ export default {
       // this.$router.push({name: "gameResult"});
     },
     makeDisplay(e) {
+      console.log("메이크디스클레이에 왔어요")
       if (e == 'none') {
         this.game_end_display = "비겼어요..."
         this.game_end_display_sub = "인생엔 승리도 패배도 없는 것인가 봐요"
