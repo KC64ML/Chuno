@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     offing() {
-      this.$emit("on-modal");
+      this.$emit("on-editProfile");
     },
 
     async check() {

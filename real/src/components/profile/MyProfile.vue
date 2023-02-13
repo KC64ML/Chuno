@@ -1,7 +1,4 @@
 <template>
-
-  
-
   <div>
     <div class="container-col" id="myProfile">
       <div class="container-row">
