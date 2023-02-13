@@ -83,14 +83,14 @@
 	</transition>
 
 	<div id="status_bar" style="display: flex; justify-content: space-between">
-		<div>남은 시간 : </div>
+		<div>남은 시간 : {{ game_timer_minute }}분 {{ game_timer_second }}초</div>
 		<div @click="status_open" class="for_trans" :class="{'trans':status_specific_modal}">▼</div>
 	</div>
   <transition name="close_specific">
     <div id="status_specific" v-if="status_specific_modal">
       <div>
-        <div>잡은 노비 수 : 4 / 5</div>
-        <div>찾은 노비 문서 수 : 3 / 5</div>
+        <div>잡은 노비 수 : {{ arrested_salve }} / {{ total_slave }}</div>
+        <div>찾은 노비 문서 수 : {{ ripped_paper }} / {{ total_paper }}</div>
       </div>
     </div>
   </transition>
@@ -141,9 +141,9 @@
 </template>
 
 <script>
-import OpenViduVue from '@/components/game/OpenViduVue.vue'
-import MapView from '@/components/game/MapView.vue' // huh
-import RoleModalVue from '@/components/game/RoleModalVue.vue'
+import OpenViduVue from '@/components/game/OpenViduVue.vue';
+import MapView from '@/components/game/MapView.vue'; // huh
+import RoleModalVue from '@/components/game/RoleModalVue.vue';
 import ChatCardVue from '@/components/game/ChatCardVue.vue';
 // import LeaveModal from '@/components/game/LeaveModal.vue';
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
@@ -181,6 +181,10 @@ export default {
 					this.system_toast = false;
 					this.chat_toast = false;
 				}, 3000)
+      } else if (content.type == 'caughtRunner') {
+        alert("게임뷰에서 실행되었어요!!!!!!");
+      } else if (content.type == 'rippedPaper') {
+        alert("페이퍼를 찌저요!!!!!!!")
       }
     })
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
@@ -208,6 +212,11 @@ export default {
     console.log("-----------------------")
     console.log(this.user);
     console.log(this.roomInfo);
+
+    /* 게임 시간 카운트 로직 */
+    setInterval(() => {
+      this.game_timer--;
+    }, 1000);
   },
   data() {
     return {
@@ -281,6 +290,14 @@ export default {
         ]
       },
       item_used: [0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    }
+  },
+  computed: {
+    game_timer_minute() {
+      return parseInt(this.game_timer / 60)
+    },
+    game_timer_second() {
+      return this.game_timer % 60;
     }
   },
   methods: {
