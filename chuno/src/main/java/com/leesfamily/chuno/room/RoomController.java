@@ -161,7 +161,7 @@ public class RoomController {
     @Transactional
     @Operation(summary = " 게임 종료 후 정보 업데이트", description = "승리 했을 경우 승리 횟수 + 1, 게임 횟수 + 1 (추노 승 + 1, 추노 게임 횟수 + 1) 넣어주세요. ")
     @PutMapping("/endRoom")
-    public ResponseEntity<RoomGameEndResponseDto> endRoom(
+    public ResponseEntity<RoomGameEndRequestDto> endRoom(
             @RequestBody RoomGameEndRequestDto roomGameEndRequestDto,
             @RequestHeader HttpHeaders requestHeader
     ){

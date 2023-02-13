@@ -198,7 +198,7 @@ public class RoomService {
 
     }
 
-    public RoomGameEndResponseDto endRoom(RoomGameEndRequestDto roomGameEndRequestDto, Long userId) {
+    public RoomGameEndRequestDto endRoom(RoomGameEndRequestDto roomGameEndRequestDto, Long userId) {
         int isWin = roomGameEndRequestDto.getRunnerWin() + roomGameEndRequestDto.getChaserWin();
         int exp = 50;
         int money = 500;
@@ -216,7 +216,8 @@ public class RoomService {
         }
         roomGameEndRequestDto.setExp(exp);
         roomGameEndRequestDto.setMoney(money);
-        return roomRepository.endRoom(roomGameEndRequestDto, userId);
+        roomRepository.endRoom(roomGameEndRequestDto, userId);
+        return roomGameEndRequestDto;
     }
 
     public List<RoomGameStartSlaveDocumentDto> relocationSlaveDocument(RoomGameRelocationSlaveDocumentRequestDto requestDto){
