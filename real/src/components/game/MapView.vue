@@ -179,6 +179,7 @@ export default {
         url: MyChaserMarker,
         scaledSize: { width: 40, height: 40 }
       },
+      outOfPlayGroundFlag: false,
       // 노비 문서 관련 정보
       papers: [], // props로
       paperMarkerImg: {
@@ -362,6 +363,7 @@ export default {
       console.log('outOfPlayground 함수 실행')
       // if(this.user.caught == false && this.calculateDistance(location) >= this.roomInfo.radius){
         console.log('범위밖으로 나왔습니다!! 플레이 범위 안으로 돌아가세요')
+        this.outOfPlayGroundFlag = true
         this.onOutOfPlayground == true
         console.log('복귀 카운트 다운 시작')
         setTimeout(function() {
@@ -382,7 +384,7 @@ export default {
         console.log(this.user.caught)
         console.log(this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}))
         console.log(this.roomInfo.radius)
-        if(this.user.caught == false && this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}) >= this.roomInfo.radius){
+        if(!this.outOfPlayGroundFlag && this.user.caught == false && this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}) >= this.roomInfo.radius){
           console.log('범위 밖!!!!!!!!!!!!!!!!!')
           this.outOfPlayground()
         }
