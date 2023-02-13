@@ -16,7 +16,10 @@
 			</div>
 			<div v-if="this.user">
 				<div style="margin-bottom: 10px; text-align: center;">메뉴</div>
-				<div @click="onLeave">
+				<div 
+					@click="onLeave"
+					style="display: flex; align-items: center;"
+				>
 					<img src="@/assets/leave.png" alt="" style="margin-right: 5px;">
 					<div style="color:#A03A2C;">나가기</div>
 				</div>
@@ -278,6 +281,7 @@ export default {
 	},
 	onleave(){
 		this.leaveModal = true
+		console.log(this.leaveModal)
 	},
     stopingPropagation(e) {
       e.stopPropagation();
