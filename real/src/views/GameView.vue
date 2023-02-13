@@ -1,10 +1,5 @@
 <template>
-	<!-- <LeaveModal
-		v-if="leaveModal"
-		@on-no-leave="onNoLeave"
-		@on-yes-leave="onYesLeave"
-	/> -->
-
+	<!-- 나가기 모달 시작 -->
 	<div v-if="leaveModal" id="item_description_modal" @click="close_item_description_modal">
 		<div id="item_description_modal_container" @click="stopingPropagation">
 			<div style="text-align: center; font-size: 25px; margin-bottom: 10px;">정말로 나가시겠소?</div>
@@ -21,6 +16,7 @@
 			</div>
 		</div>
 	</div>
+	<!-- 나가기 모달 끝 -->
 
 	<transition name="menu-retreat">
 		<div id="item_menu_modal" v-if="item_menu_modal">
@@ -292,6 +288,23 @@ export default {
 	onYesLeave(){
 		console.log('진짜로 나간다!!!!!')
 		this.leaveModal = false
+		this.conn.send(JSON.stringify(
+          {
+            event:"leave",
+            nickname: this.user.nickname,
+			level: 1,
+            room: this.roomInfo.id,
+          }
+        ));
+		this.conn.send(JSON.stringify(
+        {
+          event: "chat",
+          room: this.roomInfo.id,
+          nickname: 'system',
+          level: 1,
+          msg: `${this.user.nickname}이 방을 나갔습니다.`
+        }
+      ))
 		this.$router.push({ name: 'home' })
 	},
 	onNoLeave(){
