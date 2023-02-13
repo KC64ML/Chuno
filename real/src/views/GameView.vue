@@ -1,4 +1,9 @@
 <template>
+	<LeaveModal
+		v-if="leaveModal"
+		@on-no-leave="onNoLeave"
+		@on-yes-leave="onYesLeave"
+	/>
 	<transition name="menu-retreat">
 		<div id="item_menu_modal" v-if="item_menu_modal">
 			<div v-if="this.user">
@@ -7,6 +12,13 @@
 					style="display: flex; align-items: center;" @click="item_select(e)">
 					<img :src="e.path" alt="" style="margin-right: 5px;">
 					<div>{{ e.name }}</div>
+				</div>
+			</div>
+			<div v-if="this.user">
+				<div style="margin-bottom: 10px; text-align: center;">메뉴</div>
+				<div @click="onLeave">
+					<img src="@/assets/leave.png" alt="" style="margin-right: 5px;">
+					<div style="color:#A03A2C;">나가기</div>
 				</div>
 			</div>
 		</div>
@@ -115,6 +127,7 @@ import OpenViduVue from '@/components/game/OpenViduVue.vue';
 import MapView from '@/components/game/MapView.vue'; // huh
 import RoleModalVue from '@/components/game/RoleModalVue.vue';
 import ChatCardVue from '@/components/game/ChatCardVue.vue';
+import LeaveModal from '@/components/game/LeaveModal.vue';
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
@@ -128,6 +141,7 @@ export default {
     SpiningModalVue,
     RoleModalVue,
     ChatCardVue,
+	LeaveModal,
   },
   async created() {
     this.conn.addEventListener('message', (e)  => {
@@ -287,6 +301,19 @@ export default {
     }
   },
   methods: {
+	// 방나가기
+	onYesLeave(){
+		console.log('진짜로 나간다!!!!!')
+		this.leaveModal = false
+		this.$router.push({ name: 'home' })
+	},
+	onNoLeave(){
+		console.log('안나갈건데')
+		this.leaveModal = false
+	},
+	onleave(){
+		this.leaveModal = true
+	},
     stopingPropagation(e) {
       e.stopPropagation();
     },

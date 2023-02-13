@@ -288,6 +288,9 @@ export default {
             console.log("소켓에서 받아왔어요!!!", content);
             this.papers = content.info;
             
+          } else if (content.type == 'leave') {
+            const content = JSON.parse(e.data);
+            console.log(content)
           }
         }
         )
@@ -349,13 +352,15 @@ export default {
       this.ripModal = false
     },
     reOutOfPlayground(){
+      console.log('reOutOfPlayground 실행됨!!!!!!!!!')
+      console.log(this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}))
+      console.log(this.roomInfo.radius)
       if(this.calculateDistance({ location: { lat: this.roomInfo.lat, lng: this.roomInfo.lng } }) >= this.roomInfo.radius){
         // 아웃
-        // this.outOfPlayground(this.location)
         console.log('아웃임')
       } else {
-        console.log('범위안임')
         // ㄱㅊ
+        console.log('범위안임')
       }
     },
     // 범위 밖으로 나갈 시 경고
@@ -366,7 +371,7 @@ export default {
         this.outOfPlayGroundFlag = true
         this.onOutOfPlayground = true
         console.log('복귀 카운트 다운 시작')
-        setTimeout(function() {
+        setTimeout(() => {
           this.reOutOfPlayground()
         }, 60000)
       // }
@@ -381,6 +386,9 @@ export default {
       .then((coordinates) => {
         this.location.lat = coordinates.lat
         this.location.lng = coordinates.lng
+
+
+        // 범위 내에 있는지 확인
         console.log(this.user.caught)
         console.log(this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}))
         console.log(this.roomInfo.radius)
