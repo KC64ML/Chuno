@@ -151,6 +151,8 @@ export default {
 				}, 3000)
       } else if (content.type == 'caughtRunner') {
         alert("게임뷰에서 실행되었어요!!!!!!");
+      } else if (content.type == 'rippedPaper') {
+        alert("페이퍼를 찌저요!!!!!!!")
       }
     })
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
