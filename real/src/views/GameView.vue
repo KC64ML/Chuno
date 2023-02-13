@@ -542,7 +542,7 @@ export default {
         "runnerCnt": this.my_ripped_paper
       }, { headers: { Authorization: sessionStorage.getItem("token") } }).then(res => res.data);
       alert(result.successOrFailure);
-      this.$router.push({ name: "gameResult", params: { role: this.user.role } });
+      this.$router.push({ name: "gameResult", params: { role: this.user.role, win: (this.chaserWin+this.runnerWin), exp: result.exp, money: result.money } });
     },
     makeDisplay(e) {
       console.log("메이크디스클레이에 왔어요")
