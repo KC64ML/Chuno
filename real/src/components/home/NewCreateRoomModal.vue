@@ -221,6 +221,7 @@ export default {
                 isToday: this.is_today, 
                 hour:  (this.hour + (this.is_am ? 0 : 12)) % 24,
                 minute:  this.minute,
+                maxPlayers: this.max_player,
             }, {
                 headers: { Authorization: sessionStorage.getItem("token") }
             }).then(res => res.data.result)
@@ -248,7 +249,7 @@ $plma_size: 30px;
     width: 100vw;
     height: 100%;
     background: rgb(0, 0, 0, 0.6);
-    z-index: 1;
+    z-index: 5;
 }
 
 #make_room_modal {

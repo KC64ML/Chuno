@@ -60,6 +60,18 @@
 			</div>
 		</div>
 	</div>
+
+  <div id="game_end_modal_container" v-if="game_end">
+    <div id="game_end_modal">
+      <div style="text-align:center; font-size: 20px; ">{{ game_end_display }}</div>
+      <div style="text-align:center; font-size: 15px; word-break: break-all; width: 90%;">{{ game_end_display_sub }}</div>
+      <div class="flex_center" @click="close_item_description_modal">
+        <img src="@/assets/main_button1.png" class="modal_confirm_button">
+        <div class="image_text" @click="end_confirm">확인</div>
+      </div>
+    </div>
+  </div>
+
 	<OpenViduVue
     :my_cam_modal="my_cam_modal"
     :user="user"></OpenViduVue>
@@ -89,13 +101,13 @@
   <transition name="close_specific">
     <div id="status_specific" v-if="status_specific_modal">
       <div>
-        <div>잡은 노비 수 : {{ arrested_salve }} / {{ total_slave }}</div>
-        <div>찾은 노비 문서 수 : {{ ripped_paper }} / {{ total_paper }}</div>
+        <div>잡은 노비 수 : {{ arrested_slave }}명 / {{ total_slave }}명</div>
+        <div>찾은 노비 문서 수 : {{ ripped_paper }}장 / {{ total_paper }}장</div>
       </div>
     </div>
   </transition>
 
-	<MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught" :item_used="item_used[7]"/>
+	<MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught" :item_used="item_used[7]" @myArrestSlave="myArrestSlave" @myRippedPaper="myRippedPaper"/>
 	<div style="position: absolute; bottom: 0; left: 0;">
 
 		<div id="footer_container">
@@ -103,7 +115,7 @@
 				<img class="menu" src="@/assets/game_chat.png">
 			</div>
 			<div>
-				<input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data">
+				<input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data" @keyup.enter="transmit_chat">
 			</div>
 			<div class="menu_box" @click="transmit_chat">
 				<img src="@/assets/paper_plane.svg" alt="">
@@ -150,6 +162,8 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
 
+import jing from "@/assets/audio/jing.wav";
+
 export default {
 
   name: 'GameView',
@@ -182,9 +196,23 @@ export default {
 					this.chat_toast = false;
 				}, 3000)
       } else if (content.type == 'caughtRunner') {
-        alert("게임뷰에서 실행되었어요!!!!!!");
+        this.arrested_slave++;
+        if (this.arrested_slave == this.total_slave) {
+          this.victory_team = 'chaser';
+          this.victoryCnt(this.user.role, this.victory_team);
+          this.makeDisplay(this.victory_team);
+          this.game_ending();
+        }
       } else if (content.type == 'rippedPaper') {
-        alert("페이퍼를 찌저요!!!!!!!")
+        if(content.info.paper.real == true) {
+          this.ripped_paper++;
+          if (this.ripped_paper == this.total_paper) {
+            this.victory_team = 'runner';
+            this.victoryCnt(this.user.role, this.victory_team);
+            this.makeDisplay(this.victory_team);
+            this.game_ending();
+          }
+        }
       }
     })
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
@@ -214,9 +242,7 @@ export default {
     console.log(this.roomInfo);
 
     /* 게임 시간 카운트 로직 */
-    setInterval(() => {
-      this.game_timer--;
-    }, 1000);
+    this.game_intervaling();
   },
   data() {
     return {
@@ -243,14 +269,35 @@ export default {
       player_len: 0,
 
       // 게임 종료를 위한 변수에요
+      game_end: false,
+      game_end_display: "",
+      game_end_display_sub: "",
+      message_victory: "우리의 승리다!^^",
+      message_lose: "우리의 패배다ㅜㅜ",
+      line_zip: [
+        "난 말이다.. 다 싫구나.. 네가 추운게 싫고 아픈게 싫고 네가 힘든게 싫구나..",
+        "어쩌면.. 우리 모두는 우리가 살고 있는 바로 지금이 가장 암울한 시대라고 생각하고 살고 있는지도 모르겠다",
+        "잊어라.. 기억이 많으면, 슬픔도 많은 법이다.",
+        "누가 재미있어서 사나.. 다들 내일이 재밌을 줄 알고 사는거지..",
+        "우리 세상이 오는 것이 아니라, 만드는 거라 하셨네",
+        "인간의 눈이란 간사해서, 간혹 보고싶은 대로 봐버리기도 하지..",
+        "살길이 있는데, 죽을 생각 부터 해서 쓰나.. 죽은 정승이 산 정승만 못한 법이야.",
+        "내 비록 가진게 없어 '번듯하게'는 못살겠지만, '반듯하게'는 살걸세",
+      ],
+      victory_team: "",
+      game_interval: null,
       game_timer: 1800,
       total_slave: 0,
-      arrested_salve: 0,
+      arrested_slave: 0,
+      my_arrest_slave: 0,
       total_paper: 0,
       ripped_paper: 0,
+      my_ripped_paper: 0,
+      chaserWin: 0,
+      runnerWin: 0,
 
       item_description_modal: false,
-      selected_item: {},
+      selected_item: {},//
       item_list: {
         "runner": [
           {
@@ -290,6 +337,12 @@ export default {
         ]
       },
       item_used: [0, 0, 0, 0, 0, 0, 0, 0, 0,],
+      audio: {
+            id: "music-game",
+            name: "MusicGame",
+            file: new Audio(jing),
+            isPlaying: false,
+          },
     }
   },
   computed: {
@@ -301,7 +354,34 @@ export default {
     }
   },
   methods: {
-	// 방나가기
+    game_intervaling() {
+      this.game_interval = setInterval(() => {
+        this.game_timer--;
+        if (this.game_timer == 0) {
+          if (this.ripped_paper > this.arrested_slave) {
+            this.victory_team = 'runner';
+            this.victoryCnt(this.user.role, this.victory_team);
+            this.makeDisplay(this.victory_team);
+            this.game_ending();
+          } else if (this.ripped_paper < this.arrested_slave) {
+            this.victory_team = 'chaser';
+            this.victoryCnt(this.user.role, this.victory_team);
+            this.makeDisplay(this.victory_team);
+            this.game_ending();
+          } else {
+            this.victory_team = 'none';
+            this.victoryCnt(this.user.role, this.victory_team);
+            this.makeDisplay(this.victory_team);
+            this.game_ending();
+          }
+        }
+      }, 1000);
+    },
+    game_ending() {
+      console.log("게임엔딩에 왓어요!")
+      clearInterval(this.game_interval);
+      this.game_end = true;
+    },
 	onYesLeave(){
 		console.log('진짜로 나간다!!!!!')
 		this.leaveModal = false
@@ -363,6 +443,8 @@ export default {
     },
     modalAllClose() {
       this.roleModal = false;
+      this.play(this.audio);
+      console.log("jing 들려요?");
     },
 
     open_chat_modal() {
@@ -444,7 +526,50 @@ export default {
 		status_open() {
 			this.status_specific_modal = !this.status_specific_modal;
       console.log(this.status_specific_modal)
-		}
+		},
+    myArrestSlave() {
+      this.my_arrest_slave++;
+    },
+    myRippedPaper() {
+      this.my_ripped_paper++;
+    },
+    async end_confirm() {
+      var result = await this.axios.put(process.env.VUE_APP_SPRING + "room/endRoom", {
+        "catchCount": this.my_arrest_slave,
+        "paperCount": this.my_ripped_paper,
+        "exp": 0,
+        "money": 0,
+        "chaserWin": this.chaserWin,
+        "chaserCnt": this.my_arrest_slave,
+        "runnerWin": this.runnerWin,
+        "runnerCnt": this.my_ripped_paper
+      }, {headers: {Authorization: sessionStorage.getItem("token")}}).then(res => res.data);
+      alert(result.successOrFailure);
+      this.$router.push({name: "gameResult", params: {role: this.user.role}});
+    },
+    makeDisplay(e) {
+      console.log("메이크디스클레이에 왔어요")
+      if (e == 'none') {
+        this.game_end_display = "비겼어요..."
+        this.game_end_display_sub = "인생엔 승리도 패배도 없는 것인가 봐요"
+      } else if (this.user.role == e) {
+        this.game_end_display = this.message_victory;
+        this.game_end_display_sub = this.line_zip[Math.floor(Math.random() * this.line_zip.length)];
+      } else {
+        this.game_end_display = this.message_lose;
+        this.game_end_display_sub = this.line_zip[Math.floor(Math.random() * this.line_zip.length)];
+      }
+    },
+    victoryCnt(a, b) {
+      if (a == b) {
+        if (a == 'chaser') this.chaserWin = 1;
+        else if (a == 'runner') this.runnerWin = 1;
+      }
+    },
+	play(audio) {
+		audio.isPlaying = true;
+		audio.file.play();
+		},
 	}
 }
 
@@ -685,5 +810,34 @@ $status_height: 30px;
 }
 .trans {
   transform: rotateZ(180deg);
+}
+#game_end_modal_container {
+  z-index: 1000000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  background-color: rgb(0,0,0,0.5);
+}
+#game_end_modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  width: 90vw;
+  background-color: #F2F2F2;
+  border-radius: 20px;
+  animation-name: game_end_modal_appear;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+}
+@keyframes game_end_modal_appear {
+  0% {transform: translate(-50%, -50%) scale(0);}
+  70% {transform: translate(-50%, -50%) scale(1.3);}
+  85% {transform: translate(-50%, -50%) scale(0.8);}
+  95% {transform: translate(-50%, -50%) scale(1.1);}
+  100% {transform: translate(-50%, -50%) scale(1);}
 }
 </style>

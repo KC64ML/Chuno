@@ -292,7 +292,6 @@ export default {
             console.log('me를 받아오긴함')
             // present 현재방 넘버
             // players 배열 nickname
-            // const content = JSON.parse(e.data);
             // console.log(content.nickname + '님이 떠나갔어요...')
             console.log(content)
             for (let i = 0; i < this.others.length; i++) {
@@ -339,7 +338,7 @@ export default {
       console.log('얘랑')
       console.log(target)
       console.log('같아야함')
-
+      this.$emit("myRippedPaper")
       this.conn.send(JSON.stringify(
           {
             event:"ripPaper",
@@ -512,6 +511,7 @@ export default {
       console.log(target)
       this.catchModal = false
       target.caught = true
+      this.$emit("myArrestSlave")
       this.conn.send(JSON.stringify(
           {
             event:'catchRunner',

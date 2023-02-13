@@ -19,7 +19,9 @@ import soundOff from "@/assets/sound_off.png";
 export default {
   props: {
     isPlay: Boolean,
+    start: Boolean,
   },
+
   data() {
     return {
       bgm,
@@ -27,18 +29,29 @@ export default {
       soundOff,
       audio: {
         id: "music-opening",
-        name: "MuscicOpening",
+        name: "MusicOpening",
         file: new Audio(bgm),
         isPlaying: false,
       },
     };
   },
 
+  mounted() {
+    this.audio.file.addEventListener("ended", () => {
+      this.audio.file.play();
+      this.audio.file.currentTime = 0;
+      this.audio.isPlaying = true;
+    });
+  },
+
   updated() {
     if (!this.isPlay) {
-      this.audio.isPlaying = false;
-      this.audio.file.pause();
-      this.audio.currentTime = 0;
+      this.pause(this.audio);
+      this.audio.file.currentTime = 0;
+    }
+    if (this.start) {
+      this.play(this.audio);
+      this.$emit("offStart");
     }
   },
 
@@ -46,8 +59,6 @@ export default {
     play(audio) {
       audio.isPlaying = true;
       audio.file.play();
-      audio.loop = true;
-      audio.autoplay = true;
     },
 
     pause(audio) {

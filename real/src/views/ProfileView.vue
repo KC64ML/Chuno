@@ -2,7 +2,7 @@
   <!-- 모달 -->
   <LogoutModal v-if="logoutModal" @on-logout="onLogout"/>
   <DeleteAccountModal v-if="deleteAccountModal" @on-delete="onDelete"/>
-  <NewEditProfileModal v-if="profileEditModal" :userInfo="userInfo" />
+  <NewEditProfileModal v-if="profileEditModal" @on-editProfile="openEditModal" :userInfo="userInfo" />
 
   <HeaderVue
     v-if="me"
@@ -111,7 +111,7 @@ export default {
           
           if (res.data.result.profile == null || res.data.result.profile.path == '') {
             res.data.result.profile = {
-              path: 'profile/default.svg'
+              path: 'profile/default.png'
             };
           }
           console.log("path : " + res.data.result.profile.path);
