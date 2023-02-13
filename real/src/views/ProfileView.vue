@@ -111,7 +111,7 @@ export default {
           
           if (res.data.result.profile == null || res.data.result.profile.path == '') {
             res.data.result.profile = {
-              path: 'profile/default.svg'
+              path: 'profile/default.png'
             };
           }
           console.log("path : " + res.data.result.profile.path);
