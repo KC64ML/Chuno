@@ -348,14 +348,14 @@ export default {
       this.ripModal = false
     },
     reOutOfPlayground(){
-      if(this.calculateDistance({lat: this.roomInfo.lat, lng: this.roomInfo.lng}) <= this.roomInfo.radius){
-        console.log('재확인')
+      if(this.calculateDistance({lat: this.roomInfo.lat, lng: this.roomInfo.lng}) >= this.roomInfo.radius){
+        this.outOfPlayground(this.location)
       }
     },
     // 범위 밖으로 나갈 시 경고
     outOfPlayground(location){
       console.log('outOfPlayground 함수 실행')
-      if(this.user.caught == false && this.calculateDistance(location) <= this.roomInfo.radius){
+      if(this.user.caught == false && this.calculateDistance(location) >= this.roomInfo.radius){
         console.log('범위밖으로 나왔습니다!! 플레이 범위 안으로 돌아가세요')
         this.onOutOfPlayground == true
         console.log('복귀 카운트 다운 시작')
@@ -374,13 +374,7 @@ export default {
       .then((coordinates) => {
         this.location.lat = coordinates.lat
         this.location.lng = coordinates.lng
-        // console.log(this.location.lat)
-        // console.log(this.location.lng)
-        // 내가 노비이면
-        // if(this.user.role == 'runner') {
-        //   this.ripPaper()
-        // }
-        // 위치 공유
+        this.outOfPlayground(this.location)
         this.conn.send(JSON.stringify(
           {
             event:"playerLocation",
@@ -515,7 +509,7 @@ export default {
     }, 5000);
   },
   mounted() {
-    this.outOfPlayground({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}})
+    // this.outOfPlayground({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}})
 
   },
   computed: {
