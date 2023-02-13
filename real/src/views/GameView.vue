@@ -168,6 +168,8 @@ export default {
       })
     const info = JSON.parse(sessionStorage.info);
     this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
+    this.total_paper = info.teamslave.length;
+    this.total_slave = info.teamslave.length;
     this.player_len = info.teamchuno.length + info.teamslave.length;
     this.user.caught = false;
     console.log("GameView created complete");
@@ -177,7 +179,7 @@ export default {
   },
   data() {
     return {
-      my_cam_modal: { active: true },
+      my_cam_modal: { active: false },
       item_menu_modal: false,
       user: undefined,
       usedItem: [],
@@ -198,6 +200,13 @@ export default {
 
       // 노비문서 셔플을 위한 변수에요
       player_len: 0,
+
+      // 게임 종료를 위한 변수에요
+      game_timer: 1800,
+      total_slave: 0,
+      arrested_salve: 0,
+      total_paper: 0,
+      ripped_paper: 0,
 
       item_description_modal: false,
       selected_item: {},
