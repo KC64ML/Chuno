@@ -293,7 +293,7 @@ export default {
             console.log(content.nickname + '님이 떠나갔어요...')
             console.log(content)
             for (let i = 0; i < this.others.length; i++) {
-              if (others[i].nickname == content.nickname) {
+              if (this.others[i].nickname == content.nickname) {
                 const playerleaved = this.others.splice(i, 1)
                 console.log(playerleaved)
               }
