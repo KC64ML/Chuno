@@ -108,22 +108,23 @@ import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
 
 export default {
 
-	name: 'GameView',
-	components: {
-		MapView,
-		OpenViduVue,
-		SpiningModalVue,
-		RoleModalVue,
-		ChatCardVue,
-	},
-	async created() {
-		this.conn.addEventListener('message', (e) => {
-			var content = JSON.parse(e.data);
-			if (content.type == 'chat') {
-				console.log({ nickname: content.nickname, msg: content.message })
-				this.chat_log.push({ nickname: content.nickname, msg: content.message })
+  name: 'GameView',
+  components: {
+    MapView,
+    OpenViduVue,
+    SpiningModalVue,
+    RoleModalVue,
+    ChatCardVue,
+  },
+  async created() {
+    this.conn.addEventListener('message', (e)  => {
+      var content = JSON.parse(e.data);
+      if (content.type == 'chat') {
+        console.log({ nickname: content.nickname, msg: content.message })
+        this.chat_log.push({ nickname: content.nickname, msg: content.message })
 
-				if (content.nickname == "system") {
+        // 최근 메세지를 토스트로 띄우고 싶어요!!!
+        if (content.nickname == "system") {
 					this.last_chat = content.message;
 					this.system_toast = true;
 				} else {
@@ -135,149 +136,149 @@ export default {
 					this.system_toast = false;
 					this.chat_toast = false;
 				}, 3000)
-			}
-		})
-		await this.axios.get(APPLICATION_SERVER_URL + 'user',
-			{
-				headers: { Authorization: sessionStorage.token }
-			}).then(({ data }) => {
-				if (data.code) {
-					this.user = data.result;
-				}
-			});
-		await this.axios.get(APPLICATION_SERVER_URL + 'room/' + this.$route.params.roomId)
-			.then(({ data }) => {
-				if (data.code) {
-					this.roomInfo = data.result;
-					console.log("GameView room info loaded");
-				}
-			})
-		const info = JSON.parse(sessionStorage.info);
-		this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
-		this.player_len = info.teamchuno.length + info.teamslave.length;
-		this.user.caught = false;
-		console.log("GameView created complete");
-		console.log("-----------------------")
-		console.log(this.user);
-		console.log(this.roomInfo);
-	},
-	data() {
-		return {
-			my_cam_modal: { active: false },
-			item_menu_modal: false,
-			user: undefined,
-			usedItem: [],
-			// 개발이 끝나면 true로 고쳐줘요
-			spinningModal: false,
-			roleModal: false,
-			roomInfo: undefined,
+      }
+    })
+    await this.axios.get(APPLICATION_SERVER_URL + 'user',
+          {
+              headers: { Authorization: sessionStorage.token }
+          }).then(({ data }) => {
+              if (data.code) {
+                  this.user = data.result;
+              }
+          });
+    await this.axios.get(APPLICATION_SERVER_URL + 'room/' + this.$route.params.roomId)
+      .then(({ data }) => {
+        if (data.code) {
+          this.roomInfo = data.result;
+          console.log("GameView room info loaded");
+        }
+      })
+    const info = JSON.parse(sessionStorage.info);
+    this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
+    this.player_len = info.teamchuno.length + info.teamslave.length;
+    this.user.caught = false;
+    console.log("GameView created complete");
+    console.log("-----------------------")
+    console.log(this.user);
+    console.log(this.roomInfo);
+  },
+  data() {
+    return {
+      my_cam_modal: { active: true },
+      item_menu_modal: true,
+      user: undefined,
+      usedItem: [],
+      // 개발이 끝나면 true로 고쳐줘요
+      spinningModal: true,
+      roleModal: false,
+      roomInfo: undefined,
 
-			system_toast: false,
+      system_toast: false,
 			chat_toast: false,
 			last_chat: "",
-			chat_modal: false,
-			chat_data: "",
-			chat_log: [],
+      chat_modal: false,
+      chat_data: "",
+      chat_log:[],
 
-			// 노비문서 셔플을 위한 변수에요
-			player_len: 0,
+      // 노비문서 셔플을 위한 변수에요
+      player_len: 0,
 
-			item_description_modal: false,
-			selected_item: {},
-			item_list: {
-				"runner": [
-					{
-						id: 1, name: "천리안", path: require('@/assets/item1.png'), is_implemented: false,
-						description: "자신의 위치를 드러내지 않고 가장 가까운 추노꾼의 위치를 확인할 수 있다."
-					},
-					{
-						id: 2, name: "위장", path: require('@/assets/item2.png'), is_implemented: false,
-						description: "추노꾼이 자신을 잡을 수 있는 범위를 축소한다."
-					},
-					{
-						id: 3, name: "확실한 정보통", path: require('@/assets/item3.png'), is_implemented: false,
-						description: "진짜 노비문서의 위치를 확인할 수 있다."
-					},
-					{
-						id: 4, name: "먹물탄", path: require('@/assets/item4.png'), is_implemented: true,
-						description: "먹물을 뿌려 내 화면을 가릴 수 있다.",
-					},
-				],
-				"chaser": [
-					{
-						id: 5, name: "조명탄", path: require('@/assets/item5.png'), is_implemented: false,
-						description: "30초간 노비의 위치를 지도에 표시할 수 있다."
-					},
-					{
-						id: 6, name: "긴 오랏줄", path: require('@/assets/item6.png'), is_implemented: false,
-						description: "자신이 노비를 잡을 수 있는 범위를 확대할 수 있다."
-					},
-					{
-						id: 7, name: "거짓 정보통", path: require('@/assets/item7.png'), is_implemented: true,
-						description: "노비 문서의 위치를 셔플할 수 있다."
-					},
-					{
-						id: 8, name: "연막탄", path: require('@/assets/item8.png'), is_implemented: false,
-						description: "연기를 피워 내 화면을 가릴 수 있다.",
-					},
-				]
-			},
-			item_used: [0, 0, 0, 0, 0, 0, 0, 0, 0,],
-		}
-	},
-	methods: {
-		stopingPropagation(e) {
-			e.stopPropagation();
-		},
-		onMenu() {
-			this.item_menu_modal = !this.item_menu_modal
-		},
-		getMyRole(teamslave, teamchuno, nickname) {
-			for (let i = 0; i < teamslave.length; i++) {
-				if (teamslave[i].nickname == nickname) {
-					return "runner";
-				}
-			}
-			for (let i = 0; i < teamchuno.length; i++) {
-				if (teamchuno[i].nickname == nickname) {
-					return "chaser";
-				}
-			}
-		},
-		myCam() {
-			this.my_cam_modal.active = !this.my_cam_modal.active
-			console.log("mycam 눌림");
-		},
-		onCaught() {
-			this.user.caught = true
-		},
-		spinningEnd() {
-			this.spinningModal = false;
-			this.roleModal = true;
-		},
-		modalAllClose() {
-			this.roleModal = false;
-		},
+      item_description_modal: false,
+      selected_item: {},
+      item_list: {
+        "runner": [
+          {
+            id: 1, name: "천리안", path: require('@/assets/item1.png'), is_implemented: false,
+            description: "자신의 위치를 드러내지 않고 가장 가까운 추노꾼의 위치를 확인할 수 있다."
+          },
+          {
+            id: 2, name: "위장", path: require('@/assets/item2.png'), is_implemented: false,
+            description: "추노꾼이 자신을 잡을 수 있는 범위를 축소한다."
+          },
+          {
+            id: 3, name: "확실한 정보통", path: require('@/assets/item3.png'), is_implemented: false,
+            description: "진짜 노비문서의 위치를 확인할 수 있다."
+          },
+          {
+            id: 4, name: "먹물탄", path: require('@/assets/item4.png'), is_implemented: true,
+            description: "먹물을 뿌려 내 화면을 가릴 수 있다.",
+          },
+        ],
+        "chaser": [
+        {
+            id: 5, name: "조명탄", path: require('@/assets/item5.png'), is_implemented: false,
+            description: "30초간 노비의 위치를 지도에 표시할 수 있다."
+          },
+          {
+            id: 6, name: "긴 오랏줄", path: require('@/assets/item6.png'), is_implemented: false,
+            description: "자신이 노비를 잡을 수 있는 범위를 확대할 수 있다."
+          },
+          {
+            id: 7, name: "거짓 정보통", path: require('@/assets/item7.png'), is_implemented: true,
+            description: "노비 문서의 위치를 셔플할 수 있다."
+          },
+          {
+            id: 8, name: "연막탄", path: require('@/assets/item8.png'), is_implemented: false,
+            description: "연기를 피워 내 화면을 가릴 수 있다.",
+          },
+        ]
+      },
+      item_used: [0, 0, 0, 0, 0, 0, 0, 0, 0,],
+    }
+  },
+  methods: {
+    stopingPropagation(e) {
+      e.stopPropagation();
+    },
+    onMenu() {
+      this.item_menu_modal = !this.item_menu_modal
+    },
+    getMyRole(teamslave, teamchuno, nickname) {
+      for (let i = 0; i < teamslave.length; i++) {
+        if (teamslave[i].nickname == nickname) {
+          return "runner";
+        }
+      }
+      for (let i = 0; i < teamchuno.length; i++) {
+        if (teamchuno[i].nickname == nickname) {
+          return "chaser";
+        }
+      }
+    },
+    myCam() {
+      this.my_cam_modal.active = !this.my_cam_modal.active
+      console.log("mycam 눌림");
+    },
+    onCaught(){
+      this.user.caught = true
+    },
+    spinningEnd() {
+      this.spinningModal = false;
+      this.roleModal = true;
+    },
+    modalAllClose() {
+      this.roleModal = false;
+    },
 
-		open_chat_modal() {
-			this.chat_modal = !this.chat_modal;
-		},
-		close_chat_modal() {
-			this.chat_modal = false;
-		},
-		transmit_chat() {
-			this.conn.send(JSON.stringify({
-				"event": "chat",
-				"room": this.roomInfo.id,
-				"nickname": this.user.nickname,
-				"level": this.user.level,
-				"msg": this.chat_data,
-			}))
-			this.chat_data = "";
-		},
-		clearChatData() {
-			this.chat_data = "";
-		},
+    open_chat_modal() {
+      this.chat_modal = !this.chat_modal;
+    },
+    close_chat_modal() {
+      this.chat_modal = false;
+    },
+    transmit_chat() {
+      this.conn.send(JSON.stringify({
+        "event": "chat",
+        "room": this.roomInfo.id,
+        "nickname": this.user.nickname,
+        "level": this.user.level,
+        "msg": this.chat_data,
+      }))
+      this.chat_data = "";
+    },
+    clearChatData() {
+      this.chat_data = "";
+    },
 
 		item_select(e) {
 			this.selected_item = e;
@@ -314,7 +315,7 @@ export default {
 						}
 					}
 				));
-				// 30초 후에 제거
+				// 5초 후에 제거
 				setTimeout(
         this.conn.send(JSON.stringify(
           {
@@ -328,6 +329,7 @@ export default {
           }
         )
 				), 60000 * 5);
+				this.close_item_description_modal();
 			} else if (item.id == 7) {
 				this.item_used[7]++;
 				this.close_item_description_modal();

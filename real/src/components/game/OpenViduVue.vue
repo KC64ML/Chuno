@@ -360,6 +360,7 @@ $my_video_margin: 20px;
     overflow: hidden;
 }
 .hidden_modal{
+    opacity: 0;
     transform: translateY(50%);
     visibility: hidden;
 }
