@@ -334,12 +334,12 @@ export default {
         ]
       },
       item_used: [0, 0, 0, 0, 0, 0, 0, 0, 0,],
-	audio: {
-        id: "music-game",
-        name: "MusicGame",
-        file: new Audio(jing),
-        isPlaying: false,
-      },
+      audio: {
+            id: "music-game",
+            name: "MusicGame",
+            file: new Audio(jing),
+            isPlaying: false,
+          },
     }
   },
   computed: {
@@ -437,6 +437,8 @@ export default {
     },
     modalAllClose() {
       this.roleModal = false;
+      this.play(this.audio);
+      console.log("jing 들려요?");
     },
 
     open_chat_modal() {
