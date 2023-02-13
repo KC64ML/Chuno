@@ -358,6 +358,7 @@ $my_video_margin: 20px;
     opacity: 0.5;
 }
 .hidden_modal{
+    opacity: 0;
     transform: translateY(50%);
     visibility: hidden;
 }
