@@ -269,7 +269,7 @@ export default {
       player_len: 0,
 
       // 게임 종료를 위한 변수에요
-      game_end: true,
+      game_end: false,
       game_end_display: "",
       game_end_display_sub: "",
       message_victory: "우리의 승리다!^^",
