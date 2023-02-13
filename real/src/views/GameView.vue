@@ -71,14 +71,14 @@
     <div class="toast_chat" v-if="system_toast">
       <div class="flex_center">
           <img src="@/assets/system_chat.png" style="height: 60px; width: 90vw;">
-          <div class="image_text">{{ last_chat }}</div>
+          <div class="image_text" style="word-break:break-all;">{{ last_chat }}</div>
       </div>
     </div>
   </transition>
   <transition name="toasting">
     <div class="toast_chat" v-if="chat_toast">
       <div class="flex_center">
-          <div style="font-size: 20px; padding: 20px; border-radius: 5px 10px; background-color: rgb(0,0,0,0.6); color: white">{{ last_chat }}</div>
+          <div style="font-size: 20px; word-break:break-all; padding: 10px 20px; border-radius: 10px; background-color: rgb(0,0,0,0.6); color: white; width: 90vw;">{{ last_chat }}</div>
       </div>
     </div>
   </transition>
