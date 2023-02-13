@@ -30,9 +30,9 @@
 			</div>
 		</div>
 	</div>
-	<OpenViduVue
+	<!-- <OpenViduVue
     :my_cam_modal="my_cam_modal"
-    :user="user"></OpenViduVue>
+    :user="user"></OpenViduVue> -->
 
 	<transition name="chat-retreat">
 		<div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
@@ -52,7 +52,20 @@
 		</div>
 	</transition>
 
-	<MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught" :item_used="item_used[7]"/>
+	<div id="status_bar" style="display: flex; justify-content: space-between">
+		<div>남은 시간 : </div>
+		<div @click="status_open" class="for_trans" :class="{'trans':status_specific_modal}">▼</div>
+	</div>
+  <transition name="close_specific">
+    <div id="status_specific" v-if="status_specific_modal">
+      <div>
+        <div>잡은 노비 수 : 4 / 5</div>
+        <div>찾은 노비 문서 수 : 3 / 5</div>
+      </div>
+    </div>
+  </transition>
+
+	<!-- <MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught" :item_used="item_used[7]"/> -->
 	<div style="position: absolute; bottom: 0; left: 0;">
 
 		<div id="footer_container">
@@ -98,8 +111,8 @@
 </template>
 
 <script>
-import OpenViduVue from '@/components/game/OpenViduVue.vue'
-import MapView from '@/components/game/MapView.vue' // huh
+// import OpenViduVue from '@/components/game/OpenViduVue.vue'
+// import MapView from '@/components/game/MapView.vue' // huh
 import RoleModalVue from '@/components/game/RoleModalVue.vue'
 import ChatCardVue from '@/components/game/ChatCardVue.vue';
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
@@ -110,8 +123,8 @@ export default {
 
   name: 'GameView',
   components: {
-    MapView,
-    OpenViduVue,
+    // MapView,
+    // OpenViduVue,
     SpiningModalVue,
     RoleModalVue,
     ChatCardVue,
@@ -169,7 +182,7 @@ export default {
       user: undefined,
       usedItem: [],
       // 개발이 끝나면 true로 고쳐줘요
-      spinningModal: true,
+      spinningModal: false,
       roleModal: false,
       roomInfo: undefined,
 
@@ -179,6 +192,9 @@ export default {
       chat_modal: false,
       chat_data: "",
       chat_log:[],
+
+      // status-bar를 위한 변수에요
+      status_specific_modal: true,
 
       // 노비문서 셔플을 위한 변수에요
       player_len: 0,
@@ -335,6 +351,10 @@ export default {
 				this.item_used[7]++;
 				this.close_item_description_modal();
 			}
+		},
+		status_open() {
+			this.status_specific_modal = !this.status_specific_modal;
+      console.log(this.status_specific_modal)
 		}
 	}
 }
@@ -345,6 +365,7 @@ export default {
 @import "@/assets/scss/variable.scss";
 $button_width: 50px;
 $item_modal_confirm_button_height: 60px;
+$status_height: 30px;
 
 #footer_container {
 	z-index: 1012;
@@ -532,5 +553,48 @@ $item_modal_confirm_button_height: 60px;
 .chat-retreat-leave-to {
 	opacity: 0;
 	transform: translateY(100%);
+}
+#status_bar {
+	position: absolute;
+	top: $video-height;
+	width: 100vw;
+	z-index: 1100;
+	color: white;
+	background-color: rgb(0,0,0,0.7);
+	padding: 0 20px;
+	height: $status_height;
+	line-height: $status_height;
+}
+#status_specific {
+	position: absolute;
+	z-index: 1199;
+	top: calc($video-height + $status_height);
+	width: 100vw;
+	padding: 5px 20px 10px;
+	color: white;
+	background-color: rgb(0,0,0,0.5);
+  animation-name: open_status;
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+}
+@keyframes open_status {
+  0% {
+    opacity: 0;
+    transform: translateY(-30%);
+  }
+  
+}
+.close_specific-leave-active {
+  transition: all 0.5s
+}
+.close_specific-leave-to {
+  opacity: 0;
+  transform: translateY(-30%)
+}
+.for_trans {
+  transition: all 0.5s;
+}
+.trans {
+  transform: rotateZ(180deg);
 }
 </style>
