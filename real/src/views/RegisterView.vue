@@ -80,6 +80,10 @@ export default {
     oneFileSelect(e) {
       this.one_file = e.target.files[0];
       this.img_url = URL.createObjectURL(e.target.files[0]);
+      console.log("files : " + e.target.files[0]);
+      console.log("one_file : " + this.one_file.path);
+      console.log("e : " + e);
+      console.log("img_url : " + this.img_url);
     },
     save() {
       if (this.nickname.length == 0) {
@@ -97,6 +101,12 @@ export default {
       if (this.one_file) {
         formData.append("file", this.one_file);
       }
+
+      console.log("phone : ", this.phone);
+      console.log("file : " + this.nickname);
+      console.log("this.file : " + this.img_url);
+      // console.log("this.file : " + this.one_file.get());
+      
 
       this.axios.post(process.env.VUE_APP_SPRING + "kakao/register", formData, {
         headers: {

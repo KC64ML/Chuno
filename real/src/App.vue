@@ -19,7 +19,6 @@
     "
   >
   </FooterVue>
-  <button @click="test">test</button>
 </template>
 
 <script>

@@ -8,6 +8,9 @@
         <!-- <div class="camera_name">
             임시이름 {{ enemy_name }}
         </div> -->
+        <div v-if="isInked" class="ink-bomb">
+            <img src="@/assets/inkbomb.png">
+        </div>
         <img class="camera_arrow left_arrow" src="@/assets/camera_left.svg" alt="">
         <img class="camera_arrow right_arrow" src="@/assets/camera_right.svg" alt="">
         <div class="arrow_box right_box" @click="rightArrow"></div>  
@@ -19,6 +22,9 @@
             :stream-manager="myStreamManager"
             :class-name="my_video">
         </user-video>
+        <div v-if="amIInked" class="ink-bomb-me">
+            <img src="@/assets/inkbomb.png">
+        </div>
     </div>
 </template>
 
@@ -55,6 +61,11 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 my_video: "my_video",
                 enemy_video: "enemy_video",
 
+                /* for item */
+                players_state: {},
+                isInked: false,
+                amIInked: false,
+
                 // Join form
                 mySessionId: this.$route.params.roomId,
             };
@@ -70,9 +81,11 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 this.OV = new OpenVidu();
                 this.session = this.OV.initSession();
                 this.session.on("streamCreated", ({ stream }) => {
-                    if (stream.connection.data.nickname == this.user.nickname) {
+                    const otherData = JSON.parse(stream.connection.data);
+                    if (otherData.nickname == this.user.nickname) {
                         return;
                     }
+                    console.log("stream.connection.data : " + otherData);
                     const subscriber = this.session.subscribe(stream);
                     this.subscribers.push(subscriber);
                     console.log("스트림을 발견했어요!")
@@ -82,6 +95,10 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     const { connection } = this.mainStreamManager.stream;
                     console.log("커넥션 데이터에요:", connection.data)
                     const { clientData } = JSON.parse(connection.data);
+                    console.log("clientData : " + clientData);
+                    this.players_state[clientData.user.nickname] = {
+                        isInked: false,
+                    };
                     this.enemy_name = clientData;
                 });
                 this.session.on("streamDestroyed", ({ stream }) => {
@@ -171,6 +188,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     idx = len - 1;
                 }
                 this.updateMainVideoStreamManager(this.subscribers[idx]);
+                this.inkedCheck();
             },
             rightArrow() {
                 let idx = this.subscribers.indexOf(this.mainStreamManager);
@@ -180,12 +198,57 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     idx = 0;
                 }
                 this.updateMainVideoStreamManager(this.subscribers[idx]);
+                this.inkedCheck();
+            },
+            clientUser (streamManager)  {
+                const { connection } = streamManager.stream;
+                const { clientData } = JSON.parse(connection.data);
+                return clientData.user;
+            },
+            inkedCheck() {
+                console.log("==============inked check=============");
+                console.log(this.clientUser(this.mainStreamManager).nickname);
+                console.log(this.players_state[this.clientUser(this.mainStreamManager).nickname]);
+                if (this.players_state[this.clientUser(this.mainStreamManager).nickname].isInked) {
+                    this.isInked = true;
+                } else {
+                    this.isInked = false;
+                }
             },
             async openMediaDevices(constraints) {
                 return await navigator.mediaDevices.getUserMedia(constraints);
             }
         },
     async created() {
+        this.conn.addEventListener("message", (e) => {
+            const content = JSON.parse(e.data);
+            console.log("받은 메세지 : ");
+            console.log(content);
+            if (content.type == "item4") {
+                console.log("누군가 먹물탄을 사용하였습니다.", content);
+                const nickname = content.nickname;
+                if (nickname == this.user.nickname) {
+                    if (content.info.isStart == 1) {
+                        this.amIInked = true;
+                    } else {
+                        this.amIInked = false;
+                    }
+                }else if (content.info.isStart == 1) {
+                    this.players_state[nickname].isInked = true; // undefined
+                    if (this.clientUser(this.mainStreamManager).nickname == nickname) {
+                        this.isInked = true;
+                        console.log("this.isInked : " + this.isInked);
+                    }
+                } else {
+                    this.players_state[nickname].isInked = false;
+                    if (this.clientUser(this.mainStreamManager).nickname == nickname) {
+                        this.isInked = false;
+                    }
+                }
+            }
+        })
+
+
         await this.openMediaDevices({
         video: true,
         audio: true,
@@ -200,6 +263,9 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
         for (var sub of this.subscribers) {
             console.log("---", sub);
         }
+
+        
+
         this.init();
     },
     computed: {
@@ -277,9 +343,25 @@ $my_video_margin: 20px;
 
     min-height: 100px;
     border: dashed;
-}
 
+    transition: all 0.5s
+}
+.ink-bomb {
+    position: inherit;
+    width: 100%;
+    height: 100%;
+}
+.ink-bomb-me {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    overflow: hidden;
+}
 .hidden_modal{
-    visibility: hidden;
+    opacity: 0;
+    transform: translateY(50%);
+    display: none;
 }
 </style>
