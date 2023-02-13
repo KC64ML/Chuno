@@ -38,7 +38,13 @@ export default {
       });
     },
     musicControll() {
-      if (this.$route.name != "waitingRoom" && this.$route.name != "game") {
+      if (this.$route.name == "friends" || this.$route.name == "search") {
+        this.isPlay = true;
+        return false;
+      } else if (
+        this.$route.name != "waitingRoom" &&
+        this.$route.name != "game"
+      ) {
         this.isPlay = true;
         return true;
       } else {
@@ -206,19 +212,19 @@ input:focus {
   display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
 .sliding_down_appearance {
-    animation-name:sliding_down_appearance;
-    animation-iteration-count: 1;
-    animation-duration: 1s;
+  animation-name: sliding_down_appearance;
+  animation-iteration-count: 1;
+  animation-duration: 1s;
 }
 @keyframes sliding_down_appearance {
-    0% {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    100% {
-        opacity: 100;
-        transform: translateX(0);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 100;
+    transform: translateX(0);
+  }
 }
 </style>
 

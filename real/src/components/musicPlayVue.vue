@@ -8,14 +8,6 @@
         v-bind:src="`${audio.isPlaying ? soundOn : soundOff}`"
       />
     </div>
-    <div>
-      <img
-        class="music"
-        :v-if="!audio.isPlaying"
-        @click="audio.isPlaying ? pause(audio) : play(audio)"
-        src="@/assets/sound_off.png"
-      />
-    </div>
   </div>
 </template>
 
@@ -28,6 +20,7 @@ export default {
   props: {
     isPlay: Boolean,
   },
+
   data() {
     return {
       bgm,
@@ -37,17 +30,24 @@ export default {
         id: "music-opening",
         name: "MuscicOpening",
         file: new Audio(bgm),
-        loop: true,
         isPlaying: false,
       },
     };
+  },
+
+  mounted() {
+    this.audio.file.addEventListener("ended", () => {
+      this.audio.file.play();
+      this.audio.file.currentTime = 0;
+      this.audio.isPlaying = true;
+    });
   },
 
   updated() {
     if (!this.isPlay) {
       this.audio.isPlaying = false;
       this.audio.file.pause();
-      this.audio.currentTime = 0;
+      this.audio.file.currentTime = 0;
     }
   },
 
