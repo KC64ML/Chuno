@@ -288,7 +288,9 @@ export default {
             console.log("소켓에서 받아왔어요!!!", content);
             this.papers = content.info;
             
-          } else if (content.type == 'leave') {
+          } else if (content.type == 'me') {
+            // present 현재방 넘버
+            // players 배열 nickname
             const content = JSON.parse(e.data);
             console.log(content.nickname + '님이 떠나갔어요...')
             console.log(content)
