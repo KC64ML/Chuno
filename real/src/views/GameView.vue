@@ -190,7 +190,7 @@ export default {
     console.log(this.roomInfo);
 
     /* 게임 시간 카운트 로직 */
-    var game_interval = setInterval(() => {
+    this.game_interval = setInterval(() => {
       this.game_timer--;
       if (this.game_timer == 0) {
         if (this.ripped_paper > this.arrested_slave) {
@@ -202,7 +202,7 @@ export default {
         }
       }
     }, 1000);
-    game_interval();
+    this.game_interval();
   },
   data() {
     return {
@@ -229,6 +229,7 @@ export default {
       player_len: 0,
 
       // 게임 종료를 위한 변수에요
+      game_interval: undefined,
       game_timer: 1800,
       total_slave: 0,
       arrested_slave: 0,
@@ -399,7 +400,7 @@ export default {
 		status_open() {
 			this.status_specific_modal = !this.status_specific_modal;
       console.log(this.status_specific_modal)
-		}
+		},
 	}
 }
 
