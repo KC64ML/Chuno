@@ -364,7 +364,7 @@ export default {
       // if(this.user.caught == false && this.calculateDistance(location) >= this.roomInfo.radius){
         console.log('범위밖으로 나왔습니다!! 플레이 범위 안으로 돌아가세요')
         this.outOfPlayGroundFlag = true
-        this.onOutOfPlayground == true
+        this.onOutOfPlayground = true
         console.log('복귀 카운트 다운 시작')
         setTimeout(function() {
           this.reOutOfPlayground()
