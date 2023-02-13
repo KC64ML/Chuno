@@ -343,6 +343,8 @@ $my_video_margin: 20px;
 
     min-height: 100px;
     border: dashed;
+
+    transition: all 0.5s
 }
 .ink-bomb {
     position: inherit;
@@ -356,6 +358,7 @@ $my_video_margin: 20px;
     opacity: 0.5;
 }
 .hidden_modal{
-    visibility: hidden;
+    opacity: 0;
+    transform: translateY(50%);
 }
 </style>

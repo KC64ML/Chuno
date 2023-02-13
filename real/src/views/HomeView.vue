@@ -8,14 +8,12 @@
 </template>
 
 <script>
-// import CreateRoomModal from "@/components/home/CreateRoomModal.vue"
 import HeaderVue from "@/components/HeaderVue.vue"
 import RoomCard from "@/components/RoomCard.vue"
 import NewCreateRoomModal from '@/components/home/NewCreateRoomModal.vue'
 
 export default {
     components: {
-        // CreateRoomModal,
         HeaderVue,
         RoomCard,
         NewCreateRoomModal,
