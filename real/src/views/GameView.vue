@@ -277,7 +277,7 @@ export default {
           }
         ));
         // 30초 후에 제거
-        setTimeout(
+        setTimeout(() => {
           this.conn.send(JSON.stringify(
             {
               event: "useItem",
@@ -289,7 +289,7 @@ export default {
               }
             }
           )
-        ), 30000);
+        )}, 30000);
       } else if(item.id == 7) {
         this.item_used[7]++;
       }

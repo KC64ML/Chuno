@@ -11,6 +11,10 @@
       :ripTarget="ripTarget"
       @on-rip="onRip"
     />
+    <OutOfPlaygroundModal
+      v-if="onOutOfPlayground"
+      @off-out-of-playground="offOutOfPlayGround"
+    />
     <GMapMap
       :center="location"
       :zoom="18"
@@ -129,6 +133,7 @@ import MyRunnerMarker from '@/assets/slave_me_img.png'
 import MyChaserMarker from '@/assets/chuno_me_img.png'
 import CatchModal from './CatchModal.vue';
 import RipModal from './RipModal.vue';
+import OutOfPlaygroundModal from '@/components/game/OutOfPlaygroundModal.vue'
 
 export default {
   name: 'MapView',
@@ -149,6 +154,7 @@ export default {
   components: {
     CatchModal,
     RipModal,
+    OutOfPlaygroundModal,
   },
   data() {
     return {
@@ -332,14 +338,26 @@ export default {
       ))
       this.ripModal = false
     },
+    reOutOfPlayground(){
+      if(this.calculateDistance({lat: this.roomInfo.lat, lng: this.roomInfo.lng}) <= this.roomInfo.radius){
+        console.log('재확인')
+      }
+    },
     // 범위 밖으로 나갈 시 경고
     outOfPlayground(location){
-      console.log('4. outOfPlayground 함수 실행')
-      if(this.calculateDistance(location) <= this.roomInfo.radius){
+      console.log('outOfPlayground 함수 실행')
+      if(this.user.caught == false && this.calculateDistance(location) <= this.roomInfo.radius){
         console.log('범위밖으로 나왔습니다!! 플레이 범위 안으로 돌아가세요')
-      } else{
-        console.log('정상 범위 안 입니다.')
+        this.onOutOfPlayground == true
+        console.log('복귀 카운트 다운 시작')
+        setTimeout(function() {
+          this.reOutOfPlayground()
+        }, 60000)
       }
+    },
+    offOutOfPlayGround(){
+      this.onOutOfPlayground == false
+      console.log()
     },
     // 내 위치
     myLocation() {
