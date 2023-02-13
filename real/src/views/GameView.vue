@@ -1,9 +1,27 @@
 <template>
-	<LeaveModal
+	<!-- <LeaveModal
 		v-if="leaveModal"
 		@on-no-leave="onNoLeave"
 		@on-yes-leave="onYesLeave"
-	/>
+	/> -->
+
+	<div v-if="leaveModal" id="item_description_modal" @click="close_item_description_modal">
+		<div id="item_description_modal_container" @click="stopingPropagation">
+			<div style="text-align: center; font-size: 25px; margin-bottom: 10px;">정말로 나가시겠소?</div>
+			<div style="display: flex; justify-content: space-around;">
+				<div class="flex_center"
+					@click="onYesLeave">
+					<img src="@/assets/main_button1.png" class="modal_confirm_button">
+					<div class="image_text">네</div>
+				</div>
+				<div class="flex_center" @click="onNoLeave">
+					<img src="@/assets/main_button1.png" class="modal_confirm_button">
+					<div class="image_text">아니요</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<transition name="menu-retreat">
 		<div id="item_menu_modal" v-if="item_menu_modal">
 			<div v-if="this.user">
@@ -131,7 +149,7 @@ import OpenViduVue from '@/components/game/OpenViduVue.vue'
 import MapView from '@/components/game/MapView.vue' // huh
 import RoleModalVue from '@/components/game/RoleModalVue.vue'
 import ChatCardVue from '@/components/game/ChatCardVue.vue';
-import LeaveModal from '@/components/game/LeaveModal.vue';
+// import LeaveModal from '@/components/game/LeaveModal.vue';
 const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
 import SpiningModalVue from '@/components/game/SpiningModalVue.vue'
@@ -145,7 +163,7 @@ export default {
     SpiningModalVue,
     RoleModalVue,
     ChatCardVue,
-	LeaveModal,
+	// LeaveModal,
   },
   async created() {
     this.conn.addEventListener('message', (e)  => {
