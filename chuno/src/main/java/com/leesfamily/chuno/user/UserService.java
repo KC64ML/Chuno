@@ -152,7 +152,6 @@ public class UserService {
     }
 
     public UserEntity putMyProfileImg( Long userId, MultipartFile img, String nickname, String phone) {
-        log.info("userId : " + userId);
         Optional<UserEntity> option = userRepository.findById(userId);
         UserEntity userEntity = option.get();
         if(userEntity.getProfile() == null) {
@@ -173,14 +172,7 @@ public class UserService {
             }
         }
         if(img == null) {
-            // 만약 null인 경우 기본 이미지 넣어주기
-            // profile/14/1f5b0f6d-b51a-42a6-a354-ac965fa5f86f.png
-            String defaultPng = "profileimage.png";
-            String target = "profile/"+userId;
-            String path = target + "/" + defaultPng;
-
-            userEntity.getProfile().setPath(path);
-            userEntity.getProfile().setSaveName(defaultPng);
+            userEntity.setProfile(null);
         }
         userRepository.saveAndFlush(userEntity);
         return userEntity;
@@ -268,3 +260,4 @@ public class UserService {
         return phone;
     }
 }
+
