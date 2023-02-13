@@ -371,7 +371,7 @@ export default {
     },
     offOutOfPlayGround(){
       this.onOutOfPlayground == false
-      console.log()
+      console.log(this.onOutOfPlayground)
     },
     // 내 위치
     myLocation() {
@@ -379,7 +379,11 @@ export default {
       .then((coordinates) => {
         this.location.lat = coordinates.lat
         this.location.lng = coordinates.lng
+        console.log(this.user.caught)
+        console.log(this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}))
+        console.log(this.roomInfo.radius)
         if(this.user.caught == false && this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}) >= this.roomInfo.radius){
+          console.log('범위 밖!!!!!!!!!!!!!!!!!')
           this.outOfPlayground()
         }
         this.conn.send(JSON.stringify(
