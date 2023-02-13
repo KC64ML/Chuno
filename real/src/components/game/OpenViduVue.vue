@@ -345,8 +345,15 @@ $my_video_margin: 20px;
     border: dashed;
 }
 .ink-bomb {
+    position: inherit;
     width: 100%;
     height: 100%;
+}
+.ink-bomb-me {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
 }
 .hidden_modal{
     visibility: hidden;
