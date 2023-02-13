@@ -200,8 +200,8 @@ export default {
       } else if (content.type == 'caughtRunner') {
         this.arrested_slave++;
         if (this.arrested_slave == this.total_slave) {
-          alert("끝");
           this.victory_team = 'chaser';
+          this.victoryCnt(this.user.role, this.victory_team);
           this.makeDisplay(this.victory_team);
           this.game_ending();
         }
@@ -210,6 +210,7 @@ export default {
           this.ripped_paper++;
           if (this.ripped_paper == this.total_paper) {
             this.victory_team = 'runner';
+            this.victoryCnt(this.user.role, this.victory_team);
             this.makeDisplay(this.victory_team);
             this.game_ending();
           }
@@ -294,6 +295,8 @@ export default {
       total_paper: 0,
       ripped_paper: 0,
       my_ripped_paper: 0,
+      chaserWin: 0,
+      runnerWin: 0,
 
       item_description_modal: false,
       selected_item: {},//
@@ -353,14 +356,17 @@ export default {
         if (this.game_timer == 0) {
           if (this.ripped_paper > this.arrested_slave) {
             this.victory_team = 'runner';
+            this.victoryCnt(this.user.role, this.victory_team);
             this.makeDisplay(this.victory_team);
             this.game_ending();
           } else if (this.ripped_paper < this.arrested_slave) {
             this.victory_team = 'chaser';
+            this.victoryCnt(this.user.role, this.victory_team);
             this.makeDisplay(this.victory_team);
             this.game_ending();
           } else {
             this.victory_team = 'none';
+            this.victoryCnt(this.user.role, this.victory_team);
             this.makeDisplay(this.victory_team);
             this.game_ending();
           }
@@ -510,13 +516,13 @@ export default {
         "paperCount": this.my_ripped_paper,
         "exp": 0,
         "money": 0,
-        "chaserWin": 0,
-        "chaserCnt": 0,
-        "runnerWin": 0,
-        "runnerCnt": 0
+        "chaserWin": this.chaserWin,
+        "chaserCnt": this.my_arrest_slave,
+        "runnerWin": this.runnerWin,
+        "runnerCnt": this.my_ripped_paper
       }, {headers: {Authorization: sessionStorage.getItem("token")}}).then(res => res.data);
       alert(result.successOrFailure);
-      // this.$router.push({name: "gameResult"});
+      this.$router.push({name: "gameResult", params: {role: this.user.role}});
     },
     makeDisplay(e) {
       console.log("메이크디스클레이에 왔어요")
@@ -529,6 +535,12 @@ export default {
       } else {
         this.game_end_display = this.message_lose;
         this.game_end_display_sub = this.line_zip[Math.floor(Math.random() * this.line_zip.length)];
+      }
+    },
+    victoryCnt(a, b) {
+      if (a == b) {
+        if (a == 'chaser') this.chaserWin = 1;
+        else if (a == 'runner') this.runnerWin = 1;
       }
     }
 	}
