@@ -316,19 +316,20 @@ export default {
 					}
 				));
 				// 5초 후에 제거
-				setTimeout(
-        this.conn.send(JSON.stringify(
-          {
-            event: "useItem",
-            level: 4,
-            nickname: this.user.nickname,
-            room: this.roomInfo.id,
-            startData: {
-              "isStart" : 0,
+        setTimeout(() => {
+          this.conn.send(JSON.stringify(
+            {
+              event: "useItem",
+              level: 4,
+              nickname: this.user.nickname,
+              room: this.roomInfo.id,
+              startData: {
+                "isStart": 0,
+              }
             }
-          }
-        )
-				), 60000 * 5);
+          )
+          )
+        }, 60000 * 5);
 				this.close_item_description_modal();
 			} else if (item.id == 7) {
 				this.item_used[7]++;
