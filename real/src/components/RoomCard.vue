@@ -74,6 +74,7 @@ export default {
         },
         info_icon(e) {
             alert("정보 버튼이 눌렸어요");
+            console.log(this.room);
             e.stopPropagation();
         }
     }
