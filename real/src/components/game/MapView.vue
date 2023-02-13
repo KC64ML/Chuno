@@ -423,6 +423,7 @@ export default {
       .catch((error) => {
         console.log(error)
       })
+      this.catchRunner()
     },
     GyroAllow() {
       // 자이로스코프 인식
