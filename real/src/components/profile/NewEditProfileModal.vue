@@ -2,39 +2,53 @@
   <div class="regiterview">
     <div id="make_room_modal">
       <div id="close_button" @click="offing">x</div>
-      <div id="modal_title" style="font-size: 24px;">프로필 편집</div>
+      <div id="modal_title" style="font-size: 24px">프로필 편집</div>
       <div>
         <table>
           <colgroup>
-            <col style="width: 90px">
-            <col style="width: 200px">
+            <col style="width: 90px" />
+            <col style="width: 200px" />
           </colgroup>
           <tr id="profile_image">
             <td>
               <div v-if="this.img_url">
                 <div id="profile_background">
-                  <img :src="this.img_url" alt="profile pic" class="uploadedImg" />
+                  <img
+                    :src="this.img_url"
+                    alt="profile pic"
+                    class="uploadedImg"
+                  />
                 </div>
                 <div>
                   <button @click="clearImage">다시 선택할래요</button>
                 </div>
               </div>
               <div v-else>
-                <img id="blank_img" src="@/assets/profile_default_with_cam.svg" alt="" @click="profile_click">
+                <img
+                  id="blank_img"
+                  src="@/assets/profile_default_with_cam.svg"
+                  alt=""
+                  @click="profile_click"
+                />
               </div>
-              <input ref="file_input" type="file" @change="oneFileSelect" style="display:none" />
+              <input
+                ref="file_input"
+                type="file"
+                @change="oneFileSelect"
+                style="display: none"
+              />
             </td>
           </tr>
           <tr>
             <td>닉네임</td>
             <td>
-              <input v-model="nickname" style="padding: 0 3%">
+              <input v-model="nickname" style="padding: 0 3%" />
             </td>
           </tr>
           <tr>
             <td>전화번호</td>
             <td>
-              <input v-model="phone" style="padding: 0 3%" maxlength="12">
+              <input v-model="phone" style="padding: 0 3%" maxlength="12" />
             </td>
           </tr>
           <tr>
@@ -42,7 +56,11 @@
           </tr>
         </table>
         <div class="flex_center hover_pointer" @click="save">
-          <img src="@/assets/main_button1.png" id="button1" style="width: 140px">
+          <img
+            src="@/assets/main_button1.png"
+            id="button1"
+            style="width: 140px"
+          />
           <div class="image_text">저장</div>
         </div>
       </div>
@@ -52,8 +70,6 @@
 
 <script>
 // import { formToJSON } from 'axios';
-
-
 
 export default {
   name: "NewEditProfileModal",
@@ -66,18 +82,22 @@ export default {
       phone: this.userInfo.phone,
       can_use: false,
       one_file: undefined,
-      img_url: process.env.VUE_APP_SPRING + 'resources/images?path=' + this.userInfo.profile.path, // userInfo.profile : 기존 이미지
-      check_img : false,
-    }
+      img_url:
+        process.env.VUE_APP_SPRING +
+        "resources/images?path=" +
+        this.userInfo.profile.path, // userInfo.profile : 기존 이미지
+      check_img: false,
+    };
   },
   methods: {
     offing() {
-      this.$emit("on-modal")
+      this.$emit("on-modal");
     },
 
     async check() {
       console.log(this.nickname);
-      await this.axios.get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname)
+      await this.axios
+        .get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname)
         .then(({ data }) => {
           console.log("data : " + data.result);
           if (data.code) {
@@ -85,16 +105,15 @@ export default {
           } else {
             this.can_use = false;
           }
-        })
+        });
     },
-    
+
     profile_click() {
       console.log("profile_click 실행");
-      this.$refs.file_input.click()
+      this.$refs.file_input.click();
       // console.log("img : " + this.$refs.file_input.click());
     },
     oneFileSelect(e) {
-
       // (URL + 'resources/images?path=' + this.img_url)
       this.one_file = e.target.files[0];
       this.img_url = URL.createObjectURL(e.target.files[0]); // 기존에 있는것
@@ -130,25 +149,26 @@ export default {
       if (this.one_file) {
         formData.append("file", this.one_file);
       }
-      
+
       console.log("phone : ", this.phone);
       console.log("file : " + this.nickname);
       console.log("this.file : " + this.img_url);
       console.log("this.file : " + this.one_file.path);
-      const token = sessionStorage.token
+      const token = sessionStorage.token;
 
-      this.axios.put(process.env.VUE_APP_SPRING + "user/profile", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: token
-        }
-      })
+      this.axios
+        .put(process.env.VUE_APP_SPRING + "user/profile", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: token,
+          },
+        })
         .then((res) => {
           // const code = res.data.code
           // if(code) {
-          console.log('회원가입 수정 성공')
-          console.log(res)
-          console.log(res.data)
+          console.log("회원가입 수정 성공");
+          console.log(res);
+          console.log(res.data);
           alert("등록완료");
           this.$router.push({ name: "home" });
           // } else {
@@ -157,27 +177,24 @@ export default {
           // }
         })
         .catch((e) => {
-          console.log('회원가입 실패')
-          console.log(e)
-        })
+          console.log("회원가입 실패");
+          console.log(e);
+        });
     },
 
     reSelect() {
       alert("다시선택");
     },
     clearImage() {
-      this.$refs.file_input.value = ''
+      this.$refs.file_input.value = "";
       this.one_file = undefined;
       this.img_url = undefined;
-    }
-
+    },
   },
-
-}
+};
 </script>
 
 <style src="@vueform/slider/themes/default.css">
-
 </style>
 <style lang="scss" scoped>
 $input_height: 30px;
@@ -202,8 +219,6 @@ $plma_size: 30px;
   background: rgb(0, 0, 0, 0.6);
   z-index: 1;
 }
-
-
 
 #make_room_modal {
   position: absolute;
@@ -248,7 +263,7 @@ td:nth-child(1) {
   text-align: center;
 }
 
-td:nth-child(2)>div {
+td:nth-child(2) > div {
   display: flex;
   align-items: center;
 }
@@ -315,11 +330,14 @@ td:nth-child(2)>div {
 }
 
 .regiterview {
-  height: 80vh;
-  margin-top: 200px;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   background: rgb(0, 0, 0, 0.6);
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
-
 </style>
