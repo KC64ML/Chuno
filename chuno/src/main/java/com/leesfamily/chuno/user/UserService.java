@@ -172,7 +172,8 @@ public class UserService {
             }
         }
         if(img == null) {
-            userEntity.setProfile(null);
+            userEntity.getProfile.setPath("");
+            userEntity.getProfile.setSaveName("");
         }
         userRepository.saveAndFlush(userEntity);
         return userEntity;
