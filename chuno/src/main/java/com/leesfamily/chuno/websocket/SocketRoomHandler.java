@@ -128,9 +128,9 @@ public class SocketRoomHandler extends TextWebSocketHandler {
 			}
 			// 방에 있는 사람들에게 내정보(내가 현재있는 방번호와, 그방의 사람들)을 보여줘요//
 			MsgDto dto2 = new MsgDto("me", room, new ArrayList<isHostDto>());
-			for (PlayerDto p : room_map.get(room)) {
-				dto2.getPlayers().add(new isHostDto(p.getLevel(), p.getNickname(), p.isReady(), p.isHost()));
-			}
+//			for (PlayerDto p : room_map.get(room)) {
+			dto2.getPlayers().add(new isHostDto(1, nickname, false, false));
+//			}
 			TextMessage msg2 = new TextMessage(mapper.writeValueAsString(dto2));
 			for (PlayerDto p : room_map.get(room)) {
 				p.getSession().sendMessage(msg2);
