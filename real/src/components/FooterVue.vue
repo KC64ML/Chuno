@@ -1,7 +1,7 @@
 <template>
     <div id="container">
         <div class="menu_box" @click="this.$router.push('/home')">
-            <img class="menu" src="@/assets/Home.svg">
+            <img class="menu" src="@/assets/Home.png">
             <div style="color: white">저잣거리</div>
         </div>
         <div class="menu_box" @click="this.$router.push('/search')">
@@ -9,15 +9,15 @@
             <div style="color: white">거리탐색</div>
         </div>
         <div class="menu_box" @click="this.$router.push({ name: 'Profile', params: { uid: userInfo.id } })">
-            <img class="menu" src="@/assets/Profile_footer.svg">
-            <div style="color: white">호패증</div>
+            <img class="menu" src="@/assets/Profile_footer.png">
+            <div style="color: white">호패</div>
         </div>
         <div class="menu_box" @click="this.$router.push('/shop')">
-            <img class="menu" src="@/assets/Shop.svg">
+            <img class="menu" src="@/assets/Shop.png">
             <div style="color: white">보부상</div>
         </div>
         <div class="menu_box" @click="this.$router.push('/rank')">
-            <img class="menu" src="@/assets/Rank.svg">
+            <img class="menu" src="@/assets/Rank.png">
             <div style="color: white">순위</div>
         </div>
     </div>
