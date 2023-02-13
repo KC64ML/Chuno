@@ -200,6 +200,7 @@ export default {
       } else if (content.type == 'caughtRunner') {
         this.arrested_slave++;
         if (this.arrested_slave == this.total_slave) {
+          alert("끝");
           this.victory_team = 'chaser';
           this.makeDisplay(this.victory_team);
           this.game_ending();
