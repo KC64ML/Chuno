@@ -1,75 +1,113 @@
-<template> 
-  <div id="item_menu_modal" v-if="item_menu_modal">
-    <div v-if="this.user">
-      <div style="margin-bottom: 10px; text-align: center;">아이템</div>
-      <div v-for="(e, idx) in item_list[this.user.role]" :key="idx" style="display: flex; align-items: center;" @click="item_select(e)">
-        <img :src="e.path" alt="" style="margin-right: 5px;">
-        <div>{{ e.name }}</div>
-      </div>
-    </div>
-  </div>
+<template>
+	<transition name="menu-retreat">
+		<div id="item_menu_modal" v-if="item_menu_modal">
+			<div v-if="this.user">
+				<div style="margin-bottom: 10px; text-align: center;">아이템</div>
+				<div v-for="(e, idx) in item_list[this.user.role]" :key="idx"
+					style="display: flex; align-items: center;" @click="item_select(e)">
+					<img :src="e.path" alt="" style="margin-right: 5px;">
+					<div>{{ e.name }}</div>
+				</div>
+			</div>
+		</div>
+	</transition>
 
-  <div v-if="item_description_modal" id="item_description_modal" @click="close_item_description_modal">
-    <div id="item_description_modal_container" @click="stopingPropagation">
-      <div style="text-align: center; font-size:25px; margin-bottom: 10px;">{{ selected_item.name }}</div>
-      <div style="text-align: center; margin-bottom: 20px;">{{ selected_item.description }}</div>
-      <div style="text-align: center; font-size: 25px; margin-bottom: 10px;">사용하실래요?</div>
-      <div style="display: flex; justify-content: space-around;">
-        <div class="flex_center">
-            <img src="@/assets/main_button1.png" class="modal_confirm_button">
-            <div class="image_text" @click="[stopingPropagation, item_confirm_yes({id: selected_item.id, is_implemented: selected_item.is_implemented})]">네</div>
-        </div>
-        <div class="flex_center">
-            <img src="@/assets/main_button1.png" class="modal_confirm_button">
-            <div class="image_text" @click="close_item_description_modal">아니요</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <OpenViduVue
+	<div v-if="item_description_modal" id="item_description_modal" @click="close_item_description_modal">
+		<div id="item_description_modal_container" @click="stopingPropagation">
+			<div style="text-align: center; font-size:25px; margin-bottom: 10px;">{{ selected_item.name }}</div>
+			<div style="text-align: center; margin-bottom: 20px;">{{ selected_item.description }}</div>
+			<div style="text-align: center; font-size: 25px; margin-bottom: 10px;">사용하실래요?</div>
+			<div style="display: flex; justify-content: space-around;">
+				<div class="flex_center"
+					@click="[stopingPropagation, item_confirm_yes({ id: selected_item.id, is_implemented: selected_item.is_implemented })]">
+					<img src="@/assets/main_button1.png" class="modal_confirm_button">
+					<div class="image_text">네</div>
+				</div>
+				<div class="flex_center" @click="close_item_description_modal">
+					<img src="@/assets/main_button1.png" class="modal_confirm_button">
+					<div class="image_text">아니요</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<OpenViduVue
     :my_cam_modal="my_cam_modal"
     :user="user"></OpenViduVue>
-   
-  <div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
-        <div id="chat_header"
-            style="display: flex; align-items:center; justify-content: space-between; margin-bottom: 10px;">
-            <div>
-                <img src="@/assets/main_logo2.png" alt="" style="width: 50px; height: 50px; margin-left: 20px;">
-            </div>
-            <div style="font-size: 30px">
-                전언
-            </div>
-            <div style="font-size: 25px; margin-right: 20px;" @click="close_chat_modal">X</div>
-        </div>
-        <div v-for="(e, idx) in chat_log" :key="idx">
-            <ChatCardVue :chat_dto="e" :my_nickname="user.nickname"></ChatCardVue>
-        </div>
-    </div>
-  
-  <MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught" :item_used="item_used[7]"/>
-  <div style="position: absolute; bottom: 0; left: 0;">
-    
-    <div id="footer_container">
-      <div class="menu_box flex_center" @click="open_chat_modal">
-        <img class="menu" src="@/assets/game_chat.png">
-      </div>
-      <div>
-        <input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data">
-      </div>
-      <div class="menu_box" @click="transmit_chat">
-          <img src="@/assets/paper_plane.svg" alt="">
-      </div>
-      <div class="menu_box" @click="myCam">
-        <img class="menu" src="@/assets/game_myCam.png">
-      </div>
-      <div class="menu_box" @click="onMenu">
-        <img class="menu" src="@/assets/game_menu.png">
-      </div>
-    </div>
-  </div>
-  <SpiningModalVue @spinningEnd="spinningEnd" v-if="spinningModal"></SpiningModalVue>
-  <RoleModalVue v-if="roleModal" @modalAllClose="modalAllClose"></RoleModalVue>
 
+	<transition name="chat-retreat">
+		<div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
+			<div id="chat_header"
+				style="display: flex; align-items:center; justify-content: space-between; margin-bottom: 10px;">
+				<div>
+					<img src="@/assets/main_logo2.png" alt="" style="width: 50px; height: 50px; margin-left: 20px;">
+				</div>
+				<div style="font-size: 30px">
+					전언
+				</div>
+				<div style="font-size: 25px; margin-right: 20px;" @click="close_chat_modal">X</div>
+			</div>
+			<div v-for="(e, idx) in chat_log" :key="idx">
+				<ChatCardVue :chat_dto="e" :my_nickname="user.nickname"></ChatCardVue>
+			</div>
+		</div>
+	</transition>
+
+	<div id="status_bar" style="display: flex; justify-content: space-between">
+		<div>남은 시간 : </div>
+		<div @click="status_open" class="for_trans" :class="{'trans':status_specific_modal}">▼</div>
+	</div>
+  <transition name="close_specific">
+    <div id="status_specific" v-if="status_specific_modal">
+      <div>
+        <div>잡은 노비 수 : 4 / 5</div>
+        <div>찾은 노비 문서 수 : 3 / 5</div>
+      </div>
+    </div>
+  </transition>
+
+	<MapView :user="user" :roomInfo="roomInfo" @on-caught="onCaught" :item_used="item_used[7]"/>
+	<div style="position: absolute; bottom: 0; left: 0;">
+
+		<div id="footer_container">
+			<div class="menu_box flex_center" @click="open_chat_modal">
+				<img class="menu" src="@/assets/game_chat.png">
+			</div>
+			<div>
+				<input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data">
+			</div>
+			<div class="menu_box" @click="transmit_chat">
+				<img src="@/assets/paper_plane.svg" alt="">
+			</div>
+			<div class="menu_box" @click="myCam">
+				<img class="menu" src="@/assets/game_myCam.png">
+			</div>
+			<div class="menu_box" @click="onMenu">
+				<img class="menu" src="@/assets/game_menu.png">
+			</div>
+		</div>
+	</div>
+	<transition name="toasting">
+		<div class="toast_chat" v-if="system_toast">
+			<div class="flex_center">
+				<img src="@/assets/system_chat.png" style="height: 60px; width: 90vw;">
+				<div class="image_text" style="word-break:break-all;">{{ last_chat }}</div>
+			</div>
+		</div>
+	</transition>
+	<transition name="toasting">
+		<div class="toast_chat" v-if="chat_toast">
+			<div class="flex_center">
+				<div
+					style="font-size: 20px; word-break:break-all; padding: 10px 20px; border-radius: 10px; background-color: rgb(0,0,0,0.6); color: white; width: 90vw;">
+					{{ last_chat }}</div>
+			</div>
+		</div>
+	</transition>
+	<SpiningModalVue @spinningEnd="spinningEnd" v-if="spinningModal"></SpiningModalVue>
+
+	<transition name="modal-fading">
+		<RoleModalVue v-if="roleModal" @modalAllClose="modalAllClose"></RoleModalVue>
+	</transition>
 </template>
 
 <script>
@@ -99,6 +137,18 @@ export default {
         this.chat_log.push({ nickname: content.nickname, msg: content.message })
 
         // 최근 메세지를 토스트로 띄우고 싶어요!!!
+        if (content.nickname == "system") {
+					this.last_chat = content.message;
+					this.system_toast = true;
+				} else {
+					this.last_chat = content.nickname + " : " + content.message;
+					this.chat_toast = true;
+				}
+
+				setTimeout(() => {
+					this.system_toast = false;
+					this.chat_toast = false;
+				}, 3000)
       }
     })
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
@@ -118,6 +168,8 @@ export default {
       })
     const info = JSON.parse(sessionStorage.info);
     this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
+    this.total_paper = info.teamslave.length;
+    this.total_slave = info.teamslave.length;
     this.player_len = info.teamchuno.length + info.teamslave.length;
     this.user.caught = false;
     console.log("GameView created complete");
@@ -127,8 +179,8 @@ export default {
   },
   data() {
     return {
-      my_cam_modal: { active: true },
-      item_menu_modal: true,
+      my_cam_modal: { active: false },
+      item_menu_modal: false,
       user: undefined,
       usedItem: [],
       // 개발이 끝나면 true로 고쳐줘요
@@ -136,12 +188,25 @@ export default {
       roleModal: false,
       roomInfo: undefined,
 
+      system_toast: false,
+			chat_toast: false,
+			last_chat: "",
       chat_modal: false,
       chat_data: "",
       chat_log:[],
 
+      // status-bar를 위한 변수에요
+      status_specific_modal: true,
+
       // 노비문서 셔플을 위한 변수에요
       player_len: 0,
+
+      // 게임 종료를 위한 변수에요
+      game_timer: 1800,
+      total_slave: 0,
+      arrested_salve: 0,
+      total_paper: 0,
+      ripped_paper: 0,
 
       item_description_modal: false,
       selected_item: {},
@@ -240,43 +305,42 @@ export default {
       this.chat_data = "";
     },
 
-    item_select(e) {
-      this.selected_item = e;
-      this.item_description_modal = true;
-    },
-    close_item_description_modal() {
-      this.selected_item = {};
-      this.item_description_modal = false;
-      this.item_menu_modal = false;
-    },
-    async item_confirm_yes(item) {
-      console.log(item)
-      if(item.id == 1){
-        // 천리안: 가장 가까운 추노꾼 위치 표시
-        console.log(1)
-      } else if (item.id == 2){
-        // 위장: 추노꾼의 catch 범위 축소
-        console.log(2)
-      } else if (item.id == 3) {
-        // 확실한 정보통: 진짜 노비 문서 위치 표시
-        console.log(3)
-        this.visibility = true
-        setTimeout(this.visibility = false, 30000)
-      } else if (item.id == 4) {
-        // 먹물탄
-        console.log(4)
-        this.conn.send(JSON.stringify(
-          {
-            event: "useItem",
-            level: 4,
-            nickname:this.user.nickname,
-            room: this.roomInfo.id,
-            startData: {
-              "isStart" : 1,
-            }
-          }
-        ));
-        // 30초 후에 제거
+		item_select(e) {
+			this.selected_item = e;
+			this.item_description_modal = true;
+		},
+		close_item_description_modal() {
+			this.selected_item = {};
+			this.item_description_modal = false;
+			this.item_menu_modal = false;
+		},
+		async item_confirm_yes(item) {
+			if (item.id == 1) {
+				// 천리안: 가장 가까운 추노꾼 위치 표시
+				console.log(1)
+			} else if (item.id == 2) {
+				// 위장: 추노꾼의 catch 범위 축소
+				console.log(2)
+			} else if (item.id == 3) {
+				// 확실한 정보통: 진짜 노비 문서 위치 표시
+				console.log(3)
+				this.visibility = true
+				setTimeout(this.visibility = false, 30000)
+			} else if (item.id == 4) {
+				// 먹물탄
+				console.log("먹물탄 사용 : ", 4);
+				this.conn.send(JSON.stringify(
+					{
+						event: "useItem",
+						level: 4,
+						nickname: this.user.nickname,
+						room: this.roomInfo.id,
+						startData: {
+							"isStart": 1,
+						}
+					}
+				));
+				// 5초 후에 제거
         setTimeout(() => {
           this.conn.send(JSON.stringify(
             {
@@ -285,16 +349,23 @@ export default {
               nickname: this.user.nickname,
               room: this.roomInfo.id,
               startData: {
-                "isStart" : 0,
+                "isStart": 0,
               }
             }
           )
-        )}, 30000);
-      } else if(item.id == 7) {
-        this.item_used[7]++;
-      }
-    }
-  }
+          )
+        }, 60000 * 5);
+				this.close_item_description_modal();
+			} else if (item.id == 7) {
+				this.item_used[7]++;
+				this.close_item_description_modal();
+			}
+		},
+		status_open() {
+			this.status_specific_modal = !this.status_specific_modal;
+      console.log(this.status_specific_modal)
+		}
+	}
 }
 
 </script>
@@ -302,124 +373,237 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/variable.scss";
 $button_width: 50px;
-$item_modal_confirm_button_height: 60px; 
+$item_modal_confirm_button_height: 60px;
+$status_height: 30px;
 
 #footer_container {
-  z-index: 1012;
-  position: absolute;
-  bottom: 0;
-  background-color: black;
-  height: $footer_height;
-  width: 100vw;
-  display: grid;
-  grid-template-columns: $button_width 1fr $button_width $button_width $button_width;
-  justify-content: space-around;
-  align-items: center;
+	z-index: 1012;
+	position: absolute;
+	bottom: 0;
+	background-color: black;
+	height: $footer_height;
+	width: 100vw;
+	display: grid;
+	grid-template-columns: $button_width 1fr $button_width $button_width $button_width;
+	justify-content: space-around;
+	align-items: center;
 }
 
 #footer_container>div {
-  width: 100%;
+	width: 100%;
 }
 
 .menu-window {
-  float: right;
-  position: absolute;
-  bottom: 60px;
+	float: right;
+	position: absolute;
+	bottom: 60px;
 }
 
 .menu_box {
-  width: 20%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+	width: 20%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .map_search {
-  display: block;
-  margin: 0 auto;
-  width: 95%;
-  height: 40px;
-  background-color: #F1F1F180;
-  color: white;
-  padding: 0 10px;
-  border-radius: 15px;
-  font-size: 20px;
+	display: block;
+	margin: 0 auto;
+	width: 95%;
+	height: 40px;
+	background-color: #F1F1F180;
+	color: white;
+	padding: 0 10px;
+	border-radius: 15px;
+	font-size: 20px;
 }
 
 .map_search::placeholder {
-  color: rgba(255, 255, 255, 0.56)
+	color: rgba(255, 255, 255, 0.56)
 }
 
 #chat_container {
-    z-index: 1010;
-    position: absolute;
-    bottom: $footer-height;
-    background-image: url("@/assets/main_back_horizon.png");
-    background-size: cover;
-    width: 100vw;
-    max-height: 60%;
-    min-height: 200px;
-    overflow-y: scroll;
-    animation-name: chat_container;
-    animation-duration: 0.4s;
-    animation-iteration-count: 1;
+	z-index: 1011;
+	position: absolute;
+	bottom: $footer-height;
+	background-image: url("@/assets/main_back_horizon.png");
+	background-size: cover;
+	width: 100vw;
+	max-height: 60%;
+	min-height: 200px;
+	overflow-y: scroll;
+	animation-name: chat_container;
+	animation-duration: 0.4s;
+	animation-iteration-count: 1;
 }
+
 @keyframes chat_container {
-  0% {
-    transform: translateY(100%);
-  }
+	0% {
+		opacity: 0;
+		transform: translateY(100%);
+	}
 }
 
 
 #item_menu_modal {
-  padding: 10px 20px;
-  border-radius: 20px;
-  background-color: rgb(0,0,0,0.3);
-  color: white;
-  position: absolute;
-  bottom: $footer-height + 10px;
-  right: 10px;
-  animation-name: item_menu_modal;
-  animation-duration: 0.2s;
-  animation-iteration-count: 1;
-  box-shadow: 0 5px 5px rgb(0, 0, 0, 0.3);
+	padding: 10px 20px;
+	border-radius: 20px;
+	background-color: rgb(0, 0, 0, 0.3);
+	color: white;
+	position: absolute;
+	bottom: $footer-height + 10px;
+	right: 10px;
+	animation-name: item_menu_modal;
+	animation-duration: 0.5s;
+	animation-iteration-count: 1;
+	box-shadow: 0 5px 5px rgb(0, 0, 0, 0.3);
+	z-index: 100;
 }
+
 @keyframes item_menu_modal {
-  0% {
-    transform: translateY(100%)
-  }
+	0% {
+		opacity: 0;
+		transform: translateY(100%)
+	}
 }
 
 #item_description_modal {
-  z-index: 100010;
-  background-color: rgb(0,0,0,0.5);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100%;
+	z-index: 100010;
+	background-color: rgb(0, 0, 0, 0.5);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100%;
 }
+
 #item_description_modal_container {
-  background-color: #F2F2F2;
-  width: 100vw * 0.85;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 20px;
-  padding: 20px;
-  word-break:break-all;
-  animation-name: item_description_modal_container;
+	background-color: #F2F2F2;
+	width: 100vw * 0.85;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border-radius: 20px;
+	padding: 20px;
+	word-break: break-all;
+	animation-name: item_description_modal_container;
+	animation-duration: 0.5s;
+	animation-iteration-count: 1;
+}
+
+@keyframes item_description_modal_container {
+	0% {
+		transform: translate(-50%, -50%) scale(0);
+	}
+
+	70% {
+		transform: translate(-50%, -50%) scale(1.3);
+	}
+
+	85% {
+		transform: translate(-50%, -50%) scale(0.8);
+	}
+
+	95% {
+		transform: translate(-50%, -50%) scale(1.1);
+	}
+}
+
+.modal_confirm_button {
+	height: $item_modal_confirm_button_height;
+}
+
+.toast_chat {
+	z-index: 100100;
+	position: absolute;
+	bottom: $footer-height + 40px;
+	animation-name: toasting;
+	animation-duration: 0.25s;
+	animation-iteration-count: 1;
+}
+
+@keyframes toasting {
+	0% {
+		opacity: 0;
+		transform: scale(0) translateY(30px);
+	}
+}
+
+.toasting-leave-active {
+	transition: all 0.25s;
+}
+
+.toasting-leave-to {
+	opacity: 0;
+	transform: scale(0) translateY(30px);
+}
+
+.modal-fading-leave-active {
+	transition: all 0.5s;
+}
+
+.modal-fading-leave-to {
+	opacity: 0;
+	transform: scale(0) translateY(100%);
+}
+
+.menu-retreat-leave-active {
+	transition: all 0.5s;
+}
+
+.menu-retreat-leave-to {
+	opacity: 0;
+	transform: translateY(100%);
+}
+.chat-retreat-leave-active {
+	transition: all 0.5s;
+}
+.chat-retreat-leave-to {
+	opacity: 0;
+	transform: translateY(100%);
+}
+#status_bar {
+	position: absolute;
+	top: $video-height;
+	width: 100vw;
+	z-index: 1100;
+	color: white;
+	background-color: rgb(0,0,0,0.7);
+	padding: 0 20px;
+	height: $status_height;
+	line-height: $status_height;
+}
+#status_specific {
+	position: absolute;
+	z-index: 1199;
+	top: calc($video-height + $status_height);
+	width: 100vw;
+	padding: 5px 20px 10px;
+	color: white;
+	background-color: rgb(0,0,0,0.5);
+  animation-name: open_status;
   animation-duration: 0.5s;
   animation-iteration-count: 1;
 }
-@keyframes item_description_modal_container {
-  0% {transform: translate(-50%, -50%) scale(0);}
-  70% {transform: translate(-50%, -50%) scale(1.3);}
-  85% {transform: translate(-50%, -50%) scale(0.8);}
-  95% {transform: translate(-50%, -50%) scale(1.1);}
+@keyframes open_status {
+  0% {
+    opacity: 0;
+    transform: translateY(-30%);
+  }
+  
 }
-.modal_confirm_button {
-  height: $item_modal_confirm_button_height;
+.close_specific-leave-active {
+  transition: all 0.5s
+}
+.close_specific-leave-to {
+  opacity: 0;
+  transform: translateY(-30%)
+}
+.for_trans {
+  transition: all 0.5s;
+}
+.trans {
+  transform: rotateZ(180deg);
 }
 </style>

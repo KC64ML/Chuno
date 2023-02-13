@@ -74,6 +74,7 @@ export default {
         },
         info_icon(e) {
             alert("정보 버튼이 눌렸어요");
+            console.log(this.room);
             e.stopPropagation();
         }
     }
@@ -91,6 +92,15 @@ export default {
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0px 10px 20px -10px rgb(0, 0, 0, 0.7);
+    animation-name: room_card_appear;
+    animation-duration: 0.5s;
+    animation-iteration-count: 1;
+}
+@keyframes room_card_appear {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
 }
 .card_menu {
     padding: 10px;
