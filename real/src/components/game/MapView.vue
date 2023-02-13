@@ -351,7 +351,9 @@ export default {
       if(this.calculateDistance({lat: this.roomInfo.lat, lng: this.roomInfo.lng}) >= this.roomInfo.radius){
         // 아웃
         // this.outOfPlayground(this.location)
+        console.log('아웃임')
       } else {
+        console.log('범위안임')
         // ㄱㅊ
       }
     },
@@ -377,7 +379,7 @@ export default {
       .then((coordinates) => {
         this.location.lat = coordinates.lat
         this.location.lng = coordinates.lng
-        if(this.user.caught == false && this.calculateDistance(location) >= this.roomInfo.radius){
+        if(this.user.caught == false && this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}) >= this.roomInfo.radius){
           this.outOfPlayground()
         }
         this.conn.send(JSON.stringify(
