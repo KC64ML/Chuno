@@ -104,8 +104,10 @@ export default {
           const code = res.data.code
           console.log(token)
           
-          if(res.data.result.profile == null || res.data.result.profile.path == '') {
-            res.data.result.profile.path = 'profile/default.png';
+          if (res.data.result.profile == null || res.data.result.profile.path == '') {
+            res.data.result.profile = {
+              path: 'profile/default.png'
+            };
           }
           // console.log("path : " + res.data.result.profile.path);
           if (code) {
