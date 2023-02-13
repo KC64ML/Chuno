@@ -39,9 +39,6 @@
   <script>
   export default {
     name: "LeaveModal",
-    props: {
-        catchTarget: Object,
-    },
     methods: {
       onYesLeave() {
         console.log("나갈거야");
