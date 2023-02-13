@@ -347,8 +347,15 @@ $my_video_margin: 20px;
     transition: all 0.5s
 }
 .ink-bomb {
+    position: inherit;
     width: 100%;
     height: 100%;
+}
+.ink-bomb-me {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
 }
 .hidden_modal{
     transform: translateY(50%);
