@@ -59,6 +59,7 @@ export default {
     };
   },
   async created() {
+    console.log(this.room_info);
     this.room = await this.axios
       .get(process.env.VUE_APP_SPRING + "room/" + this.room_info.roomid)
       .then((res) => res.data.result);
