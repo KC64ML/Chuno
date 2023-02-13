@@ -38,6 +38,7 @@ export default {
             var content = JSON.parse(e.data);
             if (content.type == "rooms") {
                 this.rooms = content.roomInfo;
+                console.log("content.roomInfo : " + content.roomInfo);
             }
         };
     },
@@ -46,10 +47,8 @@ export default {
             // (2)
             // rooms를 돌면서 제목을 검색한다.
             // 제목이 검색어에 부합하는가 display  변수에 넣을 것
-            
-            console.log("rooms : " + this.rooms.type);
             for(const room in this.rooms){
-                console.log("room : " + room);
+                console.log("room : " + room.roomInfo);
             }
 
             // axios를 통 해모든 데이터를 가져오는데
