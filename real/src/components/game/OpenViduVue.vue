@@ -352,6 +352,6 @@ $my_video_margin: 20px;
 }
 .hidden_modal{
     opacity: 0;
-    transform: translateY(-50%);
+    transform: translateY(50%);
 }
 </style>
