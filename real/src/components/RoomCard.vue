@@ -40,7 +40,7 @@ export default {
   props: {
     room_info: undefined,
   },
-  //   emits: ["room_info"],
+
   data() {
     return {
       room: {},
@@ -83,10 +83,9 @@ export default {
     },
     info_icon(e) {
       console.log("정보 버튼이 눌렸어요");
-      //   this.read_mode = true;
       console.log(this.room);
-      this.$emit("a");
-      //   this.$emit("room_info", this.room);
+      this.$emit("info_show");
+      this.$emit("room_info", this.room);
       e.stopPropagation();
     },
   },

@@ -2,9 +2,10 @@
     <RoomInfoModal v-if="read_only" :roomInfo="roomInfo" @modal_off="modalOff()"></RoomInfoModal>
     <NewCreateRoomModal class="" v-if="modal_show" @modal_off="modalOff()" :player="{'lat': lat, 'lng': lng}"/>
     <HeaderVue :title="'홈'"></HeaderVue>
-    <div id="room_box" style="height: 80%; overflow: scroll;" class:="scroll">
-        <RoomCard v-for="(room, idx) in roomList" :key="idx" :room="room_info" @a="readOnly"></RoomCard>
-    </div>
+    <RoomCard :room="room_info[0]" @a="kk"></RoomCard>
+    <!-- <div id="room_box" style="height: 80%; overflow: scroll;" class:="scroll">
+        <RoomCard v-for="(room, idx) in roomList" :key="idx" :room="room_info" @a="kk"></RoomCard>
+    </div> -->
     <div id="plus_button" @click="createRoom">+</div>
 </template>
 
@@ -72,6 +73,9 @@ export default {
       console.log("리드온리");
       this.read_only = true;
     },
+    kk() {
+        console.log("왓어요");
+    }
   },
 };
 </script>

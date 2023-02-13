@@ -221,6 +221,7 @@ export default {
                 isToday: this.is_today, 
                 hour:  (this.hour + (this.is_am ? 0 : 12)) % 24,
                 minute:  this.minute,
+                maxPlayers: this.max_player,
             }, {
                 headers: { Authorization: sessionStorage.getItem("token") }
             }).then(res => res.data.result)
