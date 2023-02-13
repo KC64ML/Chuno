@@ -59,8 +59,8 @@
   <transition name="close_specific">
     <div id="status_specific" v-if="status_specific_modal">
       <div>
-        <div>잡은 노비 수 : {{ arrested_salve }} / {{ total_slave }}</div>
-        <div>찾은 노비 문서 수 : {{ ripped_paper }} / {{ total_paper }}</div>
+        <div>잡은 노비 수 : {{ arrested_salve }}명 / {{ total_slave }}명</div>
+        <div>찾은 노비 문서 수 : {{ ripped_paper }}명 / {{ total_paper }}명</div>
       </div>
     </div>
   </transition>
@@ -150,9 +150,17 @@ export default {
 					this.chat_toast = false;
 				}, 3000)
       } else if (content.type == 'caughtRunner') {
-        alert("게임뷰에서 실행되었어요!!!!!!");
+        this.arrested_slave++;
+        if (this.arrested_slave == this.total_slave) {
+          alert("추노팀 승리로 게임이 끝남!!!!!!")
+        }
       } else if (content.type == 'rippedPaper') {
-        alert("페이퍼를 찌저요!!!!!!!")
+        if(content.info.paper.real == true) {
+          this.ripped_paper++;
+          if (this.ripped_paper == this.total_paper) {
+            alert("노비팀 승리로 게임이 끝남")
+          }
+        }
       }
     })
     await this.axios.get(APPLICATION_SERVER_URL + 'user',
@@ -184,6 +192,15 @@ export default {
     /* 게임 시간 카운트 로직 */
     setInterval(() => {
       this.game_timer--;
+      if (this.game_timer == 0) {
+        if (this.ripped_paper > this.arrested_salve) {
+          alert("시간 제한 끝!!! 노비팀 승리!!!")
+        } else if (this.ripped_paper < this.arrested_salve) {
+          alert("시간 제한 끝!!! 추노팀 승리!!!")
+        } else {
+          alert("시간 제한 끝!!! 무승부!!!")
+        }
+      }
     }, 1000);
   },
   data() {
