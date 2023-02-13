@@ -20,6 +20,7 @@ export default {
   props: {
     isPlay: Boolean,
   },
+
   data() {
     return {
       bgm,
@@ -34,11 +35,19 @@ export default {
     };
   },
 
+  mounted() {
+    this.audio.file.addEventListener("ended", () => {
+      this.audio.file.play();
+      this.audio.file.currentTime = 0;
+      this.audio.isPlaying = true;
+    });
+  },
+
   updated() {
     if (!this.isPlay) {
       this.audio.isPlaying = false;
       this.audio.file.pause();
-      this.audio.currentTime = 0;
+      this.audio.file.currentTime = 0;
     }
   },
 
@@ -46,8 +55,6 @@ export default {
     play(audio) {
       audio.isPlaying = true;
       audio.file.play();
-      audio.loop = true;
-      audio.autoplay = true;
     },
 
     pause(audio) {

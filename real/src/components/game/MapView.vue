@@ -349,7 +349,7 @@ export default {
       this.ripModal = false
     },
     reOutOfPlayground(){
-      if(this.calculateDistance({lat: this.roomInfo.lat, lng: this.roomInfo.lng}) >= this.roomInfo.radius){
+      if(this.calculateDistance({ location: { lat: this.roomInfo.lat, lng: this.roomInfo.lng } }) >= this.roomInfo.radius){
         // 아웃
         // this.outOfPlayground(this.location)
         console.log('아웃임')
@@ -372,7 +372,7 @@ export default {
       // }
     },
     offOutOfPlayGround(){
-      this.onOutOfPlayground == false
+      this.onOutOfPlayground = false
       console.log(this.onOutOfPlayground)
     },
     // 내 위치
