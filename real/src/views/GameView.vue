@@ -59,7 +59,7 @@
   <transition name="close_specific">
     <div id="status_specific" v-if="status_specific_modal">
       <div>
-        <div>잡은 노비 수 : {{ arrested_salve }}명 / {{ total_slave }}명</div>
+        <div>잡은 노비 수 : {{ arrested_slave }}명 / {{ total_slave }}명</div>
         <div>찾은 노비 문서 수 : {{ ripped_paper }}명 / {{ total_paper }}명</div>
       </div>
     </div>
@@ -193,9 +193,9 @@ export default {
     setInterval(() => {
       this.game_timer--;
       if (this.game_timer == 0) {
-        if (this.ripped_paper > this.arrested_salve) {
+        if (this.ripped_paper > this.arrested_slave) {
           alert("시간 제한 끝!!! 노비팀 승리!!!")
-        } else if (this.ripped_paper < this.arrested_salve) {
+        } else if (this.ripped_paper < this.arrested_slave) {
           alert("시간 제한 끝!!! 추노팀 승리!!!")
         } else {
           alert("시간 제한 끝!!! 무승부!!!")
@@ -230,7 +230,7 @@ export default {
       // 게임 종료를 위한 변수에요
       game_timer: 1800,
       total_slave: 0,
-      arrested_salve: 0,
+      arrested_slave: 0,
       total_paper: 0,
       ripped_paper: 0,
 
