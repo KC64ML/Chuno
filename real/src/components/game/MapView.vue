@@ -264,8 +264,7 @@ export default {
               return;
             }
             console.log(('erollEvent에서 나와 타인의 거리 계산'))
-            const distance = this.calculateDistance(other)
-
+            // const distance = this.calculateDistance(other)
             
             this.others[other.nickname] = {
               nickname: other.nickname,
