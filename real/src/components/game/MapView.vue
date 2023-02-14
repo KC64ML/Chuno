@@ -117,7 +117,7 @@
         <!-- 상대가 노비일 때 -->
         <div v-if="o.role == 'runner' && user.role == 'chaser'">
           <GMapMarker
-            v-if="o.myMarker"
+            v-if="o.myMarker || calculateDistance(o) <= catchRadius"
             :icon=otherRunnerMarkerImg
             :position="o.location"
             :clickable="true"
@@ -186,7 +186,7 @@ export default {
         scaledSize: { width: 40, height: 40 }
       },
       outOfPlayGroundFlag: false,
-      catchRunnerFlag: false,
+      // catchRunnerFlag: false,
       onOutOfPlayground: false,
       outModal: false,
       
@@ -263,6 +263,10 @@ export default {
             if (other.nickname == this.user.nickname) {
               return;
             }
+            console.log(('erollEvent에서 나와 타인의 거리 계산'))
+            const distance = this.calculateDistance(other)
+
+            
             this.others[other.nickname] = {
               nickname: other.nickname,
               role: other.role,
@@ -270,11 +274,11 @@ export default {
               myMarker: other.myMarker,
               caught: other.caught,
             };
-            if(!this.catchRunnerFlag) {
-              console.log('enrollEvent에서 catchRunner실행')
-              this.catchRunner(this.others[other.nickname].location)
-            }
-            console.log("ohters 받아오는 중 : ", this.others);
+            // if(!this.catchRunnerFlag) {
+            //   console.log('enrollEvent에서 catchRunner실행')
+            //   this.catchRunner(this.others[other.nickname].location)
+            // }
+            // console.log("ohters 받아오는 중 : ", this.others);
             
             
           } else if (content.type == "caughtRunner") {
@@ -506,7 +510,7 @@ export default {
       console.log('--------------DISTANCE-----------------')
       console.log(distance)
       if(this.user.role == 'chaser' && marker.role == 'runner' && marker.caught == false && distance <= this.catchRadius){
-        this.catchRunnerFlag = true
+        // this.catchRunnerFlag = true
         console.log('잡을 수 있음' + marker)
         this.catchModal = true
         this.catchTarget = marker
@@ -518,7 +522,7 @@ export default {
     onNoCatch(){
       this.catchModal = false
       console.log('노비 안잡을래..')
-      this.catchRunnerFlag = false
+      // this.catchRunnerFlag = false
     },
     // 노비 잡기
     onYesCatch(target){
@@ -527,7 +531,7 @@ export default {
       console.log(target)
       this.catchModal = false
       target.caught = true
-      this.catchRunnerFlag = false
+      // this.catchRunnerFlag = false
       this.$emit("myArrestSlave")
       this.conn.send(JSON.stringify(
           {
