@@ -72,6 +72,9 @@ public class RoomService {
         dt.setHour(room.getHour());
         dt.setMinute(room.getMinute());
         LocalDate now = LocalDate.now();
+        if(!room.getIsToday()) {
+            now.plusDays(1);
+        }
         dt.setYear(now.getYear());
         dt.setMonth(now.getMonthValue());
         dt.setDay(now.getDayOfMonth());
@@ -105,7 +108,7 @@ public class RoomService {
                 if (currentPlayers == maxPlayers) {
                     resMap.put("code", "2");
                 } else {
-                    room.setCurrentPlayers(currentPlayers + 1);
+//                    room.setCurrentPlayers(currentPlayers + 1);
                     roomRepository.saveAndFlush(room);
                     RoomResponse dto = new RoomResponse(room, null);
                     resMap.put("result", dto);

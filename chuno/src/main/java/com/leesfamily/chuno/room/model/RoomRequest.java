@@ -6,7 +6,7 @@ import lombok.Data;
 public class RoomRequest extends RoomEntity{
 
     private Long hostId;
-    private boolean isToday;
+    private Boolean isToday;
     private int hour;
     private int minute;
 
