@@ -5,7 +5,7 @@
         <div id="close_button" @click="offing">x</div>
         <div id="modal_title" style="font-size: 24px">비밀번호</div>
       </div>
-      <div class="{'shake' : wrong}">
+      <div :class="{ shake: wrong }">
         <input
           v-model="password"
           style="padding: 0 20px; display: block; width: 70%; margin: 0 auto"
@@ -63,6 +63,7 @@ export default {
             this.offing();
             this.$router.push(`/waitingRoom/${this.roomInfo.id}`);
           } else if (code == 3) {
+            this.shakeWrongAnswer();
             this.wrong = true;
           }
           console.log("code", code);
