@@ -325,6 +325,12 @@ public class SocketRoomHandler extends TextWebSocketHandler {
 			for (PlayerDto p : room_map.get(room)) {
 				p.getSession().sendMessage(msg);
 			}
+		} else if (event.equals("keepconnect")) {
+			HashMap<String, Object> dto = new HashMap<>();
+			dto.put("type", "keepconnect");
+			dto.put("info", "keep Connect");
+			TextMessage msg = new TextMessage(mapper.writeValueAsString(dto));
+			session.sendMessage(msg);
 		}
 	}
 
