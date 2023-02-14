@@ -39,7 +39,7 @@
                 <input id="input_el" v-model="chat_data" @keyup.enter="transform_chat">
             </div>
             <div style="display: flex; align-items: center" @click="transform_chat">
-                <img src="@/assets/paper_plane.svg" alt="">
+                <img src="@/assets/arrow.svg" alt="">
             </div>
             <div v-if="is_host" id="start_button" class="ready_start" @click="start_button">
                 시작!
@@ -122,10 +122,10 @@ export default {
             })
         },
         init() {
-            this.conn.send(JSON.stringify({
+            this.sendData({
                 "event": "getAllUserInRoom", // rooms와 연결되어있음
                 "room": this.room_id,
-            }));
+            });
         },
         dot_menu() {
             this.menu_modal = true;
@@ -149,20 +149,20 @@ export default {
             e.stopPropagation();
         },
         leave_room() {
-            this.conn.send(JSON.stringify({
+            this.sendData({
                 "event": "leave",
                 "room": this.room_id,
                 "nickname": this.user.nickname,
                 "level": this.user.level
-            }))
+            })
         },
         ready_button() {
-            this.conn.send(JSON.stringify({
+            this.sendData({
                 "event": "ready",
                 "room": this.room_info.id,
                 "nickname": this.user.nickname,
                 "level": this.user.level,
-            }))
+            })
 
         },
         async start_button() {
@@ -186,7 +186,7 @@ export default {
             var team_slave = data.roomDecideChunoOrSlaveList.slice(0, user_len / 2);
             var team_chuno = data.roomDecideChunoOrSlaveList.slice(user_len/2, user_len);
             console.log(data.roomStartDto.lat)
-            this.conn.send(JSON.stringify({
+            this.sendData({
                 "event": "startGame",
                 "room": roomId,
                 "startData": {
@@ -197,7 +197,7 @@ export default {
                     "teamslave": team_slave,
                     "teamchuno": team_chuno,
                 }
-            }));
+            });
             // console.log(data.roomDecideChunoOrSlaveList.slice(0,))
             // var user_len = data.roomDecideChunoOrSlaveList.length();
             // var team_slave = data.roomDecideChunoOrSlaveList.slice(0,user_len / 2);
@@ -211,13 +211,13 @@ export default {
             // }))
         },
         transform_chat() {
-            this.conn.send(JSON.stringify({
+            this.sendData({
                 "event": "chat",
                 "room": this.room_info.id,
                 "nickname": this.user.nickname,
                 "level": this.user.level,
                 "msg": this.chat_data
-            }))
+            })
             this.chat_data = "";
         }
     }

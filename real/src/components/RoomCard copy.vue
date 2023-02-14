@@ -60,12 +60,12 @@ export default {
         async goWaitingRoom() {
             var user = await this.axios.get(process.env.VUE_APP_SPRING + "user", {headers: {Authorization: sessionStorage.getItem("token")}}).then(res => res.data.result);
             console.log("-------------", user)
-            this.conn.send(JSON.stringify({
+            this.sendData({
                 "event": "enter",
                 "room": this.room_info.roomid,
                 "nickname": user.nickname,
                 "level": user.level
-            }))
+            })
             this.$router.push({ path: "/waitingRoom/" + this.room.id })
         },
         bell_icon(e) {
