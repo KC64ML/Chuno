@@ -73,7 +73,7 @@ public class RoomService {
         dt.setMinute(room.getMinute());
         LocalDate now = LocalDate.now();
         if(!room.getIsToday()) {
-            now.plusDays(1);
+            now = now.plusDays(1);
         }
         dt.setYear(now.getYear());
         dt.setMonth(now.getMonthValue());
