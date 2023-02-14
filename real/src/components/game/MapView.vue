@@ -181,7 +181,8 @@ export default {
       },
       outOfPlayGroundFlag: false,
       catchRunnerFlag: false,
-
+      onOutOfPlayground: false,
+      
       // 노비 문서 관련 정보
       papers: [], // props로
       paperMarkerImg: {
@@ -396,9 +397,7 @@ export default {
       .then((coordinates) => {
         this.location.lat = coordinates.lat
         this.location.lng = coordinates.lng
-      .catch((error) => {
-        console.log(error)
-      })
+
 
         // 범위 내에 있는지 확인
         console.log(this.user.caught)
@@ -422,10 +421,13 @@ export default {
             }
           }
         ));
+        if(!this.catchRunnerFlag) {
+          this.catchRunner()
+        }
       })
-      if(!this.catchRunnerFlag) {
-        this.catchRunner()
-      }
+      .catch((error) => {
+        console.log(error)
+      })
     },
     GyroAllow() {
       // 자이로스코프 인식
