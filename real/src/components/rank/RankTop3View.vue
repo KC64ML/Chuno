@@ -12,9 +12,10 @@
         <img src="@/assets/crown_silver.png" alt="" v-if="user.rank == 2" id="crown">
         <img src="@/assets/crown_bronze.png" alt="" v-if="user.rank == 3" id="crown">
         <img 
+
           :src="user.path ? URL + 'resources/images?path=' + user.path :  defaultProfile" 
           alt="profile" 
-          id="profile"
+          class="profile"
           @click="this.$router.push({ name: 'Profile', params: { uid: user.id } })"
         >
         <p>Lv.{{ user.level }}</p>
@@ -54,5 +55,10 @@ export default {
   /* height: 30px; */
   width: 30px;
   position: absolute;
+}
+.profile {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
 }
 </style>
