@@ -33,6 +33,7 @@ public class Scheduler {
     @Async // 병렬로 Scheduler 를 사용할 경우 @Async 추가
     @Scheduled(fixedRate = 60000)
     public void scheduleFixedRateTask() throws InterruptedException {
+        log.info("scheduler exec");
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime later10m = now.plusMinutes(10l);
         List<PushEntity> pushList = pushRepository.findAll();
@@ -52,6 +53,7 @@ public class Scheduler {
                     && nowDay == roomDay && nowMonth == roomMonth && nowYear == roomYear) {
                 UserEntity user = push.getUser();
                 RoomEntity room = push.getRoom();
+                log.info("send sms");
                 smsUtils.sendOne(user.getPhone(), room.getTitle());
                 return;
             }
