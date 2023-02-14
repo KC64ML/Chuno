@@ -1,5 +1,5 @@
 <template>
-    <div id="main_vedio_container" :class="isLongVideo ? 'short-version' : 'long-version'" style="z-index: 10000;">
+    <div id="main_vedio_container" :class="isLongVideo ? 'long-version' : 'short-version'" style="z-index: 10000;">
         <div id="long_video_toggle" :class="isLongVideo ? 'upside-down' : ''" @click="videoLengthToggle">
             <img src="@/assets/to_bottom.png">
         </div>
@@ -295,6 +295,7 @@ $my_video_margin: 20px;
     overflow: hidden;
     border: dashed;
     background-color: black;
+    transition: all 0.5s ease-in-out;
 }
 #long_video_toggle {
     position: absolute;
@@ -302,6 +303,7 @@ $my_video_margin: 20px;
     right: 5px;
     width: 20px;
     height: 20px;
+    transition: all 0.3s ease-in;
 }
 @keyframes upsidedown {
   0% {
