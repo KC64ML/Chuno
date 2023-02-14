@@ -27,6 +27,9 @@ public class CommonController {
 
     @GetMapping("/images")
     public ResponseEntity<byte[]> userSearch(@RequestParam("path") String path) throws IOException {
+        if(path.equals(null)) {
+            return null;
+        }
         InputStream imageStream = new FileInputStream(uploadFilePath + "/" + path);
         byte[] imageByteArray = toByteArray(imageStream);
         imageStream.close();
