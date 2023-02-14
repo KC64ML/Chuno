@@ -433,7 +433,7 @@ export default {
               caught: this.user.caught,
             }
           }
-        ));
+        );
         
       })
       .catch((error) => {
