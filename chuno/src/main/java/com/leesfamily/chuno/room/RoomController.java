@@ -121,12 +121,13 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/join/{roomId}")
+    @PostMapping("/join/{roomId}")
     public ResponseEntity<Map<String, Object>> joinRoom(
             @PathVariable("roomId") long roomId,
+            @RequestBody(required = false) String password,
             @RequestHeader HttpHeaders requestHeader) {
         Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
-        Map<String, Object> resMap = roomService.joinRoom(roomId, userId);
+        Map<String, Object> resMap = roomService.joinRoom(roomId, userId, password);
         return new ResponseEntity<>(resMap, HttpStatus.OK);
     }
 

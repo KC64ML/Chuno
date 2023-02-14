@@ -92,21 +92,25 @@ public class RoomService {
         return res;
     }
 
-    public Map<String, Object> joinRoom(long roomId, Long userId) {
+    public Map<String, Object> joinRoom(long roomId, Long userId, String password) {
         Optional<RoomEntity> res = roomRepository.findById(roomId);
         Map<String, Object> resMap = new HashMap<>();
         if (res.isPresent()) {
             RoomEntity room = res.get();
-            int currentPlayers = room.getCurrentPlayers();
-            int maxPlayers = room.getMaxPlayers();
-            if (currentPlayers == maxPlayers) {
-                resMap.put("code", "2");
-            } else {
-                room.setCurrentPlayers(currentPlayers + 1);
-                roomRepository.saveAndFlush(room);
-                RoomResponse dto = new RoomResponse(room, null);
-                resMap.put("result", dto);
-                resMap.put("code", "1");
+            if(!room.isPushed() && !room.getPassword().equals(password)) {
+                resMap.put("code", "3");
+            }else {
+                int currentPlayers = room.getCurrentPlayers();
+                int maxPlayers = room.getMaxPlayers();
+                if (currentPlayers == maxPlayers) {
+                    resMap.put("code", "2");
+                } else {
+                    room.setCurrentPlayers(currentPlayers + 1);
+                    roomRepository.saveAndFlush(room);
+                    RoomResponse dto = new RoomResponse(room, null);
+                    resMap.put("result", dto);
+                    resMap.put("code", "1");
+                }
             }
         } else {
             resMap.put("code", 0);
