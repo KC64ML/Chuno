@@ -180,6 +180,8 @@ export default {
         scaledSize: { width: 40, height: 40 }
       },
       outOfPlayGroundFlag: false,
+      catchRunnerFlag: false,
+
       // 노비 문서 관련 정보
       papers: [], // props로
       paperMarkerImg: {
@@ -394,7 +396,9 @@ export default {
       .then((coordinates) => {
         this.location.lat = coordinates.lat
         this.location.lng = coordinates.lng
-
+      .catch((error) => {
+        console.log(error)
+      })
 
         // 범위 내에 있는지 확인
         console.log(this.user.caught)
@@ -418,9 +422,6 @@ export default {
             }
           }
         ));
-      })
-      .catch((error) => {
-        console.log(error)
       })
       if(!this.catchRunnerFlag) {
         this.catchRunner()
