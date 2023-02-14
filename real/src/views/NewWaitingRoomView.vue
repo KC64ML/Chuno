@@ -39,7 +39,7 @@
                 <input id="input_el" v-model="chat_data" @keyup.enter="transform_chat">
             </div>
             <div style="display: flex; align-items: center" @click="transform_chat">
-                <img src="@/assets/paper_plane.svg" alt="">
+                <img src="@/assets/arrow.svg" alt="">
             </div>
             <div v-if="is_host" id="start_button" class="ready_start" @click="start_button">
                 시작!
