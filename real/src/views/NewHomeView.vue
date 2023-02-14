@@ -10,16 +10,32 @@
     :player="{ lat: lat, lng: lng }"
   />
   <HeaderVue :title="'저잣거리'"></HeaderVue>
-  <div id="room_box" style="height: 80%; overflow: scroll">
-    <RoomCard
-      v-for="(room, idx) in roomList"
-      :key="idx"
-      v-bind:room_info="room"
-      @click="play(this.door)"
-      @info_show="showRoomInfo"
-      @room_info="setRoomInfo"
-      @info_close="closeRoomInfo"
-    ></RoomCard>
+  <div v-if="!connect_try">
+    <div class="flex_center">
+      <div class="lds-ripple"><div></div><div></div></div>
+    </div>
+    <div class="yura_yura" style="text-align: center; margin-top: 40px; font-size: 20px; width: 100vw; overflow: hidden;">저잣거리를 둘러 보고 있어요.</div>
+  </div>
+  <div v-else style="height: 80%;">
+    <div v-if="roomList.length == 0" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%)">
+      <div class="sad_face" style="text-align: center; font-size: 40px;">
+        ㅠ.ㅠ
+      </div>
+      <div style="text-align: center;">
+        참가 가능한 방이 없어요
+      </div>
+    </div>
+    <div id="room_box" style="height: 100%; overflow: scroll" v-else>
+      <RoomCard
+        v-for="(room, idx) in roomList"
+        :key="idx"
+        v-bind:room_info="room"
+        @click="play(this.door)"
+        @info_show="showRoomInfo"
+        @room_info="setRoomInfo"
+        @info_close="closeRoomInfo"
+      ></RoomCard>
+    </div>
   </div>
   <div id="plus_button" @click="createRoom">+</div>
 </template>
@@ -42,6 +58,9 @@ export default {
   },
   data() {
     return {
+      connect_try: false,
+      try_error: false,
+
       modal_show: false,
       info_show: false,
       lat: 0,
@@ -79,6 +98,7 @@ export default {
               )
               .then((res) => res.data.result);
             this.roomList = temp_room;
+            this.connect_try = true;
             console.log("지금 있는 모든 방을 조회해요");
             var rooms = content.roomInfo;
 
@@ -110,6 +130,7 @@ export default {
             //     lng: this.lng,
             // })
             this.roomList = rooms;
+            this.connect_try = true;
           } else if (content.type == "error") {
             console.log(content.msg);
           }
@@ -120,11 +141,15 @@ export default {
       });
     },
     init() {
-      this.conn.send(
-        JSON.stringify({
-          event: "getAllRoom", // rooms와 연결되어있음
-        })
-      );
+      try {
+        this.conn.send(
+          JSON.stringify({
+            event: "getAllRoom", // rooms와 연결되어있음
+          })
+        );
+      } catch (error) {
+        alert("ㅋㅋㅋㅋㅋㅋㅋ");
+      }
     },
     createRoom() {
       this.modal_show = true;
@@ -179,8 +204,14 @@ export default {
   z-index: 2;
 }
 @keyframes plus_button {
+  0% {
+    transform: scale(1.1, 0.9);
+  }
   50% {
-    transform: translateY(-50%);
+    transform: translateY(-50%) scale(0.95, 1.1)
+  }
+  100% {
+    transform: scale(1.1, 0.9);
   }
 }
 
@@ -210,5 +241,78 @@ export default {
 
 #room_box::-webkit-scrollbar {
   display: none;
+}
+
+.lds-ripple {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ripple div {
+  position: absolute;
+  border: 4px solid rgb(0, 0, 0);
+  opacity: 1;
+  border-radius: 50%;
+  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+.lds-ripple div:nth-child(2) {
+  animation-delay: -0.5s;
+}
+@keyframes lds-ripple {
+  0% {
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  4.9% {
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  5% {
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    top: 0px;
+    left: 0px;
+    width: 72px;
+    height: 72px;
+    opacity: 0;
+  }
+}
+.sad_face {
+  animation-name: sad_face;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite;
+}
+@keyframes sad_face {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.1, 0.9);
+  }
+  75% {
+    transform: scale(0.9, 1.1);
+  }
+  85% {
+    transform: translateY(-8px) scale(1.05,0.95);
+  }
+  95% {
+    transform: scale(0.9, 1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+
 }
 </style>
