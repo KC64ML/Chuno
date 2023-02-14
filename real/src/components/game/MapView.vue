@@ -423,7 +423,9 @@ export default {
       .catch((error) => {
         console.log(error)
       })
-      this.catchRunner()
+      if(!this.catchRunnerFlag) {
+        this.catchRunner()
+      }
     },
     GyroAllow() {
       // 자이로스코프 인식
@@ -491,10 +493,10 @@ export default {
       console.log('--------------DISTANCE-----------------')
       console.log(distance)
       if(this.user.role == 'chaser' && marker.role == 'runner' && marker.caught == false && distance <= this.catchRadius){
+        this.catchRunnerFlag = true
         console.log('잡을 수 있음' + marker)
         this.catchModal = true
         this.catchTarget = marker
-        
       } else {
         console.log('잡을 수 없음')
       }
@@ -503,6 +505,7 @@ export default {
     onNoCatch(){
       this.catchModal = false
       console.log('노비 안잡을래..')
+      this.catchRunnerFlag = false
     },
     // 노비 잡기
     onYesCatch(target){
@@ -511,6 +514,7 @@ export default {
       console.log(target)
       this.catchModal = false
       target.caught = true
+      this.catchRunnerFlag = false
       this.$emit("myArrestSlave")
       this.conn.send(JSON.stringify(
           {
