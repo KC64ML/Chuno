@@ -304,6 +304,7 @@ $my_video_margin: 20px;
     width: 20px;
     height: 20px;
     transition: all 0.3s ease-in;
+    z-index: 1;
 }
 #long_video_toggle img {
     width: 100%;
