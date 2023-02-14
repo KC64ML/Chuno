@@ -270,10 +270,12 @@ export default {
               myMarker: other.myMarker,
               caught: other.caught,
             };
+            if(!this.catchRunnerFlag) {
+              console.log('enrollEvent에서 catchRunner실행')
+              this.catchRunner(this.others[other.nickname].location)
+            }
             console.log("ohters 받아오는 중 : ", this.others);
-            // if(this.user.role == 'chaser') {
-            //   this.catchRunner(other);
-            // }
+            
             
           } else if (content.type == "caughtRunner") {
               const content = JSON.parse(e.data);
@@ -432,9 +434,7 @@ export default {
             }
           }
         ));
-        if(!this.catchRunnerFlag) {
-          this.catchRunner()
-        }
+        
       })
       .catch((error) => {
         console.log(error)
