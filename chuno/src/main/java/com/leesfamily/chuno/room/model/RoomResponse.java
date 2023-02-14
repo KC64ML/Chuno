@@ -21,7 +21,7 @@ public class RoomResponse {
         private double radius;
         private double distance;
         private Boolean isPublic;
-        private boolean isPushed;
+        private Boolean isPushed;
         private UserEntity host;
         private DateTime dateTime;
 
@@ -35,7 +35,7 @@ public class RoomResponse {
             this.maxPlayers = entity.getMaxPlayers();
             this.radius = entity.getRadius();
             this.host = entity.getHost();
-            this.isPushed = entity.isPushed();
+            this.isPushed = entity.getIsPushed();
             this.isPublic = entity.getIsPublic();
             this.distance = entity.getDistance();
             this.dateTime = entity.getDateTime();

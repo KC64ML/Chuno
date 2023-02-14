@@ -35,7 +35,7 @@ public class RoomStartDto {
 
     private double distance;
 
-    private boolean isPushed;
+    private Boolean isPushed;
 
 
     // of 호출시 RoomStartDto 반환
@@ -52,7 +52,7 @@ public class RoomStartDto {
                 room.getDateTime(),
                 room.getHost(),
                 room.getDistance(),
-                room.isPushed()
+                room.getIsPushed()
         );
     }
 }

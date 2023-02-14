@@ -67,6 +67,6 @@ public class RoomEntity {
     private double distance;
 
     @Transient
-    private boolean isPushed;
+    private Boolean isPushed;
 
 }
