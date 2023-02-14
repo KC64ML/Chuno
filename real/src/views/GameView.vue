@@ -542,7 +542,7 @@ export default {
         "runnerWin": this.runnerWin,
         "runnerCnt": this.my_ripped_paper
       }, { headers: { Authorization: sessionStorage.getItem("token") } }).then(res => res.data);
-      this.$router.push({ name: "gameResult", params: { role: this.user.role, win: (this.chaserWin+this.runnerWin), exp: result.exp, money: result.money } });
+      this.$router.push({ name: "gameResult", params: { role: this.user.role, win: (this.chaserWin+this.runnerWin), exp: result.exp, money: result.money, host: this.roomInfo.host.nickname, roomId:this.roomInfo.id } });
     },
     makeDisplay(e) {
       console.log("메이크디스클레이에 왔어요")

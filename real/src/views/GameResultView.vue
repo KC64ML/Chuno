@@ -82,6 +82,8 @@ export default {
             user_level_from_exp: 0,
             user_level_to: 3,
             user_level_to_exp: 0,
+            roomId: this.$route.params.roomId,
+            host: this.$route.params.host,
             user_role: this.$route.params.role,
             user_win: this.$route.params.win,
             user_exp: this.$route.params.exp,
@@ -171,6 +173,13 @@ export default {
             this.level_up_modal = false;
         },
         game_end_confirm() {
+            console.log("111111",this.roomId, this.host, "11111111")
+            this.conn.send(JSON.stringify({
+                "event": "leave",
+                "room": this.roomId,
+                "nickname": this.host,
+                "level": "1",
+            }))
             this.$router.push({name: "home"});
         }
     }

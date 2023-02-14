@@ -11,7 +11,7 @@ const routes = [
         props: true,
     },
     {
-        path: "/gameResult/:role/:win/:exp/:money",
+        path: "/gameResult/:role/:win/:exp/:money/:host/:roomId",
         name: "gameResult",
         component: () => import("@/views/GameResultView.vue")
     }
