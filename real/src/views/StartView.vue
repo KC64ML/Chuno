@@ -1,8 +1,11 @@
 <template>
   <div id="container">
+    <div class="video_back" style="overflow: hidden; z-index=0; position: absolute; top: 0; left: 0; width: 100vw; height: 100%; background-color: black;">
+      <video src="@/assets/smoke.mp4" playbackRate="1.5" autoplay muted style="width: 250vw; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></video>
+    </div>
     <transition name="start_disappear">
-      <img v-if="show_el" src="@/assets/main_logo1.png" class="block_center sliding_down_appearance"
-        style="width:150px">
+      <img v-if="show_el" src="@/assets/main_logo1.png" class="block_center new_logo_appear"
+        style="width:150px; z-index: 1000; position: relative;">
     </transition>
     <div style="margin-top: 30px"></div>
     <transition name="button_disappear">
@@ -36,6 +39,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$video_duration: 6s;
 #button1 {
   height: 70px;
 }
@@ -43,8 +47,8 @@ export default {
 .opacity_appear {
   opacity: 0;
   animation-name: btn_opacity;
-  animation-delay: .3s;
-  animation-duration: 2s;
+  animation-delay: $video_duration / 4;
+  animation-duration: $video_duration;
   animation-fill-mode: forwards;
   animation-iteration-count: 1;
 }
@@ -92,5 +96,31 @@ export default {
 .button_disappear-leave-to {
   filter: opacity(0%);
 }
-
+.new_logo_appear {
+  animation-name: new_logo_appear;
+  animation-duration: $video_duration;
+  animation-iteration-count: 1;
+}
+@keyframes new_logo_appear {
+  0%{
+    opacity: 0;
+    filter: blur(40px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(0) brightness(0) invert(1);
+  }
+}
+.video_back {
+  animation-name: video_back;
+  animation-duration: $video_duration / 2;
+  animation-delay: $video_duration / 2;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+@keyframes video_back {
+  100% {
+    opacity: 0;
+  }
+}
 </style>
