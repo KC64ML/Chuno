@@ -34,7 +34,7 @@ public class RoomEntity {
 
     @Column(nullable = false)
     @ColumnDefault("true")
-    private boolean isPublic;
+    private Boolean isPublic;
     @Column(nullable = false)
     private double lat;
 
