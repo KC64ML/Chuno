@@ -181,7 +181,8 @@ export default {
       },
       outOfPlayGroundFlag: false,
       catchRunnerFlag: false,
-
+      onOutOfPlayground: false,
+      
       // 노비 문서 관련 정보
       papers: [], // props로
       paperMarkerImg: {
