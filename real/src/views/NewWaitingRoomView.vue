@@ -1,11 +1,12 @@
 <template>
+<RoomInfoModal :roomInfo="room_info" v-if="infoShow" @info_close="closeInfo"></RoomInfoModal>
     <div id="modal_container" @click="modal_close" v-if="menu_modal">
         <div id="waiting_room_modal">
             <div style="display: flex" class="menu_box" @click="info_on">
                 <img class="modal_menu_image" src="@/assets/info_yanggak.svg" />
                 <div>방 정보</div>
             </div>
-            <div style="display: flex" class="menu_box" @click="notting" v-if="is_notified">
+            <div style="display: flex" class="menu_box" @click="notting" v-if="isPushed">
                 <img class="modal_menu_image" src="@/assets/note_on.svg" />
                 <div>알림끄기</div>
             </div>
@@ -54,6 +55,7 @@
 <script>
 import HeaderVue from '@/components/HeaderVue.vue';
 import NicknameCardVue from '@/components/waitingRoom/NicknameCardVue.vue'
+import RoomInfoModal from '@/components/home/RoomInfoModal.vue'
 
 export default {
     beforeRouteLeave(to, from, next) {
@@ -62,13 +64,15 @@ export default {
     },
     components: {
         HeaderVue,
-        NicknameCardVue
+        NicknameCardVue,
+        RoomInfoModal
     },
     data() {
         return {
             menu_modal: false,
             // 이건 수정해야 될 가능성 큼
-            is_notified: false,
+            isPushed: false,
+            infoShow:false,
 
             is_host: false,
             room_id: this.$route.params.roomId,
@@ -84,8 +88,14 @@ export default {
     },
     async created() {
         // 방정보를 받아올게요
-        this.room_info = await this.axios.get(process.env.VUE_APP_SPRING + "room/" + this.room_id).then(res => res.data.result);
+        this.room_info = await this.axios.get(process.env.VUE_APP_SPRING + "room/" + this.room_id, {
+                headers: { Authorization: sessionStorage.getItem("token") },
+            })
+      .then((res) => res.data.result);
         console.log("현재 방 정보:", this.room_info);
+        this.isPushed = this.room_info.isPushed;
+        console.log("현재 방 알림:", this.isPushed);
+        console.log("현재 방 아이디:", this.room_info.id);
         // 내정보를 가저와요
         this.user = await this.axios.get(process.env.VUE_APP_SPRING + "user", { headers: { Authorization: this.token } }).then(res => res.data.result);
         // 방장인지 알아봐요
@@ -133,16 +143,51 @@ export default {
         modal_close() {
             this.menu_modal = false;
         },
-        info_on(e) {
-            alert("정보");
-            e.stopPropagation();
+        info_on() {
+            this.infoShow = true;
+            // e.stopPropagation();
         },
-        notting(e) {
+        closeInfo(){
+            this.infoShow = false;
+        },
+        notting() {
             // 방 아이디를 보내면 유저가 방에대해 한 알림설정의 상태를 바꿔주세요
             console.log("방키:" + this.$route.params.roomId)
-            // 임시로 바꾼 정보를 받았다 칠게요
-            this.is_notified = !this.is_notified;
-            e.stopPropagation();
+            if (!this.isPushed) {
+                this.axios
+                .post(
+                    process.env.VUE_APP_SPRING + "room/push/" + this.room_info.id,
+                    "",
+                    {
+                    headers: { Authorization: sessionStorage.getItem("token") },
+                    }
+                )
+                .then(({ data }) => {
+                    if (data.code == 1) {
+                    this.isPushed = true;
+                    console.log("예약 성공");
+                    } else {
+                    alert("예약에 실패했습니다. 오류코드 : " + data.code);
+                    }
+                });
+            } else {
+                this.axios
+                .delete(
+                    process.env.VUE_APP_SPRING + "room/push/" + this.room_info.id,
+                    {
+                    headers: { Authorization: sessionStorage.getItem("token") },
+                    }
+                )
+                .then(({ data }) => {
+                    if (data.code == 1) {
+                        console.log("예약취소 성공");
+                    this.isPushed = false;
+                    } else {
+                    alert("예약 취소에 실패했습니다. 오류코드 : " + data.code);
+                    }
+                });
+            }
+            // e.stopPropagation();
         },
         exiting_room(e) {
             this.$router.push({ name: 'home' })
@@ -269,6 +314,7 @@ $ready_button_height: 50px;
     top: $header_height - 10px;
     right: $dot_right_position;
     z-index: 1;
+    border-radius: 10px;
 }
 
 .modal_menu_image {
