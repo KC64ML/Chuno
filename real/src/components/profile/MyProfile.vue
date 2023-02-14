@@ -3,7 +3,7 @@
     <div class="container-col" id="myProfile">
       <div class="container-row">
         <!-- <img src="@/assets/profile_default.svg" alt="profile pic" class="uploadedImg"> -->
-        <img :src="userInfo.profile ? URL + 'resources/images?path=' + userInfo.profile.path : defaultProfile"
+        <img :src="userInfo.profile.path ? URL + 'resources/images?path=' + userInfo.profile.path : defaultProfile"
           alt="profile pic" class="uploadedImg">
         <div>
           <p style="font-size: 20pt;">{{ userInfo.nickname }}</p>
