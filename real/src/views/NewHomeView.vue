@@ -3,6 +3,7 @@
     v-if="pass_show"
     @pass_close="closePass()"
     :roomInfo="roomInfo"
+    @isEnter="setIsEnter"
   ></PasswordModal>
   <RoomInfoModal
     v-if="info_show"
@@ -25,6 +26,7 @@
       @room_info="setRoomInfo"
       @info_close="closeRoomInfo"
       @show_pass="showPassword"
+      :isEnter="isEnter"
     ></RoomCard>
   </div>
   <div id="plus_button" @click="createRoom">+</div>
@@ -58,6 +60,7 @@ export default {
       roomList: [],
       roomInfo: {},
       door,
+      isEnter: false,
     };
   },
   async created() {
@@ -168,6 +171,9 @@ export default {
     showPassword() {
       console.log("showPass");
       this.pass_show = true;
+    },
+    setIsEnter() {
+      this.isEnter = true;
     },
   },
 };
