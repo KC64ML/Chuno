@@ -4,12 +4,7 @@
       <div id="close_button" @click="offing">x</div>
       <div id="modal_title" style="font-size: 24px">프로필 편집</div>
       <div>
-        <table>
-          <colgroup>
-            <col style="width: 90px" />
-            <col style="width: 200px" />
-          </colgroup>
-          <tr id="profile_image">
+        <div id="profile_image">
             <td>
               <div v-if="this.img_url">
                 <div id="profile_background">
@@ -38,7 +33,12 @@
                 style="display: none"
               />
             </td>
-          </tr>
+          </div>
+        <table>
+          <colgroup>
+            <col style="width: 90px" />
+            <col style="width: 200px" />
+          </colgroup>
           <tr>
             <td>닉네임</td>
             <td>
@@ -51,10 +51,8 @@
               <input v-model="phone" style="padding: 0 3%" maxlength="12" />
             </td>
           </tr>
-          <tr>
-            <td class="grey">전화번호는 '-' 없이 숫자만 입력해주세요.</td>
-          </tr>
         </table>
+          <td class="grey">전화번호는 '-' 없이 숫자만 입력해주세요.</td>
         <div class="flex_center hover_pointer" @click="save">
           <img
             src="@/assets/main_button1.png"
@@ -69,8 +67,6 @@
 </template>
 
 <script>
-// import { formToJSON } from 'axios';
-
 export default {
   name: "NewEditProfileModal",
   props: {
@@ -199,19 +195,18 @@ export default {
 <style lang="scss" scoped>
 $input_height: 30px;
 $plma_size: 30px;
-// $image_size: 140px;
+$image_size: 140px;
 
-// #profile_background {
-//   // background-color: rgb(24, 138, 28);
-//   margin: 20% auto;
-//   height: $image_size * 0.8;
-//   width: $image_size * 0.8;
-//   border-radius: $image_size / 2;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   overflow: hidden;
-// }
+#profile_background {
+  margin: 20% auto;
+  height: $image_size * 0.8;
+  width: $image_size * 0.8;
+  border-radius: $image_size / 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
 
 #modal_back {
   height: 100%;

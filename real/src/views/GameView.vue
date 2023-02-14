@@ -108,14 +108,14 @@
 
     <div id="footer_container">
       <div class="menu_box flex_center" @click="open_chat_modal">
-        <img class="menu" src="@/assets/game_chat.png">
+        <img class="menu" src="@/assets/game_chat.svg">
       </div>
       <div>
         <input class="map_search" type="text" placeholder="채팅을 입력해 주세요" v-model="chat_data"
           @keyup.enter="transmit_chat">
       </div>
       <div class="menu_box" @click="transmit_chat">
-        <img src="@/assets/paper_plane.svg" alt="">
+        <img src="@/assets/arrow.svg" alt="">
       </div>
       <div class="menu_box" @click="myCam">
         <img class="menu" src="@/assets/game_myCam.png">
