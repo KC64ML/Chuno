@@ -18,7 +18,7 @@
                     <tr>
                         <td>최대인원</td>
                         <td>
-                            <div>
+                            <div :class="{ shake: wrong }">
                                 <div @click="minus" class="plma_button">-</div>
                                 <div style="margin: 0 30px">{{ max_player }}</div>
                                 <div @click="plus" class="plma_button">+</div>
@@ -158,7 +158,8 @@ export default {
                 fillOpacity: 0.15,
             },
             is_am: true,
-            radius: 750
+            radius: 750,
+            wrong:false,
         }
     },
     methods: {
@@ -202,11 +203,17 @@ export default {
             return false;
         },
         minus() {
-            if (this.max_player <= 4) return;
+            if (this.max_player <= 4) {
+                this.shakeWrongAnswer();
+                return;
+            }
             this.max_player-=2;
         },
         plus() {
-            if (this.max_player >= 8) return;
+            if (this.max_player >= 10) {
+                this.shakeWrongAnswer();
+                return;
+            }
             this.max_player+=2;
         },
         publicGame() {
@@ -257,7 +264,13 @@ export default {
                 "level": user.level,
             });
             this.$router.push({ path: "/waitingRoom/" + data })
-        }
+        },
+        shakeWrongAnswer() {
+            this.wrong = true;
+            setTimeout(() => {
+                this.wrong = false;
+            }, 1000);
+        },
     },
 }
 </script>
@@ -375,5 +388,29 @@ td:nth-child(2)>div {
     70% {transform: translate(-50%, -50%) scale(1.2);}
     85% {transform: translate(-50%, -50%) scale(0.9);}
     95% {transform: translate(-50%, -50%) scale(1.05);}
+}
+
+.shake {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
 </style>
