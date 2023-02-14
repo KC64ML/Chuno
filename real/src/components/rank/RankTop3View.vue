@@ -33,6 +33,7 @@ export default {
   data() {
     return {
       defaultProfile: defaultProfile,
+      URL: process.env.VUE_APP_SPRING
     }
   },
   props: {
