@@ -90,7 +90,7 @@ export default {
     },
     bell_icon(e) {
       if (!this.isPushed) {
-        this.axios.post(process.env.VUE_APP_SPRING + "push/" + this.room_info.roomid, "", {
+        this.axios.post(process.env.VUE_APP_SPRING + "room/push/" + this.room_info.roomid, "", {
                 headers: { Authorization: sessionStorage.getItem("token") }
         }).then(({ data }) => {
           if (data.code == 1) {
@@ -100,7 +100,7 @@ export default {
           }
         })
       } else {
-        this.axios.delete(process.env.VUE_APP_SPRING + "push/" + this.room_info.roomid, {
+        this.axios.delete(process.env.VUE_APP_SPRING + "room/push/" + this.room_info.roomid, {
                 headers: { Authorization: sessionStorage.getItem("token") }
         }).then(({ data }) => {
           if (data.code == 1) {
