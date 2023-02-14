@@ -287,15 +287,14 @@ export default {
           } else if (content.type == "startGame") {
             console.log("소켓에서 받아왔어요!!!", content);
             this.papers = content.info;
-            
+
           } else if (content.type == 'me') {
             console.log('me를 받아오긴함')
-            // present 현재방 넘버
-            // players 배열 nickname
-            // console.log(content.nickname + '님이 떠나갔어요...')
-            console.log(content)
+            console.log(content.players[0].nickname)
+            const nm = content.players[0].nickname
+            console.log(nm + '님이 떠나갔어요...')
             for (let i = 0; i < this.others.length; i++) {
-              if (this.others[i].nickname == content.nickname) {
+              if (this.others[i].nickname == nm) {
                 const playerleaved = this.others.splice(i, 1)
                 console.log(playerleaved)
               }
