@@ -1,5 +1,6 @@
 package com.leesfamily.chuno.user.model.dto;
 
+import com.leesfamily.chuno.user.model.UserProfile;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,14 +19,16 @@ public class UserRankingListDto {
     int runnerWinCount; // 노비승
     int chaserWinCount; // 추노승
     int userCountAvg; // 승률
+    String path;
 
     @QueryProjection
-    public UserRankingListDto(Long id, String nickname, int level, int runnerWinCount, int chaserWinCount, int userCountAvg) {
+    public UserRankingListDto(Long id, String nickname, int level, int runnerWinCount, int chaserWinCount, String path, int userCountAvg) {
         this.id = id;
         this.nickname = nickname;
         this.level = level;
         this.runnerWinCount = runnerWinCount;
         this.chaserWinCount = chaserWinCount;
         this.userCountAvg = userCountAvg;
+        this.path = path;
     }
 }

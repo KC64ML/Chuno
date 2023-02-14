@@ -29,6 +29,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                         userEntity.level,
                         userEntity.runnerWinCount,
                         userEntity.chaserWinCount,
+                        userEntity.profile.path,
                         userEntity.chaserWinCount.add(userEntity.runnerWinCount).divide(
                                 userEntity.chaserPlayCount.add(userEntity.runnerPlayCount)
                         ).multiply(100))
