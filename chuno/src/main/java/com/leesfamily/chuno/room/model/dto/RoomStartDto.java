@@ -19,7 +19,7 @@ public class RoomStartDto {
     private Long id;
     private String title;
     private String password;
-    private boolean isPublic;
+    private Boolean isPublic;
     private double lat;
     private double lng;
     private int currentPlayers;
@@ -44,7 +44,7 @@ public class RoomStartDto {
                 room.getId(),
                 room.getTitle(),
                 room.getPassword(),
-                room.isPublic(),
+                room.getIsPublic(),
                 room.getLat(),
                 room.getLng(),
                 room.getCurrentPlayers(),
