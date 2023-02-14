@@ -39,7 +39,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$video_duration: 6s;
+$video_duration: 8s;
 #button1 {
   height: 70px;
 }
@@ -87,7 +87,7 @@ $video_duration: 6s;
   opacity: 0;
   transform: rotate(-40deg) skewX(50deg) scale(1.5);
   text-shadow: 0 0 20px;
-  filter: blur(10px);
+  filter: blur(8px);
   ;
 }
 .button_disappear-leave-active {
