@@ -153,6 +153,15 @@ public class RoomService {
         PushEntity res = pushRepository.saveAndFlush(pushEntity);
         return res;
     }
+    public int unPushRoom(long roomId, Long userId) {
+        PushEntity pushEntity = pushRepository.findByRoomIdAndUserId(roomId, userId);
+        try {
+            pushRepository.delete(pushEntity);
+        }catch (Exception e) {
+            return 0;
+        }
+        return 1;
+    }
 
 
     public RoomGameStartResponseDto startRoom(RoomGameStartRequestDto roomStartRequestDto) {
@@ -387,6 +396,8 @@ public class RoomService {
 
         return resList;
     }
+
+
 
 //    public RoomGameStartSlaveDocumentDto getRandomLocation(double lat, double lng, int radius) {
 //        double d2r = Math.PI / 180;

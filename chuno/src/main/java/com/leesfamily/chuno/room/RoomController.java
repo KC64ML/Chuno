@@ -139,6 +139,16 @@ public class RoomController {
         Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByObject(res);
         return new ResponseEntity<>(resMap, HttpStatus.OK);
     }
+    @DeleteMapping("/push/{roomId}")
+    public ResponseEntity<Map<String, Object>> unPushRoom(
+            @PathVariable("roomId") long roomId,
+            @RequestHeader HttpHeaders requestHeader
+    ) {
+        Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
+        int res = roomService.unPushRoom(roomId, userId);
+        Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByNumber(res);
+        return new ResponseEntity<>(resMap, HttpStatus.OK);
+    }
 
     @Operation(summary = "게임 시작", description = "추노 노비 정함, 노비 문서 위치, 방 정보 전달")
     @ApiResponse(
