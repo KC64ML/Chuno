@@ -17,4 +17,5 @@ import java.util.Optional;
 public interface RoomRepository extends JpaRepository<RoomEntity, Long>, RoomRepositoryCustom {
 
     Optional<RoomEntity> findById(String id);
+
 }
