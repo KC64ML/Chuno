@@ -44,13 +44,10 @@ public class RoomService {
                         " (6371*acos(cos(radians(" + latitude + ")) " +
                         " * cos(radians(r.lat)) " +
                         " * cos(radians(r.lng) - radians(" + longitude + ")) " +
-                        " + sin(radians(" + latitude + ")) * sin(radians(r.lat)))) as distance," +
-                        " IF(p.room_id = r.room_id, true, false) as isPushed "
+                        " + sin(radians(" + latitude + ")) * sin(radians(r.lat)))) as distance,"
                         + " FROM rooms AS r " +
                         " LEFT JOIN users AS u " +
-                        " ON r.host_id = u.user_id " +
-                        " LEFT JOIN pushes p " +
-                        " ON p.user_id = u.user_id "
+                        " ON r.host_id = u.user_id "
 //                        + " WHERE distance  " +
                         + " ORDER BY distance ", RoomEntity.class)
                 .setMaxResults(20);
@@ -64,7 +61,18 @@ public class RoomService {
     }
 
     public RoomResponse getRoomById(Long roomId) {
-        return new RoomResponse(roomRepository.findById(roomId).get());
+        RoomResponse res = new RoomResponse(roomRepository.findById(roomId).get());
+        return res;
+    }
+    public RoomResponse getRoomById(Long roomId, Long userId) {
+        RoomResponse res = new RoomResponse(roomRepository.findById(roomId).get());
+        Optional<PushEntity> pushed = pushRepository.findByRoomIdAndUserId(roomId, userId);
+        if(pushed.isPresent()) {
+            res.setIsPushed(true);
+        }else {
+            res.setIsPushed(false);
+        }
+        return res;
     }
 
     public RoomEntity insRoom(RoomRequest room, Long host_id) {
@@ -161,8 +169,9 @@ public class RoomService {
         return res;
     }
     public int unPushRoom(long roomId, Long userId) {
-        PushEntity pushEntity = pushRepository.findByRoomIdAndUserId(roomId, userId);
+        Optional<PushEntity> pushEntityOptional = pushRepository.findByRoomIdAndUserId(roomId, userId);
         try {
+            PushEntity pushEntity = pushEntityOptional.get();
             pushRepository.delete(pushEntity);
         }catch (Exception e) {
             return 0;

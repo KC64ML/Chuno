@@ -83,9 +83,11 @@ public class RoomController {
 
     @GetMapping("/{roomId}")
     public ResponseEntity<Map<String, Object>> getRoomById(
-            @PathVariable("roomId") Long roomId
+            @PathVariable("roomId") Long roomId,
+            @RequestHeader HttpHeaders requestHeader
     ) {
-        RoomResponse roomResponse = roomService.getRoomById(roomId);
+        Long userId = tokenUtils.getUserIdFromHeader(requestHeader);
+        RoomResponse roomResponse = roomService.getRoomById(roomId, userId);
         Map<String, Object> res = statusCodeGeneratorUtils.checkResultByObject(roomResponse);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
