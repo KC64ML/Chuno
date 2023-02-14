@@ -99,15 +99,17 @@ export default {
         this.display_exp = this.user.exp - this.user_exp;
         this.display_money = this.user.money - this.user_money;
 
-        // this.level_exp_mapping = await this.axios.get(process.env.VUE_APP_SPRING + 'level').then(res => res.data);
-        this.level_mapper = [
-            { "level": '0', "exp": "0" },
-            { "level": '1', "exp": "810" },
-            { "level": '2', 'exp': '900' },
-            { "level": '3', 'exp': '2400' }
-        ]
+        this.level_mapper = await this.axios.get(process.env.VUE_APP_SPRING + 'room/levelandexp').then(res => res.data);
+        
+        // this.level_mapper = [
+        //     { "level": '0', "exp": "0" },
+        //     { "level": '1', "exp": "810" },
+        //     { "level": '2', 'exp': '900' },
+        //     { "level": '3', 'exp': '2400' }
+        // ]
 
         this.user_level_from = this.user.level;
+        console.log(this.level_mapper, this.user_level_from - 1)
         this.user_level_from_exp = this.level_mapper[this.user_level_from - 1].exp;
 
         var flag = false;
@@ -122,6 +124,9 @@ export default {
         }
         if (flag == false) {
             this.user_level_to = this.level_mapper.length;
+        }
+        if (this.user_level_from != this.user_level_to) {
+            this.axios.post(process.env.VUE_APP_SPRING + "updatelevel", this.user_level_to, {headers: {Authorization: sessionStorage.getItem("token")}}).then((res) => console.log("*****",res));
         }
         if (this.user_level_to == this.level_mapper.length) {
             this.$refs.sub_bar.style.width = "100%";
@@ -143,7 +148,8 @@ export default {
             this.interv = setTimeout(() => {
                 this.interv = setInterval(() => {
                     this.display_exp += exp_speed;
-                    this.$refs.sub_bar.style.width = (this.display_exp - this.user_level_from_exp) / (this.user_level_to_exp - this.user_level_from_exp) * 100 + "%";
+                    if (this.user_level_to == this.level_mapper.length) this.$refs.sub_bar.style.width = "100%"
+                    else this.$refs.sub_bar.style.width = (this.display_exp - this.user_level_from_exp) / (this.user_level_to_exp - this.user_level_from_exp) * 100 + "%";
                     if (this.display_exp >= this.user.exp) this.ci();
                 }, 1)
             }, 2000);
@@ -165,7 +171,7 @@ export default {
             this.level_up_modal = false;
         },
         game_end_confirm() {
-            alert("ttt");
+            this.$router.push({name: "home"});
         }
     }
 }
@@ -179,6 +185,9 @@ export default {
 }
 
 @keyframes up_arrow {
+    0% {
+        transform: translateY(50%);
+    }
     100% {
         opacity: 0;
         transform: translateY(-50%);

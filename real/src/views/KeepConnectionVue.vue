@@ -25,7 +25,7 @@ export default {
                     this.conn.send(JSON.stringify({
                         "event": "keepconnect"
                     }))
-                }, 50000)
+                }, 30000)
             })
         },
 
