@@ -1,8 +1,8 @@
 <template>
   <div id="modal_back">
     <div id="make_room_modal">
-      <div id="modal_title" style="font-size: 24px">플레이 범위 밖입니다.</div>
-      <div id="modal_title" style="font-size: 24px">범위 안으로 돌아가세요.</div>
+      <div id="modal_title" style="font-size: 24px">플레이 범위 벗어나.</div>
+      <div id="modal_title" style="font-size: 24px">아웃되었습니다.</div>
 
       <div class="flex_center">
         <div class="flex_center hover_pointer" data-v-7961e374="">
@@ -24,7 +24,7 @@ export default {
   name: "OutOfPlaygroundModal",
   methods: {
       onYes() {
-      this.$emit('off-out-of-playground');
+      this.$emit('off-out-modal');
     },
   },
 };

@@ -15,6 +15,10 @@
       v-if="onOutOfPlayground"
       @off-out-of-playground="offOutOfPlayGround"
     />
+    <OutModal
+      v-if="outModal"
+      @off-out-modal="offOutModal"
+    />
     <GMapMap
       :center="location"
       :zoom="18"
@@ -134,6 +138,7 @@ import MyChaserMarker from '@/assets/chuno_me_img.png'
 import CatchModal from './CatchModal.vue';
 import RipModal from './RipModal.vue';
 import OutOfPlaygroundModal from '@/components/game/OutOfPlaygroundModal.vue'
+import OutModal from '@/components/game/OutModal.vue'
 
 export default {
   name: 'MapView',
@@ -155,6 +160,7 @@ export default {
     CatchModal,
     RipModal,
     OutOfPlaygroundModal,
+    OutModal,
   },
   data() {
     return {
@@ -182,6 +188,7 @@ export default {
       outOfPlayGroundFlag: false,
       catchRunnerFlag: false,
       onOutOfPlayground: false,
+      outModal: false,
       
       // 노비 문서 관련 정보
       papers: [], // props로
@@ -362,6 +369,9 @@ export default {
       ))
       this.ripModal = false
     },
+    offOutModal(){
+      this.outModal = false
+    },
     reOutOfPlayground(){
       console.log('reOutOfPlayground 실행됨!!!!!!!!!')
       console.log(this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}))
@@ -369,6 +379,7 @@ export default {
       if(this.calculateDistance({ location: { lat: this.roomInfo.lat, lng: this.roomInfo.lng } }) >= this.roomInfo.radius){
         // 아웃
         console.log('아웃임')
+        this.outModal = true
       } else {
         // ㄱㅊ
         console.log('범위안임')
