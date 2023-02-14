@@ -67,6 +67,8 @@ export default {
   mounted() {},
   methods: {
     async goWaitingRoom() {
+      this.checkPassword();
+
       var user = await this.axios
         .get(process.env.VUE_APP_SPRING + "user", {
           headers: { Authorization: sessionStorage.getItem("token") },
@@ -82,6 +84,12 @@ export default {
         })
       );
       this.$router.push({ path: "/waitingRoom/" + this.room.id });
+    },
+    checkPassword(){
+      if(!this.room.password){
+          console.log("비밀번호 체크");
+          
+      }
     },
     bell_icon(e) {
       alert("알람버튼이 눌렸어요");

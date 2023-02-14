@@ -1,4 +1,5 @@
 <template>
+<PasswordModal v-if="pass_show" ></PasswordModal>
   <RoomInfoModal
     v-if="info_show"
     :roomInfo="roomInfo"
@@ -29,6 +30,7 @@ import NewCreateRoomModal from "@/components/home/NewCreateRoomModal.vue";
 import HeaderVue from "@/components/HeaderVue.vue";
 import RoomCard from "@/components/RoomCard.vue";
 import RoomInfoModal from "@/components/home/RoomInfoModal.vue";
+import PasswordModal from "@/components/home/PasswordModal.vue";
 
 import door from "@/assets/audio/wood_door.mp3";
 import tak from "@/assets/audio/tak.mp3";
@@ -39,6 +41,7 @@ export default {
     HeaderVue,
     RoomCard,
     RoomInfoModal,
+    PasswordModal,
   },
   data() {
     return {
