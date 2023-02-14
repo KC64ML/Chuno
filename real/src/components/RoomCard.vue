@@ -64,11 +64,18 @@ export default {
     };
   },
   async created() {
+    console.log("나 시작해요")
     this.room = await this.axios
-      .get(process.env.VUE_APP_SPRING + "room/" + this.room_info.roomid)
+      .get(process.env.VUE_APP_SPRING + "room/" + this.room_info.roomid, {
+        headers: { Authorization: sessionStorage.getItem("token") },
+      })
       .then((res) => res.data.result);
+        console.log("나 끝했어요")
     this.dateTime = this.room.dateTime;
-    this.isPushed = this.room_info.isPushed;
+    this.isPushed = this.room.isPushed;
+    console.log("room", this.room);
+    console.log("room_info", this.room_info);
+    console.log("this.room_info.isPushed", this.room.isPushed);
   },
   methods: {
     enterRoom() {
@@ -111,6 +118,7 @@ export default {
           .then(({ data }) => {
             if (data.code == 1) {
               this.isPushed = true;
+              console.log("예약 성공");
             } else {
               alert("예약에 실패했습니다. 오류코드 : " + data.code);
             }
@@ -126,6 +134,7 @@ export default {
           .then(({ data }) => {
             if (data.code == 1) {
               this.isPushed = false;
+              console.log("예약취소 성공");
             } else {
               alert("예약 취소에 실패했습니다. 오류코드 : " + data.code);
             }
