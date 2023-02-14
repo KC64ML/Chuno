@@ -225,7 +225,10 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             videoLengthToggle() {
                 this.isLongVideo = !this.isLongVideo;
             }
-        },
+    },
+    beforeUnmount() {
+        this.leaveSession();
+    },
     async created() {
         this.conn.addEventListener("message", (e) => {
             const content = JSON.parse(e.data);
