@@ -34,6 +34,9 @@ public class UserInventoryResponse {
     private UserProfile profile;
     private int[] items;
     public static UserInventoryResponse toUserInventoryResponse(UserEntity user) {
+        if(user.getProfile() == null) {
+            user.setProfile(new UserProfile());
+        }
         return UserInventoryResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
