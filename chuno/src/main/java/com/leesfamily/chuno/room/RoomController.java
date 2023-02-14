@@ -188,4 +188,29 @@ public class RoomController {
     ){
         return ResponseEntity.ok(roomService.relocationSlaveDocument(requestDto));
     }
+
+
+
+    // 게임 level과 해당 레벨 max 경험치 반환해주는 api
+    @Operation(summary = "게임 level과 경험치", description = "default level : 0, exp : 0 (+1000단위)")
+    @GetMapping("/levelandexp")
+    public ResponseEntity<List<RoomGetLevelAndExperienceDto>> getUserLevelAndExperience(
+    ){
+        return ResponseEntity.ok(roomService.getUserLevelAndExperience());
+    }
+
+    // userId, level을 주면 그 userId의 level을 변경해주는 api : update문
+    // - userId, level을 주면 해당 userId의 level을 업데이트한다.
+    @Transactional
+    @Operation(summary = "userId level 변경", description = "user의 LEVEL을 변경해준다.")
+    @PostMapping("/updatelevel")
+    public ResponseEntity<Map<String, Object>> updateUserLevel(
+            int level,
+            @RequestHeader HttpHeaders headers
+    ){
+        Long userId = tokenUtils.getUserIdFromHeader(headers);
+        int res = (int)roomService.updateUserLevel(userId, level);
+        Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByNumber(res);
+        return new ResponseEntity<>(resMap, HttpStatus.OK);
+    }
 }

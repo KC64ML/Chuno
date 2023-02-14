@@ -418,4 +418,33 @@ public class RoomService {
 //        return new RoomGameStartSlaveDocumentDto(x, y);
 //    }
 
+
+    // 게임 level과 해당 레벨 max 경험치 반환해주는 api
+    public List<RoomGetLevelAndExperienceDto> getUserLevelAndExperience(){
+        /*
+            { "level": '0', "exp": "0" },
+            { "level": '1', "exp": "1000" },
+            { "level": '2', 'exp': '2000' },
+            { "level": '3', 'exp': '3000' }
+            { "level": '4', 'exp': '4000' }
+            { "level": '5', 'exp': '5000' }
+        */
+
+        int defaultExp = 0;
+        List<RoomGetLevelAndExperienceDto> listRoomGetLevelAndExp = new ArrayList<>();
+
+        for(int levelIdx = 0; levelIdx < 6; levelIdx++){
+            listRoomGetLevelAndExp.add(new RoomGetLevelAndExperienceDto(
+                    levelIdx, defaultExp
+            ));
+            defaultExp += 1000;
+        }
+
+        return listRoomGetLevelAndExp;
+    }
+
+    public long updateUserLevel(Long userId, int level){
+        return roomRepository.updateUserLevel(userId,level);
+    }
+
 }

@@ -38,4 +38,18 @@ public class RoomRepositoryImpl implements RoomRepositoryCustom{
 
         return new RoomGameEndResponseDto(res);
     }
+
+    // 게임 level
+    @Override
+    public int updateUserLevel(Long userId, int level) {
+        long res = jpaQueryFactory
+                .update(userEntity)
+                .set(userEntity.level, level)
+                .where(userEntity.id.eq(userId))
+                .execute();
+
+        System.out.println("res : " + res);
+
+        return 1;
+    }
 }

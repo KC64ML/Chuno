@@ -8,4 +8,5 @@ public interface RoomRepositoryCustom {
 
     // 게임이 종료되었을 때
     RoomGameEndResponseDto endRoom(RoomGameEndRequestDto roomGameEndRequestDto, Long userId);
+    int updateUserLevel(Long userId, int level);
 }
