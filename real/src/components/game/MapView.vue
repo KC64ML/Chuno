@@ -287,15 +287,14 @@ export default {
           } else if (content.type == "startGame") {
             console.log("소켓에서 받아왔어요!!!", content);
             this.papers = content.info;
-            
+
           } else if (content.type == 'me') {
             console.log('me를 받아오긴함')
-            // present 현재방 넘버
-            // players 배열 nickname
-            // console.log(content.nickname + '님이 떠나갔어요...')
-            console.log(content)
+            console.log(content.players[0].nickname)
+            const nm = content.players[0].nickname
+            console.log(nm + '님이 떠나갔어요...')
             for (let i = 0; i < this.others.length; i++) {
-              if (this.others[i].nickname == content.nickname) {
+              if (this.others[i].nickname == nm) {
                 const playerleaved = this.others.splice(i, 1)
                 console.log(playerleaved)
               }
@@ -423,7 +422,9 @@ export default {
       .catch((error) => {
         console.log(error)
       })
-      this.catchRunner()
+      if(!this.catchRunnerFlag) {
+        this.catchRunner()
+      }
     },
     GyroAllow() {
       // 자이로스코프 인식
@@ -491,10 +492,10 @@ export default {
       console.log('--------------DISTANCE-----------------')
       console.log(distance)
       if(this.user.role == 'chaser' && marker.role == 'runner' && marker.caught == false && distance <= this.catchRadius){
+        this.catchRunnerFlag = true
         console.log('잡을 수 있음' + marker)
         this.catchModal = true
         this.catchTarget = marker
-        
       } else {
         console.log('잡을 수 없음')
       }
@@ -503,6 +504,7 @@ export default {
     onNoCatch(){
       this.catchModal = false
       console.log('노비 안잡을래..')
+      this.catchRunnerFlag = false
     },
     // 노비 잡기
     onYesCatch(target){
@@ -511,6 +513,7 @@ export default {
       console.log(target)
       this.catchModal = false
       target.caught = true
+      this.catchRunnerFlag = false
       this.$emit("myArrestSlave")
       this.conn.send(JSON.stringify(
           {
