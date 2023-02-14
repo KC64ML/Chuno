@@ -70,11 +70,11 @@
                                     오후
                                 </div>
                                 <div style="display: flex; align-items: center;">
-                                    <input class="time_input" v-model="hour" type="number" max="23" min="0">
+                                    <input class="time_input" v-model="hour" type="number" max="12" min="1" maxlength="2">
                                     <div style="margin-right: 15px">시</div>
                                 </div>
                                 <div style="display: flex; align-items: center;">
-                                    <input class="time_input" v-model="minute" type="number" max="59" min="0">
+                                    <input class="time_input" v-model="minute" type="number" max="59" min="0" maxlength="2">
                                     <div>분</div>
                                 </div>
                             </div>
@@ -171,12 +171,35 @@ export default {
                 alert("제목을 입력해 주세요");
                 return;
             }
-            if (this.hour > 12 || this.hour <= 0 || this.minute < 0 || this.minute >= 60) {
+            if (this.checkDate()) {
                 alert("시간을 확인해 주세요");
                 return;
             }
             this.page1 = false;
             this.page2 = true;
+        },
+        checkDate(){
+            if (this.hour > 12 || this.hour <= 0 || this.minute < 0 || this.minute >= 60) {
+                return true;
+            }
+            if (this.is_today) {
+                let curDate = new Date();
+                let h = curDate.getHours();
+                let m = curDate.getMinutes();
+                console.log("curDate",curDate);
+                console.log("h",h);
+                console.log("m",m);
+                if(this.is_am){
+                    if(this.hour<=h&&this.minute<m){
+                        return true;
+                    }
+                }else{
+                    if(this.hour+12<=h&&this.minute<m){
+                        return true;
+                    }
+                }
+            }
+            return false;
         },
         minus() {
             if (this.max_player <= 4) return;

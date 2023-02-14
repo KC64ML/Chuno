@@ -27,8 +27,11 @@
 
       <div class="card_margin"></div>
 
-      <div class="card_menu" @click="bell_icon">
+      <div v-if="!isPushed" class="card_menu" @click="bell_icon">
         <img src="@/assets/Notification.svg" />
+      </div>
+      <div v-if="isPushed" class="card_menu" @click="bell_icon">
+        <img src="@/assets/Notification_ringing.svg" />
       </div>
 
       <div class="card_margin"></div>
@@ -50,6 +53,7 @@ export default {
   data() {
     return {
       room: {},
+      isPushed: false,
       dateTime: {
         month: 0,
         day: 0,
@@ -63,6 +67,7 @@ export default {
       .get(process.env.VUE_APP_SPRING + "room/" + this.room_info.roomid)
       .then((res) => res.data.result);
     this.dateTime = this.room.dateTime;
+    this.isPushed = this.room_info.isPushed;
   },
   mounted() {},
   methods: {
@@ -84,7 +89,27 @@ export default {
       this.$router.push({ path: "/waitingRoom/" + this.room.id });
     },
     bell_icon(e) {
-      alert("알람버튼이 눌렸어요");
+      if (!this.isPushed) {
+        this.axios.post(process.env.VUE_APP_SPRING + "room/push/" + this.room_info.roomid, "", {
+                headers: { Authorization: sessionStorage.getItem("token") }
+        }).then(({ data }) => {
+          if (data.code == 1) {
+            this.isPushed = true;
+          } else {
+            alert("예약에 실패했습니다. 오류코드 : " + data.code);
+          }
+        })
+      } else {
+        this.axios.delete(process.env.VUE_APP_SPRING + "room/push/" + this.room_info.roomid, {
+                headers: { Authorization: sessionStorage.getItem("token") }
+        }).then(({ data }) => {
+          if (data.code == 1) {
+            this.isPushed = false;
+          } else {
+            alert("예약 취소에 실패했습니다. 오류코드 : " + data.code);
+          }
+        })
+      }
       e.stopPropagation();
     },
     info_icon(e) {
@@ -150,6 +175,10 @@ export default {
   background-color: #291d00e8;
   text-shadow: 1px 1px 0 #6a5c00, -1px -1px 0 #4e4300;
   box-shadow: 1px 1px 0 #746000, -1px -1px 0 rgb(204 181 96 / 78%);
+}
+.card_menu img {
+  width: 22px;
+  height: 22px;
 }
 .card_margin {
   margin-left: $card_margin;
