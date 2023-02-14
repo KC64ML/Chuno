@@ -75,8 +75,8 @@
             <td></td>
             <td>
               <div>
-                <div class="hour_type" v-if="is_am" @click="amChange">오전</div>
-                <div class="hour_type" v-else @click="amChange">오후</div>
+                <div class="hour_type" v-if="is_am">오전</div>
+                <div class="hour_type" v-else>오후</div>
                 <div style="display: flex; align-items: center">
                   <div>{{ hour }}</div>
                   <div style="margin-right: 15px">시</div>

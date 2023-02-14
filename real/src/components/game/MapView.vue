@@ -117,7 +117,7 @@
         <!-- 상대가 노비일 때 -->
         <div v-if="o.role == 'runner' && user.role == 'chaser'">
           <GMapMarker
-            v-if="o.myMarker"
+            v-if="o.myMarker || calculateDistance(o) <= catchRadius"
             :icon=otherRunnerMarkerImg
             :position="o.location"
             :clickable="true"
@@ -186,7 +186,7 @@ export default {
         scaledSize: { width: 40, height: 40 }
       },
       outOfPlayGroundFlag: false,
-      catchRunnerFlag: false,
+      // catchRunnerFlag: false,
       onOutOfPlayground: false,
       outModal: false,
       
@@ -263,6 +263,9 @@ export default {
             if (other.nickname == this.user.nickname) {
               return;
             }
+            console.log(('erollEvent에서 나와 타인의 거리 계산'))
+            // const distance = this.calculateDistance(other)
+            
             this.others[other.nickname] = {
               nickname: other.nickname,
               role: other.role,
@@ -270,10 +273,12 @@ export default {
               myMarker: other.myMarker,
               caught: other.caught,
             };
-            console.log("ohters 받아오는 중 : ", this.others);
-            // if(this.user.role == 'chaser') {
-            //   this.catchRunner(other);
+            // if(!this.catchRunnerFlag) {
+            //   console.log('enrollEvent에서 catchRunner실행')
+            //   this.catchRunner(this.others[other.nickname].location)
             // }
+            // console.log("ohters 받아오는 중 : ", this.others);
+            
             
           } else if (content.type == "caughtRunner") {
               const content = JSON.parse(e.data);
@@ -348,8 +353,7 @@ export default {
       console.log(target)
       console.log('같아야함')
       this.$emit("myRippedPaper")
-      this.conn.send(JSON.stringify(
-          {
+      this.sendData({
             event:"ripPaper",
             nickname: this.user.nickname,
             room: this.roomInfo.id,
@@ -357,16 +361,15 @@ export default {
               paper: target,
             }
           }
-        ));
-      this.conn.send(JSON.stringify(
-        {
-          event: "chat",
-          room: this.roomInfo.id,
-          nickname: 'system',
-          level: 1,
-          msg: `${this.user.nickname}이 노비문서를 찢었습니다.`
-        }
-      ))
+        );
+      this.sendData({
+        event: "chat",
+        room: this.roomInfo.id,
+        nickname: 'system',
+        level: 1,
+        msg: `${this.user.nickname}이 노비문서를 찢었습니다.`
+      }
+      );
       this.ripModal = false
     },
     offOutModal(){
@@ -418,8 +421,7 @@ export default {
           console.log('범위 밖!!!!!!!!!!!!!!!!!')
           this.outOfPlayground()
         }
-        this.conn.send(JSON.stringify(
-          {
+        this.sendData({
             event:"playerLocation",
             nickname: this.user.nickname,
             room: this.roomInfo.id,
@@ -431,10 +433,8 @@ export default {
               caught: this.user.caught,
             }
           }
-        ));
-        if(!this.catchRunnerFlag) {
-          this.catchRunner()
-        }
+        );
+        
       })
       .catch((error) => {
         console.log(error)
@@ -506,7 +506,7 @@ export default {
       console.log('--------------DISTANCE-----------------')
       console.log(distance)
       if(this.user.role == 'chaser' && marker.role == 'runner' && marker.caught == false && distance <= this.catchRadius){
-        this.catchRunnerFlag = true
+        // this.catchRunnerFlag = true
         console.log('잡을 수 있음' + marker)
         this.catchModal = true
         this.catchTarget = marker
@@ -518,7 +518,7 @@ export default {
     onNoCatch(){
       this.catchModal = false
       console.log('노비 안잡을래..')
-      this.catchRunnerFlag = false
+      // this.catchRunnerFlag = false
     },
     // 노비 잡기
     onYesCatch(target){
@@ -527,27 +527,25 @@ export default {
       console.log(target)
       this.catchModal = false
       target.caught = true
-      this.catchRunnerFlag = false
+      // this.catchRunnerFlag = false
       this.$emit("myArrestSlave")
-      this.conn.send(JSON.stringify(
-          {
-            event:'catchRunner',
-            nickname: this.user.nickname,
-            room: this.roomInfo.id,
-            startData: {
-              others : target,
-            }
-          }
-      ))
-      this.conn.send(JSON.stringify(
-        {
-          event: 'chat',
-          room: this.roomInfo.id,
-          nickname: 'system',
-          level: 1,
-          msg: `${this.user.nickname}이 ${target.nickname}을 잡았습니다.`
+      this.sendData({
+        event: 'catchRunner',
+        nickname: this.user.nickname,
+        room: this.roomInfo.id,
+        startData: {
+          others: target,
         }
-      ))
+      }
+      );
+      this.sendData({
+        event: 'chat',
+        room: this.roomInfo.id,
+        nickname: 'system',
+        level: 1,
+        msg: `${this.user.nickname}이 ${target.nickname}을 잡았습니다.`
+      }
+      );
     },
   },
   created() {
@@ -595,11 +593,11 @@ export default {
         return_paper.push({id: new_pp+new_papers.length, location: ripped_list[new_pp].location, real: ripped_list[new_pp].real, ripped: ripped_list[new_pp].ripped});
       }
       this.papers = return_paper;
-      this.conn.send(JSON.stringify({
+      this.sendData({
         "event": "startGame",
         "room": this.roomId,
         "startData": this.papers,
-      }))
+      });
     }
   },
 };

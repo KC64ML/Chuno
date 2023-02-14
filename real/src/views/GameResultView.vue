@@ -173,12 +173,12 @@ export default {
             this.level_up_modal = false;
         },
         game_end_confirm() {
-            this.conn.send(JSON.stringify({
+            this.sendData({
                 "event": "clear",
                 "room": this.roomId,
                 "nickname": this.host,
                 "level": "1",
-            }))
+            });
             this.$router.push({name: "home"});
         }
     }

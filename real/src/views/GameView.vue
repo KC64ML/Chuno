@@ -383,23 +383,21 @@ export default {
     onYesLeave() {
       console.log('진짜로 나간다!!!!!')
       this.leaveModal = false
-      this.conn.send(JSON.stringify(
-        {
+      this.sendData({
           event: "leave",
           nickname: this.user.nickname,
           level: 1,
           room: this.roomInfo.id,
         }
-      ));
-      this.conn.send(JSON.stringify(
-        {
+      );
+      this.sendData({
           event: "chat",
           room: this.roomInfo.id,
           nickname: 'system',
           level: 1,
           msg: `${this.user.nickname}이 방을 나갔습니다.`
         }
-      ))
+      )
       this.$router.push({ name: 'home' })
     },
     onNoLeave() {
@@ -452,13 +450,13 @@ export default {
       this.chat_modal = false;
     },
     transmit_chat() {
-      this.conn.send(JSON.stringify({
+      this.sendData({
         "event": "chat",
         "room": this.roomInfo.id,
         "nickname": this.user.nickname,
         "level": this.user.level,
         "msg": this.chat_data,
-      }))
+      })
       this.chat_data = "";
     },
     clearChatData() {
@@ -489,8 +487,7 @@ export default {
       } else if (item.id == 4) {
         // 먹물탄
         console.log("먹물탄 사용 : ", 4);
-        this.conn.send(JSON.stringify(
-          {
+        this.sendData({
             event: "useItem",
             level: 4,
             nickname: this.user.nickname,
@@ -499,11 +496,10 @@ export default {
               "isStart": 1,
             }
           }
-        ));
-        // 5초 후에 제거
+        );
+        // 5분 후에 제거
         setTimeout(() => {
-          this.conn.send(JSON.stringify(
-            {
+          this.sendData({
               event: "useItem",
               level: 4,
               nickname: this.user.nickname,
@@ -513,7 +509,7 @@ export default {
               }
             }
           )
-          )
+          
         }, 60000 * 5);
         this.close_item_description_modal();
       } else if (item.id == 7) {

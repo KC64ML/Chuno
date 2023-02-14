@@ -6,16 +6,16 @@
     >
       <div 
         style="margin:0.5rem;"
-
         v-if="user.rank < 4"
       >
         <img src="@/assets/crown_gold.png" alt="" v-if="user.rank == 1" id="crown">
         <img src="@/assets/crown_silver.png" alt="" v-if="user.rank == 2" id="crown">
         <img src="@/assets/crown_bronze.png" alt="" v-if="user.rank == 3" id="crown">
         <img 
-          :src=" user.profile ? URL + 'resources/images?path=' + user.profile.path :  defaultProfile" 
+
+          :src="user.path ? URL + 'resources/images?path=' + user.path :  defaultProfile" 
           alt="profile" 
-          id="profile"
+          class="profile"
           @click="this.$router.push({ name: 'Profile', params: { uid: user.id } })"
         >
         <p>Lv.{{ user.level }}</p>
@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       defaultProfile: defaultProfile,
+      URL: process.env.VUE_APP_SPRING
     }
   },
   props: {
@@ -54,5 +55,10 @@ export default {
   /* height: 30px; */
   width: 30px;
   position: absolute;
+}
+.profile {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
 }
 </style>

@@ -1,4 +1,10 @@
 <template>
+  <PasswordModal
+    v-if="pass_show"
+    @pass_close="closePass()"
+    :roomInfo="roomInfo"
+    @isEnter="setIsEnter"
+  ></PasswordModal>
   <RoomInfoModal
     v-if="info_show"
     :roomInfo="roomInfo"
@@ -28,12 +34,14 @@
     <div id="room_box" style="height: 100%; overflow: scroll" v-else>
       <RoomCard
         v-for="(room, idx) in roomList"
-        :key="idx"
-        v-bind:room_info="room"
-        @click="play(this.door)"
-        @info_show="showRoomInfo"
-        @room_info="setRoomInfo"
-        @info_close="closeRoomInfo"
+      :key="idx"
+      :room_info="room"
+      @click="play(this.door)"
+      @info_show="showRoomInfo"
+      @room_info="setRoomInfo"
+      @info_close="closeRoomInfo"
+      @show_pass="showPassword"
+      :isEnter="isEnter"
       ></RoomCard>
     </div>
   </div>
@@ -45,6 +53,7 @@ import NewCreateRoomModal from "@/components/home/NewCreateRoomModal.vue";
 import HeaderVue from "@/components/HeaderVue.vue";
 import RoomCard from "@/components/RoomCard.vue";
 import RoomInfoModal from "@/components/home/RoomInfoModal.vue";
+import PasswordModal from "@/components/home/PasswordModal.vue";
 
 import door from "@/assets/audio/wood_door.mp3";
 import tak from "@/assets/audio/tak.mp3";
@@ -55,6 +64,7 @@ export default {
     HeaderVue,
     RoomCard,
     RoomInfoModal,
+    PasswordModal,
   },
   data() {
     return {
@@ -63,11 +73,13 @@ export default {
 
       modal_show: false,
       info_show: false,
+      pass_show: false,
       lat: 0,
       lng: 0,
       roomList: [],
       roomInfo: {},
       door,
+      isEnter: false,
     };
   },
   async created() {
@@ -141,15 +153,10 @@ export default {
       });
     },
     init() {
-      try {
-        this.conn.send(
-          JSON.stringify({
-            event: "getAllRoom", // rooms와 연결되어있음
-          })
-        );
-      } catch (error) {
-        alert("ㅋㅋㅋㅋㅋㅋㅋ");
-      }
+      this.sendData({
+          event: "getAllRoom", // rooms와 연결되어있음
+        }
+      );
     },
     createRoom() {
       this.modal_show = true;
@@ -176,6 +183,17 @@ export default {
         file: new Audio(audiofile),
       };
       audio.file.play();
+    },
+    closePass() {
+      console.log("closePass");
+      this.pass_show = false;
+    },
+    showPassword() {
+      console.log("showPass");
+      this.pass_show = true;
+    },
+    setIsEnter() {
+      this.isEnter = true;
     },
   },
 };
