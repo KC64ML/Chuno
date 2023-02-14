@@ -1,5 +1,8 @@
 <template>
-    <div id="main_vedio_container" style="z-index: 10000;">
+    <div id="main_vedio_container" :class="isLongVideo ? 'short-version' : 'long-version'" style="z-index: 10000;">
+        <div id="long_video_toggle" :class="isLongVideo ? 'upside-down' : ''" @click="videoLengthToggle">
+            <img src="@/assets/to_bottom.png">
+        </div>
         <!-- <video autoplay ref="video" class="enemy_video"></video> -->
         <user-video 
             :stream-manager="mainStreamManager" 
@@ -60,6 +63,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 enemy_name: undefined,
                 my_video: "my_video",
                 enemy_video: "enemy_video",
+                isLongVideo: false,
 
                 /* for item */
                 players_state: {},
@@ -217,6 +221,9 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             },
             async openMediaDevices(constraints) {
                 return await navigator.mediaDevices.getUserMedia(constraints);
+            },
+            videoLengthToggle() {
+                this.isLongVideo = !this.isLongVideo;
             }
         },
     async created() {
@@ -285,10 +292,33 @@ $my_video_margin: 20px;
     position: absolute;
     top: 0;
     width: 100vw;
-    height: $video_height;
     overflow: hidden;
     border: dashed;
     background-color: black;
+}
+#long_video_toggle {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+}
+@keyframes upsidedown {
+  0% {
+    left:100px;
+  }
+  100% {
+    left:300px;
+  }
+}
+.upside-down {
+    transform: rotate(180deg);
+}
+.short-version {
+    height: $video_height;
+}
+.long-version {
+    height: $video_height_long;
 }
 
 .camera_name {
