@@ -348,8 +348,7 @@ export default {
       console.log(target)
       console.log('같아야함')
       this.$emit("myRippedPaper")
-      this.conn.send(JSON.stringify(
-          {
+      this.sendData({
             event:"ripPaper",
             nickname: this.user.nickname,
             room: this.roomInfo.id,
@@ -357,16 +356,15 @@ export default {
               paper: target,
             }
           }
-        ));
-      this.conn.send(JSON.stringify(
-        {
-          event: "chat",
-          room: this.roomInfo.id,
-          nickname: 'system',
-          level: 1,
-          msg: `${this.user.nickname}이 노비문서를 찢었습니다.`
-        }
-      ))
+        );
+      this.sendData({
+        event: "chat",
+        room: this.roomInfo.id,
+        nickname: 'system',
+        level: 1,
+        msg: `${this.user.nickname}이 노비문서를 찢었습니다.`
+      }
+      );
       this.ripModal = false
     },
     offOutModal(){
@@ -418,8 +416,7 @@ export default {
           console.log('범위 밖!!!!!!!!!!!!!!!!!')
           this.outOfPlayground()
         }
-        this.conn.send(JSON.stringify(
-          {
+        this.sendData({
             event:"playerLocation",
             nickname: this.user.nickname,
             room: this.roomInfo.id,
@@ -431,7 +428,7 @@ export default {
               caught: this.user.caught,
             }
           }
-        ));
+        );
         if(!this.catchRunnerFlag) {
           this.catchRunner()
         }
@@ -529,25 +526,23 @@ export default {
       target.caught = true
       this.catchRunnerFlag = false
       this.$emit("myArrestSlave")
-      this.conn.send(JSON.stringify(
-          {
-            event:'catchRunner',
-            nickname: this.user.nickname,
-            room: this.roomInfo.id,
-            startData: {
-              others : target,
-            }
-          }
-      ))
-      this.conn.send(JSON.stringify(
-        {
-          event: 'chat',
-          room: this.roomInfo.id,
-          nickname: 'system',
-          level: 1,
-          msg: `${this.user.nickname}이 ${target.nickname}을 잡았습니다.`
+      this.sendData({
+        event: 'catchRunner',
+        nickname: this.user.nickname,
+        room: this.roomInfo.id,
+        startData: {
+          others: target,
         }
-      ))
+      }
+      );
+      this.sendData({
+        event: 'chat',
+        room: this.roomInfo.id,
+        nickname: 'system',
+        level: 1,
+        msg: `${this.user.nickname}이 ${target.nickname}을 잡았습니다.`
+      }
+      );
     },
   },
   created() {
@@ -595,11 +590,11 @@ export default {
         return_paper.push({id: new_pp+new_papers.length, location: ripped_list[new_pp].location, real: ripped_list[new_pp].real, ripped: ripped_list[new_pp].ripped});
       }
       this.papers = return_paper;
-      this.conn.send(JSON.stringify({
+      this.sendData({
         "event": "startGame",
         "room": this.roomId,
         "startData": this.papers,
-      }))
+      });
     }
   },
 };

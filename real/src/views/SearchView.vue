@@ -66,10 +66,9 @@ export default {
       // (2)
       // rooms를 돌면서 제목을 검색한다.
         
-      this.conn.send(
-        JSON.stringify({
+      this.sendData({
           event: "getAllRoom",
-        })
+        }
       );
 
     //   console.log("rooms : " + this.rooms);

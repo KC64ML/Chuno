@@ -149,7 +149,7 @@ export default {
             this.lat = val.coords.latitude;
             this.lng = val.coords.longitude;
 
-            this.conn.send(JSON.stringify({
+            this.sendData({
                 "event": "sendlocation",
                 "nickname": this.nickname,
                 "room": this.room_id,
@@ -158,7 +158,7 @@ export default {
                     "lat": this.lat,
                     "lng": this.lng,
                 }
-            }))
+            });
         },
         noTouch(e) {
             e.stopPropagation();

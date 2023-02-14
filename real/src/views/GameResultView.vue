@@ -174,12 +174,12 @@ export default {
         },
         game_end_confirm() {
             console.log("111111",this.roomId, this.host, "11111111")
-            this.conn.send(JSON.stringify({
+            this.sendData({
                 "event": "leave",
                 "room": this.roomId,
                 "nickname": this.host,
                 "level": "1",
-            }))
+            });
             this.$router.push({name: "home"});
         }
     }

@@ -22,9 +22,9 @@ export default {
             }).then(() => {
                 setInterval(() => {
                     console.log("소켓연결을 유지해요");
-                    this.conn.send(JSON.stringify({
+                    this.sendData({
                         "event": "keepconnect"
-                    }))
+                    })
                 }, 30000)
             })
         },
