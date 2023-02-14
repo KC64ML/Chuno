@@ -1,16 +1,16 @@
 <template>
-  <div id="header">
+  <div id="header" style="padding: 20px">
     <img class="header_menu" src="@/assets/Search.svg" />
     <div style="margin-left: 20px"></div>
     <input class="header_menu header_input" id="room_search" v-model="roomSearch" placeholder="방을 검색해 보세요" />
   </div>
-  <div v-if="search && roomSearch.length > 0" style="height: 80%; overflow: scroll" class="scroll">
+  <div v-if="search = '' || (search != '' && roomSearch.length == 0)" style="height: 80%; overflow: scroll" class="scroll">
     <room-card v-for="(room, idx) in roomList" :key="idx" v-bind:room_info="room" @info_show="showRoomInfo"
       @room_info="setRoomInfo" @info_close="closeRoomInfo">
     </room-card>
   </div>
   <div v-else>
-    {{ roomSearch }} 검색 결과 없음
+    검색 결과 없음
   </div>
 </template>
 
