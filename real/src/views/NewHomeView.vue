@@ -1,4 +1,9 @@
 <template>
+  <PasswordModal
+    v-if="pass_show"
+    @pass_close="closePass()"
+    :roomInfo="roomInfo"
+  ></PasswordModal>
   <RoomInfoModal
     v-if="info_show"
     :roomInfo="roomInfo"
@@ -14,11 +19,12 @@
     <RoomCard
       v-for="(room, idx) in roomList"
       :key="idx"
-      v-bind:room_info="room"
+      :room_info="room"
       @click="play(this.door)"
       @info_show="showRoomInfo"
       @room_info="setRoomInfo"
       @info_close="closeRoomInfo"
+      @show_pass="showPassword"
     ></RoomCard>
   </div>
   <div id="plus_button" @click="createRoom">+</div>
@@ -29,6 +35,7 @@ import NewCreateRoomModal from "@/components/home/NewCreateRoomModal.vue";
 import HeaderVue from "@/components/HeaderVue.vue";
 import RoomCard from "@/components/RoomCard.vue";
 import RoomInfoModal from "@/components/home/RoomInfoModal.vue";
+import PasswordModal from "@/components/home/PasswordModal.vue";
 
 import door from "@/assets/audio/wood_door.mp3";
 import tak from "@/assets/audio/tak.mp3";
@@ -39,11 +46,13 @@ export default {
     HeaderVue,
     RoomCard,
     RoomInfoModal,
+    PasswordModal,
   },
   data() {
     return {
       modal_show: false,
       info_show: false,
+      pass_show: false,
       lat: 0,
       lng: 0,
       roomList: [],
@@ -151,6 +160,14 @@ export default {
         file: new Audio(audiofile),
       };
       audio.file.play();
+    },
+    closePass() {
+      console.log("closePass");
+      this.pass_show = false;
+    },
+    showPassword() {
+      console.log("showPass");
+      this.pass_show = true;
     },
   },
 };
