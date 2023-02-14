@@ -44,7 +44,7 @@ public class RoomService {
                         " (6371*acos(cos(radians(" + latitude + ")) " +
                         " * cos(radians(r.lat)) " +
                         " * cos(radians(r.lng) - radians(" + longitude + ")) " +
-                        " + sin(radians(" + latitude + ")) * sin(radians(r.lat)))) as distance,"
+                        " + sin(radians(" + latitude + ")) * sin(radians(r.lat)))) as distance"
                         + " FROM rooms AS r " +
                         " LEFT JOIN users AS u " +
                         " ON r.host_id = u.user_id "
@@ -141,12 +141,12 @@ public class RoomService {
                         " (6371*acos(cos(radians(" + latitude + ")) " +
                         " * cos(radians(r.lat)) " +
                         " * cos(radians(r.lng) - radians(" + longitude + ")) " +
-                        " + sin(radians(" + latitude + ")) * sin(radians(r.lat)))) as distance," +
+                        " + sin(radians(" + latitude + ")) * sin(radians(r.lat)))) as distance, " +
                         " IF(p.room_id = r.room_id, true, false) as isPushed "
                         + " FROM rooms AS r " +
                         " LEFT JOIN users AS u " +
                         " ON r.host_id = u.user_id " +
-                        " LEFT JOIN pushes p " +
+                        " LEFT JOIN pushes AS p " +
                         " ON p.user_id = u.user_id " +
                         " WHERE r.title LIKE '%" + roomListByConditionDto.getKeyword() + "%' " +
                         " ORDER BY distance ", RoomEntity.class)
