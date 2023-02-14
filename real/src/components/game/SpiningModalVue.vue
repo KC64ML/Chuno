@@ -19,7 +19,7 @@
             <div style="text-align: center; margin-top: 20px;">
                 {{ display_info }}
             </div>
-            <div class="flex_center" style="margin-top: 30px">
+            <div class="flex_center map_appear" style="margin-top: 30px">
                 <GMapMap :center="roomcenter" :zoom="map_zoom" :options="{
                     zoomControl: false,
                     mapTypeControl: false,
@@ -298,5 +298,17 @@ $map_height: $map_width;
     100% {
         transform: rotate(360deg);
     }
+}
+
+.map_appear {
+    animation-name: map_appear;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+}
+@keyframes map_appear {
+    0% {transform: scale(0);}
+    70% {transform: scale(1.3);}
+    85% {transform: scale(0.8);}
+    95% {transform: scale(1.1);}
 }
 </style>
