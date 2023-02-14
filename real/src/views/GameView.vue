@@ -224,6 +224,7 @@ export default {
       .then(({ data }) => {
         if (data.code) {
           this.roomInfo = data.result;
+          console.log(this.roomInfo)
           console.log("GameView room info loaded");
         }
       })
