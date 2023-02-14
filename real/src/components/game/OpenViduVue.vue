@@ -225,7 +225,10 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             videoLengthToggle() {
                 this.isLongVideo = !this.isLongVideo;
             }
-        },
+    },
+    beforeUnmount() {
+        this.leaveSession();
+    },
     async created() {
         this.conn.addEventListener("message", (e) => {
             const content = JSON.parse(e.data);
@@ -304,15 +307,20 @@ $my_video_margin: 20px;
     width: 20px;
     height: 20px;
     transition: all 0.3s ease-in;
+    z-index: 1;
 }
-@keyframes upsidedown {
-  0% {
-    left:100px;
-  }
-  100% {
-    left:300px;
-  }
+#long_video_toggle img {
+    width: 100%;
+    height: 100%;
 }
+// @keyframes upsidedown {
+//   0% {
+//     left:100px;
+//   }
+//   100% {
+//     left:300px;
+//   }
+// }
 .upside-down {
     transform: rotate(180deg);
 }
@@ -349,8 +357,6 @@ $my_video_margin: 20px;
     right: 5px
 }
 .arrow_box {
-    border: solid;
-    border-color: white;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

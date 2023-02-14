@@ -72,9 +72,16 @@
   <OpenViduVue :my_cam_modal="my_cam_modal" :user="user"></OpenViduVue>
 
   <transition name="chat-retreat">
-    <div id="chat_container" style="padding: 20px 0;" v-if="chat_modal">
+    <div id="chat_container" v-if="chat_modal">
       <div id="chat_header"
-        style="display: flex; align-items:center; justify-content: space-between; margin-bottom: 10px;">
+        style="display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 10px;
+              position: fixed;
+              width: 100%;
+              background: #ffffff82;
+              padding: 7px 0;">
         <div>
           <img src="@/assets/main_logo2.png" alt="" style="width: 50px; height: 50px; margin-left: 20px;">
         </div>
@@ -627,7 +634,7 @@ $status_height: 30px;
   background-image: url("@/assets/main_back_horizon.png");
   background-size: cover;
   width: 100vw;
-  max-height: 60%;
+  max-height: 50%;
   min-height: 200px;
   overflow-y: scroll;
   animation-name: chat_container;
@@ -655,7 +662,7 @@ $status_height: 30px;
   animation-duration: 0.5s;
   animation-iteration-count: 1;
   box-shadow: 0 5px 5px rgb(0, 0, 0, 0.3);
-  z-index: 100;
+  z-index: 10001;
 }
 
 @keyframes item_menu_modal {
@@ -713,7 +720,7 @@ $status_height: 30px;
 }
 
 .toast_chat {
-  z-index: 100100;
+  z-index: 1000100;
   position: absolute;
   bottom: $footer-height + 40px;
   animation-name: toasting;
