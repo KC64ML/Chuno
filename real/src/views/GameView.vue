@@ -171,6 +171,7 @@ import jing from "@/assets/audio/jing.wav";
 export default {
 
   name: 'GameView',
+  
   components: {
     MapView,
     OpenViduVue,
@@ -178,6 +179,11 @@ export default {
     RoleModalVue,
     ChatCardVue,
     // LeaveModal,
+  },
+  beforeRouteLeave(to, from, next) {
+      console.log(to);
+      if (to.name == "waitingRoom") return;
+      next();
   },
   async created() {
     this.conn.addEventListener('message', (e) => {

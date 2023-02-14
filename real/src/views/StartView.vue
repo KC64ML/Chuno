@@ -1,6 +1,5 @@
 <template>
   <div id="container">
-
     <transition name="start_disappear">
       <img v-if="show_el" src="@/assets/main_logo1.png" class="block_center sliding_down_appearance"
         style="width:150px">
