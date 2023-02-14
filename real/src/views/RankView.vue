@@ -10,10 +10,6 @@
       :users="users"
       :myId="myId"
     />
-    <hr>
-    <p @click="onGame">
-      game router test
-    </p>
   </div>
 </template>
 
