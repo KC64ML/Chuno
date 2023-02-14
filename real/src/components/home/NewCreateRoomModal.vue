@@ -257,12 +257,12 @@ export default {
             }).then(res => res.data.result)
             var user = await this.axios.get(process.env.VUE_APP_SPRING + "user", {headers: {Authorization: sessionStorage.getItem("token")}}).then(res => res.data.result);
             console.log(data);
-            this.conn.send(JSON.stringify({
+            this.sendData({
                 "event": "make",
                 "room": data,
                 "nickname": user.nickname,
                 "level": user.level,
-            }));
+            });
             this.$router.push({ path: "/waitingRoom/" + data })
         },
         shakeWrongAnswer() {

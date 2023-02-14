@@ -132,10 +132,9 @@ export default {
       });
     },
     init() {
-      this.conn.send(
-        JSON.stringify({
+      this.sendData({
           event: "getAllRoom", // rooms와 연결되어있음
-        })
+        }
       );
     },
     createRoom() {
