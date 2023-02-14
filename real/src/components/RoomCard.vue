@@ -27,12 +27,12 @@
 
         <div class="card_margin"></div>
 
-      <div v-if="!isPushed" class="card_menu" @click="bell_icon">
-        <img src="@/assets/Notification.svg" />
-      </div>
-      <div v-if="isPushed" class="card_menu" @click="bell_icon">
-        <img src="@/assets/Notification_ringing.svg" />
-      </div>
+        <div v-if="!isPushed" class="card_menu" @click="bell_icon">
+          <img src="@/assets/Notification.svg" />
+        </div>
+        <div v-if="isPushed" class="card_menu" @click="bell_icon">
+          <img src="@/assets/Notification_ringing.svg" />
+        </div>
 
         <div class="card_margin"></div>
 
@@ -70,11 +70,6 @@ export default {
     this.dateTime = this.room.dateTime;
     this.isPushed = this.room_info.isPushed;
   },
-  mounted() {
-    if (this.isEnter) {
-      this.goWaitingRoom();
-    }
-  },
   methods: {
     enterRoom() {
       console.log("room", this.room);
@@ -105,25 +100,36 @@ export default {
     },
     bell_icon(e) {
       if (!this.isPushed) {
-        this.axios.post(process.env.VUE_APP_SPRING + "room/push/" + this.room_info.roomid, "", {
-                headers: { Authorization: sessionStorage.getItem("token") }
-        }).then(({ data }) => {
-          if (data.code == 1) {
-            this.isPushed = true;
-          } else {
-            alert("예약에 실패했습니다. 오류코드 : " + data.code);
-          }
-        })
+        this.axios
+          .post(
+            process.env.VUE_APP_SPRING + "room/push/" + this.room_info.roomid,
+            "",
+            {
+              headers: { Authorization: sessionStorage.getItem("token") },
+            }
+          )
+          .then(({ data }) => {
+            if (data.code == 1) {
+              this.isPushed = true;
+            } else {
+              alert("예약에 실패했습니다. 오류코드 : " + data.code);
+            }
+          });
       } else {
-        this.axios.delete(process.env.VUE_APP_SPRING + "room/push/" + this.room_info.roomid, {
-                headers: { Authorization: sessionStorage.getItem("token") }
-        }).then(({ data }) => {
-          if (data.code == 1) {
-            this.isPushed = false;
-          } else {
-            alert("예약 취소에 실패했습니다. 오류코드 : " + data.code);
-          }
-        })
+        this.axios
+          .delete(
+            process.env.VUE_APP_SPRING + "room/push/" + this.room_info.roomid,
+            {
+              headers: { Authorization: sessionStorage.getItem("token") },
+            }
+          )
+          .then(({ data }) => {
+            if (data.code == 1) {
+              this.isPushed = false;
+            } else {
+              alert("예약 취소에 실패했습니다. 오류코드 : " + data.code);
+            }
+          });
       }
       e.stopPropagation();
     },

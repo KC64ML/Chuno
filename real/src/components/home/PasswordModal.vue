@@ -61,13 +61,30 @@ export default {
           if (code == 1) {
             this.wrong = false;
             this.offing();
-            this.$router.push(`/waitingRoom/${this.roomInfo.id}`);
+            this.goWaitingRoom();
           } else if (code == 3) {
             this.shakeWrongAnswer();
             this.wrong = true;
           }
           console.log("code", code);
         });
+    },
+    async goWaitingRoom() {
+      var user = await this.axios
+        .get(process.env.VUE_APP_SPRING + "user", {
+          headers: { Authorization: sessionStorage.getItem("token") },
+        })
+        .then((res) => res.data.result);
+      console.log("-------------", user);
+      this.conn.send(
+        JSON.stringify({
+          event: "enter",
+          room: this.roomInfo.id,
+          nickname: user.nickname,
+          level: user.level,
+        })
+      );
+      this.$router.push({ path: "/waitingRoom/" + this.roomInfo.id });
     },
     offing() {
       this.$emit("pass_close");
