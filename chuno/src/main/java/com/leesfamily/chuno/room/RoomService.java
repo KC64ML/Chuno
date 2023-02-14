@@ -97,7 +97,7 @@ public class RoomService {
         Map<String, Object> resMap = new HashMap<>();
         if (res.isPresent()) {
             RoomEntity room = res.get();
-            if(!room.isPushed() && !room.getPassword().equals(password)) {
+            if(!room.getIsPublic() && !room.getPassword().equals(password)) {
                 resMap.put("code", "3");
             }else {
                 int currentPlayers = room.getCurrentPlayers();
