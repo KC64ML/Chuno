@@ -13,7 +13,7 @@
         <img src="@/assets/crown_silver.png" alt="" v-if="user.rank == 2" id="crown">
         <img src="@/assets/crown_bronze.png" alt="" v-if="user.rank == 3" id="crown">
         <img 
-          :src="user.profile.path ? URL + 'resources/images?path=' + user.profile.path :  defaultProfile" 
+          :src="user.profile ? URL + 'resources/images?path=' + user.profile.path :  defaultProfile" 
           alt="profile" 
           id="profile"
           @click="this.$router.push({ name: 'Profile', params: { uid: user.id } })"
