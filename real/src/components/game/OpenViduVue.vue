@@ -226,8 +226,15 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 this.isLongVideo = !this.isLongVideo;
             }
     },
+    beforeRouteLeave() {
+        if (this.session) {
+            this.leaveSession();    
+        }
+    },
     beforeUnmount() {
-        this.leaveSession();
+        if (this.session) {
+            this.leaveSession();    
+        }
     },
     async created() {
         this.conn.addEventListener("message", (e) => {
