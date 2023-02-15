@@ -42,7 +42,7 @@ spring:
 logging:
   level:
     root: info
-    org.hibernate.type: trace
+    org.hibernate.type: error
 
 secret:
   key: believ8ebeli7ev6ethat5lifeisno4tadrea1mitsfal3lWhatthoughourBestOerhopeaheavyswayHopeagain2eriemfojc

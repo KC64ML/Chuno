@@ -12,16 +12,6 @@ values
 (now(), 0, 11, 7, "grg@naver.com", 0, 0, 0, 1, 800, "귀찮아죽겠음", 0, "", "", 30, 15, "01849878512"),
 (now(), 0, 11, 7, "tnth@naver.com", 0, 0, 0, 1, 7000, "닉넴뭐하지", 0, "", "", 30, 15, "01012168849");
 
-
-INSERT INTO rooms
-(is_public, lat, lng, password, radius, title, host_id, year, month, day, hour, minute)
-VALUES
-    (false, 36.12345, 125.12345, 123, 500, '사이좋은 구미 친구들', 2, 2023, 02, 02, 14, 49),
-    (true, 36.12345, 125.12345, null, 500, '구미 공개방임', 2, 2023, 02, 02, 14, 49),
-    (true, 35.5534, 37.14123, null, 200, '드루와', 1, 2023, 02, 01, 10, 22),
-    (true, 35.5534, 37.14123, 1234, 300, '드루와', 3, 2023, 02, 01, 14, 55),
-    (true, 35.5534, 37.14123, null, 400, '드루와', 4, 2023, 02, 02, 1, 05);
-
 INSERT INTO items
 (description, img_path, name, price, for_runner)
 VALUES
