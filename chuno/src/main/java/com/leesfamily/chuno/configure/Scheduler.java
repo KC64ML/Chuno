@@ -36,7 +36,7 @@ public class Scheduler {
     @Scheduled(cron="1/60 * * * * ?")
     public void scheduleFixedRateTask() throws InterruptedException {
         log.info("scheduler exec");
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now().plusHours(9l);
         LocalDateTime later10m = now.plusMinutes(10l);
         List<PushEntity> pushList = pushRepository.findAll();
         pushList.forEach((push) -> {
