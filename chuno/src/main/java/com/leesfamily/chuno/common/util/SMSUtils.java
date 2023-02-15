@@ -103,7 +103,7 @@ public class SMSUtils {
         // 발신번호 및 수신번호는 반드시 01012345678 형태로 입력되어야 합니다.
         message.setFrom("01051411025");
         message.setTo(phone);
-        message.setText(roomTitle + " 방의 추노 게임이 곧 시작됩니다!");
+        message.setText(roomTitle + " 방의 추노 게임이 10분 후 시작됩니다!\n\nhttps://i8d208.p.ssafy.io/");
 
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
         System.out.println(response);
