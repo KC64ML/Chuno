@@ -15,9 +15,10 @@
                 <div v-else>
                     <div id="profile_background">
                     <img
-                      :src="URL + this.img_url"
+                      :src="this.img_url"
                       alt="profile pic"
                       class="uploadedImg"
+                      @click="profile_click"
                     />
                     </div>
                     <div>
@@ -82,7 +83,7 @@ export default {
         can_use: false,
         one_file: undefined,
         URL: process.env.VUE_APP_SPRING + "resources/images?path=",
-        img_url: this.userInfo.profile.path, // userInfo.profile : 기존 이미지
+        img_url: process.env.VUE_APP_SPRING + "resources/images?path="+ this.userInfo.profile.path, // userInfo.profile : 기존 이미지
         check_img: false,
       }
     },

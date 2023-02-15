@@ -71,7 +71,7 @@ import InventoryView from '@/components/profile/InventoryView.vue'
 
 import LogoutModal from '@/components/profile/LogoutModal.vue'
 import EditProfileModal from '@/components/profile/EditProfileModal.vue'
-// import NewEditProfileModal from '@/components/profile/NewEditProfileModal.vue'
+// import EditProfileModal from '@/components/profile/NewEditProfileModal.vue'
 import DeleteAccountModal from '@/components/profile/DeleteAccountModal.vue'
 
 export default {
