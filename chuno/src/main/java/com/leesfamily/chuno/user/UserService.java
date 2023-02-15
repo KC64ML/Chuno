@@ -39,6 +39,7 @@ public class UserService {
 
     public UserInventoryResponse getProfile(Long id) {
         Optional<UserEntity> user = userRepository.findById(id);
+        if(!user.isPresent()) return null;
         List<InventoryEntity> inventoryList = inventoryEntityRepository.findAllByUser(user.get());
         UserInventoryResponse userInventoryResponse = UserInventoryResponse.toUserInventoryResponse(user.get());
         userInventoryResponse.countingItems(inventoryList);
@@ -50,6 +51,7 @@ public class UserService {
     }
     public UserInventoryResponse getProfile(String nickname) {
         Optional<UserEntity> user = userRepository.findByNickname(nickname);
+        if(!user.isPresent()) return null;
         List<InventoryEntity> inventoryList = inventoryEntityRepository.findAllByUser(user.get());
         UserInventoryResponse userInventoryResponse = UserInventoryResponse.toUserInventoryResponse(user.get());
         userInventoryResponse.countingItems(inventoryList);
