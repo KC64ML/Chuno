@@ -69,7 +69,7 @@
     </div>
   </div>
 
-  <OpenViduVue :my_cam_modal="my_cam_modal" :user="user"></OpenViduVue>
+  <OpenViduVue :my_cam_modal="my_cam_modal" :user="user" :vidu_end="vidu_end"></OpenViduVue>
 
   <transition name="chat-retreat">
     <div id="chat_container" v-if="chat_modal">
@@ -261,6 +261,8 @@ export default {
   },
   data() {
     return {
+      vidu_end: false,
+
       my_cam_modal: { active: false },
       item_menu_modal: false,
       user: undefined,
@@ -545,6 +547,7 @@ export default {
       this.my_ripped_paper++;
     },
     async end_confirm() {
+      this.vidu_end = true;
       var result = await this.axios.put(process.env.VUE_APP_SPRING + "room/endRoom", {
         "catchCount": this.my_arrest_slave,
         "paperCount": this.my_ripped_paper,

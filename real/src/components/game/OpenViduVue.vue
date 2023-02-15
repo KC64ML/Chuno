@@ -46,6 +46,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             UserVideo,
         },
         props: {
+            vidu_end: Boolean,
             my_cam_modal: Object,
             user: Object,
         },
@@ -149,6 +150,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 window.addEventListener("beforeunload", this.leaveSession);
             },
             leaveSession() {
+                console.log("-----오픈비두 세션을 끊어요!!!-----")
                 if (this.session) this.session.disconnect();
 
                 this.session = undefined;
@@ -226,7 +228,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             },
             videoLengthToggle() {
                 this.isLongVideo = !this.isLongVideo;
-            }
+            },
     },
     beforeRouteLeave() {
         if (this.session) {
@@ -292,6 +294,9 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
             return this.user.nickname;
         }
     },
+    watch: {
+        'vidu_end': 'leaveSession'
+    }
 }
 </script>
 
