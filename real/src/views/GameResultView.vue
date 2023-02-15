@@ -1,59 +1,61 @@
 <template>
     <HeaderVue :title="'결과'"></HeaderVue>
-    <div style="height: 75%; width: 100vw; overflow-x: hidden; overflow-y:scroll;">
-        <div class="display_win_appear">
-            <div class="display_win" :class="{ 'win_true': user_win }">
-                <img src="@/assets/leaf_crown.png" alt="" style="height: 100px" v-if="user_win == 1">
-                <div class="winDiv" v-if="user_win == 1">승리!</div>
-                <div class="winDiv" v-else>패배ㅠㅠ</div>
+    <transition name="result_disappear">
+        <div v-if="page_show" id="result_container">
+            <div class="display_win_appear">
+                <div class="display_win" :class="{ 'win_true': user_win }">
+                    <img src="@/assets/leaf_crown.png" alt="" style="height: 100px" v-if="user_win == 1">
+                    <div class="winDiv" v-if="user_win == 1">승리!</div>
+                    <div class="winDiv" v-else>패배ㅠㅠ</div>
+                </div>
+                <div style="text-align: center; margin-bottom: 50px;">
+                    <div v-if="user_win == 1">신난닭! 오늘 저녁은 치킨이닭!</div>
+                    <div v-else>괜찮아.. 그런날도 있는거지 뭐..</div>
+                </div>
             </div>
-            <div style="text-align: center; margin-bottom: 50px;">
-                <div v-if="user_win == 1">신난닭! 오늘 저녁은 치킨이닭!</div>
-                <div v-else>괜찮아.. 그런날도 있는거지 뭐..</div>
-            </div>
-        </div>
-        <div class="bar_appear" style="display: flex; align-items: center; width: 100vw; margin-bottom: 30px;">
-            <div style="width: 100%;">
-                <div class="total_bar exp_bar">
-                    <div class="sub_bar exp_bar" ref="sub_bar">
-                        <div>{{ Math.floor(display_exp) }}</div>
+            <div class="bar_appear" style="display: flex; align-items: center; width: 100vw; margin-bottom: 30px;">
+                <div style="width: 100%;">
+                    <div class="total_bar exp_bar">
+                        <div class="sub_bar exp_bar" ref="sub_bar">
+                            <div>{{ Math.floor(display_exp) }}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; width: 95%; margin: 0 auto;">
+                        <div>
+                            <div>Lv.{{ user_level_from }}</div>
+                            <div v-if="user_level_from != level_mapper.length">({{ user_level_from_exp }})</div>
+                        </div>
+                        <div>
+                            <div>Lv.{{ user_level_to }}</div>
+                            <div v-if="user_level_to != level_mapper.length">({{ user_level_to_exp }})</div>
+                        </div>
                     </div>
                 </div>
-                <div style="display: flex; justify-content: space-between; width: 95%; margin: 0 auto;">
-                    <div>
-                        <div>Lv.{{ user_level_from }}</div>
-                        <div v-if="user_level_from != level_mapper.length">({{ user_level_from_exp }})</div>
+            </div>
+            <div class="obtain_box">
+                <div style="width: 50%; text-align: center;">
+                    <div style="width: 100%; text-align:center">경험치 {{ Math.floor(display_exp) }}</div>
+                    <div style="display: flex; justify-content: center;">
+                        <div>(+{{ user_exp }}</div>
+                        <div class="up_arrow">▲</div>
+                        <div>)</div>
                     </div>
-                    <div>
-                        <div>Lv.{{ user_level_to }}</div>
-                        <div v-if="user_level_to != level_mapper.length">({{ user_level_to_exp }})</div>
+                </div>
+                <div style="width: 50%; text-align: center;">
+                    <div style="width: 100%; text-align:center">내 엽전 {{ Math.floor(display_money) }}</div>
+                    <div style="display: flex; justify-content: center;">
+                        <div>(+{{ user_money }}</div>
+                        <div class="up_arrow">▲</div>
+                        <div>)</div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="obtain_box">
-            <div style="width: 50%; text-align: center;">
-                <div style="width: 100%; text-align:center">경험치 {{ Math.floor(display_exp) }}</div>
-                <div style="display: flex; justify-content: center;">
-                    <div>(+{{ user_exp }}</div>
-                    <div class="up_arrow">▲</div>
-                    <div>)</div>
-                </div>
-            </div>
-            <div style="width: 50%; text-align: center;">
-                <div style="width: 100%; text-align:center">내 엽전 {{ Math.floor(display_money) }}</div>
-                <div style="display: flex; justify-content: center;">
-                    <div>(+{{ user_money }}</div>
-                    <div class="up_arrow">▲</div>
-                    <div>)</div>
-                </div>
+            <div class="flex_center confirm_button" style="margin-top: 20px;" @click="game_end_confirm">
+                <img src="@/assets/main_button1.png" style="height: 80px;">
+                <div class="image_text">확인</div>
             </div>
         </div>
-        <div class="flex_center confirm_button" style="margin-top: 20px;" @click="game_end_confirm">
-            <img src="@/assets/main_button1.png" style="height: 80px;">
-            <div class="image_text">확인</div>
-        </div>
-    </div>
+    </transition>
     <div id="level_up_container" v-if="level_up_modal" style="background-color: rgb(0,0,0,0.5); position: absolute; top: 0; left: 0; width: 100vw; height: 100%; z-index= 10011100">
         <div id="level_up_modal" class="level_up_modal">
             <div style="text-align: center; font-size: 25px;">축하합니다 레벨업 하셨습니다</div>
@@ -74,6 +76,7 @@ export default {
     },
     data() {
         return {
+            page_show: true,
             level_up_modal: false,
 
             user: {},
@@ -173,13 +176,16 @@ export default {
             this.level_up_modal = false;
         },
         game_end_confirm() {
+            this.page_show = false;
             this.sendData({
                 "event": "clear",
                 "room": this.roomId,
                 "nickname": this.host,
                 "level": "1",
             });
-            this.$router.push({name: "home"});
+            setTimeout(() => {
+                this.$router.push({name: "home"});
+            }, 1000)
         }
     }
 }
@@ -353,4 +359,19 @@ export default {
     
 }
 
+.result_disappear-leave-active {
+    animation: result_out 1s;
+}
+@keyframes result_out {
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+#result_container {
+    height: 75%;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y:scroll;
+}
 </style>
