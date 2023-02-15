@@ -2,7 +2,7 @@
   <!-- 모달 -->
   <LogoutModal v-if="logoutModal" @on-logout="onLogout"/>
   <DeleteAccountModal v-if="deleteAccountModal" @on-delete="onDelete"/>
-  <NewEditProfileModal v-if="profileEditModal" @on-editProfile="openEditModal" :userInfo="userInfo" />
+  <EditProfileModal v-if="profileEditModal" @on-editProfile="openEditModal" :userInfo="userInfo" />
 
   <HeaderVue
     v-if="me"
@@ -70,8 +70,8 @@ import RecordView from '@/components/profile/RecordView.vue'
 import InventoryView from '@/components/profile/InventoryView.vue'
 
 import LogoutModal from '@/components/profile/LogoutModal.vue'
-// import NewEditProfileModal from '@/components/profile/EditProfileModal.vue'
-import NewEditProfileModal from '@/components/profile/NewEditProfileModal.vue'
+import EditProfileModal from '@/components/profile/EditProfileModal.vue'
+// import NewEditProfileModal from '@/components/profile/NewEditProfileModal.vue'
 import DeleteAccountModal from '@/components/profile/DeleteAccountModal.vue'
 
 export default {
@@ -84,7 +84,7 @@ export default {
     RecordView,
     LogoutModal,
     DeleteAccountModal,
-    NewEditProfileModal,
+    EditProfileModal,
   },
   data() {
     return {

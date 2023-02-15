@@ -3,26 +3,26 @@
         <div id="make_room_modal">
             <div id="close_button" @click="offing">x</div>
             <div id="modal_title" style="font-size: 24px;">호패 편집</div>
-            <div>
-                <div v-if="this.img_url">
+            <div style="text-align: center;">
+                <div v-if="img_url == 'profile/default.png'" id="profile_background">
+                  <img
+                  id="blank_img"
+                  src="@/assets/profile_default_with_cam.svg"
+                  alt=""
+                  @click="profile_click"
+                />
+                </div>
+                <div v-else>
                     <div id="profile_background">
                     <img
-                        :src="this.img_url"
-                        alt="profile pic"
-                        class="uploadedImg"
+                      :src="URL + this.img_url"
+                      alt="profile pic"
+                      class="uploadedImg"
                     />
                     </div>
                     <div>
-                    <button @click="clearImage">다시 선택할래요</button>
+                    <button @click="clearImage">현재 사진 삭제</button>
                     </div>
-                </div>
-                <div v-else>
-                    <img
-                    id="blank_img"
-                    src="@/assets/profile_default_with_cam.svg"
-                    alt=""
-                    @click="profile_click"
-                    />
                 </div>
                 <input
                     ref="file_input"
@@ -37,17 +37,32 @@
                         <col style="width: 200px">
                     </colgroup>
                     <tr>
-                        <td>닉네임</td>
-                        <td>
-                            <input v-model="title" style="padding: 0 20px">
-                        </td>
+                      <td>닉네임</td>
+                      <td>
+                          <input v-model="nickname" style="padding: 0 20px">
+                      </td>
                     </tr>
-                        <td>전화번호</td>
-                        <td>
-                            <input v-model="title" style="padding: 0 20px">
-                        </td>
-                </table>
-                <div class="flex_center hover_pointer" @click="nextButton1">
+                    <tr>
+                      <td></td>
+                      <td>
+                        <p v-if="!can_use && nickname != userInfo.nickname && nickname.length > 0" 
+                          style="color: red;">이미 사용 중인 닉네임 입니다.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>전화번호</td>
+                      <td>
+                        <input v-model="phone" style="padding: 0 20px">
+                      </td>
+                    </tr>
+                    <!-- <tr>
+                      <td></td>
+                      <td> -->
+                        <!-- </td>
+                        </tr> -->
+                      </table>
+                <p style="size: 18%; color: gray; text-align: center;">전화번호는 '-' 없이 숫자만 입력해주세요.</p>
+                <div class="flex_center hover_pointer" @click="save">
                     <img src="@/assets/main_button1.png" id="button1" style="width: 140px">
                     <div class="image_text">저장</div>
                 </div>
@@ -58,130 +73,121 @@
 <script>
 export default {
     props: {
-        player: undefined,
-    },
-    components: {
+      userInfo: Object,
     },
     data() {
-        return {
-            title: "",
-            max_player: 4,
-            is_public: true,
-            password: "",
-            is_today: true,
-            hour: null,
-            minute: null,
-            page1: true,
-            page2: false,
-            circleOptions: {
-                strokeColor: "#0000FF",
-                strokeOpacity: 0.3,
-                strokeWeight: 2,
-                fillColor: "#0000FF",
-                fillOpacity: 0.15,
-            },
-            is_am: true,
-            radius: 750
-        }
+      return {
+        nickname: this.userInfo.nickname,
+        phone: this.userInfo.phone,
+        can_use: false,
+        one_file: undefined,
+        URL: process.env.VUE_APP_SPRING + "resources/images?path=",
+        img_url: this.userInfo.profile.path, // userInfo.profile : 기존 이미지
+        check_img: false,
+      }
     },
     methods: {
-        offing() {
-            this.$emit("modal_off")
-        },
-        nextButton1() {
-            console.log(this.hour + (this.is_am ? 0 : 12), this.minute)
-            if (this.title == "") {
-                alert("제목을 입력해 주세요");
-                return;
+      offing() {
+        this.$emit("on-editProfile");
+      },
+      check() {
+      console.log(this.nickname);
+      this.axios
+        .get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname)
+        .then(({ data }) => {
+          console.log("result : " + data.result);
+          console.log("code : " + data.code);
+          if(!data.code){
+            //없는 닉네임
+            this.can_use = true
+          } else {
+            if(this.nickname == this.userInfo.nickname){
+              this.can_use = true
+            } else {
+              this.can_use = false
             }
-            if (this.checkDate()) {
-                alert("시간을 확인해 주세요");
-                return;
-            }
-            this.page1 = false;
-            this.page2 = true;
-        },
-        checkDate(){
-            if (this.hour > 12 || this.hour <= 0 || this.minute < 0 || this.minute >= 60) {
-                return true;
-            }
-            if (this.is_today) {
-                let curDate = new Date();
-                let h = curDate.getHours();
-                let m = curDate.getMinutes();
-                console.log("curDate",curDate);
-                console.log("h",h);
-                console.log("m",m);
-                if(this.is_am){
-                    if(this.hour<=h&&this.minute<m){
-                        return true;
-                    }
-                }else{
-                    if(this.hour+12<=h&&this.minute<m){
-                        return true;
-                    }
-                }
-            }
-            return false;
-        },
-        minus() {
-            if (this.max_player <= 4) return;
-            this.max_player-=2;
-        },
-        plus() {
-            if (this.max_player >= 8) return;
-            this.max_player+=2;
-        },
-        publicGame() {
-            this.is_public = true;
-        },
-        secretGame() {
-            this.is_public = false;
-        },
-        today() {
-            this.is_today = true;
-        },
-        amChange() {
-            this.is_am = !this.is_am;
-        },
-        tomorrow() {
-            this.is_today = false;
-        },
-        previous() {
-            this.page1 = true;
-            this.page2 = false;
-        },
-        async modalConfirm() {
-            alert('게임방을 만들어요!!!')
-            console.log(process.env.VUE_APP_SPRING + "room")
-            console.log(sessionStorage.getItem("token"));
-            // 방을 데이터 베이스에 등록해요
-            console.log(process.env.VUE_APP_SPRING + "room");
-            var data = await this.axios.post(process.env.VUE_APP_SPRING + "room", {
-                lat: this.player.lat,
-                lng: this.player.lng,
-                title: this.title,
-                isPublic: this.is_public,
-                password: this.is_public ? null : this.password,
-                radius: this.radius,
-                isToday: this.is_today, 
-                hour:  (this.hour + (this.is_am ? 0 : 12)) % 24,
-                minute:  this.minute,
-                maxPlayers: this.max_player,
-            }, {
-                headers: { Authorization: sessionStorage.getItem("token") }
-            }).then(res => res.data.result)
-            var user = await this.axios.get(process.env.VUE_APP_SPRING + "user", {headers: {Authorization: sessionStorage.getItem("token")}}).then(res => res.data.result);
-            console.log(data);
-            this.conn.send(JSON.stringify({
-                "event": "make",
-                "room": data,
-                "nickname": user.nickname,
-                "level": user.level,
-            }));
-            this.$router.push({ path: "/waitingRoom/" + data })
-        }
+          }
+        });
     },
+
+    profile_click() {
+      console.log("profile_click 실행");
+      this.$refs.file_input.click();
+      // console.log("img : " + this.$refs.file_input.click());
+    },
+    oneFileSelect(e) {
+      // (URL + 'resources/images?path=' + this.img_url)
+      this.one_file = e.target.files[0];
+      this.img_url = URL.createObjectURL(e.target.files[0]); // 기존에 있는것
+      console.log("files : " + e.target.files[0]);
+      console.log("one_file : " + this.one_file.path);
+      console.log("e : " + e);
+      console.log("img_url : " + this.img_url);
+    },
+    async save() {
+      if (this.nickname.length == 0) {
+        alert("닉네임을 확인해 주세요");
+        return;
+      } else {
+        // 현재 자신의 닉네임이 아니고, 다른 사람이 사용하는 닉네임인 경우
+        if (this.can_use == false && this.nickname != this.userInfo.nickname) {
+          alert("이미 사용 중인 닉네임이에요");
+          return;
+        }
+      }
+
+      console.log("닉네임 사용가능");
+
+      // 현재 프로필을 저장하는 변수, 미래를 가져오는 변수
+      // img_url : 이전 파일
+      // one_file : 새로운 파일
+
+      const formData = new FormData();
+      formData.append("nickname", this.nickname);
+      formData.append("phone", this.phone);
+      if (this.one_file) {
+        formData.append("file", this.one_file);
+      } else {
+        formData.append("file", this.one_file);
+
+      }
+
+      console.log("phone : ", this.phone);
+      console.log("file : " + this.nickname);
+      console.log("this.file : " + this.img_url);
+      // console.log("this.file : " + this.one_file.path);
+      const token = sessionStorage.token;
+
+      this.axios
+        .put(process.env.VUE_APP_SPRING + "user/profile", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: token,
+          },
+        })
+        .then(() => {
+          console.log("프로필 편집 성공");
+          this.$emit('on-editProfile')
+          this.$router.push({ name: "Profile", params: { uid: this.userInfo.id } });
+        })
+        .catch((e) => {
+          console.log("프로필 편집 실패");
+          console.log(e);
+        });
+    },
+
+    reSelect() {
+      alert("다시선택");
+    },
+    clearImage() {
+      this.$refs.file_input.value = "";
+      this.one_file = undefined;
+      this.img_url = 'profile/default.png';
+    },
+  },
+  watch: {
+    'nickname' : 'check',
+  }
 }
 </script>
 
@@ -189,7 +195,19 @@ export default {
 <style lang="scss" scoped>
 $input_height: 30px;
 $plma_size: 30px;
+$image_size: 140px;
 
+#profile_background {
+  margin: auto;
+  height: $image_size;
+  width: $image_size;
+  border-radius: $image_size / 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  object-fit: cover;
+}
 #modal_back {
     position: absolute;
     width: 100vw;
