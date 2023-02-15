@@ -20,10 +20,10 @@
         </div>
       </div>
       <div v-if="!me">
-        <div class="button profile" v-if="!friend" @click="addFriend(this.$route.params.uid)">
+        <div class="button" v-if="!friend" @click="addFriend(this.$route.params.uid)">
           <p>친구 추가</p>
         </div>
-        <div class="button profile" v-if="friend" @click="deleteFriend(this.$route.params.uid)">
+        <div class="button" v-if="friend" @click="deleteFriend(this.$route.params.uid)">
           <p>친구 끊기</p>
         </div>
       </div>
