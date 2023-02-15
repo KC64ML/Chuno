@@ -148,7 +148,7 @@ export default {
       if (this.one_file) {
         formData.append("file", this.one_file);
       } else {
-        formData.append("file", this.one_file);
+        formData.append("file", this.img_url);
 
       }
 
