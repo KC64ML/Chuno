@@ -12,6 +12,7 @@ import com.leesfamily.chuno.user.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@EnableScheduling
 public class Scheduler {
 
     final private UserService userService;
@@ -31,7 +33,7 @@ public class Scheduler {
 
 
     @Async // 병렬로 Scheduler 를 사용할 경우 @Async 추가
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(cron="1/60 * * * * ?")
     public void scheduleFixedRateTask() throws InterruptedException {
         log.info("scheduler exec");
         LocalDateTime now = LocalDateTime.now();
