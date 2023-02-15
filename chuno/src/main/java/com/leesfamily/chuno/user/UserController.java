@@ -68,6 +68,15 @@ public class UserController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/isLogin")
+    public ResponseEntity<Map<String, Object>> loginCheck(
+            @RequestHeader HttpHeaders requestHeaders
+    ) {
+        Long userId = tokenUtils.getUserIdFromHeader(requestHeaders);
+        Map<String, Object> resMap = statusCodeGeneratorUtils.checkResultByNumber(userId);
+        return new ResponseEntity<>(resMap, HttpStatus.OK);
+    }
+
     @Operation(summary = "닉네임 중복체크")
     @GetMapping("/nickname/{nickname}")
     public ResponseEntity<Map<String, Object>> nestedCheckNickname(@PathVariable("nickname") String nickname) {
