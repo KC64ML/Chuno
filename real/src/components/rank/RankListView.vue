@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="rank-result-list">
     <table
       style="width: 85vw;"
     >
@@ -13,12 +13,12 @@
       </colgroup>
       <thead>
         <tr>
-          <th>순위</th>
-          <th>닉네임</th>
-          <th>레벨</th>
-          <th>노비승</th>
-          <th>추노승</th>
-          <th>승률</th>
+          <th style="-webkit-text-stroke: medium">순위</th>
+          <th style="-webkit-text-stroke: medium">닉네임</th>
+          <th style="-webkit-text-stroke: medium">레벨</th>
+          <th style="-webkit-text-stroke: medium">노비승</th>
+          <th style="-webkit-text-stroke: medium">추노승</th>
+          <th style="-webkit-text-stroke: medium">승률</th>
         </tr>
       </thead>
     </table>
@@ -82,4 +82,13 @@ td {
 .rank-bg{
   background-color: #F9CF65;
 }
+
+.rank-result-list{
+  font-family: "WandohopeR";
+  margin-top: 200px;
+  position: relative;
+  z-index: 0;
+  overflow-wrap: initial;
+}
+
 </style>
