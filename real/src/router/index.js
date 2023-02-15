@@ -5,6 +5,7 @@ import ShopView from '@/views/ShopView.vue'
 import RankView from '@/views/RankView.vue'
 import OauthView from '@/views/OauthView.vue'
 import GameView from '@/views/GameView.vue'
+import axios from 'axios';
 
 import module from '@/router/module.js'
 
@@ -94,7 +95,7 @@ router.beforeEach(async (to, from, next) => {
   // 나머지는 다 로그인 체크
   if (sessionStorage.token) {
     const token = sessionStorage.token;
-    const isLogin = await this.axios.get(process.env.VUE_APP_SPRING + "user/isLogin", { headers: { Authorization: token } }).then(res => res.data.code);
+    const isLogin = await axios.get(process.env.VUE_APP_SPRING + "user/isLogin", { headers: { Authorization: token } }).then(res => res.data.code);
     if (isLogin) {
       return next()
     }
