@@ -51,6 +51,17 @@ public class Scheduler {
             int nowDay = later10m.getDayOfMonth();
             int nowHour = later10m.getHour();
             int nowMinute = later10m.getMinute();
+            log.info("roomYear : " + roomYear);
+            log.info("nowYear : " + nowYear);
+            log.info("roomMonth : " + roomMonth);
+            log.info("nowMonth : " + nowMonth);
+            log.info("roomDay : " + roomDay);
+            log.info("nowDay : " + nowDay);
+            log.info("roomHour : " + roomHour);
+            log.info("nowHour : " + nowHour);
+            log.info("roomMinute : " + roomMinute);
+            log.info("nowMinute : " + nowMinute);
+
             if(nowMinute == roomMinute && nowHour == roomHour
                     && nowDay == roomDay && nowMonth == roomMonth && nowYear == roomYear) {
                 UserEntity user = push.getUser();
