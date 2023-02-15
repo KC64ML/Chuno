@@ -189,6 +189,7 @@ export default {
     'nickname' : 'check',
   }
 }
+
 </script>
 
 <style src="@vueform/slider/themes/default.css"></style>
