@@ -87,20 +87,20 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(async (to, from, next) => {
-  // 로그인 없이 갈 수 있는 페이지
-  if (to.name == 'start' || to.name == 'login' || to.name == 'Oauth' || to.name == 'Register') {
-    return next();
-  }
-  // 나머지는 다 로그인 체크
-  if (sessionStorage.token) {
-    const token = sessionStorage.token;
-    const isLogin = await axios.get(process.env.VUE_APP_SPRING + "user/isLogin", { headers: { Authorization: token } }).then(res => res.data.code);
-    if (isLogin) {
-      return next()
-    }
-  }
-  return next({ name: 'start' });
-})
+// router.beforeEach(async (to, from, next) => {
+//   // 로그인 없이 갈 수 있는 페이지
+//   if (to.name == 'start' || to.name == 'login' || to.name == 'Oauth' || to.name == 'Register') {
+//     return next();
+//   }
+//   // 나머지는 다 로그인 체크
+//   if (sessionStorage.token) {
+//     const token = sessionStorage.token;
+//     const isLogin = await axios.get(process.env.VUE_APP_SPRING + "user/isLogin", { headers: { Authorization: token } }).then(res => res.data.code);
+//     if (isLogin) {
+//       return next()
+//     }
+//   }
+//   return next({ name: 'start' });
+// })
 
 export default router
