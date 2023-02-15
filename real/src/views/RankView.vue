@@ -6,7 +6,11 @@
     <RankTop3View
       :users="users"
     />
-    <RankListView
+
+  </div>
+
+  <div>
+  <RankListView
       :users="users"
       :myId="myId"
     />
@@ -27,7 +31,7 @@ export default {
   },
   data() {
     return {
-      users: [],
+      users: undefined,
       myId: null,
     }
   },
@@ -50,7 +54,7 @@ export default {
       this.axios.get(process.env.VUE_APP_SPRING + 'user/rank', { headers: { Authorization: token } })
       .then((res) => {
         this.users = res.data
-        console.log(res.data)
+        console.log("****", res.data)
       })
       .catch(() => {
         console.log('error')
