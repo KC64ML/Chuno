@@ -118,6 +118,8 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 });
                 await this.getToken(this.mySessionId + "game").then(async (token) => {
                     console.log("토큰을생성해요:" + token);
+                    console.log("openviduvue 하기 전에 user 상태 : ");
+                    console.log(this.user);
                     this.session.connect(token, {
                         clientData: {
                             user: this.user,

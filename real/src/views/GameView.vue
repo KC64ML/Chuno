@@ -231,6 +231,8 @@ export default {
       }).then(({ data }) => {
         if (data.code) {
           this.user = data.result;
+          console.log("게임 뷰에서 받아오는 user 값 : ");
+          console.log(this.user);
         }
       });
     await this.axios.get(APPLICATION_SERVER_URL + 'room/' + this.$route.params.roomId)
@@ -247,6 +249,8 @@ export default {
     this.total_slave = info.teamslave.length;
     this.player_len = info.teamchuno.length + info.teamslave.length;
     this.user.caught = false;
+    console.log("role 받아 온 후 user 상태 : ");
+    console.log(this.user);
     console.log("GameView created complete");
     console.log("-----------------------")
     console.log(this.user);
