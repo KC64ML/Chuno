@@ -292,6 +292,14 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 if (this.clientUser(this.mainStreamManager).nickname == nickname) {
                     this.isOut = true;
                 }
+            } else if (content.type == "caughtRunner") {
+                if (nickname == this.user.nickname) {
+                    this.amIOut = true;
+                }
+                this.players_state[nickname].isOut = true;
+                if (this.clientUser(this.mainStreamManager).nickname == nickname) {
+                    this.isOut = true;
+                }
             }
         })
 

@@ -92,9 +92,15 @@
             :clickable="true"
             @click="catchRunner(o)"
           >
-          <GMapInfoWindow>
-            <div>{{ o.nickname }}</div>
-          </GMapInfoWindow>
+            <GMapInfoWindow
+            :opened="true"
+            :options=" {
+              pixelOffset: {
+                width: 0, height: -40
+              },
+            }">
+              <div>{{ o.nickname }}</div>
+            </GMapInfoWindow>
           </GMapMarker>
           <GMapMarker v-if="o.caught"
           :icon=outPlayerMarkerImg
@@ -110,7 +116,13 @@
             :clickable="true"
             @click="catchRunner(o)"
           >
-            <GMapInfoWindow>
+            <GMapInfoWindow
+            :opened="true"
+            :options=" {
+              pixelOffset: {
+                width: 0, height: -40
+              },
+            }">
               <div>{{ o.nickname }}</div>
             </GMapInfoWindow>
           </GMapMarker>
@@ -125,7 +137,13 @@
             :clickable="true"
             @click="catchRunner(o)"
           >
-            <GMapInfoWindow>
+            <GMapInfoWindow
+            :opened="true"
+            :options=" {
+              pixelOffset: {
+                width: 0, height: -40
+              },
+            }">
               <div>{{ o.nickname }}</div>
             </GMapInfoWindow>
           </GMapMarker>
@@ -139,7 +157,13 @@
             :clickable="true"
             @click="catchRunner(o)"
           >
-            <GMapInfoWindow>
+            <GMapInfoWindow
+            :opened="true"
+            :options=" {
+              pixelOffset: {
+                width: 0, height: -40
+              },
+            }">
               <div>{{ o.nickname }}</div>
             </GMapInfoWindow>
           </GMapMarker>
