@@ -2,19 +2,19 @@
   <HeaderVue
     :title="'랭킹'"
   ></HeaderVue>
-  <div style="height: 80%;">
-    <RankTop3View
+  <div class="childernbar_up" v-if="this.users != null">
+    <RankTop3View 
       :users="users"
     />
-
   </div>
 
-  <div>
-  <RankListView
+  <div class="childernbar_down">
+    <RankListView
       :users="users"
       :myId="myId"
-    />
+      />
   </div>
+
 </template>
 
 <script>
@@ -70,6 +70,15 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+.childernbar_up{
+  margin-bottom: 80%;
+}
+
+.childernbar_down{
+  margin-top: 30%;
+}
+
 
 </style>

@@ -132,16 +132,32 @@ export default {
   created() {
     console.log("실행 하겠습니다.");
     console.log("-----------", this.users, "-------------");
-    this.users.forEach((user) => {
-      if (user.rank == 1) {
-        this.userRank1 = user;
-      } else if (user.rank == 2) {
-        this.userRank2 = user;
-      } else if (user.rank == 3) {
-        this.userRank3 = user;
-      }
-    });
 
+    // for(var userIdx =0 ; this.users == null && userIdx < this.users.length; userIdx++){
+    //   var user = this.users;
+    //   if (user.rank == 1) {
+    //       this.userRank1 = user;
+    //     } else if (user.rank == 2) {
+    //       this.userRank2 = user;
+    //     } else if (user.rank == 3) {
+    //       this.userRank3 = user;
+    //     }
+    // }
+
+
+      this.users.forEach((user) => {
+        if (user.rank == 1) {
+          this.userRank1 = user;
+        } else if (user.rank == 2) {
+          this.userRank2 = user;
+        } else if (user.rank == 3) {
+          this.userRank3 = user;
+        }
+      });
+    
+
+
+    console.log("userRank")
     console.log(this.userRank1);
   },
 };
@@ -155,18 +171,23 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   align-items : center;
+  top: 20%;
 }
 
 .list_rank2 {
   position: absolute;
-  left: 20%;
-  margin-top: 20%;
+  left: 10%;
+  align-items : center;
+  top: 30%;
+  /* margin-top: 20%; */
 }
 
 .list_rank3 {
   position: absolute;
-  right: 20%;
-  margin-top: 20%;
+  right: 10%;
+  align-items : center;
+  top: 30%;
+  /* margin-top: 20%; */
 }
 
 .container-row {

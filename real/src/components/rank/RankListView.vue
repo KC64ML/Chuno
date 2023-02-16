@@ -85,7 +85,7 @@ td {
 
 .rank-result-list{
   font-family: "WandohopeR";
-  margin-top: 200px;
+  margin-top: 300px;
   position: relative;
   z-index: 0;
   overflow-wrap: initial;
