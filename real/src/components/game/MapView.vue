@@ -91,7 +91,11 @@
             :position="o.location"
             :clickable="true"
             @click="catchRunner(o)"
-          />
+          >
+          <GMapInfoWindow>
+            <div>{{ o.nickname }}</div>
+          </GMapInfoWindow>
+          </GMapMarker>
           <GMapMarker v-if="o.caught"
           :icon=outPlayerMarkerImg
           :position="o.location"
@@ -105,7 +109,11 @@
             :position="o.location"
             :clickable="true"
             @click="catchRunner(o)"
-          />
+          >
+            <GMapInfoWindow>
+              <div>{{ o.nickname }}</div>
+            </GMapInfoWindow>
+          </GMapMarker>
         </div>
 
         <!-- 내가 추노인데, -->
@@ -116,7 +124,11 @@
             :position="o.location"
             :clickable="true"
             @click="catchRunner(o)"
-          />
+          >
+            <GMapInfoWindow>
+              <div>{{ o.nickname }}</div>
+            </GMapInfoWindow>
+          </GMapMarker>
         </div>
         <!-- 상대가 노비일 때 -->
         <div v-if="o.role == 'runner' && user.role == 'chaser' && !o.isOut">
@@ -126,7 +138,11 @@
             :position="o.location"
             :clickable="true"
             @click="catchRunner(o)"
-          />
+          >
+            <GMapInfoWindow>
+              <div>{{ o.nickname }}</div>
+            </GMapInfoWindow>
+          </GMapMarker>
           <GMapMarker v-if="o.caught"
           :icon=outPlayerMarkerImg
           :position="o.location"
