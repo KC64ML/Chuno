@@ -12,7 +12,7 @@
       <div v-if="show_el" class="opacity_appear">
         <div class="flex_center hover_pointer button_animation" @click="start">
           <img src="@/assets/main_button1.png" id="button1">
-          <div class="image_text">시작해요</div>
+          <div class="image_text">시작하기</div>
         </div>
       </div>
     </transition>
@@ -85,7 +85,7 @@ $video_duration: 8s;
 
 .start_disappear-leave-to {
   opacity: 0;
-  transform: rotate(-40deg) skewX(50deg) scale(1.5);
+  transform: scale(1.7);
   text-shadow: 0 0 20px;
   filter: blur(8px);
   ;

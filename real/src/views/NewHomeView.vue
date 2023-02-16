@@ -28,7 +28,7 @@
         ㅠ.ㅠ
       </div>
       <div style="text-align: center;">
-        참가 가능한 방이 없어요
+        참가 가능한 방이 없습니다.
       </div>
     </div>
     <div id="room_box" style="height: 100%; overflow: scroll" v-else>

@@ -6,23 +6,23 @@
       <!-- </div> -->
       <div class="container-col">
         <div>플레이</div>
-        <div>타임</div>
+        <div>시간</div>
       </div>
     </div>
     <br />
     <div>
       <div>
-        <div>플레이한 게임</div>
+        <div>전체 횟수</div>
         <div id="cnt">{{ totalPlay }}회</div>
       </div>
       <br />
       <div>
-        <div>추노꾼 플레이</div>
+        <div>추노꾼 횟수</div>
         <div id="cnt">{{ userInfo.chaserPlayCount }}회</div>
       </div>
       <br />
       <div>
-        <div>노비 플레이</div>
+        <div>노비 횟수</div>
         <div id="cnt">{{ userInfo.runnerPlayCount }}회</div>
       </div>
     </div>

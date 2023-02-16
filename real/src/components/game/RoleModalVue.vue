@@ -10,14 +10,14 @@
     <div class="centering big_text">입니다.</div>
     <div style="display: flex; justify-content: space-evenly">
       <div>
-        <div class="centering big_text" style="margin-bottom: 10px">노비팀</div>
+        <div class="centering big_text" style="margin-bottom: 10px">노비</div>
         <div v-for="(p, idx) in teamslave" :key="idx">
           <RoleCardVue :comp="p == nickname ? 'yellow' : 'white'" :nickname="p">
           </RoleCardVue>
         </div>
       </div>
       <div>
-        <div class="centering big_text" style="margin-bottom: 10px">추노팀</div>
+        <div class="centering big_text" style="margin-bottom: 10px">추노꾼</div>
         <div v-for="(p, idx) in teamchuno" :key="idx">
           <RoleCardVue :comp="p == nickname ? 'yellow' : 'white'" :nickname="p">
           </RoleCardVue>

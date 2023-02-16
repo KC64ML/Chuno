@@ -2,7 +2,7 @@
     <div id="spining_container" class="flex_center">
         <div>
             <div style="width: 100vw; margin-bottom: 40px; font-size: 20px; text-align: center">
-                열심히 정보를 가져오는 중이에요
+                정보를 가져오는 중입니다.
             </div>
             <div style="display:flex; justify-content: center">
                 <div class="lds-roller">
@@ -48,7 +48,7 @@
             </div>
             <div :class="{ div_hidden: !count_down_start }"
                 style="text-align: center; font-size: 25px; margin-top: 20px;">
-                {{ count_down }}초 후에 게임이 시작되요!
+                {{ count_down }}초 후에 추노가 시작됩니다!
             </div>
         </div>
     </div>
@@ -79,7 +79,7 @@ export default {
             location_list: [],
             roomcenter: undefined,
             roomradius: 0,
-            display_info: "백성을 추리고 있어요",
+            display_info: "백성을 추리고 있는 중...",
             gameCircle: {
                 strokeColor: "#0000FF",
                 strokeOpacity: 0.3,
@@ -118,7 +118,7 @@ export default {
                 this.cnt_len++;
                 this.display_info = this.cnt_len + " / " + this.player_len;
                 if (this.cnt_len == this.player_len) {
-                    this.display_info = "모든 사용자로 부터 정보를 받아왔어요!"
+                    this.display_info = "역할 분담이 끝났습니다."
                     var count = setInterval(() => {
                         this.count_down_start = true;
                         this.count_down--;

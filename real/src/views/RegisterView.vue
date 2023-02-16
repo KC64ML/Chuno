@@ -15,7 +15,7 @@
               <img id="preview_img" :src="this.img_url" />
             </div>
             <div>
-              <button @click="clearImage">다시 선택할래요</button>
+              <button @click="clearImage">다시 선택</button>
             </div>
           </div>
           <div v-else>
@@ -30,8 +30,8 @@
           </div>
         </div>
         <div v-if="this.nickname.length">
-          <div v-if="!can_use" style="color: red;">이미 사용 중이에요</div>
-          <div v-else style="color: green;">사용 할 수 있어요</div>
+          <div v-if="!can_use" style="color: red;">이미 사용 중입니다</div>
+          <div v-else style="color: green;">사용 할 수 있습니다</div>
         </div>
         <div id="input_box" style="display: flex; align-items: center;">
           <div style="margin-right: 5px;">전화번호</div>

@@ -29,7 +29,7 @@
             />
         </div>
         <div v-if="ripTarget.real">
-          <div id="modal_title" style="font-size: 24px">이 문서를는 진짜입니다.</div>
+          <div id="modal_title" style="font-size: 24px">이 문서는 진짜입니다.</div>
           <div class="flex_center hover_pointer" data-v-7961e374="">
             <img
               src="@/assets/main_button1.png"
@@ -42,7 +42,7 @@
         </div>
 
         <div v-if="!ripTarget.real">
-          <div id="modal_title" style="font-size: 24px">이 문서를는 가짜입니다.</div>
+          <div id="modal_title" style="font-size: 24px">이 문서는 가짜입니다.</div>
           <div class="flex_center">
             <div class="flex_center hover_pointer" data-v-7961e374="">
               <img
