@@ -82,7 +82,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
         //     },
         // },
         methods: {
-            async init() {
+            async initOpenvidu() {
                 this.OV = new OpenVidu();
                 this.session = this.OV.initSession();
                 this.session.on("streamCreated", ({ stream }) => {
@@ -291,7 +291,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
 
         
         setTimeout(() => {
-            this.init();
+            this.initOpenvidu();
         }, 500);
     },
     computed: {

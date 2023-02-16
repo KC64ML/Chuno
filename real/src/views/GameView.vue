@@ -188,91 +188,13 @@ export default {
   created() {
     this.init();
   },
-  async init() {
-    this.conn.addEventListener('message', (e) => {
-      var content = JSON.parse(e.data);
-      if (content.type == 'chat') {
-        // console.log({ nickname: content.nickname, msg: content.message })
-        this.chat_log.push({ nickname: content.nickname, msg: content.message })
-
-        // 최근 메세지를 토스트로 띄우고 싶어요!!!
-        if (content.nickname == "system") {
-          this.last_chat = content.message;
-          this.system_toast = true;
-        } else {
-          this.last_chat = content.nickname + " : " + content.message;
-          this.chat_toast = true;
-        }
-
-        setTimeout(() => {
-          this.system_toast = false;
-          this.chat_toast = false;
-        }, 3000)
-      } else if (content.type == 'caughtRunner') {
-        this.arrested_slave++;
-        if (this.arrested_slave == this.total_slave) {
-          this.victory_team = 'chaser';
-          this.victoryCnt(this.user.role, this.victory_team);
-          this.makeDisplay(this.victory_team);
-          this.game_ending();
-        }
-      } else if (content.type == 'rippedPaper') {
-        if (content.info.paper.real == true) {
-          this.ripped_paper++;
-          if (this.ripped_paper == this.total_paper) {
-            this.victory_team = 'runner';
-            this.victoryCnt(this.user.role, this.victory_team);
-            this.makeDisplay(this.victory_team);
-            this.game_ending();
-          }
-        }
-      }
-    })
-    this.user = await this.axios.get(APPLICATION_SERVER_URL + 'user',
-      {
-        headers: { Authorization: sessionStorage.token }
-      }).then(({ data }) => {
-        if (data.code) {
-          return data.result;
-          // console.log("게임 뷰에서 받아오는 user 값 : ");
-          // console.log(this.user);
-        } else {
-          return null;
-        }
-      });
-    this.roomInfo = await this.axios.get(APPLICATION_SERVER_URL + 'room/' + this.$route.params.roomId)
-      .then(({ data }) => {
-        if (data.code) {
-          return data.result;
-          // console.log(this.roomInfo)
-          // console.log("GameView room info loaded");
-        } else {
-          return null;
-        }
-      })
-    const info = JSON.parse(sessionStorage.info);
-    this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
-    this.total_paper = info.teamslave.length;
-    this.total_slave = info.teamslave.length;
-    this.player_len = info.teamchuno.length + info.teamslave.length;
-    this.user.caught = false;
-    // console.log("role 받아 온 후 user 상태 : ");
-    // console.log(this.user);
-    // console.log("GameView created complete");
-    // console.log("-----------------------")
-    // console.log(this.user);
-    // console.log(this.roomInfo);
-
-    /* 게임 시간 카운트 로직 */
-    this.game_intervaling();
-  },
   data() {
     return {
       vidu_end: false,
 
       my_cam_modal: { active: false },
       item_menu_modal: false,
-      user: undefined,
+      user: null,
       usedItem: [],
       // 개발이 끝나면 true로 고쳐줘요
       spinningModal: true,
@@ -378,6 +300,85 @@ export default {
     }
   },
   methods: {
+    
+    async init() {
+      this.conn.addEventListener('message', (e) => {
+        var content = JSON.parse(e.data);
+        if (content.type == 'chat') {
+          // console.log({ nickname: content.nickname, msg: content.message })
+          this.chat_log.push({ nickname: content.nickname, msg: content.message })
+
+          // 최근 메세지를 토스트로 띄우고 싶어요!!!
+          if (content.nickname == "system") {
+            this.last_chat = content.message;
+            this.system_toast = true;
+          } else {
+            this.last_chat = content.nickname + " : " + content.message;
+            this.chat_toast = true;
+          }
+
+          setTimeout(() => {
+            this.system_toast = false;
+            this.chat_toast = false;
+          }, 3000)
+        } else if (content.type == 'caughtRunner') {
+          this.arrested_slave++;
+          if (this.arrested_slave == this.total_slave) {
+            this.victory_team = 'chaser';
+            this.victoryCnt(this.user.role, this.victory_team);
+            this.makeDisplay(this.victory_team);
+            this.game_ending();
+          }
+        } else if (content.type == 'rippedPaper') {
+          if (content.info.paper.real == true) {
+            this.ripped_paper++;
+            if (this.ripped_paper == this.total_paper) {
+              this.victory_team = 'runner';
+              this.victoryCnt(this.user.role, this.victory_team);
+              this.makeDisplay(this.victory_team);
+              this.game_ending();
+            }
+          }
+        }
+      })
+      this.user = await this.axios.get(APPLICATION_SERVER_URL + 'user',
+        {
+          headers: { Authorization: sessionStorage.token }
+        }).then(({ data }) => {
+          if (data.code) {
+            return data.result;
+            // console.log("게임 뷰에서 받아오는 user 값 : ");
+            // console.log(this.user);
+          } else {
+            return null;
+          }
+        });
+      this.roomInfo = await this.axios.get(APPLICATION_SERVER_URL + 'room/' + this.$route.params.roomId)
+        .then(({ data }) => {
+          if (data.code) {
+            return data.result;
+            // console.log(this.roomInfo)
+            // console.log("GameView room info loaded");
+          } else {
+            return null;
+          }
+        })
+      const info = JSON.parse(sessionStorage.info);
+      this.user.role = this.getMyRole(info.teamslave, info.teamchuno, this.user.nickname);
+      this.total_paper = info.teamslave.length;
+      this.total_slave = info.teamslave.length;
+      this.player_len = info.teamchuno.length + info.teamslave.length;
+      this.user.caught = false;
+      // console.log("role 받아 온 후 user 상태 : ");
+      // console.log(this.user);
+      // console.log("GameView created complete");
+      // console.log("-----------------------")
+      // console.log(this.user);
+      // console.log(this.roomInfo);
+
+      /* 게임 시간 카운트 로직 */
+      this.game_intervaling();
+    },
     game_intervaling() {
       this.game_interval = setInterval(() => {
         this.game_timer--;

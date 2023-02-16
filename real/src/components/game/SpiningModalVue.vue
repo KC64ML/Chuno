@@ -119,7 +119,7 @@ export default {
                 this.display_info = this.cnt_len + " / " + this.player_len;
                 if (this.cnt_len == this.player_len) {
                     this.display_info = "역할 분담이 끝났습니다."
-                    var count = setInterval(() => {
+                    const count = setInterval(() => {
                         this.count_down_start = true;
                         this.count_down--;
                         if (this.count_down == 0) {
@@ -127,7 +127,6 @@ export default {
                             this.$emit("spinningEnd");
                         }
                     }, 1000);
-                    count();
                 }
             }
         })
