@@ -16,6 +16,7 @@
 # 📚 1. Jenkins 어떤 구조로 동작할까?
 
 **✔️ 현재 상황**
+
 프로젝트에 기능을 추가해서 base branch에 merge 되었다. 이제 실제 서버에 배포를 해야하겠다.
 
 
@@ -24,7 +25,6 @@
 **✔️ 팀프로젝트에서 많이 사용하는 work flow - 현재 매번 실행되어야 한다.**
 
 <img width="786" alt="스크린샷 2023-01-14 오전 12 54 46" src="https://user-images.githubusercontent.com/72541544/212362539-477996c8-6565-485d-a852-b20a1f261cf4.png">
-
 (1) 각 개발자가 기능을 구현한 후 PR
 
 (2) EC2 서버로 접속
@@ -80,9 +80,10 @@ Jenkins가 해주는 부분은?
 
 
 > **💡 참고**
->
 > 어플리케이션 서버에서 Jenkins를 구동할 경우, 빌드가 진행될 때마다 CPU 자원이 모자라서 서버가 다운되는 일이 있다.
+> 
 > 이로 인해 별도 EC2로 분리하는 것이 좋다.
+> 
 > 만약, **서버 자원이 모자라거나 여러 개의 WAS를 띄울 일이 생긴다면, 별도 환경으로 분리하는 것을 추천한다.**
 
 
@@ -139,6 +140,7 @@ sudo apt-get install openjdk-11-jdk
 &nbsp;
 
 **✔️ github repository 연결**
+
 <img width="1437" alt="스크린샷 2023-01-14 오전 11 02 04" src="https://user-images.githubusercontent.com/72541544/212445730-1f471176-4975-4afa-b30d-2c23933b348d.png">
 - github 탭으로 이동, add  누른다.
 
@@ -146,7 +148,9 @@ sudo apt-get install openjdk-11-jdk
 - Secret text 선택, Secret(github token), ID는 아무거나
 
 &nbsp;
+
 <img width="1222" alt="스크린샷 2023-01-14 오전 11 10 53" src="https://user-images.githubusercontent.com/72541544/212446085-98fb5366-a27d-46b6-bd49-ea68636f1b08.png">
+
 - test Connection이 발생할 경우 성공
 
 &nbsp;
@@ -155,6 +159,7 @@ sudo apt-get install openjdk-11-jdk
 **✔️ credentials이 필요하다 (미리 생성하자)**
 
 - 시스템 설정의 github과 연관된 것은 credentials에 Secret text로 등록한 credentials만 인식한다.
+  
 - 지금은 Username with password 로 생성한 credentials이 필요하다.
 
 
@@ -183,7 +188,9 @@ sudo apt-get install openjdk-11-jdk
 
 > **💡 참고**
 > - 간단한 Job을 위해선 freestyle도 좋은 선택 (비교적 세팅이 단순)
+>   
 > - 복잡한 종류의 Job간의 연계나 상세한 세팅, UI (각 job별로 어떻게 진행되고 있는지 보여준다.)를 원한다면 파이프라인을 선택
+
 
 <img width="1432" alt="스크린샷 2023-01-14 오전 11 25 04" src="https://user-images.githubusercontent.com/72541544/212446578-fbf31d81-edfa-4735-bc3b-a64e8736a84a.png">
 
@@ -210,9 +217,13 @@ pipeline script은 Groobee 또는 Jenkins에서 정의한 pipeline syntax를 통
 
 
 (1) `pipe line`은 이 파이프라인 자체를 의미한다.
+
 (2) `agent`는 이 파이프라인 스크립트를 실행할 `executor`를 지정한다. `any`로 둘 시 어떤 `executor`도 실행할 수 있다는 의미가 된다.  
+
 (3) `stages`는 실행할 Job들의 집합이다.  
+
 (4) `stage`는 각각의 Job을 의미한다. Job 내부의 단계를 의미하는 steps를 포함해야한다. 
+
 (5) `steps`에선 실제로 실행할 쉘이나 `syntax`를 입력해주면 된다.
 
 
@@ -239,7 +250,9 @@ pipeline script은 Groobee 또는 Jenkins에서 정의한 pipeline syntax를 통
 
 
 - `repository url`을 적어주고, `branch`를 선택하고, `credentials`를 넣어준다. 
+  
 - 아까 추가하지 않았다면 지금 추가해준다. 
+  
 - **공용 레포지토리를 clone하는 입장이라면 비워놓아도 된다.**
 
 &nbsp;
@@ -260,6 +273,7 @@ pipeline script은 Groobee 또는 Jenkins에서 정의한 pipeline syntax를 통
 
 <img width="1414" alt="스크린샷 2023-01-14 오후 2 36 54" src="https://user-images.githubusercontent.com/72541544/212457668-ad632bfa-128b-4709-a79b-f54f078ddea9.png">
 - `stage` 이름을 원하는 이름으로 변경하고, `steps`에는 위에서 생성한 `snippet`을 붙여주면 된다.
+  
 - **읽어보면, git 특정 브랜치에서 특정 `credentials`로 url의 레포지토리에서 소스를 가져오는 `snippet`이다.**
 
 
@@ -277,6 +291,7 @@ pipeline script은 Groobee 또는 Jenkins에서 정의한 pipeline syntax를 통
 
 <img width="1431" alt="스크린샷 2023-01-14 오후 2 45 42" src="https://user-images.githubusercontent.com/72541544/212457898-d7d28f38-d63a-40b7-aece-7cccbeb90062.png">
 - 수동적으로 build 할시, job을 유발한다.
+  
 - 실행되어 Build History에 잘 들어간 것을 볼 수 있다.
 
 &nbsp;
@@ -286,6 +301,7 @@ pipeline script은 Groobee 또는 Jenkins에서 정의한 pipeline syntax를 통
 
 <img width="1383" alt="스크린샷 2023-01-14 오후 2 49 59" src="https://user-images.githubusercontent.com/72541544/212458016-29d3b3b1-c249-43c5-b895-6b9440b70295.png">
 <img width="1091" alt="스크린샷 2023-01-14 오후 2 50 06" src="https://user-images.githubusercontent.com/72541544/212458023-1511d5da-860a-4be0-b09b-4df0719d2dcf.png">
+
 - `pipeline`  job의 진행 경과 및 `github clone`을 진행하며 입력된 명령어와 출력문들을 확인할 수 있다.
 
 
@@ -297,10 +313,15 @@ pipeline script은 Groobee 또는 Jenkins에서 정의한 pipeline syntax를 통
 # 📚 4. Build 
 
 > **📣 시작하기전**
+> 
 > - 빌드는(Build) clone해 온 소스에 포함되어 있는 gradle wrapper를 활용한다!
+>   
 > - 프로젝트에서 .gradlew 위치를 찾아야 한다.
+>   
 > - dir 스니펫 : cd
+>   
 > - `sh ''' ${쉘 명령어} '''` : pipeline syntax에서 쉘 명령어를 실행하도록 설정하는 부분
+>   
 > - 현재 빌드를 위해 실행해야할 테스트 : `clean`, `bootJar`
 
 
@@ -343,7 +364,9 @@ pipeline {
 스니펫(snippet) : **재사용 가능한 소스 코드, 기계어, 텍스트의 작은 부분**을 일컫는 프로그래밍 용어
 
 - dir : cd
+  
 - `stages` : 실행할 Job들의 집합
+  
 - `stage` : 각각의 Job을 의미
 
 &nbsp;
@@ -383,6 +406,7 @@ private repository로 등록한 서브모듈을 받아오기 위한 여정이므
 
 <img width="1706" alt="스크린샷 2023-01-15 오전 12 24 19" src="https://user-images.githubusercontent.com/72541544/212479701-5f7ae833-59d6-44c6-9667-2b6a9d37ae58.png">
 - `pipeline syntax`에서 `additional behaviours`의 add 버튼을 클릭한 후, `Advanced sub-modules behaviours`를 눌러 위와 같이 설정해준다.
+  
 - `Generate Pipeline Script`을 눌러서, 부모 레포지토리의 `credentials`를 그대로 활용한다.
 
 
@@ -391,6 +415,7 @@ private repository로 등록한 서브모듈을 받아오기 위한 여정이므
 
 <img width="1716" alt="스크린샷 2023-01-15 오전 12 27 35" src="https://user-images.githubusercontent.com/72541544/212479703-c5a75d96-b92b-4cd8-b5e6-313352f0d78b.png">
 - 생성한 `pipeline script`를 steps 하위에 붙여넣어서 **기존의 `git syntax`를 대체해준다.**
+  
 - 서브 모듈 관련 명령어가 추가되었다.
 
 
@@ -465,6 +490,7 @@ pipeline {
 <img width="864" alt="스크린샷 2023-01-15 오후 3 11 48" src="https://user-images.githubusercontent.com/72541544/212528120-3a752b1c-3726-4b5b-aa77-3b65e1c85b52.png">
 
 - ssh를 통해 파일을 보내기전에, pem키의 정보가 필요하다.
+  
 - EC2에 접속할 수 있는 pem키의 내용을 얻어온 후, 내용을 복사한 후, EC2 접속에 필요한 pem키의 내용을 사진 key에 붙여넣어 준다.
 
 
@@ -502,9 +528,13 @@ pipeline {
 <img width="1721" alt="스크린샷 2023-01-15 오후 9 40 11" src="https://user-images.githubusercontent.com/72541544/212541198-4be8273f-e6b6-4816-8a55-88647b45c997.png">
 
 - ssh Server 설정에서 선언한 name을 넣어준다. (원래 자동으로 들어간다.)
+  
 - `Source files` : 소스파일의 위치, gradlew wrapper에서 빌드 결과물을 `build/libs/`로 위치하므로, `build/libs/*.jar` 로 작성하였다.
+  
 - `Remove prefix` : 소스파일에서 원본파일의 디렉터리를 어디까지 포함할 것인지에 대한 설정
+  
 - `remote directory` : 배포될 경로를 적는다. 배포 서버의 해당 폴더로 목적파일이 도착하게 된다. (디렉터리 미리 만들어야 한다.)
+  
 - `Exec command` : 전송을 마치고 실행할 shell 문의 디렉터리 및 파일 위치이다.
 
 &nbsp;
@@ -528,9 +558,13 @@ sudo nohup java -jar ${JAR_PATH} >> /home/ubuntu/D208-Project/logs/D208.log &
 ```
 
 - `CURRENT_PID=$(ps -ef | grep java | grep D208 | grep -v nohup | awk '{print $2}')` : `CURRENT_PID`에 현재 실행되고 있는 프로젝트의 pid를 받아온다.
+  
 - 쉘을 작성하기 전 직접 서버를 실행하고 해당 명령어를 입력해서 pid를 잘 잡아오는지 확인한다.
+  
   - `ps -ef | grep java | grep D208 | grep -v nohup | awk '{print $2}'`
+
 - `CURRENT_PID`가 있다면 먼저 종료한다. (셧다운 시간이 있기 때문에 sleep을 해준다.)
+  
 - 종료가 끝나면 `deploy` 폴더에서 마지막 jar을, 80port에 dev 프로필로 실행한다.
 
 
@@ -538,11 +572,16 @@ sudo nohup java -jar ${JAR_PATH} >> /home/ubuntu/D208-Project/logs/D208.log &
 
 
 > 📝 리눅스 `2>&1` 그리고 `/dev/null`
+> 
 > 참고 : https://inpa.tistory.com/entry/%EB%A6%AC%EB%88%85%EC%8A%A4-devnull-%EB%A6%AC%EB%8B%A4%EC%9D%B4%EB%A0%89%EC%85%98-%EA%B8%B0%ED%98%B8-%EC%A2%85%EB%A5%98
+> 
 > (1) `2>&1`
 > <img width="1044" alt="스크린샷 2023-01-15 오후 9 53 40" src="https://user-images.githubusercontent.com/72541544/212541916-8db7e632-ccdc-45c7-b084-9a31c8129b78.png"><img width="898" alt="스크린샷 2023-01-15 오후 9 53 56" src="https://user-images.githubusercontent.com/72541544/212541917-bd804105-8415-44c1-a9a8-cc006c22695a.png">
+> 
 > (2) `/dev/null`
+> 
 > - `/dev/null`로 결과를 보낸다는 것은, 데이터를 죄다 말끔히 없애버려서 깔끔하게 화면에 표시하지 않는다는 것을 말한다.
+>   
 >   <img width="1080" alt="스크린샷 2023-01-15 오후 9 56 44" src="https://user-images.githubusercontent.com/72541544/212542006-b31b8c11-d6d1-4ed1-a10b-a317645536f2.png">
 > 
 
@@ -550,7 +589,9 @@ sudo nohup java -jar ${JAR_PATH} >> /home/ubuntu/D208-Project/logs/D208.log &
 &nbsp;
 <img width="1689" alt="스크린샷 2023-01-15 오후 9 40 18" src="https://user-images.githubusercontent.com/72541544/212541199-b1829d62-cdd1-4d64-a463-3995d48b4936.png">
 - Generate Pipeline Script클릭을 통해 발급 받는다.
+  
 - snippet을 stage로 만들어보자.
+  
 - **sshPublisher 같은 경우 verbose 옵션이 있는데, 해당 옵션을 true로 주면 트러플 슈팅시 유용하다.**  빌드의 console output에 해당 내용이 상세히 찍힌다. (true 줄 시, 디벅)
 
 &nbsp;
@@ -598,15 +639,23 @@ pipeline {
 
 **✔️ 성공적으로 실행되었는지 파일 확인**
 
+
 <img width="664" alt="스크린샷 2023-01-15 오후 9 38 42" src="https://user-images.githubusercontent.com/72541544/212541193-62e2aa45-8eee-4fdf-98d5-6684c643715a.png">
+
 <img width="1721" alt="스크린샷 2023-01-15 오후 9 39 21" src="https://user-images.githubusercontent.com/72541544/212541195-3bcca784-eff9-4d43-ba07-67bba0c0f89f.png">
 
 <img width="865" alt="스크린샷 2023-01-15 오후 9 40 53" src="https://user-images.githubusercontent.com/72541544/212541200-5b8aad3c-258e-440f-b1a2-0e77094cfe8a.png">
+
 <img width="860" alt="스크린샷 2023-01-15 오후 9 41 07" src="https://user-images.githubusercontent.com/72541544/212541201-3736699b-ae5d-44ab-b8f5-35eae3de67b9.png">
+
 <img width="1684" alt="스크린샷 2023-01-15 오후 9 41 12" src="https://user-images.githubusercontent.com/72541544/212541202-7a96ed4a-6abe-47ee-9680-1e5b68133367.png">
+
 <img width="1703" alt="스크린샷 2023-01-15 오후 9 41 17" src="https://user-images.githubusercontent.com/72541544/212541204-3bb564f6-5c43-43b0-9e9c-b31d0892bea7.png">
 
+
+
 - 성공적으로 실행된 결과다. (EC2 콘솔에서 `ps -ef | grep java` 명령어를 통해 구동이 잘되었는지 확인한다.)
+  
 - 다만, 실행하다 2분뒤 종료된다. 그전까지는 업로드가 계속 진행중이었다.
 
 
@@ -623,6 +672,7 @@ pipeline {
 **✔️ github에서 제공하는 webhook**
 
 - 특정한 이벤트가 발생했을 때, 해당 내용을 등록해놓은 api로 보내주는 기능이다.
+  
 - 이 기능을 활용하여 github에서 특정한 활동이 일어났을 때 job이 유발되도록 구현할 수 있다.
 
 => 이를 적용해보기 위해 PR이 merge될 때 자동으로 빌드가 일어나도록 설정해보자!
@@ -642,6 +692,7 @@ pipeline {
 어떻게 하면 될까?
 
 => Pull Request의 라벨을 바탕으로 백엔드와 프론트엔드 PR을 구분하도록 해보자!
+
 => 백엔드 라벨이 붙어 있는 PR이 머지 되었을 때만 빌드가 일어나도록 해보자!
 
 
