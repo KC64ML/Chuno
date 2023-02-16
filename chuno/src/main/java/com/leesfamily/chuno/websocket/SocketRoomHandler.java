@@ -1,5 +1,6 @@
 package com.leesfamily.chuno.websocket;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leesfamily.chuno.websocket.dto.*;
 import org.springframework.stereotype.Component;
@@ -333,6 +334,11 @@ public class SocketRoomHandler extends TextWebSocketHandler {
 			dto.put("info", "keep Connect");
 			TextMessage msg = new TextMessage(mapper.writeValueAsString(dto));
 			session.sendMessage(msg);
+		} else if(event.equals("playerOut")) {
+			TextMessage msg = makeTextMsg("playerOut", inputDto, nickname);
+			for (PlayerDto p : room_map.get(room)) {
+				p.getSession().sendMessage(msg);
+			}
 		}
 	}
 
@@ -373,5 +379,13 @@ public class SocketRoomHandler extends TextWebSocketHandler {
 				p.getSession().sendMessage(msg2);
 			}
 		}
+	}
+
+	public TextMessage makeTextMsg(String event, InputDto inputDto, String nickname) throws JsonProcessingException {
+		HashMap<String, Object> dto = new HashMap<>();
+		dto.put("type", event);
+		dto.put("info", inputDto.getStartData());
+		dto.put("nickname", nickname);
+		return new TextMessage(mapper.writeValueAsString(dto));
 	}
 }
