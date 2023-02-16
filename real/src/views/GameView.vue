@@ -343,27 +343,19 @@ export default {
           }, 3000)
         } else if (content.type == 'caughtRunner') {
           this.arrested_slave++;
-          if (this.arrested_slave == this.total_slave) {
-            this.victory_team = 'chaser';
-            this.victoryCnt(this.user.role, this.victory_team);
-            this.makeDisplay(this.victory_team);
-            this.game_ending();
-          }
+          this.gameEndCheck();
         } else if (content.type == 'rippedPaper') {
           if (content.info.paper.real == true) {
             this.ripped_paper++;
-            if (this.ripped_paper == this.total_paper) {
-              this.victory_team = 'runner';
-              this.victoryCnt(this.user.role, this.victory_team);
-              this.makeDisplay(this.victory_team);
-              this.game_ending();
-            }
+            this.gameEndCheck();
           }
         } else if (content.type == 'playerOut') {
           if (content.info.role == 'runner') {
             this.arrested_slave += 1;
+            this.gameEndCheck();
           } else if (content.info.role == 'chaser') {
             this.ripped_paper += 1;
+            this.gameEndCheck();
           }
         }
       })
@@ -428,6 +420,19 @@ export default {
           }
         }
       }, 1000);
+    },
+    gameEndCheck() {
+      if (this.arrested_slave == this.total_slave) {
+        this.victory_team = 'chaser';
+        this.victoryCnt(this.user.role, this.victory_team);
+        this.makeDisplay(this.victory_team);
+        this.game_ending();
+      }else if (this.ripped_paper == this.total_paper) {
+        this.victory_team = 'runner';
+        this.victoryCnt(this.user.role, this.victory_team);
+        this.makeDisplay(this.victory_team);
+        this.game_ending();
+      }
     },
     game_ending() {
       // console.log("게임엔딩에 왓어요!")
