@@ -2,7 +2,7 @@
   <!-- 나가기 모달 시작 -->
   <div v-if="leaveModal" id="item_description_modal" @click="close_item_description_modal">
     <div id="item_description_modal_container" @click="stopingPropagation">
-      <div style="text-align: center; font-size: 25px; margin-bottom: 10px;">정말로 나가시겠소?</div>
+      <div style="text-align: center; font-size: 25px; margin-bottom: 10px;">정말로 나가시겠습니까?</div>
       <div style="display: flex; justify-content: space-around;">
         <div class="flex_center" @click="onYesLeave">
           <img src="@/assets/main_button1.png" class="modal_confirm_button">
@@ -42,7 +42,7 @@
     <div id="item_description_modal_container" @click="stopingPropagation">
       <div style="text-align: center; font-size:25px; margin-bottom: 10px;">{{ selected_item.name }}</div>
       <div style="text-align: center; margin-bottom: 20px;">{{ selected_item.description }}</div>
-      <div style="text-align: center; font-size: 25px; margin-bottom: 10px;">사용하실래요?</div>
+      <div style="text-align: center; font-size: 25px; margin-bottom: 10px;">사용하시겠습니까?</div>
       <div style="display: flex; justify-content: space-around;">
         <div class="flex_center"
           @click="[stopingPropagation, item_confirm_yes({ id: selected_item.id, is_implemented: selected_item.is_implemented })]">
