@@ -457,7 +457,7 @@ pipeline {
 
 **✔️ 테스트 결과**
 
-처음에는 3시간 정도 기다려도 빌드에서 오류가 발생했었다. (이는 가상메모리 ec2 메모리 크기가 1GB 이기 때문이다.) 해결책 : [EC2 메모리 크기 1GB + 2GB 추가](https://velog.io/@chang626/AWS-EC2-free%EC%97%90%EC%84%9C-%EB%B0%9C%EC%83%9D%ED%95%9C-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EB%AC%B8%EC%A0%9C-jenkins-build-%EB%B0%B0%ED%8F%AC)
+처음에는 3시간 정도 기다려도 빌드에서 오류가 발생했었다. (이는 가상메모리 ec2 메모리 크기가 1GB 이기 때문이다.)
 
 
 <img width="856" alt="스크린샷 2023-01-15 오전 10 10 16" src="https://user-images.githubusercontent.com/72541544/212519814-446ff96c-d927-4a88-924d-aff817d3ffa6.png">
@@ -483,8 +483,10 @@ pipeline {
 
 
 **✔️ 플러그인 추가**
+
 <img width="869" alt="스크린샷 2023-01-15 오후 3 09 15" src="https://user-images.githubusercontent.com/72541544/212528116-7642a2aa-9a62-4c6f-b7ea-865f99b88699.png">
 <img width="1714" alt="스크린샷 2023-01-15 오후 3 09 59" src="https://user-images.githubusercontent.com/72541544/212528119-c870a71a-5b76-4e66-b1d9-526b731e2156.png">
+
 &nbsp;
 
 <img width="864" alt="스크린샷 2023-01-15 오후 3 11 48" src="https://user-images.githubusercontent.com/72541544/212528120-3a752b1c-3726-4b5b-aa77-3b65e1c85b52.png">
@@ -496,6 +498,8 @@ pipeline {
 
 
 <img width="818" alt="스크린샷 2023-01-15 오후 4 20 56" src="https://user-images.githubusercontent.com/72541544/212528243-e59ad3c7-73a2-42da-8b60-a86ffe721397.png">
+
+
 `Name` : syntax에서 참조할 수 있는 이름
 `HostName` : 빌드된 파일을 전송할 서버의 private ip (같은 vpc에 속해있어 private ip로 접근할 수 있다.)
 `username` : ubuntu(default)
@@ -503,6 +507,7 @@ pipeline {
 
 <img width="1475" alt="스크린샷 2023-01-15 오후 4 28 24" src="https://user-images.githubusercontent.com/72541544/212528437-1b37d9e3-6f89-4e32-9b02-9b918749fabc.png">
 <img width="1552" alt="스크린샷 2023-01-15 오후 4 29 46" src="https://user-images.githubusercontent.com/72541544/212528455-bc7ffd7b-fd43-45cc-89c1-da16666b39b6.png">
+
 현재는 `/home/ubuntu`로 변경
 
 
@@ -522,6 +527,7 @@ pipeline {
 
 
 ### 📖 A. snippet을 만들어보자! - sshPublisher simple step
+
 
 <img width="861" alt="스크린샷 2023-01-15 오후 9 40 00" src="https://user-images.githubusercontent.com/72541544/212541197-e931657f-99bc-4bc2-a3a3-7deff384c656.png">
 
@@ -712,7 +718,9 @@ pipeline {
 
 라고 했지만, 일단은 시간이 없어
 
-`Github hook trigger for GITScm polling` 을 사용했다. (추후 변경될 예정)
+`Github hook trigger for GITScm polling` 을 사용했다.
+
+
 <img width="731" alt="스크린샷 2023-01-16 오전 12 06 21" src="https://user-images.githubusercontent.com/72541544/212549099-2938b701-1f2f-4669-b6dd-27aca8279ab7.png">
 
 
