@@ -82,18 +82,19 @@
       <div
         v-for="(o, key, idx) in others"
         :key="idx"
-      >
+      class="player-icon">
         <!-- 내가 노비인데, -->
         <!-- 상대도 노비일 때 -->
         <div v-if="o.role == 'runner' && user.role == 'runner' && !o.isOut">
-          <div v-if="o.caught" class="outPlayerIcon">
-            <img src="@/assets/outPlayer.png">
-          </div>
           <GMapMarker
             :icon=otherRunnerMarkerImg
             :position="o.location"
             :clickable="true"
             @click="catchRunner(o)"
+          />
+          <GMapMarker v-if="o.caught"
+          :icon=outPlayerMarkerImg
+          :position="o.location"
           />
         </div>
         <!-- 상대가 추노일 때 -->
@@ -119,12 +120,19 @@
         </div>
         <!-- 상대가 노비일 때 -->
         <div v-if="o.role == 'runner' && user.role == 'chaser' && !o.isOut">
+          <div v-if="o.caught" class="out-player-icon">
+            <img src="@/assets/outPlayer.png">
+          </div>
           <GMapMarker
             v-if="o.myMarker || calculateDistance(o) <= catchRadius"
             :icon=otherRunnerMarkerImg
             :position="o.location"
             :clickable="true"
             @click="catchRunner(o)"
+          />
+          <GMapMarker v-if="o.caught"
+          :icon=outPlayerMarkerImg
+          :position="o.location"
           />
         </div>
       </div>
@@ -134,6 +142,7 @@
 
 <script>
 import truePaper from '@/assets/TruePaper.png'
+import outPlayerMarker from '@/assets/outPlayer.png';
 import RunnerMarker from '@/assets/slave_img.png'
 import ChaserMarker from '@/assets/chuno_img.png'
 import MyRunnerMarker from '@/assets/slave_me_img.png'
@@ -201,6 +210,10 @@ export default {
       },
       // 다른 플레이어 관련 정보
       others: {}, //props로
+      outPlayerMarkerImg: {
+        url: outPlayerMarker,
+        scaledSize: { width: 40, height: 40 }
+      },
       otherRunnerMarkerImg: {
         url: RunnerMarker,
         scaledSize: { width: 40, height: 40 }
@@ -630,6 +643,14 @@ export default {
   }
   .gmap {
     position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .player-icon {
+    width: 60px;
+    height: 60px;
+  }
+  .out-player-icon {
     width: 100%;
     height: 100%;
   }

@@ -442,6 +442,10 @@ $my_video_margin: 20px;
     opacity: 0.5;
     overflow: hidden;
 }
+.ink-bomb-me img {
+    width: 100%;
+    height: 100%;
+}
 .hidden_modal{
     opacity: 0;
     transform: translateY(50%);

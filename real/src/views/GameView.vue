@@ -351,10 +351,10 @@ export default {
           }
         } else if (content.type == 'playerOut') {
           if (content.info.role == 'runner') {
-            this.arrested_slave += 1;
+            this.arrested_slave++;
             this.gameEndCheck();
           } else if (content.info.role == 'chaser') {
-            this.ripped_paper += 1;
+            this.ripped_paper++;
             this.gameEndCheck();
           }
         }
