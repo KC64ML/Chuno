@@ -13,12 +13,12 @@
       </colgroup>
       <thead>
         <tr>
-          <th style="-webkit-text-stroke: medium">순위</th>
-          <th style="-webkit-text-stroke: medium">닉네임</th>
-          <th style="-webkit-text-stroke: medium">레벨</th>
-          <th style="-webkit-text-stroke: medium">노비승</th>
-          <th style="-webkit-text-stroke: medium">추노승</th>
-          <th style="-webkit-text-stroke: medium">승률</th>
+          <th style="-webkit-text-stroke: 0.5px">순위</th>
+          <th style="-webkit-text-stroke: 0.5px">닉네임</th>
+          <th style="-webkit-text-stroke: 0.5px">레벨</th>
+          <th style="-webkit-text-stroke: 0.5px">노비승</th>
+          <th style="-webkit-text-stroke: 0.5px">추노승</th>
+          <th style="-webkit-text-stroke: 0.5px">승률</th>
         </tr>
       </thead>
     </table>
