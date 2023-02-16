@@ -25,7 +25,7 @@ import tak from "@/assets/audio/tak.mp3";
           }
       },
       created() {
-          console.log(this.title)
+          // console.log(this.title)
       },  
       methods: {
           goHome() {

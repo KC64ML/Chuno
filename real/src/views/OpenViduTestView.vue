@@ -115,15 +115,15 @@
         this.OV = new OpenVidu();
         // --- 2) Init a session ---
             this.session = this.OV.initSession();
-            console.log("init sesstion");
+            // console.log("init sesstion");
   
         // --- 3) Specify the actions when events take place in the session ---
   
         // On every new Stream received...
         this.session.on("streamCreated", (res) => {
           const subscriber = this.session.subscribe(res.stream);
-          console.log("res : ");
-          console.log(res);
+          // console.log("res : ");
+          // console.log(res);
           this.subscribers.push(subscriber);
         });
   
@@ -154,7 +154,7 @@
   
         // Get a token from the OpenVidu deployment
             this.getToken(this.mySessionId + "game").then((token) => {
-            console.log(`token : ${token}`);
+            // console.log(`token : ${token}`);
           // First param is the token. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
             this.session
@@ -198,7 +198,7 @@
               //   });
               this.publisher.stream.applyFilter("GStreamerFilter", { command: "videoflip method=vertical-flip" })
                 .then(() => {
-                    console.log("Video rotated!");
+                    // console.log("Video rotated!");
                 })
                 .catch(error => {
                     console.error(error);

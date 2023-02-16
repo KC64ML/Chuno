@@ -38,14 +38,14 @@ import drum from "@/assets/audio/drum.wav";
     },
     methods: {
       getUser() {
-        console.log('footer created에서 getuser')
+        // console.log('footer created에서 getuser')
         const token = sessionStorage.token
         this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
           .then((res) => {
             const code = res.data.result
             if(code) {
               this.userInfo = res.data.result
-              console.log(res.data)
+              // console.log(res.data)
             } else {
               console.log('code err')
             }

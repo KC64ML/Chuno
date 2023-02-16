@@ -181,7 +181,7 @@ export default {
     // LeaveModal,
   },
   beforeRouteLeave(to, from, next) {
-      console.log(to);
+      // console.log(to);
       if (to.name == "waitingRoom") return;
       next();
   },
@@ -189,7 +189,7 @@ export default {
     this.conn.addEventListener('message', (e) => {
       var content = JSON.parse(e.data);
       if (content.type == 'chat') {
-        console.log({ nickname: content.nickname, msg: content.message })
+        // console.log({ nickname: content.nickname, msg: content.message })
         this.chat_log.push({ nickname: content.nickname, msg: content.message })
 
         // 최근 메세지를 토스트로 띄우고 싶어요!!!
@@ -231,16 +231,16 @@ export default {
       }).then(({ data }) => {
         if (data.code) {
           this.user = data.result;
-          console.log("게임 뷰에서 받아오는 user 값 : ");
-          console.log(this.user);
+          // console.log("게임 뷰에서 받아오는 user 값 : ");
+          // console.log(this.user);
         }
       });
     await this.axios.get(APPLICATION_SERVER_URL + 'room/' + this.$route.params.roomId)
       .then(({ data }) => {
         if (data.code) {
           this.roomInfo = data.result;
-          console.log(this.roomInfo)
-          console.log("GameView room info loaded");
+          // console.log(this.roomInfo)
+          // console.log("GameView room info loaded");
         }
       })
     const info = JSON.parse(sessionStorage.info);
@@ -249,12 +249,12 @@ export default {
     this.total_slave = info.teamslave.length;
     this.player_len = info.teamchuno.length + info.teamslave.length;
     this.user.caught = false;
-    console.log("role 받아 온 후 user 상태 : ");
-    console.log(this.user);
-    console.log("GameView created complete");
-    console.log("-----------------------")
-    console.log(this.user);
-    console.log(this.roomInfo);
+    // console.log("role 받아 온 후 user 상태 : ");
+    // console.log(this.user);
+    // console.log("GameView created complete");
+    // console.log("-----------------------")
+    // console.log(this.user);
+    // console.log(this.roomInfo);
 
     /* 게임 시간 카운트 로직 */
     this.game_intervaling();
@@ -395,12 +395,12 @@ export default {
       }, 1000);
     },
     game_ending() {
-      console.log("게임엔딩에 왓어요!")
+      // console.log("게임엔딩에 왓어요!")
       clearInterval(this.game_interval);
       this.game_end = true;
     },
     onYesLeave() {
-      console.log('진짜로 나간다!!!!!')
+      // console.log('진짜로 나간다!!!!!')
       this.leaveModal = false
       this.sendData({
           event: "leave",
@@ -420,12 +420,12 @@ export default {
       this.$router.push({ name: 'home' })
     },
     onNoLeave() {
-      console.log('안나갈건데')
+      // console.log('안나갈건데')
       this.leaveModal = false
     },
     onLeave() {
       this.leaveModal = true
-      console.log(this.leaveModal)
+      // console.log(this.leaveModal)
     },
     stopingPropagation(e) {
       e.stopPropagation();
@@ -447,7 +447,7 @@ export default {
     },
     myCam() {
       this.my_cam_modal.active = !this.my_cam_modal.active
-      console.log("mycam 눌림");
+      // console.log("mycam 눌림");
     },
     onCaught() {
       this.user.caught = true
@@ -459,7 +459,7 @@ export default {
     modalAllClose() {
       this.roleModal = false;
       this.play(this.audio);
-      console.log("jing 들려요?");
+      // console.log("jing 들려요?");
     },
 
     open_chat_modal() {
@@ -494,18 +494,18 @@ export default {
     async item_confirm_yes(item) {
       if (item.id == 1) {
         // 천리안: 가장 가까운 추노꾼 위치 표시
-        console.log(1)
+        // console.log(1)
       } else if (item.id == 2) {
         // 위장: 추노꾼의 catch 범위 축소
-        console.log(2)
+        // console.log(2)
       } else if (item.id == 3) {
         // 확실한 정보통: 진짜 노비 문서 위치 표시
-        console.log(3)
+        // console.log(3)
         this.visibility = true
         setTimeout(this.visibility = false, 30000)
       } else if (item.id == 4) {
         // 먹물탄
-        console.log("먹물탄 사용 : ", 4);
+        // console.log("먹물탄 사용 : ", 4);
         this.sendData({
             event: "useItem",
             level: 4,
@@ -538,7 +538,7 @@ export default {
     },
     status_open() {
       this.status_specific_modal = !this.status_specific_modal;
-      console.log(this.status_specific_modal)
+      // console.log(this.status_specific_modal)
     },
     myArrestSlave() {
       this.my_arrest_slave++;
@@ -561,7 +561,7 @@ export default {
       this.$router.push({ name: "gameResult", params: { role: this.user.role, win: (this.chaserWin+this.runnerWin), exp: result.exp, money: result.money, host: this.roomInfo.host.nickname, roomId:this.roomInfo.id } });
     },
     makeDisplay(e) {
-      console.log("메이크디스클레이에 왔어요")
+      // console.log("메이크디스클레이에 왔어요")
       if (e == 'none') {
         this.game_end_display = "비겼어요..."
         this.game_end_display_sub = "인생엔 승리도 패배도 없는 것인가 봐요"

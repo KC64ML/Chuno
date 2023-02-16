@@ -44,7 +44,7 @@
     },
     methods: {
         onYesCatch() {
-        console.log("잡을거지?");
+        // console.log("잡을거지?");
         this.$emit('on-yes-catch', this.catchTarget);
       },
     },

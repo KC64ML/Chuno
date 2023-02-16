@@ -54,19 +54,19 @@ export default {
         .then((res) => {
           const code = res.data.code
           if (code) {
-            console.log('친구 겟또')
+            // console.log('친구 겟또')
             this.friends = res.data.result
-            console.log(this.friends)
+            // console.log(this.friends)
 
           } else {
-            console.log('실패')
+            console.log('failed to get friends');
           }
         })
     },
     searchFun() {
       this.friends = true
       const token = sessionStorage.token
-      console.log('----')
+      // console.log('----')
       if (this.friendSearch.length == 0) {
         this.getFriends();
         return;
@@ -75,21 +75,21 @@ export default {
         .then((res) => {
           const code = res.data.code
           if (code) {
-            console.log('친구 검색함')
+            // console.log('친구 검색함')
             this.friends = res.data.result
             this.search = true
           } else {
-            console.log('검색 결과 없음')
+            // console.log('검색 결과 없음')
             this.axios.get(process.env.VUE_APP_SPRING + 'user/friend', { headers: { Authorization: token } })
               .then((res) => {
                 const code = res.data.code
                 if (code) {
-                  console.log('친구 겟또')
+                  // console.log('친구 겟또')
                   this.friends = res.data.result
-                  console.log(this.friends)
+                  // console.log(this.friends)
 
                 } else {
-                  console.log('실패')
+                  console.log('failed to get friends');
                 }
               })
             this.search = false

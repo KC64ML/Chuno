@@ -83,7 +83,7 @@ export default {
         },
         keyword: this.roomSearch,
       };
-      console.log(data);
+      // console.log(data);
       this.curRoomDB = []
       await this.axios
         .post(process.env.VUE_APP_SPRING + "room/search", data)
@@ -115,17 +115,17 @@ export default {
 
     },
     showRoomInfo() {
-      console.log("showRoomInfo");
+      // console.log("showRoomInfo");
       this.info_show = true;
     },
     closeRoomInfo() {
-      console.log("closeRoomInfo");
+      // console.log("closeRoomInfo");
       this.info_show = false;
     },
     setRoomInfo(data) {
-      console.log("data : ", data);
+      // console.log("data : ", data);
       this.roomInfo = data;
-      console.log("this.roomInfo", this.roomInfo);
+      // console.log("this.roomInfo", this.roomInfo);
     },
   },
   watch: {

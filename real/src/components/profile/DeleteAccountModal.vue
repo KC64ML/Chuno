@@ -41,12 +41,12 @@ export default {
   name: "DeleteAccountModal",
   methods: {
     async del() {
-      alert("탈퇴완료");
+      alert("탈퇴 되셨습니다.");
       const token = sessionStorage.token;
       await this.axios.delete(process.env.VUE_APP_SPRING + "user", {
         headers: { Authorization: token },
       });
-      console.log("탈퇴완료");
+      // console.log("탈퇴완료");
       this.$emit("on-delete");
       sessionStorage.setItem("token", null);
       // Kakao.API.request({
@@ -60,7 +60,7 @@ export default {
       //     alert('fail: ' + JSON.stringify(err));
       //   });
 
-      console.log("탈퇴되는지 확인");
+      // console.log("탈퇴되는지 확인");
       this.$router.push({ name: "start" });
     },
   },

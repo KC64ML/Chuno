@@ -66,7 +66,7 @@ export default {
             this.shakeWrongAnswer();
             this.wrong = true;
           }
-          console.log("code", code);
+          // console.log("code", code);
         });
     },
     async goWaitingRoom() {
@@ -75,7 +75,7 @@ export default {
           headers: { Authorization: sessionStorage.getItem("token") },
         })
         .then((res) => res.data.result);
-      console.log("-------------", user);
+      // console.log("-------------", user);
       this.conn.send(
         JSON.stringify({
           event: "enter",

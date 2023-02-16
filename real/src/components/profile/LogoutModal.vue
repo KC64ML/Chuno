@@ -36,7 +36,6 @@ export default {
   name: "LogoutModal",
   methods: {
     logout() {
-      alert("로그아웃");
       sessionStorage.setItem("token", null);
       this.$emit("on-logout");
       this.$router.push({ name: "start" });

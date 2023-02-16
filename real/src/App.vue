@@ -68,7 +68,7 @@ export default {
     },
   },
   created() {
-    console.log("앱시작");
+    console.log("App starting");
   },
   data() {
     return {

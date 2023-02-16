@@ -18,7 +18,7 @@ export default createStore({
   actions: {
     useItem(context){
       context.state.itemModal = true
-      console.log(context.item)
+      // console.log(context.item)
     }
   },
   modules: {

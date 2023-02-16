@@ -72,17 +72,17 @@
     },
     methods: {
       verify() {
-        console.log("확인하기?");
+        // console.log("확인하기?");
         this.page1 = false
       },
       onTruePaper(){
-        console.log('-----------------진짜 문서----------------')
-        console.log(this.ripTarget + '을 찢었다!!!!!!')
+        // console.log('-----------------진짜 문서----------------')
+        // console.log(this.ripTarget + '을 찢었다!!!!!!')
         this.$emit('on-rip', this.ripTarget)
       },
       onFalsePaper(){
-        console.log('-----------------가짜 문서----------------')
-        console.log(this.ripTarget + '가 가짜문서라니ㅠㅠㅠ')
+        // console.log('-----------------가짜 문서----------------')
+        // console.log(this.ripTarget + '가 가짜문서라니ㅠㅠㅠ')
         this.$emit('on-rip', this.ripTarget)
       }
     },

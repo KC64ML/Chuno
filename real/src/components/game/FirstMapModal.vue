@@ -36,7 +36,7 @@ export default {
     },
     created() {
         this.info = sessionStorage.getItem("info");
-        console.log(this.info)
+        // console.log(this.info)
         // console.log({roomlat: this.info.roomlat, roomlng: this.info.roomlng});
         for (var i of this.location_list) {
             if (i.role == "chuno") this.teamchuno.push(i);

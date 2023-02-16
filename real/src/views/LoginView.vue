@@ -6,7 +6,6 @@
         <div>카카오 톡으로 로그인 해 보세요</div>
         <div style="margin-top: 60px"></div>
         <img src="@/assets/kakao_login_button.png" class="block_center hover_pointer" style="width: 300px" @click="loginGo">
-        <button @click="tempGo">로그인 했다치고 넘어가기</button>
     </div>
 </template>
 
@@ -18,10 +17,6 @@
                 var REDIRECT_URI = process.env.VUE_APP_HERE + "oauth";
                 window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
             },
-            tempGo() {
-                this.$store.state.nickname = prompt("임시로 사용할 닉네임");
-                this.$router.push("/home");
-            }
         }
     }
 </script>

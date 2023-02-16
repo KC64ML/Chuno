@@ -15,13 +15,13 @@ export default {
                 this.conn.addEventListener('message', (e) => {
                     var content = JSON.parse(e.data);
                     if (content.type == "keepconnect") {
-                        console.log(content.info)
+                        // console.log(content.info)
                     }
                 })
                 resolve();
             }).then(() => {
                 setInterval(() => {
-                    console.log("소켓연결을 유지해요");
+                    // console.log("소켓연결을 유지해요");
                     this.sendData({
                         "event": "keepconnect"
                     })

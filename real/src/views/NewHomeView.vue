@@ -91,14 +91,14 @@ export default {
       this.lat = val.coords.latitude;
       this.lng = val.coords.longitude;
       //룸 아이디가 담긴 리스트를 드리면 내 위치를 기준으로 해서 정렬하여 주세요
-      console.log(this.lat, this.lng);
+      // console.log(this.lat, this.lng);
       this.enrollEvent();
     },
     enrollEvent() {
       new Promise((resolve) => {
         this.conn.onmessage = async (e) => {
           var content = JSON.parse(e.data);
-          console.log("소켓에서 온 메세지", content);
+          // console.log("소켓에서 온 메세지", content);
           if (content.type == "all_room") {
             var temp_room = await this.axios
               .get(
@@ -111,7 +111,7 @@ export default {
               .then((res) => res.data.result);
             this.roomList = temp_room;
             this.connect_try = true;
-            console.log("지금 있는 모든 방을 조회해요");
+            // console.log("지금 있는 모든 방을 조회해요");
             var rooms = content.roomInfo;
 
             // rooms = rooms.map((f) => {return f.roomid})
@@ -166,17 +166,17 @@ export default {
       this.modal_show = false;
     },
     showRoomInfo() {
-      console.log("showRoomInfo");
+      // console.log("showRoomInfo");
       this.info_show = true;
     },
     closeRoomInfo() {
-      console.log("closeRoomInfo");
+      // console.log("closeRoomInfo");
       this.info_show = false;
     },
     setRoomInfo(data) {
-      console.log("data", data);
+      // console.log("data", data);
       this.roomInfo = data;
-      console.log("this.roomInfo", this.roomInfo);
+      // console.log("this.roomInfo", this.roomInfo);
     },
     play(audiofile) {
       var audio = {
@@ -185,11 +185,11 @@ export default {
       audio.file.play();
     },
     closePass() {
-      console.log("closePass");
+      // console.log("closePass");
       this.pass_show = false;
     },
     showPassword() {
-      console.log("showPass");
+      // console.log("showPass");
       this.pass_show = true;
     },
     setIsEnter() {

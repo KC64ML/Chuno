@@ -64,23 +64,23 @@ export default {
     };
   },
   async created() {
-    console.log("나 시작해요")
+    // console.log("나 시작해요")
     this.room = await this.axios
       .get(process.env.VUE_APP_SPRING + "room/" + this.room_info.roomid, {
         headers: { Authorization: sessionStorage.getItem("token") },
       })
       .then((res) => res.data.result);
-        console.log("나 끝했어요")
+        // console.log("나 끝했어요")
     this.dateTime = this.room.dateTime;
     this.isPushed = this.room.isPushed;
-    console.log("room", this.room);
-    console.log("room_info", this.room_info);
-    console.log("this.room_info.isPushed", this.room.isPushed);
+    // console.log("room", this.room);
+    // console.log("room_info", this.room_info);
+    // console.log("this.room_info.isPushed", this.room.isPushed);
   },
   methods: {
     enterRoom() {
-      console.log("room", this.room);
-      console.log("this.room.password", this.room.password);
+      // console.log("room", this.room);
+      // console.log("this.room.password", this.room.password);
       if (!this.room.password) {
         this.goWaitingRoom();
       } else {
@@ -94,7 +94,7 @@ export default {
           headers: { Authorization: sessionStorage.getItem("token") },
         })
         .then((res) => res.data.result);
-      console.log("-------------", user);
+      // console.log("-------------", user);
       this.sendData({
           event: "enter",
           room: this.room_info.roomid,
@@ -117,7 +117,7 @@ export default {
           .then(({ data }) => {
             if (data.code == 1) {
               this.isPushed = true;
-              console.log("예약 성공");
+              // console.log("예약 성공");
             } else {
               alert("예약에 실패했습니다. 오류코드 : " + data.code);
             }
@@ -133,7 +133,7 @@ export default {
           .then(({ data }) => {
             if (data.code == 1) {
               this.isPushed = false;
-              console.log("예약취소 성공");
+              // console.log("예약취소 성공");
             } else {
               alert("예약 취소에 실패했습니다. 오류코드 : " + data.code);
             }
@@ -142,8 +142,7 @@ export default {
       e.stopPropagation();
     },
     info_icon(e) {
-      console.log("정보 버튼이 눌렸어요");
-      console.log(this.room);
+      // console.log(this.room);
       this.$emit("info_show");
       this.$emit("room_info", this.room);
       e.stopPropagation();

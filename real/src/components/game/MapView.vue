@@ -234,13 +234,13 @@ export default {
     init() {
       this.GyroAllow();
       // 노비 문서 위치
-      console.log('노비 문서 가져오기')
+      // console.log('노비 문서 가져오기')
       const info = JSON.parse(sessionStorage.info);
       this.roomId = this.$route.params.roomId;
       const papers = info.slavepaper;
-      console.log("받아온 노비문서", papers);
+      // console.log("받아온 노비문서", papers);
       for (let i = 0; i < papers.length; i++){
-        console.log(i)
+        // console.log(i)
         this.papers.push({ 
               id: i,
               location: { lat: papers[i].lat, lng: papers[i].lng } ,
@@ -248,7 +248,7 @@ export default {
               ripped: false,
         })
       }
-        console.log("노비문서 받는 중", this.papers);
+        // console.log("노비문서 받는 중", this.papers);
     },
     erollEvent() {
       new Promise((resolve) => {
@@ -263,7 +263,7 @@ export default {
             if (other.nickname == this.user.nickname) {
               return;
             }
-            console.log(('erollEvent에서 나와 타인의 거리 계산'))
+            // console.log(('erollEvent에서 나와 타인의 거리 계산'))
             // const distance = this.calculateDistance(other)
             
             this.others[other.nickname] = {
@@ -285,29 +285,29 @@ export default {
               const target = content.info.others;
               if(target.nickname == this.user.nickname) { // 내가 잡혔을 때 내 상태 업뎃
                 this.$emit('on-caught')
-                console.log('나(' + target.nickname + ')는 잡혀버렸다...')
+                // console.log('나(' + target.nickname + ')는 잡혀버렸다...')
               } else {  // 다른 사람이 잡혔을 때 다른 사람 상태 업뎃
-                console.log(target.nickname + '님이' + content.nickname + '님한테 잡혔다...')
+                // console.log(target.nickname + '님이' + content.nickname + '님한테 잡혔다...')
                 this.others[target.nickname].caught = true
               }
             } else if (content.type == "rippedPaper") {
               const content = JSON.parse(e.data);
               const paper = content.info.paper
-              console.log(content.nickname + '이(가) 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
+              // console.log(content.nickname + '이(가) 확인한' + paper.id+ '번째 노비문서 상태를 업뎃하자')
               const target = this.papers[paper.id ]
-              console.log(target)
+              // console.log(target)
               target.ripped = true
-              console.log('밑에 찍히는 대로 업뎃했다.')
-              console.log(target)
+              // console.log('밑에 찍히는 대로 업뎃했다.')
+              // console.log(target)
           } else if (content.type == "startGame") {
-            console.log("소켓에서 받아왔어요!!!", content);
+            // console.log("소켓에서 받아왔어요!!!", content);
             this.papers = content.info;
 
           } else if (content.type == 'me') {
-            console.log('me를 받아오긴함')
-            console.log(content.players[0].nickname)
+            // console.log('me를 받아오긴함')
+            // console.log(content.players[0].nickname)
             const nm = content.players[0].nickname
-            console.log(nm + '님이 떠나갔어요...')
+            // console.log(nm + '님이 떠나갔어요...')
             for (let i = 0; i < this.others.length; i++) {
               if (this.others[i].nickname == nm) {
                 const playerleaved = this.others.splice(i, 1)
@@ -332,26 +332,26 @@ export default {
       if(this.user.role == 'chaser'){
         return
       }
-      console.log('3. ripPaper 함수 실행')
-      console.log(marker)
+      // console.log('3. ripPaper 함수 실행')
+      // console.log(marker)
       const distance = this.calculateDistance(marker)
       if(distance < this.catchRadius) {
-        console.log('해당 노비문서를 잡을 수 있습니다.')
+        // console.log('해당 노비문서를 잡을 수 있습니다.')
         this.ripTarget = marker
         this.ripModal = true
       } else {
-        console.log('해당 노비문서가 너무 멀리 있습니다.')
+        // console.log('해당 노비문서가 너무 멀리 있습니다.')
       }
     },
     // 노비문서를 확인하고 나서
     onRip(ripTarget){
-      console.log('얘랑')
-      console.log(ripTarget)
+      // console.log('얘랑')
+      // console.log(ripTarget)
       const target = this.papers[ripTarget.id]
       target.ripped = true
-      console.log('얘랑')
-      console.log(target)
-      console.log('같아야함')
+      // console.log('얘랑')
+      // console.log(target)
+      // console.log('같아야함')
       this.$emit("myRippedPaper")
       this.sendData({
             event:"ripPaper",
@@ -376,26 +376,26 @@ export default {
       this.outModal = false
     },
     reOutOfPlayground(){
-      console.log('reOutOfPlayground 실행됨!!!!!!!!!')
-      console.log(this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}))
-      console.log(this.roomInfo.radius)
+      // console.log('reOutOfPlayground 실행됨!!!!!!!!!')
+      // console.log(this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}))
+      // console.log(this.roomInfo.radius)
       if(this.calculateDistance({ location: { lat: this.roomInfo.lat, lng: this.roomInfo.lng } }) >= this.roomInfo.radius){
         // 아웃
-        console.log('아웃임')
+        // console.log('아웃임')
         this.outModal = true
       } else {
         // ㄱㅊ
-        console.log('범위안임')
+        // console.log('범위안임')
       }
     },
     // 범위 밖으로 나갈 시 경고
     outOfPlayground(){
-      console.log('outOfPlayground 함수 실행')
+      // console.log('outOfPlayground 함수 실행')
       // if(this.user.caught == false && this.calculateDistance(location) >= this.roomInfo.radius){
-        console.log('범위밖으로 나왔습니다!! 플레이 범위 안으로 돌아가세요')
+        // console.log('범위밖으로 나왔습니다!! 플레이 범위 안으로 돌아가세요')
         this.outOfPlayGroundFlag = true
         this.onOutOfPlayground = true
-        console.log('복귀 카운트 다운 시작')
+        // console.log('복귀 카운트 다운 시작')
         setTimeout(() => {
           this.reOutOfPlayground()
         }, 60000)
@@ -403,7 +403,7 @@ export default {
     },
     offOutOfPlayGround(){
       this.onOutOfPlayground = false
-      console.log(this.onOutOfPlayground)
+      // console.log(this.onOutOfPlayground)
     },
     // 내 위치
     myLocation() {
@@ -414,11 +414,11 @@ export default {
 
 
         // 범위 내에 있는지 확인
-        console.log(this.user.caught)
-        console.log(this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}))
-        console.log(this.roomInfo.radius)
+        // console.log(this.user.caught)
+        // console.log(this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}))
+        // console.log(this.roomInfo.radius)
         if(!this.outOfPlayGroundFlag && this.user.caught == false && this.calculateDistance({location: {lat: this.roomInfo.lat, lng: this.roomInfo.lng}}) >= this.roomInfo.radius){
-          console.log('범위 밖!!!!!!!!!!!!!!!!!')
+          // console.log('범위 밖!!!!!!!!!!!!!!!!!')
           this.outOfPlayground()
         }
         this.sendData({
@@ -481,7 +481,7 @@ export default {
 
     // 나와 marker의 거리 계산
     calculateDistance(marker){
-      console.log('!!calculateDistance 함수 실행됨')
+      // console.log('!!calculateDistance 함수 실행됨')
       console.log(marker)
       const lat1 = this.location.lat
       const lng1 = this.location.lng
@@ -499,32 +499,32 @@ export default {
 
     // 노비 잡기
     catchRunner(marker){
-      console.log('!! catchRunner 함수 실행되기는 함')
-      console.log('--------------MARKER-----------------')
-      console.log(marker)
+      // console.log('!! catchRunner 함수 실행되기는 함')
+      // console.log('--------------MARKER-----------------')
+      // console.log(marker)
       const distance = this.calculateDistance(marker)
-      console.log('--------------DISTANCE-----------------')
-      console.log(distance)
+      // console.log('--------------DISTANCE-----------------')
+      // console.log(distance)
       if(this.user.role == 'chaser' && marker.role == 'runner' && marker.caught == false && distance <= this.catchRadius){
         // this.catchRunnerFlag = true
-        console.log('잡을 수 있음' + marker)
+        // console.log('잡을 수 있음' + marker)
         this.catchModal = true
         this.catchTarget = marker
       } else {
-        console.log('잡을 수 없음')
+        // console.log('잡을 수 없음')
       }
     },
     // 노비 잡지 않기
     onNoCatch(){
       this.catchModal = false
-      console.log('노비 안잡을래..')
+      // console.log('노비 안잡을래..')
       // this.catchRunnerFlag = false
     },
     // 노비 잡기
     onYesCatch(target){
-      console.log('노비 잡을래!!!')
-      console.log('--------------TARGET-----------------')
-      console.log(target)
+      // console.log('노비 잡을래!!!')
+      // console.log('--------------TARGET-----------------')
+      // console.log(target)
       this.catchModal = false
       target.caught = true
       // this.catchRunnerFlag = false
@@ -549,7 +549,7 @@ export default {
     },
   },
   created() {
-    console.log("MapView created start");
+    // console.log("MapView created start");
     this.init();
     setTimeout(() => {
       this.erollEvent();
@@ -566,11 +566,11 @@ export default {
   },
   watch: {
     roomInfo() {
-      console.log("roomInfo at MapView");
-      console.log(this.roomInfo);
+      // console.log("roomInfo at MapView");
+      // console.log(this.roomInfo);
     },
     async item_used() {
-      console.log("새로운 메서드를 추가했어요!!!!!!!!!")
+      // console.log("새로운 메서드를 추가했어요!!!!!!!!!")
       var temp_list = [];
       var ripped_list = [];
       for (var i of this.papers) {
@@ -586,7 +586,7 @@ export default {
       }).then(res => res.data);
       var return_paper = [];
       for (var new_p = 0; new_p < new_papers.length; new_p++) {
-        console.log('1')
+        // console.log('1')
         return_paper.push({id: new_p+1, location: {lat: new_papers[new_p].lat, lng: new_papers[new_p].lng}, real: new_papers[new_p].real, ripped: false});
       }
       for (var new_pp = 0; new_pp < ripped_list.length; new_pp++) {

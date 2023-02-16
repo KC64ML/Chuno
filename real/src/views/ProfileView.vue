@@ -105,17 +105,17 @@ export default {
       //내 정보 불러와서
       this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
         .then((res) => {
-          console.log('-----------내 정보 불러오기----------')
-          console.log(res)
+          // console.log('-----------내 정보 불러오기----------')
+          // console.log(res)
           const code = res.data.code
-          console.log(token)
+          // console.log(token)
           
           if (res.data.result.profile == null || res.data.result.profile.path == '') {
             res.data.result.profile = {
               path: 'profile/default.png'
             };
           }
-          console.log("path : " + res.data.result.profile.path);
+          // console.log("path : " + res.data.result.profile.path);
           if (code) {
             if(res.data.result.id == uid){ // 내 프로필이면 
               this.userInfo = res.data.result
@@ -129,13 +129,13 @@ export default {
               // 친구인지 확인
               this.axios.get(process.env.VUE_APP_SPRING + 'user/friend/' + uid, { headers: { Authorization: token } })
               .then((res) => {
-                  console.log(res.data)
+                  // console.log(res.data)
                   const code = res.data.code
                   if(code) {
-                    console.log('친구임')
+                    // console.log('친구임')
                     this.friend = true
                   } else{
-                    console.log('친구 아님')
+                    // console.log('친구 아님')
                     this.friend = false
                   }
                 })
@@ -157,8 +157,8 @@ export default {
           const code = res.data.code
           if (code) {
             this.items = items
-            console.log("프로필에서 아이템 가져오기");
-            console.log(this.items)
+            // console.log("프로필에서 아이템 가져오기");
+            // console.log(this.items)
           } else {
             console.log('error')
           }

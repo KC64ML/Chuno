@@ -93,14 +93,14 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     console.log("stream.connection.data : " + otherData);
                     const subscriber = this.session.subscribe(stream);
                     this.subscribers.push(subscriber);
-                    console.log("스트림을 발견했어요!")
-                    console.log("현재 사람은 " + this.subscribers.length + "명이에요")
+                    // console.log("스트림을 발견했어요!")
+                    // console.log("현재 사람은 " + this.subscribers.length + "명이에요")
                     this.mainStreamManager = subscriber;
                     // this.mainStreamManager.addVideoElement(this.$refs.video);
                     const { connection } = this.mainStreamManager.stream;
-                    console.log("커넥션 데이터에요:", connection.data)
+                    // console.log("커넥션 데이터에요:", connection.data)
                     const { clientData } = JSON.parse(connection.data);
-                    console.log("clientData : " + clientData);
+                    // console.log("clientData : " + clientData);
                     this.players_state[clientData.user.nickname] = {
                         isInked: false,
                     };
@@ -111,16 +111,16 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     if (index >= 0) {
                         this.subscribers.splice(index, 1);
                     }
-                    console.log("누군가가 스트림을 종료했어요!")
-                    console.log("남은 사람은 " + this.subscribers.length + "명이에요")
+                    console.log("someone destroyed stream")
+                    console.log(this.subscribers.length + " remain")
                 });
                 this.session.on("exception", ({ exception }) => {
-                    console.warn("오류ㅠㅠ" + exception);
+                    console.warn("error:" + exception);
                 });
                 await this.getToken(this.mySessionId + "game").then(async (token) => {
-                    console.log("토큰을생성해요:" + token);
-                    console.log("openviduvue 하기 전에 user 상태 : ");
-                    console.log(this.user);
+                    // console.log("토큰을생성해요:" + token);
+                    // console.log("openviduvue 하기 전에 user 상태 : ");
+                    // console.log(this.user);
                     this.session.connect(token, {
                         clientData: {
                             user: this.user,
@@ -150,7 +150,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 window.addEventListener("beforeunload", this.leaveSession);
             },
             leaveSession() {
-                console.log("-----오픈비두 세션을 끊어요!!!-----")
+                console.log("-----OpenVidu Session Disconnecting-----")
                 if (this.session) this.session.disconnect();
 
                 this.session = undefined;
@@ -167,7 +167,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 // this.mainStreamManager.addVideoElement(this.$refs.video);
             },
             async getToken(mySessionId) {
-                console.log("getToken 시작")
+                // console.log("getToken 시작")
                 const sessionId = await this.createSession(mySessionId);
                 return await this.createToken(sessionId);
             },
@@ -178,7 +178,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 return response.data; // The sessionId
             },
             async createToken(sessionId) {
-                console.log("createToken 시작")
+                // console.log("createToken 시작")
                 const response = await this.axios.post(APPLICATION_SERVER_URL + 'api/sessions/' + sessionId + '/connections', {}, {
                     headers: { 'Content-Type': 'application/json', },
                 });
@@ -214,9 +214,9 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 return clientData.user;
             },
             inkedCheck() {
-                console.log("==============inked check=============");
-                console.log(this.clientUser(this.mainStreamManager).nickname);
-                console.log(this.players_state[this.clientUser(this.mainStreamManager).nickname]);
+                // console.log("==============inked check=============");
+                // console.log(this.clientUser(this.mainStreamManager).nickname);
+                // console.log(this.players_state[this.clientUser(this.mainStreamManager).nickname]);
                 if (this.players_state[this.clientUser(this.mainStreamManager).nickname].isInked) {
                     this.isInked = true;
                 } else {
@@ -243,10 +243,10 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
     async created() {
         this.conn.addEventListener("message", (e) => {
             const content = JSON.parse(e.data);
-            console.log("받은 메세지 : ");
-            console.log(content);
+            // console.log("받은 메세지 : ");
+            // console.log(content);
             if (content.type == "item4") {
-                console.log("누군가 먹물탄을 사용하였습니다.", content);
+                // console.log("누군가 먹물탄을 사용하였습니다.", content);
                 const nickname = content.nickname;
                 if (nickname == this.user.nickname) {
                     if (content.info.isStart == 1) {
@@ -258,7 +258,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                     this.players_state[nickname].isInked = true; // undefined
                     if (this.clientUser(this.mainStreamManager).nickname == nickname) {
                         this.isInked = true;
-                        console.log("this.isInked : " + this.isInked);
+                        // console.log("this.isInked : " + this.isInked);
                     }
                 } else {
                     this.players_state[nickname].isInked = false;
@@ -274,13 +274,13 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
         video: true,
         audio: true,
         }).then((stream) => {
-            console.log('created stream');
-            console.log(stream);
+            // console.log('created stream');
+            // console.log(stream);
             this.myVideoStream = stream;
         });
         
-        console.log("--------------ffff--------------");
-        console.log(this.subscribers.length + "명의 사람이 있어요");
+        // console.log("--------------ffff--------------");
+        // console.log(this.subscribers.length + "명의 사람이 있어요");
         for (var sub of this.subscribers) {
             console.log("---", sub);
         }

@@ -28,7 +28,7 @@ import OvVideo from '@/components/game/OvVideo.vue';
 
         computed: {
             clientData () {
-                console.log("*************")
+                // console.log("*************")
                 const { clientData } = this.getConnectionData();
                 return clientData;
             },
@@ -49,7 +49,7 @@ import OvVideo from '@/components/game/OvVideo.vue';
         },
 
         created() {
-            console.log("+++++++++++++", this.streamManager)
+            // console.log("+++++++++++++", this.streamManager)
         }
     }
 </script>

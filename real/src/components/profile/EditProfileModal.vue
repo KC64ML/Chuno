@@ -92,12 +92,12 @@ export default {
         this.$emit("on-editProfile");
       },
       check() {
-      console.log(this.nickname);
+      // console.log(this.nickname);
       this.axios
         .get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname)
         .then(({ data }) => {
-          console.log("result : " + data.result);
-          console.log("code : " + data.code);
+          // console.log("result : " + data.result);
+          // console.log("code : " + data.code);
           if(!data.code){
             //없는 닉네임
             this.can_use = true
@@ -112,7 +112,7 @@ export default {
     },
 
     profile_click() {
-      console.log("profile_click 실행");
+      // console.log("profile_click 실행");
       this.$refs.file_input.click();
       // console.log("img : " + this.$refs.file_input.click());
     },
@@ -120,10 +120,10 @@ export default {
       // (URL + 'resources/images?path=' + this.img_url)
       this.one_file = e.target.files[0];
       this.img_url = URL.createObjectURL(e.target.files[0]); // 기존에 있는것
-      console.log("files : " + e.target.files[0]);
-      console.log("one_file : " + this.one_file.path);
-      console.log("e : " + e);
-      console.log("img_url : " + this.img_url);
+      // console.log("files : " + e.target.files[0]);
+      // console.log("one_file : " + this.one_file.path);
+      // console.log("e : " + e);
+      // console.log("img_url : " + this.img_url);
     },
     async save() {
       if (this.nickname.length == 0) {
@@ -137,7 +137,7 @@ export default {
         }
       }
 
-      console.log("닉네임 사용가능");
+      // console.log("닉네임 사용가능");
 
       // 현재 프로필을 저장하는 변수, 미래를 가져오는 변수
       // img_url : 이전 파일
@@ -153,9 +153,9 @@ export default {
 
       }
 
-      console.log("phone : ", this.phone);
-      console.log("file : " + this.nickname);
-      console.log("this.file : " + this.img_url);
+      // console.log("phone : ", this.phone);
+      // console.log("file : " + this.nickname);
+      // console.log("this.file : " + this.img_url);
       // console.log("this.file : " + this.one_file.path);
       const token = sessionStorage.token;
 
@@ -167,18 +167,14 @@ export default {
           },
         })
         .then(() => {
-          console.log("프로필 편집 성공");
+          // console.log("프로필 편집 성공");
           this.$emit('on-editProfile')
           this.$router.push({ name: "Profile", params: { uid: this.userInfo.id } });
         })
         .catch((e) => {
-          console.log("프로필 편집 실패");
+          // console.log("프로필 편집 실패");
           console.log(e);
         });
-    },
-
-    reSelect() {
-      alert("다시선택");
     },
     clearImage() {
       this.$refs.file_input.value = "";

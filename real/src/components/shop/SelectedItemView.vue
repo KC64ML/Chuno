@@ -41,10 +41,10 @@ export default {
   },
   methods: {
     buy() {
-      console.log("구매 버튼");
-      console.log(this.item);
+      // console.log("구매 버튼");
+      // console.log(this.item);
       const token = sessionStorage.token;
-      console.log(token);
+      // console.log(token);
       this.axios
         .post(process.env.VUE_APP_SPRING + "user/shop/" + this.item.id, "", {
           headers: { Authorization: token },
@@ -52,11 +52,11 @@ export default {
         .then((res) => {
           const code = res.data.code;
           if (code) {
-            console.log("샀다");
+            // console.log("샀다");
             this.$emit("get-user");
             console.log(res.data);
           } else {
-            console.log("못샀다");
+            // console.log("못샀다");
             console.log(res.data);
           }
         })
@@ -69,9 +69,9 @@ export default {
     },
   },
   created() {
-    console.log("item", this.item);
-    console.log("item", this.item == null);
-    console.log("item", this.item == {});
+    // console.log("item", this.item);
+    // console.log("item", this.item == null);
+    // console.log("item", this.item == {});
   },
 };
 </script>

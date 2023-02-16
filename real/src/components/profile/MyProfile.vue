@@ -55,8 +55,8 @@ export default {
 
   methods: {
     onModal() {
-      console.log("테스트 실행")
-      console.log(this.modal)
+      // console.log("테스트 실행")
+      // console.log(this.modal)
       // const token = sessionStorage.token
       // this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: token } })
       // .then((res) =>{
@@ -66,7 +66,7 @@ export default {
     },
     // 친구 추가
     addFriend(yourUid) {
-      console.log(this.$route.params.uid)
+      // console.log(this.$route.params.uid)
       const token = sessionStorage.token
       // 내 정보 가져오기
       let myUid
@@ -87,8 +87,8 @@ export default {
           const code = res.data.code
           if (code) {
             this.$emit('get-user')
-            console.log('친구 추가 성공')
-            console.log(res.data)
+            // console.log('친구 추가 성공')
+            // console.log(res.data)
           } else {
             console.log('code error')
           }
@@ -105,7 +105,7 @@ export default {
           const code = res.data.code
           if (code) {
             this.$emit('get-user')
-            console.log('친구 끊었다..')
+            // console.log('친구 끊었다..')
           } else {
             console.log('code error')
           }

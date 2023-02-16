@@ -13,8 +13,8 @@
         },
 
         mounted () {
-            console.log("+*+*+*+*+*+*+*+*",this.streamManager);
-            console.log(this.$el);
+            // console.log("+*+*+*+*+*+*+*+*",this.streamManager);
+            // console.log(this.$el);
             this.streamManager.addVideoElement(this.$el);
     },
 

@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     check() {
-      console.log(this.nickname);
+      // console.log(this.nickname);
       this.axios.get(process.env.VUE_APP_SPRING + "user/nickname/" + this.nickname)
         .then(({ data }) => {
           if (data.code) {
@@ -80,10 +80,10 @@ export default {
     oneFileSelect(e) {
       this.one_file = e.target.files[0];
       this.img_url = URL.createObjectURL(e.target.files[0]);
-      console.log("files : " + e.target.files[0]);
-      console.log("one_file : " + this.one_file.path);
-      console.log("e : " + e);
-      console.log("img_url : " + this.img_url);
+      // console.log("files : " + e.target.files[0]);
+      // console.log("one_file : " + this.one_file.path);
+      // console.log("e : " + e);
+      // console.log("img_url : " + this.img_url);
     },
     save() {
       if (this.nickname.length == 0) {
@@ -102,9 +102,9 @@ export default {
         formData.append("file", this.one_file);
       }
 
-      console.log("phone : ", this.phone);
-      console.log("file : " + this.nickname);
-      console.log("this.file : " + this.img_url);
+      // console.log("phone : ", this.phone);
+      // console.log("file : " + this.nickname);
+      // console.log("this.file : " + this.img_url);
       // console.log("this.file : " + this.one_file.get());
       
 
@@ -117,9 +117,9 @@ export default {
           // const code = res.data.code
           // if(code) {
           sessionStorage.setItem('token', res.data)
-          console.log('회원가입 성공')
-          console.log(res)
-          alert("등록완료");
+          // console.log('회원가입 성공')
+          // console.log(res)
+          // alert("등록완료");
           this.$router.push({ name: "home" });
           // } else {
           //   console.log(res)
@@ -127,7 +127,7 @@ export default {
           // }
         })
         .catch((e) => {
-          console.log('회원가입 실패')
+          // console.log('회원가입 실패')
           console.log(e)
         })
     },
@@ -146,8 +146,7 @@ export default {
     'nickname': 'check'
   },
   created() {
-    console.log("ffffeft")
-    console.log(this.$route.params.email);
+    // console.log(this.$route.params.email);
     this.email = this.$route.params.email;
   }
 }

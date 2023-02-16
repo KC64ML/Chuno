@@ -99,7 +99,7 @@ export default {
     },
     async created() {
         this.user = await this.axios.get(process.env.VUE_APP_SPRING + 'user', { headers: { Authorization: sessionStorage.token } }).then(res => res.data.result);
-        console.log(this.user.exp)
+        // console.log(this.user.exp)
         this.user.exp = 800;
         this.display_exp = this.user.exp - this.user_exp;
         this.display_money = this.user.money - this.user_money;
@@ -114,7 +114,7 @@ export default {
         // ]
 
         this.user_level_from = this.user.level;
-        console.log(this.level_mapper, this.user_level_from - 1)
+        // console.log(this.level_mapper, this.user_level_from - 1)
         this.user_level_from_exp = this.level_mapper[this.user_level_from - 1].exp;
 
         var flag = false;
@@ -123,7 +123,7 @@ export default {
                 flag = true;
                 this.user_level_to = o.level;
                 this.user_level_to_exp = this.level_mapper[this.user_level_to].exp;
-                console.log(this.user_level_to_exp)
+                // console.log(this.user_level_to_exp)
                 break;
             }
         }
@@ -148,7 +148,7 @@ export default {
             clearInterval(this.interv2);
         },
         async startInterval() {
-            console.log(this.display_exp, this.user_level_to_exp)
+            // console.log(this.display_exp, this.user_level_to_exp)
             var exp_speed = this.user_exp / 200
             this.interv = setTimeout(() => {
                 this.interv = setInterval(() => {

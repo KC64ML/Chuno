@@ -30,11 +30,11 @@ export default {
   },
   methods: {
     itemYes(usedItem) {
-      console.log('아이템 사용')
+      // console.log('아이템 사용')
       this.$emit('item-yes', usedItem)
     },
     itemNo() {
-      console.log('아이템 미사용')
+      // console.log('아이템 미사용')
       this.$emit('item-no')
     },
 

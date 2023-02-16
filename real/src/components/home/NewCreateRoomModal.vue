@@ -187,9 +187,9 @@ export default {
                 let curDate = new Date();
                 let h = curDate.getHours();
                 let m = curDate.getMinutes();
-                console.log("curDate",curDate);
-                console.log("h",h);
-                console.log("m",m);
+                // console.log("curDate",curDate);
+                // console.log("h",h);
+                // console.log("m",m);
                 if(this.is_am){
                     if(this.hour<=h&&this.minute<m){
                         return true;
@@ -236,11 +236,10 @@ export default {
             this.page2 = false;
         },
         async modalConfirm() {
-            alert('게임방을 만들어요!!!')
-            console.log(process.env.VUE_APP_SPRING + "room")
-            console.log(sessionStorage.getItem("token"));
+            // console.log(process.env.VUE_APP_SPRING + "room")
+            // console.log(sessionStorage.getItem("token"));
             // 방을 데이터 베이스에 등록해요
-            console.log(process.env.VUE_APP_SPRING + "room");
+            // console.log(process.env.VUE_APP_SPRING + "room");
             var data = await this.axios.post(process.env.VUE_APP_SPRING + "room", {
                 lat: this.player.lat,
                 lng: this.player.lng,
@@ -256,7 +255,7 @@ export default {
                 headers: { Authorization: sessionStorage.getItem("token") }
             }).then(res => res.data.result)
             var user = await this.axios.get(process.env.VUE_APP_SPRING + "user", {headers: {Authorization: sessionStorage.getItem("token")}}).then(res => res.data.result);
-            console.log(data);
+            // console.log(data);
             this.sendData({
                 "event": "make",
                 "room": data,

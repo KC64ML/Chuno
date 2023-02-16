@@ -78,7 +78,7 @@
             const code = res.data.code
             if(code) {
               this.userInfo = res.data.result
-              console.log(this.userInfo)
+              // console.log(this.userInfo)
             } else {
               console.log('code err')
             }
@@ -86,7 +86,7 @@
       },
       onSelect(res) {
         this.selected = res
-        console.log(this.selected)
+        // console.log(this.selected)
       },
       getItems(){
         this.axios.get(
@@ -97,10 +97,10 @@
             const code = res.data.code
             if (code) {
               this.items = items
-              console.log("아이템 가져오기");
-              console.log(this.items)
+              // console.log("아이템 가져오기");
+              // console.log(this.items)
             } else {
-              console.log('error')
+              // console.log('error')
             }
           })
           .catch((e)=>{
