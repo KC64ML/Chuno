@@ -63,9 +63,9 @@ import OvVideo from '@/components/game/OvVideo.vue';
     position: absolute;
 }
 .runner {
-    color: #b1c2ff;
+    color: #ffb1b1;
 }
 .chaser {
-    color: #ffb1b1;
+    color: #b1c2ff;
 }
 </style>

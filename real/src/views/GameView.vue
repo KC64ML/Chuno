@@ -359,6 +359,12 @@ export default {
               this.game_ending();
             }
           }
+        } else if (content.type == 'playerOut') {
+          if (content.info.role == 'runner') {
+            this.arrested_slave += 1;
+          } else if (content.info.role == 'chaser') {
+            this.ripped_paper += 1;
+          }
         }
       })
       this.user = await this.axios.get(APPLICATION_SERVER_URL + 'user',
@@ -389,6 +395,7 @@ export default {
       this.total_slave = info.teamslave.length;
       this.player_len = info.teamchuno.length + info.teamslave.length;
       this.user.caught = false;
+      this.user.isOut = false;
       // console.log("role 받아 온 후 user 상태 : ");
       // console.log(this.user);
       // console.log("GameView created complete");

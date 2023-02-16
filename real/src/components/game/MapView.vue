@@ -85,7 +85,10 @@
       >
         <!-- 내가 노비인데, -->
         <!-- 상대도 노비일 때 -->
-        <div v-if="o.role == 'runner' && user.role == 'runner'">
+        <div v-if="o.role == 'runner' && user.role == 'runner' && !o.isOut">
+          <div v-if="o.caught" class="outPlayerIcon">
+            <img src="@/assets/outPlayer.png">
+          </div>
           <GMapMarker
             :icon=otherRunnerMarkerImg
             :position="o.location"
@@ -94,7 +97,7 @@
           />
         </div>
         <!-- 상대가 추노일 때 -->
-        <div v-if="o.role == 'chaser' && user.role == 'runner'">
+        <div v-if="o.role == 'chaser' && user.role == 'runner' && !o.isOut">
           <GMapMarker
             v-if="o.myMarker"
             :icon=otherChaserMarkerImg
@@ -106,7 +109,7 @@
 
         <!-- 내가 추노인데, -->
         <!-- 상대도 추노일 때 -->
-        <div v-if="o.role == 'chaser' && user.role == 'chaser'">
+        <div v-if="o.role == 'chaser' && user.role == 'chaser' && !o.isOut">
           <GMapMarker
             :icon=otherChaserMarkerImg
             :position="o.location"
@@ -115,7 +118,7 @@
           />
         </div>
         <!-- 상대가 노비일 때 -->
-        <div v-if="o.role == 'runner' && user.role == 'chaser'">
+        <div v-if="o.role == 'runner' && user.role == 'chaser' && !o.isOut">
           <GMapMarker
             v-if="o.myMarker || calculateDistance(o) <= catchRadius"
             :icon=otherRunnerMarkerImg
@@ -272,6 +275,7 @@ export default {
               location: other.location,
               myMarker: other.myMarker,
               caught: other.caught,
+              isOut: other.isOut,
             };
             // if(!this.catchRunnerFlag) {
             //   console.log('enrollEvent에서 catchRunner실행')
@@ -374,6 +378,15 @@ export default {
     },
     offOutModal(){
       this.outModal = false
+      this.sendData({
+        event: "playerOut",
+        room: this.roomInfo.id,
+        nickname: this.user.nickname,
+        level: 1,
+        startData: {
+          role: this.user.role,
+        }
+      })
     },
     reOutOfPlayground(){
       // console.log('reOutOfPlayground 실행됨!!!!!!!!!')
@@ -431,6 +444,7 @@ export default {
               location: this.location,
               myMarker: this.myMarker,
               caught: this.user.caught,
+              isOut: this.user.isOut,
             }
           }
         );
