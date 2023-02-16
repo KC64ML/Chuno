@@ -5,6 +5,7 @@
 &nbsp;
 
 **✔ 해야할 것**
+
 (1) docker container 안으로 들어가기 : `docker exec -it images이름 /bin/bash`
 
 (2) docker container 현 상태를 images로 만들기 : `docker commit -m "ubuntu jenkins save" -a "lkc263@naver.com" 41163cf987a0 d208_jenkins_test:1.0`
