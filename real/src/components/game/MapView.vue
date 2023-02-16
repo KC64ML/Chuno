@@ -520,7 +520,6 @@ export default {
     onGyro() {
       if (typeof DeviceMotionEvent.requestPermission === 'function') {
         // Handle iOS 13+ devices.
-        alert('아이폰의 경우 동작 및 방향 사용에 허가가 필요합니다.')
         DeviceMotionEvent.requestPermission()
           .then((state) => {
             if (state === 'granted') {
