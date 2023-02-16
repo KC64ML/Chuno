@@ -17,6 +17,24 @@
   </div>
   <!-- 나가기 모달 끝 -->
 
+  <!-- 잡혔습니다 모달 시작 -->
+  <div v-if="caughtModal" id="item_description_modal" @click="close_item_description_modal">
+    <div id="item_description_modal_container" @click="stopingPropagation">
+      <div style="text-align: center; font-size: 25px; margin-bottom: 10px;">잡혔습니다.<br>나가시겠습니까?</div>
+      <div style="display: flex; justify-content: space-around;">
+        <div class="flex_center" @click="onYesLeave">
+          <img src="@/assets/main_button1.png" class="modal_confirm_button">
+          <div class="image_text">네</div>
+        </div>
+        <div class="flex_center" @click="onNoLeaveCaught">
+          <img src="@/assets/main_button1.png" class="modal_confirm_button">
+          <div class="image_text">관전</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 잡혔습니다 모달 끝 -->
+
   <transition name="menu-retreat">
     <div id="item_menu_modal" v-if="item_menu_modal">
       <div v-if="this.user">
@@ -201,12 +219,14 @@ export default {
       roleModal: false,
       roomInfo: undefined,
 
+      // 알림을 위한 변수에요.
       system_toast: false,
       chat_toast: false,
       last_chat: "",
       chat_modal: false,
       chat_data: "",
       chat_log: [],
+      caughtModal: false,
 
       // status-bar를 위한 변수에요
       status_specific_modal: true,
@@ -409,7 +429,8 @@ export default {
     },
     onYesLeave() {
       // console.log('진짜로 나간다!!!!!')
-      this.leaveModal = false
+      this.leaveModal = false;
+      this.caughtModal = false;
       this.sendData({
           event: "leave",
           nickname: this.user.nickname,
@@ -429,7 +450,10 @@ export default {
     },
     onNoLeave() {
       // console.log('안나갈건데')
-      this.leaveModal = false
+      this.leaveModal = false;
+    },
+    onNoLeaveCaught() {
+      this.caughtModal = false;
     },
     onLeave() {
       this.leaveModal = true
@@ -459,6 +483,7 @@ export default {
     },
     onCaught() {
       this.user.caught = true
+      this.caught_modal = true;
     },
     spinningEnd() {
       this.spinningModal = false;
