@@ -408,6 +408,10 @@ $my_video_margin: 20px;
     width: 100%;
     height: 100%;
 }
+.ink-bomb img {
+    width: 100%;
+    height: 100%;
+}
 .ink-bomb-me {
     position: absolute;
     top: 0;
