@@ -120,9 +120,6 @@
         </div>
         <!-- 상대가 노비일 때 -->
         <div v-if="o.role == 'runner' && user.role == 'chaser' && !o.isOut">
-          <div v-if="o.caught" class="out-player-icon">
-            <img src="@/assets/outPlayer.png">
-          </div>
           <GMapMarker
             v-if="o.myMarker || calculateDistance(o) <= catchRadius"
             :icon=otherRunnerMarkerImg
