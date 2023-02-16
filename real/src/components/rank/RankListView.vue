@@ -1,7 +1,7 @@
 <template>
   <div class="rank-result-list">
     <table
-      style="width: 85vw;"
+      style="width: 90vw;"
     >
       <colgroup>
         <col width="12%">
@@ -85,7 +85,7 @@ td {
 
 .rank-result-list{
   font-family: "WandohopeR";
-  margin-top: 300px;
+  margin-top: 85%;
   position: relative;
   z-index: 0;
   overflow-wrap: initial;

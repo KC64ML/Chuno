@@ -171,14 +171,14 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   align-items : center;
-  top: 20%;
+  top: 15%;
 }
 
 .list_rank2 {
   position: absolute;
   left: 10%;
   align-items : center;
-  top: 30%;
+  top: 25%;
   /* margin-top: 20%; */
 }
 
@@ -186,7 +186,7 @@ export default {
   position: absolute;
   right: 10%;
   align-items : center;
-  top: 30%;
+  top: 25%;
   /* margin-top: 20%; */
 }
 
