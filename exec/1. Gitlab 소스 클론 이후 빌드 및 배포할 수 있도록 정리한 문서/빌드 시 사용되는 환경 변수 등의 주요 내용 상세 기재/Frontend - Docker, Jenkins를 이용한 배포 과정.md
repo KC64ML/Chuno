@@ -78,6 +78,7 @@ pipeline {
 
 
 ![plugin](https://user-images.githubusercontent.com/72541544/216201217-f8adad37-166b-4e9a-90a6-29558128f5ab.png)
+
 ![추가](https://user-images.githubusercontent.com/72541544/216201223-aac88ac9-b760-4317-8377-552c3f3e404a.png)
 
 
@@ -164,6 +165,7 @@ pipeline {
 
 
 ![현재pipeline](https://user-images.githubusercontent.com/72541544/216203601-cc41d455-4acd-4404-a3ff-1f93a96edcd6.png)
+
 ![dockerfile](https://user-images.githubusercontent.com/72541544/216203607-f190ffa4-ea25-441a-a44d-b41ba09bc68f.png)
 
 
