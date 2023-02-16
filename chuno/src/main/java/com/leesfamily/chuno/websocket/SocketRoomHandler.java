@@ -2,6 +2,7 @@ package com.leesfamily.chuno.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leesfamily.chuno.websocket.dto.*;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
@@ -11,6 +12,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@Component
 public class SocketRoomHandler extends TextWebSocketHandler {
 
 	ArrayList<WebSocketSession> allSession = new ArrayList<>();
