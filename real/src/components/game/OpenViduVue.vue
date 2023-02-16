@@ -87,6 +87,7 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
                 this.session = this.OV.initSession();
                 this.session.on("streamCreated", ({ stream }) => {
                     const otherData = JSON.parse(stream.connection.data);
+                    console.log(otherData);
                     if (otherData.nickname == this.user.nickname) {
                         return;
                     }
@@ -286,8 +287,9 @@ const APPLICATION_SERVER_URL = process.env.VUE_APP_RTC;
         }
 
         
-
-        this.init();
+        setTimeout(() => {
+            this.init();
+        }, 500);
     },
     computed: {
         myUserName() {

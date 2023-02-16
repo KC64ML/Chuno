@@ -185,7 +185,10 @@ export default {
       if (to.name == "waitingRoom") return;
       next();
   },
-  async created() {
+  created() {
+    this.init();
+  },
+  async init() {
     this.conn.addEventListener('message', (e) => {
       var content = JSON.parse(e.data);
       if (content.type == 'chat') {
@@ -225,22 +228,26 @@ export default {
         }
       }
     })
-    await this.axios.get(APPLICATION_SERVER_URL + 'user',
+    this.user = await this.axios.get(APPLICATION_SERVER_URL + 'user',
       {
         headers: { Authorization: sessionStorage.token }
       }).then(({ data }) => {
         if (data.code) {
-          this.user = data.result;
+          return data.result;
           // console.log("게임 뷰에서 받아오는 user 값 : ");
           // console.log(this.user);
+        } else {
+          return null;
         }
       });
-    await this.axios.get(APPLICATION_SERVER_URL + 'room/' + this.$route.params.roomId)
+    this.roomInfo = await this.axios.get(APPLICATION_SERVER_URL + 'room/' + this.$route.params.roomId)
       .then(({ data }) => {
         if (data.code) {
-          this.roomInfo = data.result;
+          return data.result;
           // console.log(this.roomInfo)
           // console.log("GameView room info loaded");
+        } else {
+          return null;
         }
       })
     const info = JSON.parse(sessionStorage.info);
