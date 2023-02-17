@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    이 페이지에서 로그인이 되어있는지 확인할 수 있어요<br>
+    로그인여부: <input id="islogin"><br><br>
+    <button onclick="window.location.href='index.html'">홈으로 돌아가기</button>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        // index.html과 같은 함수에요
+        start();
+        async function start() {
+            var token = sessionStorage.getItem("token");
+            if (token != null) {
+                var { data } = await axios.post("http://i8d208.p.ssafy.io/api/kakao/tokenConfirm", token, {headers: {'Content-Type': 'text/plain'}});
+                if (data.validation == "not_valid") {
+                    document.getElementById("islogin").value = "로그인X";
+                } else {
+                    document.getElementById("islogin").value = data.nickname + "님 로그인중";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
