@@ -41,7 +41,9 @@
         <div style="margin-bottom: 10px; text-align: center;">아이템</div>
         <div v-for="(e, idx) in item_list[this.user.role]" :key="idx" style="display: flex; align-items: center;"
           @click="item_select(e)">
-          <img :src="e.path" alt="" style="margin-right: 5px;">
+          <div :class="[{ unable: user.items[e.id-1] <= 0 }, { able: user.items[e.id-1] > 0 }]" style="margin-right: 5px;">
+            <img :src="e.path" alt="">
+          </div>
           <div>{{ e.name }}</div>
         </div>
       </div>
@@ -528,6 +530,9 @@ export default {
     },
 
     item_select(e) {
+      if (this.user.items[e.id - 1] <= 0) {
+        return;
+      }
       this.selected_item = e;
       this.item_description_modal = true;
     },
@@ -537,6 +542,11 @@ export default {
       this.item_menu_modal = false;
     },
     async item_confirm_yes(item) {
+      this.item_used[item.id]++;
+      if (this.user.items[item.id - 1] <= 0) {
+        return;
+      }
+      this.user.items[item.id - 1]++;
       if (item.id == 1) {
         // 천리안: 가장 가까운 추노꾼 위치 표시
         // console.log(1)
@@ -577,7 +587,6 @@ export default {
         }, 60000 * 5);
         this.close_item_description_modal();
       } else if (item.id == 7) {
-        this.item_used[7]++;
         this.close_item_description_modal();
       }
     },
@@ -728,6 +737,15 @@ $status_height: 30px;
     opacity: 0;
     transform: translateY(100%)
   }
+}
+
+.unable {
+  background-color: rgba(161, 161, 161, 0.7);
+  border-radius: 50%;
+}
+.able {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
 }
 
 #item_description_modal {
