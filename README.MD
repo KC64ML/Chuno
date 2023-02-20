@@ -1,4 +1,4 @@
-
+:dog_roll:
 
 [🏃🏻 1. Project 소개 및 구현 화면](# 🏃🏻 1. Project 소개 및 구현 화면)
 
