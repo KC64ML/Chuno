@@ -96,7 +96,7 @@
             :opened="true"
             :options=" {
               pixelOffset: {
-                width: 0, height: -40
+                width: 0, height: -25
               },
             }">
               <div>{{ o.nickname }}</div>
@@ -120,7 +120,7 @@
             :opened="true"
             :options=" {
               pixelOffset: {
-                width: 0, height: -40
+                width: 0, height: -25
               },
             }">
               <div>{{ o.nickname }}</div>
@@ -141,7 +141,7 @@
             :opened="true"
             :options=" {
               pixelOffset: {
-                width: 0, height: -40
+                width: 0, height: -25
               },
             }">
               <div>{{ o.nickname }}</div>
@@ -161,7 +161,7 @@
             :opened="true"
             :options=" {
               pixelOffset: {
-                width: 0, height: -40
+                width: 0, height: -25
               },
             }">
               <div>{{ o.nickname }}</div>
@@ -428,15 +428,6 @@ export default {
     },
     offOutModal(){
       this.outModal = false
-      this.sendData({
-        event: "playerOut",
-        room: this.roomInfo.id,
-        nickname: this.user.nickname,
-        level: 1,
-        startData: {
-          role: this.user.role,
-        }
-      })
     },
     reOutOfPlayground(){
       // console.log('reOutOfPlayground 실행됨!!!!!!!!!')
@@ -446,6 +437,15 @@ export default {
         // 아웃
         // console.log('아웃임')
         this.outModal = true
+        this.sendData({
+          event: "playerOut",
+          room: this.roomInfo.id,
+          nickname: this.user.nickname,
+          level: 1,
+          startData: {
+            role: this.user.role,
+          }
+        })
       } else {
         // ㄱㅊ
         // console.log('범위안임')

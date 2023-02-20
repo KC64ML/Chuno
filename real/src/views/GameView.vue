@@ -352,6 +352,9 @@ export default {
             this.gameEndCheck();
           }
         } else if (content.type == 'playerOut') {
+          if (content.info.nickname == this.user.nickname) {
+            this.user.isOut = true;
+          }
           if (content.info.role == 'runner') {
             this.arrested_slave++;
             this.gameEndCheck();
