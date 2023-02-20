@@ -117,6 +117,7 @@ B : 쫓는 사람은 추노꾼!
 
 **🗡️ Frontend**
 
+
   - `vue3-geolocation`
   - `vuex`
   - `vue-router`
@@ -127,11 +128,12 @@ B : 쫓는 사람은 추노꾼!
   - `kakao-auth`
   - `websocket`
 
+
 &nbsp;
 
   
 
-**🗡️ Backend + DevOps(CI/CD)
+**🗡️ Backend + DevOps(CI/CD)**
 
 - `java 11`
 - `spring boot 2.7.8`
