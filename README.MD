@@ -118,15 +118,15 @@ B : 쫓는 사람은 추노꾼!
 **🗡️ Frontend**
 
 
-  - `vue3-geolocation`
-  - `vuex`
-  - `vue-router`
-  - `@fawmi/vue-google-maps`
-  - `scss`
-  - `vue-cli`
-  - `Google-Maps API`
-  - `kakao-auth`
-  - `websocket`
+- `vue3-geolocation`
+- `vuex`
+- `vue-router`
+- `@fawmi/vue-google-maps`
+- `scss`
+- `vue-cli`
+- `Google-Maps API`
+- `kakao-auth`
+- `websocket`
 
 
 &nbsp;
