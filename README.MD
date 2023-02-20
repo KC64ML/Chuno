@@ -1,19 +1,5 @@
 
 
-> **👨🏻‍🏭 title**
-> 
-> [🏃🏻 1. Project 소개 및 구현 화면](#1. Project 소개 및 구현 화면)
-> 
-> [🏃🏻 2. 개발 환경](#🏃🏻 2. 개발 환경)
-> 
-> [🏃🏻 3. 협업 툴 ](#🏃🏻 3. 협업 툴 )
-> 
-> [🏃🏻 4. 프로젝트 회고](#🏃🏻 4. 프로젝트 회고)
-
-
-&nbsp;
-
-
 <img src="https://user-images.githubusercontent.com/72541544/220042420-522b82b3-53b2-4df2-a28f-f36faef915ee.png" width="128" height="128"/>
 
 
