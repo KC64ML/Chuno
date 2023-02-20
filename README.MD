@@ -2,10 +2,13 @@
 
 
 
-[🏃🏻 1. Project 소개 및 구현 화면](# 🏃🏻 1. Project 소개 및 구현 화면)
-[🏃🏻 2. 개발 환경](# 🏃🏻 2. 개발 환경)
-[🏃🏻 3. 협업 툴 ](# 🏃🏻 3. 협업 툴 )
-[🏃🏻 4. 프로젝트 회고](# 🏃🏻 4. 프로젝트 회고)
+[🏃🏻 1. Project 소개 및 구현 화면](#🏃🏻 1. Project 소개 및 구현 화면)
+
+[🏃🏻 2. 개발 환경](#🏃🏻 2. 개발 환경)
+
+[🏃🏻 3. 협업 툴 ](#🏃🏻 3. 협업 툴 )
+
+[🏃🏻 4. 프로젝트 회고](#🏃🏻 4. 프로젝트 회고)
 
 &nbsp;
 
@@ -45,27 +48,7 @@ B : 쫓는 사람은 추노꾼!
 ### 💰 추노 게임 설명
 
 
-
-![시연시나리오-01](https://user-images.githubusercontent.com/72541544/220032658-5e414551-9ee1-470e-969b-cbada22b12dd.jpg)
-![시연시나리오-02](https://user-images.githubusercontent.com/72541544/220032662-602ed195-a847-4704-b6eb-ffd0fbcbccfb.jpg)
-![시연시나리오-03](https://user-images.githubusercontent.com/72541544/220032664-111f76d0-6e44-47be-896b-7f6bd5d8027d.jpg)
-![시연시나리오-04](https://user-images.githubusercontent.com/72541544/220032667-3223301d-2bf1-47ed-ba76-9094c40ac43a.jpg)
-![시연시나리오-05](https://user-images.githubusercontent.com/72541544/220032668-614e9f15-bc38-410b-9cd7-7c372eafe03e.jpg)
-![시연시나리오-06](https://user-images.githubusercontent.com/72541544/220032669-c8b14953-8d4b-412e-ba72-f8a89abfc662.jpg)
-![시연시나리오-07](https://user-images.githubusercontent.com/72541544/220032671-326a52bf-8f54-4142-a989-c9ed6f66c262.jpg)
-![시연시나리오-08](https://user-images.githubusercontent.com/72541544/220032675-7f1dff12-7c7f-46fe-950f-4632a812811b.jpg)
-![시연시나리오-09](https://user-images.githubusercontent.com/72541544/220032676-9765e408-e634-4728-96ee-2e7bfdfba316.jpg)
-![시연시나리오-10](https://user-images.githubusercontent.com/72541544/220032678-c8d200e5-bcb7-4c54-9a84-52defb224b9d.jpg)
-![시연시나리오-11](https://user-images.githubusercontent.com/72541544/220032680-7ac10ec1-19dc-4640-aa9f-0ab07602753d.jpg)
-![시연시나리오-12](https://user-images.githubusercontent.com/72541544/220032681-e3cef8ed-d6d4-4249-85fc-65762fb3d9d1.jpg)
-![시연시나리오-13](https://user-images.githubusercontent.com/72541544/220032685-dd2c6dc9-c833-4dd9-a4d6-a9d28d5b1413.jpg)
-![시연시나리오-14](https://user-images.githubusercontent.com/72541544/220032687-33263f79-e715-48b5-89a6-3e33d0bd57b7.jpg)
-![시연시나리오-15](https://user-images.githubusercontent.com/72541544/220032688-0a230543-f6b4-4972-86e0-f62e338f0fc0.jpg)
-![시연시나리오-16](https://user-images.githubusercontent.com/72541544/220032691-3b7b5d81-2361-41c7-840c-6cf66fe6edad.jpg)
-![시연시나리오-17](https://user-images.githubusercontent.com/72541544/220032696-8fd3d297-24c4-4046-88a7-c4201f1dc693.jpg)
-![시연시나리오-18](https://user-images.githubusercontent.com/72541544/220032697-1b754eb5-aa2e-4209-bbd1-04ffc5a89f57.jpg)
-![시연시나리오-19](https://user-images.githubusercontent.com/72541544/220032700-233ef05b-079a-49c4-b30f-b5ab7a5d9045.jpg)
-
+[추노 게임 화면](./README.assets/구현화면.md)
 
 
 
