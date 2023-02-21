@@ -181,6 +181,7 @@ public class RoomService {
 
 
     public RoomGameStartResponseDto startRoom(RoomGameStartRequestDto roomStartRequestDto) {
+
         // (1) 방 테이블 조회
         // json test
         // {
@@ -218,6 +219,18 @@ public class RoomService {
         // user 기반 item 조회
         // chaser, runner
         List<RoomGameStartDecideChaserRunnerDto> roomGameUserChaserOrRunnerItemCntResultList = randomUserChaserRunner(roomStartRequestDto);
+
+        // 2명일 때는
+        // id : , id :
+        // userNickNameList에서 id 찾은 후, 해당 추노 노비를 준다.
+        // 인의동큰손 : 노비, 창창 : 추노
+        if(roomGameUserChaserOrRunnerItemCntResultList.size() == 2
+                && roomGameUserChaserOrRunnerItemCntResultList.get(1).getNickname().equals("인의동큰손")){
+            // 정렬하기
+//            log.info("인의동 큰손확인하기 : " + roomGameUserChaserOrRunnerItemCntResultList.get(1).getNickname());
+            Collections.sort(roomGameUserChaserOrRunnerItemCntResultList);
+//            log.info("인의동 큰손확인하기2 : " + roomGameUserChaserOrRunnerItemCntResultList.get(1).getNickname());
+        }
 
         return RoomGameStartResponseDto.of(roomStartDto, randomLatLng, roomGameUserChaserOrRunnerItemCntResultList);
 
