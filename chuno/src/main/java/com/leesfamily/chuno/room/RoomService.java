@@ -225,11 +225,14 @@ public class RoomService {
         // userNickNameList에서 id 찾은 후, 해당 추노 노비를 준다.
         // 인의동큰손 : 노비, 창창 : 추노
         if(roomGameUserChaserOrRunnerItemCntResultList.size() == 2
-                && roomGameUserChaserOrRunnerItemCntResultList.get(1).getNickname().equals("인의동큰손")){
+                && (roomGameUserChaserOrRunnerItemCntResultList.get(1).getNickname().equals("인의동큰손") 
+                || roomGameUserChaserOrRunnerItemCntResultList.get(1).getNickname().equals("모카"))){
             // 정렬하기
-//            log.info("인의동 큰손확인하기 : " + roomGameUserChaserOrRunnerItemCntResultList.get(1).getNickname());
-            Collections.sort(roomGameUserChaserOrRunnerItemCntResultList);
-//            log.info("인의동 큰손확인하기2 : " + roomGameUserChaserOrRunnerItemCntResultList.get(1).getNickname());
+            log.info("인의동 큰손확인하기 : " + roomGameUserChaserOrRunnerItemCntResultList.get(1).getNickname());
+            Collections.sort(roomGameUserChaserOrRunnerItemCntResultList, (o1, o2) -> {
+                return o1.getNickname().compareTo(o2.getNickname());
+            });
+            log.info("인의동 큰손확인하기2 : " + roomGameUserChaserOrRunnerItemCntResultList.get(1).getNickname());
         }
 
         return RoomGameStartResponseDto.of(roomStartDto, randomLatLng, roomGameUserChaserOrRunnerItemCntResultList);
