@@ -222,9 +222,7 @@ B : 쫓는 사람은 추노꾼!
 > 
 > [notion](https://www.notion.so/e35d3b316e19451993cdeea158e9bffd)
 > 
-> [mattermost](https://meeting.ssafy.com/s08p10d2/channels/d208)
-> 
-> [Jira](https://ssafy.atlassian.net/jira/your-work)
+
 
 
 
